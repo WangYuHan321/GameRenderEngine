@@ -1,0 +1,17 @@
+#pragma once
+
+#include "../../Util/Singleton.h"
+
+
+//glew ÏÔ¿¨³§ÉÌµÄ
+
+class Driver : public CSingleton<Driver>
+{
+public:
+	Driver();
+	~Driver() = default;
+
+	void InitGlew();
+
+};
+

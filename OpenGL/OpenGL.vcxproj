@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{ae018fba-f70f-4246-8f0b-2e5405bf7b48}</ProjectGuid>
+    <RootNamespace>OpenGL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../Bin/</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
+      <AdditionalIncludeDirectories>$(OPENGL)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalOptions> /wd4430 %(AdditionalOptions) /EHsc</AdditionalOptions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <DisableSpecificWarnings>4477;4267;4251;4305;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <CallingConvention>FastCall</CallingConvention>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(OPENGL)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Camera\CameraFrustum.h" />
+    <ClInclude Include="Camera\FlyCamera.h" />
+    <ClInclude Include="File\ConfigManager.h" />
+    <ClInclude Include="Global\GlobalContext.h" />
+    <ClInclude Include="Render\Mesh\Cube.h" />
+    <ClInclude Include="Render\Shader\MaterialLoader.h" />
+    <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Render\Mesh\Mesh_ID.h" />
+    <ClInclude Include="Render\ShaderConfig.h" />
+    <ClInclude Include="Render\Shader\ShaderType.h" />
+    <ClInclude Include="Time\TimeManager.h" />
+    <ClInclude Include="Window\Input\InputManager.h" />
+    <ClInclude Include="Render\Context\Driver.h" />
+    <ClInclude Include="Window\Context\Device.h" />
+    <ClInclude Include="Event\Event.h" />
+    <ClInclude Include="Render\Shader\MeshLoader.h" />
+    <ClInclude Include="pbr_capture.h" />
+    <ClInclude Include="Render\Lighting\PointLight.h" />
+    <ClInclude Include="Render\PBR.h" />
+    <ClInclude Include="Render\Mesh\Quad.h" />
+    <ClInclude Include="Render\Material\MaterialLibrary.h" />
+    <ClInclude Include="Render\Lighting\DirectionalLight.h" />
+    <ClInclude Include="Log\DumpFileManager.h" />
+    <ClInclude Include="Log\ILog.h" />
+    <ClInclude Include="Render\CommandBuffer.h" />
+    <ClInclude Include="Render\GLCache.h" />
+    <ClInclude Include="Render\Mesh\AABB.h" />
+    <ClInclude Include="Render\Mesh\Material.h" />
+    <ClInclude Include="Render\Mesh\Mesh.h" />
+    <ClInclude Include="Render\Mesh\Model.h" />
+    <ClInclude Include="Render\PostProcess.h" />
+    <ClInclude Include="Render\RenderCommand.h" />
+    <ClInclude Include="Render\Renderer.h" />
+    <ClInclude Include="Render\RenderTarget.h" />
+    <ClInclude Include="Render\Resource\ResourceManager.h" />
+    <ClInclude Include="Render\Shader\EShader.h" />
+    <ClInclude Include="Render\Shader\Texture.h" />
+    <ClInclude Include="Render\Shader\TextureCube.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneNode.h" />
+    <ClInclude Include="Render\Shader\ShaderLoader.h" />
+    <ClInclude Include="Render\Shader\TextureLoader.h" />
+    <ClInclude Include="Render\Mesh\Sphere.h" />
+    <ClInclude Include="Util\common.h" />
+    <ClInclude Include="Util\Singleton.h" />
+    <ClInclude Include="Util\string_id.hpp" />
+    <ClInclude Include="Util\Utils.h" />
+    <ClInclude Include="Window\Input\Key.h" />
+    <ClInclude Include="Window\Input\MouseBtn.h" />
+    <ClInclude Include="Window\Window.h" />
+    <ClInclude Include="Window\GLFWWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Camera\CameraFrustum.cpp" />
+    <ClCompile Include="Camera\FlyCamera.cpp" />
+    <ClCompile Include="File\ConfigManager.cpp" />
+    <ClCompile Include="Global\GlobalContext.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
+    <ClCompile Include="Render\Mesh\Cube.cpp" />
+    <ClCompile Include="Render\Shader\MaterialLoader.cpp" />
+    <ClCompile Include="Time\TimeManager.cpp" />
+    <ClCompile Include="Window\Input\InputManager.cpp" />
+    <ClCompile Include="Render\Context\Driver.cpp" />
+    <ClCompile Include="Window\Context\Device.cpp" />
+    <ClCompile Include="Render\Shader\MeshLoader.cpp" />
+    <ClCompile Include="pbr_capture.cpp" />
+    <ClCompile Include="Render\PBR.cpp" />
+    <ClCompile Include="Render\Mesh\Quad.cpp" />
+    <ClCompile Include="Render\Material\MaterialLibrary.cpp" />
+    <ClCompile Include="Render\Lighting\DirectionalLight.cpp" />
+    <ClCompile Include="Log\ILog.cpp" />
+    <ClCompile Include="Render\CommandBuffer.cpp" />
+    <ClCompile Include="Render\GLCache.cpp" />
+    <ClCompile Include="Render\Mesh\AABB.cpp" />
+    <ClCompile Include="Render\Mesh\Material.cpp" />
+    <ClCompile Include="Render\Mesh\Mesh.cpp" />
+    <ClCompile Include="Render\Mesh\Model.cpp" />
+    <ClCompile Include="Render\PostProcess.cpp" />
+    <ClCompile Include="Render\Renderer.cpp" />
+    <ClCompile Include="Render\RenderTarget.cpp" />
+    <ClCompile Include="Render\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Render\Shader\EShader.cpp" />
+    <ClCompile Include="Render\Shader\Texture.cpp" />
+    <ClCompile Include="Render\Shader\TextureCube.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneNode.cpp" />
+    <ClCompile Include="Render\Shader\ShaderLoader.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Render\Shader\TextureLoader.cpp" />
+    <ClCompile Include="Render\Mesh\Sphere.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
+    <ClCompile Include="Window\GLFWWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Event\Event.inl" />
+    <None Include="Shader\ambient.fs" />
+    <None Include="Shader\pbr\pbr.glsl" />
+    <None Include="Shader\post\down_sample.fs" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
