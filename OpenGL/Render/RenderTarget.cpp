@@ -23,13 +23,13 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 			internalFormat = GL_RGBA16F;
 		else if (type == GL_FLOAT)
 			internalFormat = GL_RGBA32F;
-		texture.Generate(Width, Height, internalFormat, GL_RGBA, type, 0);
+		texture.Generate(width, height, internalFormat, GL_RGBA, type, 0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.ID, 0);
 		m_colorAttachments.push_back(texture);
 	}
 
 	hasDepthAndStenCil = depthandstencil;
-	if (hasDepthAndStenCil)
+	if (depthandstencil)
 	{
 		Texture texture;
 		texture.FilterMax = GL_LINEAR;
@@ -66,9 +66,20 @@ void RenderTarget::Resize(uint32 width, uint32 height)
 	}
 }
 
+Texture* RenderTarget::GetDepthStencilTexture()
+{
+	return &m_depthStencil;
+}
+
 Texture* RenderTarget::GetColorTexture(unsigned int index)
 {
-	return &m_colorAttachments[index];
+	if (index < m_colorAttachments.size())
+		return &m_colorAttachments[index];
+	else
+	{
+		Log("RenderTarget color texture requested, but not available: " + std::to_string(index));
+		return nullptr;
+	}
 }
 
 

@@ -28,9 +28,14 @@ void Window::CreateGLFWWindow()
 	glfwWindowHint(GLFW_AUTO_ICONIFY, true);
 	glfwWindowHint(GLFW_REFRESH_RATE, 60);
 	glfwWindowHint(GLFW_SAMPLES, 12);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 
 	m_glfwWindow = glfwCreateWindow(m_glfwWindowSize.x, m_glfwWindowSize.y,
 		"EasyEngine -- by WangYuHan", nullptr, nullptr);
+
+//#ifdef _DEBUG
+//	glEnable(GL_DEBUG_OUTPUT);
+//#endif 
 
 	glfwMakeContextCurrent(m_glfwWindow);
 	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

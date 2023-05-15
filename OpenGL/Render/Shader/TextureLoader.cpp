@@ -52,7 +52,7 @@ Texture TextureLoader::LoadHDRTexture(std::string path)
     texture.FilterMin = GL_LINEAR;
     texture.MipMapping = false;
 
-    stbi_set_unpremultiply_on_load(true);
+    stbi_set_flip_vertically_on_load(true);
 
     if (stbi_is_hdr(path.c_str()))
     {
@@ -80,7 +80,6 @@ Texture TextureLoader::LoadHDRTexture(std::string path)
     else
     {
         Log("HDR Texture file is error !!!\n");
-        return Texture();
     }
 
     return texture;

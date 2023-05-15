@@ -10,10 +10,10 @@ private:
 	bool m_cullFace;
 
 	GLenum m_depthFunc;
-	GLenum m_BleandSrc;
-	GLenum m_BlendDst;
+	GLenum m_BleandSrc = GL_ZERO;
+	GLenum m_BlendDst = GL_ZERO;
 	GLenum m_ForntFace;
-	GLenum m_PolygonMode;
+	GLenum m_PolygonMode = GL_ZERO;
 
 	uint32 m_actieveShaderID;
 

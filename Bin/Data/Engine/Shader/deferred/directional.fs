@@ -42,7 +42,7 @@ void main()
     // calculate light radiance    
     vec3 radiance = lightColor;        
     
-    // light shadoww
+    // light shadow
     vec4 fragPosLightSpace = lightShadowViewProjection * vec4(worldPos, 1.0);
     float shadow = ShadowFactor(lightShadowMap, fragPosLightSpace, N, L);
     

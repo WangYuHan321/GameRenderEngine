@@ -3,9 +3,8 @@
 #include"Render/Shader/TextureCube.h"
 #include"GLM/glm.hpp"
 
-class PBRCapture
+struct PBRCapture
 {
-public:
 	TextureCube* Irradiance = nullptr; // ·øÕÕ¶È ÌùÍ¼
 	TextureCube* PrefilteredMap = nullptr;//Ä£ºı¶ÈÌùÍ¼
 

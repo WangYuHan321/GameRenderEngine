@@ -12,7 +12,6 @@ class TextureCube;
 class CShader;
 class Texture;
 class Mesh;
-class Cube;
 
 
 class PBR
@@ -20,7 +19,7 @@ class PBR
 	friend Renderer;
 private:
 	
-	PBRCapture* m_skyCapture; //天空盒子
+	PBRCapture* m_skyCapture = nullptr; //天空盒子
 	RenderTarget* m_renderTargetBRDFLut;
 
 	Material* m_pbrHdrToCubeMap;
@@ -28,7 +27,7 @@ private:
 	Material* m_pbrPrefilterCapture;
 	Material* m_pbrIntegrateBRDF;
 
-	Cube* m_pbrCaptureCube;
+	Mesh* m_pbrCaptureCube;
 	std::vector<PBRCapture*> m_pbrCaputreProbe;
 	SceneNode* m_sceneNode;
 

@@ -171,6 +171,7 @@ CShader::CShader()
 
 CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::string> defines)
 {
+	m_shaderPath = name;
 	unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
 	unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
 	m_ID = glCreateProgram();

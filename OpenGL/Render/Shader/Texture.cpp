@@ -123,5 +123,8 @@ void Texture::SetFilterMax(GLenum gEnum)
 
 void Texture::SetWrapMode(GLenum gEnum)
 {
-	glTexParameteri(Target, GL_WRAP_BORDER, gEnum);
+	WrapS = gEnum;
+	WrapT = gEnum;
+	glTexParameteri(Target, GL_TEXTURE_WRAP_S, gEnum);
+	glTexParameteri(Target, GL_TEXTURE_WRAP_T, gEnum);
 }

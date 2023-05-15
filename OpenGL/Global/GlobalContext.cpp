@@ -3,16 +3,14 @@
 GlobalContext::GlobalContext():
 	m_engineAssetsPath("Data\\Engine\\")
 {
-
-
 	m_device = Device::getInstance();
 	Log("Device inited success!!!\n");
 
 	m_window = Window::getInstance();
 	Log("Window inited success!!!\n");
-	
+
 	m_dirve = Driver::getInstance();
-	Log("Device inited success!!!\n");
+	Log("Drive inited success!!!\n");
 	
 	m_timeMgr = TimeManager::getInstance();
 	Log("Time inited success!!!\n");

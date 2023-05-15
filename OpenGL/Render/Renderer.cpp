@@ -9,6 +9,8 @@
 #include "Lighting/DirectionalLight.h"
 #include "Material/MaterialLibrary.h"
 #include "../Camera/Camera.h"
+#include "../pbr_capture.h"
+#include "Mesh/Sphere.h"
 #include "../Render/CommandBuffer.h"
 #include "../Render/RenderCommand.h"
 #include "../Util/Utils.h"
@@ -33,15 +35,15 @@ Renderer::~Renderer()
 	delete m_postProcess;
 	delete m_customTarget;
 	delete m_commandBuffer;
-	delete m_MaterialLibrary;
+	delete m_materialLibrary;
 	//delete m_currentRenderTarget;
 
 	//for (auto item : m_directionalLights)
 	//	delete item;
 	for (auto item : m_shadowRenderTarget)
 		delete item;
-	for (auto item : m_pointLights)
-		delete item;
+	//for (auto item : m_pointLights)
+	//	delete item;
 	for (auto item : m_renderTargetsCustom)
 		delete item;
 	Window::getInstance()->ReSizeWindowEvent.RemoveListenerID(m_frameReSizeListener);
@@ -158,6 +160,9 @@ void Renderer::Init()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
 
+	glGenFramebuffers(1, &m_frameBufferCubeMapID);
+	glGenRenderbuffers(1, &m_frameBufferCubeMapRBO);
+
 	for (int i = 0; i < 4; i++)
 	{
 		RenderTarget* rt = new RenderTarget(2048, 2048, GL_UNSIGNED_BYTE, 1, true);
@@ -166,29 +171,28 @@ void Renderer::Init()
 		rt->m_depthStencil.SetFilterMax(GL_NEAREST);
 		rt->m_depthStencil.SetWrapMode(GL_CLAMP_TO_BORDER);
 		float border[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER, border);
+		//???? glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER, border);
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 		m_shadowRenderTarget.push_back(rt);
 	}
-
 	m_quadNDC = new Quad;
 	m_camera = new Camera();
 	m_pbrCapture = new PBR(this);
 	m_postProcess = new PostProcess(this);
-	m_MaterialLibrary = new MaterialLibrary();
+	m_deferredPointMesh = new Sphere(16, 16);
+	m_materialLibrary = new MaterialLibrary();
 	m_customTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 	m_gBuffer = new RenderTarget(m_renderSize.x, m_renderSize.y, GL_HALF_FLOAT, 4, true);
-
-	Texture* hdrMap = ResourceManager::getInstance()->LoadHDRTexture("sky env", "Asset\\texture\\backgrounds\\alley.hdr");
-	PBRCapture* envBridge = m_pbrCapture->ProcessEquirectangular(hdrMap);
-	glGenBuffers(1, &m_frameBufferCubeMapID);
-	glGenRenderbuffers(1, &m_framebufferCubeMapRBO);
-
-	m_pbrCapture->SetSkyCapture(envBridge);
 
 	glGenBuffers(1, &m_globalUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_globalUBO);
 	glBufferData(GL_UNIFORM_BUFFER, 720, nullptr, GL_STREAM_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_globalUBO);
+
+	Texture* hdrMap = ResourceManager::getInstance()->LoadHDRTexture("sky env",
+		"Asset\\texture\\backgrounds\\alley.hdr");
+	PBRCapture* envBridge = m_pbrCapture->ProcessEquirectangular(hdrMap);
+	m_pbrCapture->SetSkyCapture(envBridge);
 }
 
 void Renderer::AddDirLight(DirectionalLight* directionLight)
@@ -210,19 +214,19 @@ void Renderer::SetRenderSize(uint32 width, uint32 height)
 	m_gBuffer->Resize(width, height);
 
 	m_customTarget->Resize(width, height);
-	//m_PostProcessTarget1->Resize(width, height);
 
-	//m_postProcess->UpdateRenderSize(width, height);
-	Log("Set Render Size (%d, %d) \n",width, height );
+	m_postProcess->Resize(width, height);
+
+	Log("Set Render Size (%d, %d) \n", width, height );
 }
 
 Material* Renderer::CreateMaterial(string name)
 {
-	if (m_MaterialLibrary->CreateMaterial(name) == nullptr)
+	if (m_materialLibrary->CreateMaterial(name) == nullptr)
 	{
 		Log("no material!!!!\n");
 	}
-	return m_MaterialLibrary->CreateMaterial(name);
+	return m_materialLibrary->CreateMaterial(name);
 }
 
 //参数 渲染命令 自定义相机 是否改变全局状态
@@ -250,15 +254,26 @@ void Renderer::RenderCustomCommand(RenderCommand* command, Camera* customCamera,
 	
 	if (customCamera)
 	{
-		//material->GetShader()->SetMatrix("projection",customCamera)
-		//material->GetShader()->SetMatrix("projection", customCamera)
-		//material->GetShader()->SetMatrix("projection", customCamera)
+		material->GetShader()->SetMatrix("projection", customCamera->Projection);
+		material->GetShader()->SetMatrix("view", customCamera->View);
+		material->GetShader()->SetVector("CamPos", customCamera->Position);
 	}
 
 	material->GetShader()->SetMatrix("model", command->Transfrom);
 	material->GetShader()->SetMatrix("prevModel", command->prevTransform);
-
 	material->GetShader()->SetBool("ShadowsEnabled", enableShadows);
+
+	if (enableShadows && material->Type == MATERIAL_CUSTOM && material->ShadowReceive)
+	{
+		for (uint32 i = 0; i < m_directionalLights.size(); i++)
+		{
+			if (m_directionalLights[i]->ShadowMapRT)
+			{
+				material->GetShader()->SetMatrix("lightShadowViewProjection" + std::to_string(i + 1), m_directionalLights[i]->LightSpaceViewProjection);
+				m_directionalLights[i]->ShadowMapRT->GetDepthStencilTexture()->Bind(10 + i);
+			}
+		}
+	}
 
 	//设置Shader中的数据
 	auto* samplers = material->GetSamplerUniforms();
@@ -331,15 +346,24 @@ void Renderer::RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, u
 	CommandBuffer commandBuffer(this);
 	commandBuffer.Push(sceneNode->Mesh, sceneNode->Material, sceneNode->GetTransform());
 
+	//printf("%f %f %f %f \n", sceneNode->GetTransform()[0][0],
+	//	sceneNode->GetTransform()[1][0], sceneNode->GetTransform()[2][0], sceneNode->GetTransform()[3][0]);
+	//printf("%f %f %f %f \n", sceneNode->GetTransform()[0][1],
+	//	sceneNode->GetTransform()[1][1], sceneNode->GetTransform()[2][1], sceneNode->GetTransform()[3][1]);
+	//printf("%f %f %f %f \n", sceneNode->GetTransform()[0][2],
+	//	sceneNode->GetTransform()[1][2], sceneNode->GetTransform()[2][2], sceneNode->GetTransform()[3][2]);
+	//printf("%f %f %f %f \n", sceneNode->GetTransform()[0][3],
+	//	sceneNode->GetTransform()[1][3], sceneNode->GetTransform()[2][3], sceneNode->GetTransform()[3][3]);
+
 	std::stack<SceneNode*> childStack;
-	for (unsigned int i = 0; i < sceneNode->GetChildCount(); ++i)
+	for (uint32 i = 0; i < sceneNode->GetChildCount(); ++i)
 		childStack.push(sceneNode->GetChildByIndex(i));
 	while (!childStack.empty())
 	{
 		SceneNode* child = childStack.top();
 		childStack.pop();
 		commandBuffer.Push(child->Mesh, child->Material, child->GetTransform());
-		for (unsigned int i = 0; i < child->GetChildCount(); ++i)
+		for (uint32 i = 0; i < child->GetChildCount(); ++i)
 			childStack.push(child->GetChildByIndex(i));
 	}
 	commandBuffer.Sort();
@@ -351,37 +375,38 @@ void Renderer::RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, u
 void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube, uint32 mip)
 {
 	Camera faceCameras[6] = {
-		Camera(glm::vec3(0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
-		Camera(glm::vec3(0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f,-1.0f)),
-		Camera(glm::vec3(0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f,-1.0f)),
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
-	float width = textureCube->FaceWidth * pow(0.5, mip);
-	float height = textureCube->FaceHeight * pow(0.5, mip);
+	float width = (float)textureCube->FaceWidth * pow(0.5, mip);
+	float height = (float)textureCube->FaceHeight * pow(0.5, mip);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferCubeMapID);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_framebufferCubeMapRBO);
-	glRenderbufferStorage(GL_FRAMEBUFFER, GL_DEPTH_COMPONENT24, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_framebufferCubeMapRBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_frameBufferCubeMapRBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_frameBufferCubeMapRBO);
 
 	glViewport(0, 0, width, height);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferCubeMapID);
 
-	for (uint32 i = 0; i < 6; i++)
+	for (uint32 i = 0; i < 6; ++i)
 	{
 		Camera* camera = &faceCameras[i];
 		camera->SetPerspective(Deg2Rad(90.0f), width / height, 0.1f, 100.0f);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, textureCube->ID, 0);
+			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, textureCube->ID, mip);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		for (unsigned int i = 0; i < renderCommands.size(); ++i)
+		for (uint32 i = 0; i < renderCommands.size(); ++i)
 		{
-			// cubemap generation only works w/ custom materials 
 			assert(renderCommands[i].Material->Type == MATERIAL_CUSTOM);
-			RenderCustomCommand(&renderCommands[i], camera);
+			RenderCustomCommand(&renderCommands[i], camera); 
 		}
+
 	}
 }
 
@@ -421,7 +446,7 @@ void Renderer::RenderPushedCommands()
 	//处理阴影
 	if (enableShadows)
 	{
-		m_glCache.SetCullFace(GL_BACK);
+		m_glCache.SetCullFace(GL_FRONT);
 		std::vector<RenderCommand> shadowCommands = m_commandBuffer->GetShadowCastRenderCommands();
 
 		unsigned int shadowRtIndex = 0;
@@ -434,12 +459,13 @@ void Renderer::RenderPushedCommands()
 			DirectionalLight* light = m_directionalLights[i];
 			if (light->CastShadow)
 			{
+				m_materialLibrary->dirShadowShader->activeShader();
 				glBindFramebuffer(GL_FRAMEBUFFER, m_shadowRenderTarget[shadowRtIndex]->ID);
 				glViewport(0, 0, m_shadowRenderTarget[shadowRtIndex]->Width, m_shadowRenderTarget[shadowRtIndex]->Height);
 				glClear(GL_DEPTH_BUFFER_BIT);
 
 				glm::mat4 lightProject = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, -15.0f, 20.0f);
-				glm::mat4 lightView = glm::lookAt(-light->Direction * 10.0f, glm::vec3(0.0), glm::vec3(0.0, 1.0, 0.0));
+				glm::mat4 lightView = glm::lookAt(-light->Direction * 10.0f, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 				m_directionalLights[i]->LightSpaceViewProjection = lightProject * lightView;
 				m_directionalLights[i]->ShadowMapRT = m_shadowRenderTarget[shadowRtIndex];
 				for (int j = 0; j < shadowCommands.size(); j++)
@@ -449,6 +475,7 @@ void Renderer::RenderPushedCommands()
 				++shadowRtIndex;
 			}
 		}
+		m_glCache.SetCullFace(GL_BACK);
 	}
 
 	//----------------------------
@@ -476,15 +503,40 @@ void Renderer::RenderPushedCommands()
 	m_gBuffer->GetColorTexture(1)->Bind(1);
 	m_gBuffer->GetColorTexture(2)->Bind(2);
 
+	//渲染环境光照
+	//使用SSAO 和Cook-Torance模型 记录 m_customTarget
 	RenderDeferredAmbient();
+
+	if (enableLights)
+	{
+
+		//方向光照
+		for (auto it = m_directionalLights.begin(); it != m_directionalLights.end(); ++it)
+		{
+			RenderDeferredDirLight(*it);
+		}
+
+		//点光源
+		m_glCache.SetCull(GL_FRONT);
+		for (auto it = m_pointLights.begin(); it != m_pointLights.end(); ++it)
+		{
+			//粗粒度处理
+			if (m_camera->Frustum.Intersect((*it)->Position, (*it)->Radius))
+			{
+				RenderDeferredPointLight(*it);
+			}
+		}
+		m_glCache.SetCull(GL_BACK);
+	}
 
 	//-----------------------
 
 	m_glCache.SetDepthTest(true);
 	m_glCache.SetBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	m_glCache.SetBlend(false);
-
+	
 	//自定义渲染
+
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBuffer->ID);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_customTarget->ID);
 	glBlitFramebuffer(0, 0, m_gBuffer->Width, m_gBuffer->Height,
@@ -500,6 +552,7 @@ void Renderer::RenderPushedCommands()
 		}
 		else
 		{
+			//渲染默认的framebuffer
 			glViewport(0, 0, m_renderSize.x, m_renderSize.y);
 			glBindFramebuffer(GL_FRAMEBUFFER, m_customTarget->ID);
 			m_camera->SetPerspective(m_camera->FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
@@ -519,31 +572,143 @@ void Renderer::RenderPushedCommands()
 	glViewport(0, 0, m_renderSize.x, m_renderSize.y);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_customTarget->ID);
 	std::vector<RenderCommand> alphaRenderCommand = m_commandBuffer->GetAlphaRenderCommand();
-	for (uint32 i = 0; i < alphaRenderCommand.size(); i++)
+	for (uint32 i = 0; i < alphaRenderCommand.size(); ++i)
 	{
 		RenderCustomCommand(&alphaRenderCommand[i], nullptr);
 	}
 
-	//渲染灯光网格
+	//bloom
+	m_postProcess->ProcessPostLighting(m_customTarget);
+
+	//Debug PointLight Mesh
+
+	m_glCache.SetPolyonMode(GL_LINE);
+	m_glCache.SetCullFace(GL_FRONT);
 	for (auto it = m_pointLights.begin(); it != m_pointLights.end(); it++)
 	{
 		if ((*it)->RenderMesh)
 		{
-			//
+			m_materialLibrary->debugLightMaterial->SetVector("lightColor", 
+				(*it)->Color * (*it)->Intensity * 0.25f);
+
+			RenderCommand command;
+			command.material = m_materialLibrary->debugLightMaterial;
+			command.mesh = m_deferredPointMesh;
+			glm::mat4 model;
+			glm::translate(model, (*it)->Position);
+			glm::scale(model, glm::vec3(0.25f));
+			command.Transfrom = model;
+
+			RenderCustomCommand(&command, nullptr);
 		}
 	}
+	m_glCache.SetPolyonMode(GL_FILL);
+	m_glCache.SetCullFace(GL_BACK);
+
+	std::vector<RenderCommand>postProcessingCommands = m_commandBuffer->GetPostProcessRenderCommand();
+
+	for (unsigned int i = 0; i < postProcessingCommands.size(); ++i)
+	{
+
+	}
+
+	m_postProcess->Blit(m_customTarget);
 
 	m_prevViewProjection = m_camera->Projection * m_camera->View;
 
-	m_postProcess->DebugDisplayTexture(m_gBuffer->GetColorTexture(2));
-	
 	m_commandBuffer->Clear();
+
+	m_renderTargetsCustom.clear();
 
 }
 
 void Renderer::RenderDeferredAmbient()
 {
 	//Material 内置函数
+	PBRCapture* skyCapture = m_pbrCapture->GetSkyCapture();
+	auto irradianceProbe = m_pbrCapture->m_pbrCaputreProbe;
+
+	if (enableIrradianceGI && irradianceProbe.size() > 0)
+	{
+		// 3 irradiance 4 prwefilterwmap 5 brdf lut 6 ssao
+		skyCapture->PrefilteredMap->Bind(4);
+		m_pbrCapture->m_renderTargetBRDFLut->GetColorTexture(0)->Bind(5);
+		m_postProcess->SSAOOutput->Bind(6);
+
+		m_glCache.SetCullFace(GL_FRONT);
+		for (uint32 i = 0; i < irradianceProbe.size(); i++)
+		{
+			PBRCapture* probe = irradianceProbe[i];
+
+			if (m_camera->Frustum.Intersect(probe->Position, probe->Radius))
+			{
+				probe->Irradiance->Bind(3);
+
+				CShader* irradianceShader = m_materialLibrary->deferredIrradianceShader;
+				irradianceShader->activeShader();
+				irradianceShader->SetVector("camPos", m_camera->Position);
+				irradianceShader->SetVector("probePos", probe->Position);
+				irradianceShader->SetFloat("probeRadius", probe->Radius);
+				irradianceShader->SetInt("SSAO", m_postProcess->SSAO);
+
+				glm::mat4 model;
+				glm::translate(model, probe->Position);
+				glm::scale(model, glm::vec3(probe->Radius));
+				irradianceShader->SetMatrix("model", model);
+
+				RenderMesh(m_deferredPointMesh);
+			}
+		}
+		m_glCache.SetCullFace(GL_BACK);
+	}
+	else
+	{
+		CShader* ambientShader = m_materialLibrary->deferredAmbientShader;
+		ambientShader->activeShader();
+		skyCapture->Irradiance->Bind(3);
+		skyCapture->PrefilteredMap->Bind(4);
+		m_pbrCapture->m_renderTargetBRDFLut->GetColorTexture(0)->Bind(5);
+		m_postProcess->SSAOOutput->Bind(6);
+		ambientShader->SetInt("SSAO", m_postProcess->SSAO);
+		RenderMesh(m_quadNDC);
+	}
+
+}
+
+void Renderer::RenderDeferredDirLight(DirectionalLight* light)
+{
+	CShader* dirShader = m_materialLibrary->deferredDirectionalShader;
+
+	dirShader->activeShader();
+	dirShader->SetVector("camPos", m_camera->Position);
+	dirShader->SetVector("lightDir", light->Direction);
+	dirShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
+	dirShader->SetBool("ShadowsEnabled", enableShadows);
+
+	if (light->ShadowMapRT)
+	{
+		dirShader->SetMatrix("lightShadowViewProjection", light->LightSpaceViewProjection);
+		light->ShadowMapRT->GetDepthStencilTexture()->Bind(3);
+	}
+	RenderMesh(m_quadNDC);
+}
+
+void Renderer::RenderDeferredPointLight(PointLight* light)
+{
+	CShader* pointShader = m_materialLibrary->deferredPointShader;
+	
+	pointShader->activeShader();
+	pointShader->SetVector("camPos", m_camera->Position);
+	pointShader->SetVector("lightPos", light->Position);
+	pointShader->SetFloat("lightRadius", light->Radius);
+	pointShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
+
+	glm::mat4 model;
+	glm::translate(model, light->Position);
+	glm::scale(model, glm::vec3(light->Radius));
+	pointShader->SetMatrix("model", model);
+
+	RenderMesh(m_deferredPointMesh);
 }
 
 RenderTarget* Renderer::GetCurrentRenderTarget()
@@ -554,7 +719,8 @@ RenderTarget* Renderer::GetCurrentRenderTarget()
 void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& porj, const glm::mat4& view)
 {
 	//渲染shadow map阴影
-	CShader* shadowShader = m_MaterialLibrary->dirShadowShader;
+	CShader* shadowShader = m_materialLibrary->dirShadowShader;
+	shadowShader->activeShader();
 	shadowShader->SetMatrix("projection", porj);
 	shadowShader->SetMatrix("view", view);
 	shadowShader->SetMatrix("model", command->Transfrom);
@@ -562,18 +728,20 @@ void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& 
 	RenderMesh(command->mesh);
 }
 
-void  Renderer::Blit(Renderer* render, Texture* src)
-{
-
-}
-
 //将材质粘贴到纹理渲染对象上
 void Renderer::Blit(RenderTarget* renderTarget, Material* renderMaterial)
 {
 	glViewport(0, 0, renderTarget->Width, renderTarget->Height);
 	glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->ID);
+
+	//少glClear
+	if(renderTarget->hasDepthAndStenCil)
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	else
+		glClear(GL_COLOR_BUFFER_BIT);
 	RenderCommand renderCommand;
 	renderCommand.material = renderMaterial;
 	renderCommand.mesh = m_quadNDC;
 	RenderCustomCommand(&renderCommand, nullptr, true);
+
 }

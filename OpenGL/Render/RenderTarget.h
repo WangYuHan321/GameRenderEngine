@@ -27,6 +27,7 @@ public:
 		uint32 attachemnts = 1, bool depthandstencil = false);
 	
 	Texture* GetColorTexture(unsigned int index);
+	Texture* GetDepthStencilTexture();
 	void Resize(uint32 width, uint32 height);
 
 	////深度测试必备函数

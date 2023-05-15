@@ -7,6 +7,7 @@
 
 class PBR;
 class Quad;
+class Sphere;
 class Camera;
 class PointLight;
 class PostProcess;
@@ -28,18 +29,19 @@ public:
 	PostProcess* m_postProcess;
 	RenderTarget* m_customTarget;
 	CommandBuffer* m_commandBuffer;
-	MaterialLibrary* m_MaterialLibrary;
+	MaterialLibrary* m_materialLibrary;
 	RenderTarget* m_currentRenderTarget;
 	listenerID m_frameReSizeListener;
 	PBR* m_pbrCapture;
 
 	uint32 m_globalUBO; 
 	glm::vec2 m_renderSize;
-	bool enableWireframe = false;
-	bool enableShadows = true;
 
 	uint32 m_frameBufferCubeMapID;
-	uint32 m_framebufferCubeMapRBO;
+	uint32 m_frameBufferCubeMapRBO;
+
+	//点光源模型
+	Sphere* m_deferredPointMesh;
 
 	//方向光
 	std::vector<DirectionalLight*>m_directionalLights;
@@ -48,6 +50,12 @@ public:
 	std::vector<PointLight*> m_pointLights;
 	//自定义前向渲染
 	std::vector<RenderTarget*> m_renderTargetsCustom;
+
+	bool enableIrradianceGI = true;
+	bool enableLights = true;
+	bool enableWireframe = false;
+	bool enableShadows = true;
+	bool enableDebug = false;
 
 public:
 
@@ -67,7 +75,6 @@ public:
 	RenderTarget* GetCurrentRenderTarget();
 	Material* CreateMaterial(std::string name = "default");
 
-	void RenderDeferredAmbient();
 	void RenderPushedCommands();
 	void RenderMesh(Mesh* mesh);
 	void RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, uint32 mip = 0);
@@ -75,7 +82,10 @@ public:
 	void RenderCustomCommand(RenderCommand* command, Camera* customCamera, bool updateGLState = true);
 	void RenderShadowCastCommand(RenderCommand* command, const glm::mat4& porj, const glm::mat4& view);
 	
-	void Blit(Renderer* render, Texture* src);
+	void RenderDeferredAmbient();
+	void RenderDeferredDirLight(DirectionalLight* light);
+	void RenderDeferredPointLight(PointLight* light);
+
 	void Blit(RenderTarget* renderTarget, Material* renderMaterial);
 	//void Blit(Texture* src, RenderTarget* dst = nullptr, Material* material = nullptr, std::string texturUniform = "TexSrc");
 

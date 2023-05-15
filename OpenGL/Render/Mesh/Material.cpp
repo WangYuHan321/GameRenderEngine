@@ -48,8 +48,14 @@ CShader* Material::GetShader()
 
 void Material::SetFloat(std::string name, float value)
 {
-    m_uniforms[name].FLOAT = value;
     m_uniforms[name].Type = SHADER_FLOAT;
+    m_uniforms[name].FLOAT = value;
+}
+
+void Material::SetVector(std::string name, glm::vec3 value)
+{
+    m_uniforms[name].Type = SHADER_VEC3;
+    m_uniforms[name].VEC3 = value;
 }
 
 void Material::SetTexture(std::string name, Texture* value, unsigned int unit)
@@ -83,8 +89,8 @@ void Material::SetTexture(std::string name, Texture* value, unsigned int unit)
 void Material::SetTextureCube(std::string name, TextureCube* value, unsigned int unit)
 {
     m_uniformSampler[name].ID = unit;
-    m_uniformSampler[name].TEXTURE_CUBE = value;
     m_uniformSampler[name].Type = SHADER_SAMPLERCUBE;
+    m_uniformSampler[name].TEXTURE_CUBE = value;
 
     if (m_Shader)
     {

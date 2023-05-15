@@ -13,7 +13,7 @@ void GLCache::SetDepthTest(bool enable)
 	if (m_depthTest != enable)
 	{
 		m_depthTest = enable;
-		if (m_depthTest)
+		if (enable)
 			glEnable(GL_DEPTH_TEST);
 		else
 			glDisable(GL_DEPTH_TEST);
@@ -25,7 +25,7 @@ void GLCache::SetDepthFunction(GLenum depthFunc)
 	if (m_depthFunc != depthFunc)
 	{
 		m_depthFunc = depthFunc;
-		glEnable(m_depthFunc);
+		glDepthFunc(m_depthFunc);
 	}
 }
 
@@ -45,6 +45,8 @@ void GLCache::SetBlendFunc(GLenum src, GLenum dst)
 {
 	if (m_BleandSrc != src || m_BlendDst != dst)
 	{
+		m_BleandSrc = src;
+		m_BlendDst = dst;
 		glBlendFunc(src, dst);
 	}
 }

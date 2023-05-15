@@ -1,4 +1,5 @@
-#include<string>
+#include <string>
+
 
 #define SID(string) custom_simple_hash(string)
 

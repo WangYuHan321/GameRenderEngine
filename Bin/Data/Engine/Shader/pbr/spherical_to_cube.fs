@@ -5,12 +5,11 @@ in vec3 WorldPos;
 #include ../common/constants.glsl
 #include ../common/sampling.glsl
 
-//采样点
 uniform sampler2D environment;
 
 void main()
 {
-    vec2 uv = SampleSphericalMap(normalize(WorldPos));
-    vec3 color = texture(environment, uv).rgb;
+	vec2 uv = SampleSphericalMap(normalize(WorldPos));
+	vec3 color = texture(environment, uv).rgb;
     FragColor = vec4(color, 1.0);
 }

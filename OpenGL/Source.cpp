@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include "Render/Lighting/DirectionalLight.h"
+#include "Render/Lighting/PointLight.h"
 #include "Util/Utils.h"
 #include "Global/GlobalContext.h"
 
@@ -12,13 +13,55 @@ bool isFirst = true;
 int main()
 {
 	DirectionalLight dirLight;
-	dirLight.Direction = glm::vec3(0.2f, -1.0f, 0.25f);	
+	dirLight.Direction = glm::vec3(0.2f, -1.0f, 0.25f);
 	dirLight.Color = glm::vec3(1.0f, 0.89f, 0.7f);
 	dirLight.Intensity = 50.0f;
 	g_pGlobalContext->m_renderer->AddDirLight(&dirLight);
 
+	std::vector<PointLight> torchLights;
+	{
+		PointLight torch;
+		torch.Radius = 2.5;
+		torch.Color = glm::vec3(0.1f, 0.3f, 0.05f);
+		torch.Intensity = 50.0f;
+		torch.RenderMesh = true;
+
+		torch.Position = glm::vec3(4.85f, 0.7f, 1.43f);
+		torchLights.push_back(torch);
+		torch.Position = glm::vec3(4.85f, 0.7f, -2.2f);
+		torchLights.push_back(torch);
+		torch.Position = glm::vec3(-6.19f, 0.7f, 1.43f);
+		torchLights.push_back(torch);
+		torch.Position = glm::vec3(-6.19f, 0.7f, -2.2f);
+		torchLights.push_back(torch);
+		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[0]);
+		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[1]);
+		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[2]);
+		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[3]);
+	}
+
+	//std::vector<PointLight> randomLights;
+	//std::vector<glm::vec3> randomLightStartPositions;
+	//{
+	//	for (int i = 0; i < 100; ++i)
+	//	{
+	//		PointLight light;
+	//		light.Radius = 1.0 + 0.5 * 3.0;
+	//		light.Intensity = 10.0 + 0.5 * 1000.0;
+	//		light.Color = glm::vec3(0.5, 0.3, 0.4);
+	//		light.RenderMesh = true;
+	//		randomLights.push_back(light);
+	//		randomLightStartPositions.push_back(glm::vec3(0.5 * 12.0f, 0.5 * 5.0f, 0.5 * 6.0f));
+	//	}
+	//	for (int i = 0; i < randomLights.size(); ++i)
+	//	{
+	//		// uncomment for deferred lighting madness
+	//		g_pGlobalContext->m_renderer->AddPointLight(&randomLights[i]);
+	//	}
+	//}
+
 	g_pGlobalContext->m_Camera->SetPerspective(Deg2Rad(60.0f), 
-		g_pGlobalContext->m_renderer->m_renderSize.x / g_pGlobalContext->m_renderer->m_renderSize.y, 0.1f, 100.0f);
+		g_pGlobalContext->m_renderer->m_renderSize.x / g_pGlobalContext->m_renderer->m_renderSize.y, 0.001f, 100.0f);
 	g_pGlobalContext->m_renderer->SetCamera(g_pGlobalContext->m_Camera);
 
 	SceneNode* sponza = ResourceManager::getInstance()->LoadMesh(
@@ -77,6 +120,8 @@ int main()
 			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_UP);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F))
 			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_DOWN);
+		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F9))
+			g_pGlobalContext->m_renderer->enableDebug = !g_pGlobalContext->m_renderer->enableDebug;
 
 		g_pGlobalContext->m_Camera->Update(g_pGlobalContext->m_timeMgr->GetDeltaTime());
 

@@ -161,32 +161,32 @@ void ResourceManager::GenerateDefaultMaterials()
 	defaultMaterial->SetTexture(TexMetallic, LoadTexture("default metallic", "Asset\\texture\\black.png"), 5);
 	defaultMaterial->SetTexture(TexRoughness, LoadTexture("default wroughness", "Asset\\texture\\checkerboard.png"), 6);
 
-	////glass²ÄÖÊ
-	//CShader* glassShader = LoadShader("glass", "Shader\\forward_render.vs", "Shader\\forward_render.fs", { "ALPHA_BLEND" });
-	//glassShader->SetInt("lightShadowMap1", 10);
-	//glassShader->SetInt("lightShadowMap2", 10);
-	//glassShader->SetInt("lightShadowMap3", 10);
-	//glassShader->SetInt("lightShadowMap4", 10);
-	//Material* glassMat = LoadMaterial("glass", glassShader);
-	//glassMat->Type = MATERIAL_CUSTOM;
-	//glassMat->SetTexture(TexAlbedo, LoadTexture("glass albedo", "Asset\\texture\\glass.png", GL_TEXTURE_2D, GL_RGBA), 0);
-	//glassMat->SetTexture(TexNormal, LoadTexture("glass normal", "Asset\\texture\\pbr\\plastic\\normal.png"), 1);
-	//glassMat->SetTexture(TexMetallic, LoadTexture("glass metallic", "Asset\\texture\\pbr/plastic\\metallic.png"), 2);
-	//glassMat->SetTexture(TexRoughness, LoadTexture("glass roughness", "Asset\\texture\\pbr\\plastic\\roughness.png"), 3);
-	//glassMat->SetTexture(TexRoughness, LoadTexture("glass ao", "Asset\\textures\\pbr\\plastic\\ao.png"), 4);
-	//glassMat->Blend = true;
+	//glass²ÄÖÊ
+	CShader* glassShader = LoadShader("glass", "Shader\\forward_render.vs", "Shader\\forward_render.fs", { "ALPHA_BLEND" });
+	glassShader->SetInt("lightShadowMap1", 10);
+	glassShader->SetInt("lightShadowMap2", 10);
+	glassShader->SetInt("lightShadowMap3", 10);
+	glassShader->SetInt("lightShadowMap4", 10);
+	Material* glassMat = LoadMaterial("glass", glassShader);
+	glassMat->Type = MATERIAL_CUSTOM;
+	glassMat->SetTexture(TexAlbedo, LoadTexture("glass albedo", "Asset\\texture\\glass.png", GL_TEXTURE_2D, GL_RGBA), 0);
+	glassMat->SetTexture(TexNormal, LoadTexture("glass normal", "Asset\\texture\\pbr\\plastic\\normal.png"), 1);
+	glassMat->SetTexture(TexMetallic, LoadTexture("glass metallic", "Asset\\texture\\pbr/plastic\\metallic.png"), 2);
+	glassMat->SetTexture(TexRoughness, LoadTexture("glass roughness", "Asset\\texture\\pbr\\plastic\\roughness.png"), 3);
+	glassMat->SetTexture(TexAO, LoadTexture("glass ao", "Asset\\texture\\pbr\\plastic\\ao.png"), 4);
+	glassMat->Blend = true;
 
-	//// alpha blend material
-	//CShader* alphaBlendShader = LoadShader("alpha blend", "Shader\\forward_render.vs","Shader\\forward_render.fs", 
-	//	{ "ALPHA_BLEND" });
-	//alphaBlendShader->activeShader();
-	//alphaBlendShader->SetInt("lightShadowMap1", 10);
-	//alphaBlendShader->SetInt("lightShadowMap2", 10);
-	//alphaBlendShader->SetInt("lightShadowMap3", 10);
-	//alphaBlendShader->SetInt("lightShadowMap4", 10);
-	//Material* alphaBlendMaterial = LoadMaterial("alpha blend", alphaBlendShader);
-	//alphaBlendMaterial->Type = MATERIAL_CUSTOM;
-	//alphaBlendMaterial->Blend = true;
+	// alpha blend material
+	CShader* alphaBlendShader = LoadShader("alpha blend", "Shader\\forward_render.vs","Shader\\forward_render.fs", 
+		{ "ALPHA_BLEND" });
+	alphaBlendShader->activeShader();
+	alphaBlendShader->SetInt("lightShadowMap1", 10);
+	alphaBlendShader->SetInt("lightShadowMap2", 10);
+	alphaBlendShader->SetInt("lightShadowMap3", 10);
+	alphaBlendShader->SetInt("lightShadowMap4", 10);
+	Material* alphaBlendMaterial = LoadMaterial("alpha blend", alphaBlendShader);
+	alphaBlendMaterial->Type = MATERIAL_CUSTOM;
+	alphaBlendMaterial->Blend = true;
 
 	// alpha cutout material
 	CShader* alphaDiscardShader = LoadShader("alpha discard","Shader\\forward_render.vs", "Shader\\forward_render.fs",
@@ -252,5 +252,5 @@ void ResourceManager::GenerateInternalMaterials()
 		"Shader\\shadow_cast.vs", "Shader\\shadow_cast.fs");
 
 	CShader* debugLightShader = LoadShader("debug light", "Shader\\light.vs", "Shader\\light.fs");
-	LoadMaterial("debug Light", debugLightShader);
+	LoadMaterial("debug light", debugLightShader);
 }

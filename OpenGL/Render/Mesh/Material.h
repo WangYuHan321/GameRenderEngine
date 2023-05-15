@@ -50,6 +50,7 @@ public:
 	CShader* GetShader();
 
 	void SetFloat(std::string name, float value);
+	void SetVector(std::string name, glm::vec3 value);
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
 	void SetTextureCube(std::string name, TextureCube* value, unsigned int unit);
 
