@@ -21,6 +21,7 @@ PostProcess::PostProcess(Renderer* render):
 
     {
         m_ssaoRenderTarget = new RenderTarget(SSAO_WIDTH, SSAO_HEIGHT, GL_HALF_FLOAT, 1, false);
+        LOG("new m_ssaoRenderTarget");
         SSAOOutput = m_ssaoRenderTarget->GetColorTexture(0);
 
         m_ssaoShader = ResourceManager::getInstance()->LoadShader("ssao",
@@ -59,6 +60,7 @@ PostProcess::PostProcess(Renderer* render):
         }
 
         m_ssaoNoise = new Texture();
+        LOG("new m_ssaoNoise");
         m_ssaoNoise->Generate(4, 4, GL_RGBA16F, GL_RGB, GL_HALF_FLOAT, &ssaoNoise[0]);
 
         m_ssaoShader->SetVectorArray("kernel", ssaoKernel.size(), ssaoKernel);
@@ -67,10 +69,15 @@ PostProcess::PostProcess(Renderer* render):
 
     {
         m_bloomRenderTarget0 = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_bloomRenderTarget0");
         m_bloomRenderTarget1 = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_bloomRenderTarget1");
         m_bloomRenderTarget2 = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_bloomRenderTarget2");
         m_bloomRenderTarget3 = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_bloomRenderTarget3");
         m_bloomRenderTarget4 = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_bloomRenderTarget4");
 
         m_bloomShader = ResourceManager::getInstance()->LoadShader("bloom",
             "Shader\\scene\\screen_quad.vs", "Shader\\post\\bloom.fs");
@@ -86,9 +93,13 @@ PostProcess::PostProcess(Renderer* render):
     //gaussian blur shader
     {
         m_gaussianRTHalf_H = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_gaussianRTHalf_H");
         m_gaussianRTQuarter_H = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_gaussianRTQuarter_H");
         m_gaussianRTEight_H = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_gaussianRTEight_H");
         m_gaussianRTSixteenth_H = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, false);
+        LOG("new m_gaussianRTSixteenth_H");
 
         m_onePassGaussianShader = ResourceManager::getInstance()->LoadShader("gaussian blur",
             "Shader\\scene\\screen_quad.vs", "Shader\\post\\blur_guassian.fs");
@@ -150,45 +161,57 @@ void PostProcess::ProcessPostLighting(RenderTarget* renderTarget)
 
 PostProcess::~PostProcess()
 {
+    delete m_ssaoNoise;
+    LOG("delete m_ssaoNoise");
     delete m_ssaoRenderTarget;
+    LOG("delete m_ssaoRenderTarget");
     
     delete m_bloomRenderTarget0;
+    LOG("delete m_bloomRenderTarget0");
     delete m_bloomRenderTarget1;
+    LOG("delete m_bloomRenderTarget1");
     delete m_bloomRenderTarget2;
+    LOG("delete m_bloomRenderTarget2");
     delete m_bloomRenderTarget3;
+    LOG("delete m_bloomRenderTarget3");
     delete m_bloomRenderTarget4;
+    LOG("delete m_bloomRenderTarget4");
    
     delete m_gaussianRTHalf_H;
+    LOG("delete m_gaussianRTHalf_H");
     delete m_gaussianRTQuarter_H;
+    LOG("delete m_gaussianRTQuarter_H");
     delete m_gaussianRTEight_H;
+    LOG("delete m_gaussianRTEight_H");
     delete m_gaussianRTSixteenth_H;
+    LOG("delete m_gaussianRTSixteenth_H");
 }
 
 void PostProcess::Resize(uint32 width, uint32 height)
 {
     m_ssaoRenderTarget->Resize(width, height);
 
-    m_bloomRenderTarget0->Resize(uint32(width*2), uint32(height * 2));
-    m_bloomRenderTarget1->Resize(uint32(width * 2), uint32(height * 2));
-    m_bloomRenderTarget2->Resize(uint32(width * 2), uint32(height * 2));
-    m_bloomRenderTarget3->Resize(uint32(width * 2), uint32(height * 2));
-    m_bloomRenderTarget4->Resize(uint32(width * 2), uint32(height * 2));
+    //m_bloomRenderTarget0->Resize(uint32(width*2), uint32(height * 2));
+    //m_bloomRenderTarget1->Resize(uint32(width * 2), uint32(height * 2));
+    //m_bloomRenderTarget2->Resize(uint32(width * 2), uint32(height * 2));
+    //m_bloomRenderTarget3->Resize(uint32(width * 2), uint32(height * 2));
+    //m_bloomRenderTarget4->Resize(uint32(width * 2), uint32(height * 2));
 
-    m_gaussianRTHalf_H->Resize(uint32(width * 2), uint32(height * 2));
-    m_gaussianRTQuarter_H->Resize(uint32(width * 2), uint32(height * 2));
-    m_gaussianRTEight_H->Resize(uint32(width * 2), uint32(height * 2));
-    m_gaussianRTSixteenth_H->Resize(uint32(width * 2), uint32(height * 2));
+    //m_gaussianRTHalf_H->Resize(uint32(width * 2), uint32(height * 2));
+    //m_gaussianRTQuarter_H->Resize(uint32(width * 2), uint32(height * 2));
+    //m_gaussianRTEight_H->Resize(uint32(width * 2), uint32(height * 2));
+    //m_gaussianRTSixteenth_H->Resize(uint32(width * 2), uint32(height * 2));
     
-    //m_bloomRenderTarget0->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    //m_bloomRenderTarget1->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    //m_bloomRenderTarget2->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
-    //m_bloomRenderTarget3->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
-    //m_bloomRenderTarget4->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
-    //
-    //m_gaussianRTHalf_H->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    //m_gaussianRTQuarter_H->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
-    //m_gaussianRTEight_H->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
-    //m_gaussianRTSixteenth_H->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
+    m_bloomRenderTarget0->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    m_bloomRenderTarget1->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    m_bloomRenderTarget2->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
+    m_bloomRenderTarget3->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
+    m_bloomRenderTarget4->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
+    
+    m_gaussianRTHalf_H->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    m_gaussianRTQuarter_H->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
+    m_gaussianRTEight_H->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
+    m_gaussianRTSixteenth_H->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
 }
 
 Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int count)

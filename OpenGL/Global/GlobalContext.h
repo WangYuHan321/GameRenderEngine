@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../UI/UIManager.h"
 #include "../Window/Window.h"
 #include "../Render/Renderer.h"
 #include "../Camera/FlyCamera.h"
@@ -16,6 +17,7 @@ public:
 	std::shared_ptr<Window> m_window;
 	std::shared_ptr<Device> m_device;
 	std::shared_ptr<Driver> m_dirve;
+	std::shared_ptr<UIManager> m_uiMgr;
 	std::shared_ptr<TimeManager> m_timeMgr;
 	std::shared_ptr<InputManager> m_inputMgr;
 	std::shared_ptr<ResourceManager> m_resourceMgr;

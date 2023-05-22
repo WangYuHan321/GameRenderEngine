@@ -1,4 +1,5 @@
 #include <stack>
+#include <iostream>
 #include <GLM/gtx/transform.hpp>
 
 #include "PBR.h"
@@ -30,22 +31,32 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
 	delete m_quadNDC;
+	LOG("delete m_quadNDC");
 	delete m_gBuffer;
+	LOG("delete m_gBuffer");
 	delete m_pbrCapture;
+	LOG("delete m_pbrCapture");
 	delete m_postProcess;
+	LOG("delete m_postProcess");
 	delete m_customTarget;
+	LOG("delete m_customTarget");
 	delete m_commandBuffer;
+	LOG("delete m_commandBuffer");
 	delete m_materialLibrary;
+	LOG("delete m_materialLibrary");
+	delete m_deferredPointMesh;
+	LOG("delete m_deferredPointMesh");
 	//delete m_currentRenderTarget;
 
 	//for (auto item : m_directionalLights)
 	//	delete item;
 	for (auto item : m_shadowRenderTarget)
 		delete item;
+	LOG("delete[] m_shadowRenderTarget");
 	//for (auto item : m_pointLights)
 	//	delete item;
-	for (auto item : m_renderTargetsCustom)
-		delete item;
+	//for (auto item : m_renderTargetsCustom)
+	//	delete item;
 	Window::getInstance()->ReSizeWindowEvent.RemoveListenerID(m_frameReSizeListener);
 }
 
@@ -87,6 +98,19 @@ void Renderer::PushPostProcessor(Material* postProcessor)
 {
 	//Material Type == PostProcessor
 	m_commandBuffer->Push(nullptr, postProcessor);
+}
+
+void Renderer::SetTarget(RenderTarget* renderTarget, GLenum type)
+{
+	m_currentRenderTargetCustom = renderTarget;
+	if (renderTarget != nullptr)
+	{
+		if (std::find(m_renderTargetsCustom.begin(), m_renderTargetsCustom.end(), renderTarget) !=
+			m_renderTargetsCustom.end())
+		{
+			m_renderTargetsCustom.push_back(m_currentRenderTargetCustom);
+		}
+	}
 }
 
 void Renderer::UpdateUBO()
@@ -148,6 +172,7 @@ void Renderer::Init()
 {
 	m_renderSize = glm::vec2(1920, 1080);
 	m_commandBuffer = new CommandBuffer(this);
+	LOG("new m_commandBuffer");
 
 	m_glCache.SetDepthTest(true);
 	m_glCache.SetCull(true);
@@ -175,14 +200,21 @@ void Renderer::Init()
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
 		m_shadowRenderTarget.push_back(rt);
 	}
+	LOG("new[] m_shadowRenderTarget ");
 	m_quadNDC = new Quad;
-	m_camera = new Camera();
+	LOG("new NDC Plane \n");
 	m_pbrCapture = new PBR(this);
+	LOG("new PBR \n");
 	m_postProcess = new PostProcess(this);
+	LOG("new PostProcess \n");
 	m_deferredPointMesh = new Sphere(16, 16);
+	LOG("new DeferredPointLightMesh \n");
 	m_materialLibrary = new MaterialLibrary();
+	LOG("new MaterialLibrary \n");
 	m_customTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
-	m_gBuffer = new RenderTarget(m_renderSize.x, m_renderSize.y, GL_HALF_FLOAT, 4, true);
+	LOG("new CustomTarget \n");
+	m_gBuffer = new RenderTarget(1, 1, GL_HALF_FLOAT, 4, true);
+	LOG("new GBUFFER \n");
 
 	glGenBuffers(1, &m_globalUBO);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_globalUBO);
@@ -193,6 +225,10 @@ void Renderer::Init()
 		"Asset\\texture\\backgrounds\\alley.hdr");
 	PBRCapture* envBridge = m_pbrCapture->ProcessEquirectangular(hdrMap);
 	m_pbrCapture->SetSkyCapture(envBridge);
+}
+void Renderer::Clear()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
 }
 
 void Renderer::AddDirLight(DirectionalLight* directionLight)
@@ -217,14 +253,14 @@ void Renderer::SetRenderSize(uint32 width, uint32 height)
 
 	m_postProcess->Resize(width, height);
 
-	Log("Set Render Size (%d, %d) \n", width, height );
+	LOG_INFO("Set Render Size (%d, %d) \n", width, height );
 }
 
 Material* Renderer::CreateMaterial(string name)
 {
 	if (m_materialLibrary->CreateMaterial(name) == nullptr)
 	{
-		Log("no material!!!!\n");
+		LOG_INFO("no material!!!!\n");
 	}
 	return m_materialLibrary->CreateMaterial(name);
 }
@@ -319,7 +355,7 @@ void Renderer::RenderCustomCommand(RenderCommand* command, Camera* customCamera,
 			material->GetShader()->SetMatrix(it->first, it->second.MAT4);
 			break;
 		default:
-			gLog.OutputError("error shader uniform type!!!");
+			LOG_INFO("error shader uniform type!!!");
 			break;
 		}
 
@@ -545,10 +581,17 @@ void Renderer::RenderPushedCommands()
 	m_renderTargetsCustom.push_back(nullptr);//这个是默认渲染物体
 	for (uint32 targetIndex = 0; targetIndex < m_renderTargetsCustom.size(); targetIndex++)
 	{
+		//自定义渲染
 		RenderTarget* renderTarget = m_renderTargetsCustom[targetIndex];
 		if (renderTarget)
 		{
-
+			glViewport(0, 0, renderTarget->Width, renderTarget->Height);
+			glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->ID);
+			if(renderTarget->hasDepthAndStenCil)
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			else
+				glClear(GL_COLOR_BUFFER_BIT);
+			m_camera->SetPerspective(m_camera->FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
 		}
 		else
 		{
@@ -713,7 +756,7 @@ void Renderer::RenderDeferredPointLight(PointLight* light)
 
 RenderTarget* Renderer::GetCurrentRenderTarget()
 {
-	return m_currentRenderTarget;
+	return m_currentRenderTargetCustom;
 }
 
 void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& porj, const glm::mat4& view)
@@ -744,4 +787,9 @@ void Renderer::Blit(RenderTarget* renderTarget, Material* renderMaterial)
 	renderCommand.mesh = m_quadNDC;
 	RenderCustomCommand(&renderCommand, nullptr, true);
 
+}
+
+PBRCapture* Renderer::GetSkyCapture()
+{
+	return m_pbrCapture->GetSkyCapture();
 }

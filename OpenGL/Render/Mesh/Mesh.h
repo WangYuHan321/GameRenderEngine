@@ -31,6 +31,7 @@ public:
     std::vector<unsigned int> Indices;
 
     Mesh();
+    ~Mesh();
     Mesh(std::vector<glm::vec3> positions, std::vector<unsigned int> indices);
     Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<unsigned int> indices);
     Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<glm::vec3> normals, std::vector<unsigned int> indices);

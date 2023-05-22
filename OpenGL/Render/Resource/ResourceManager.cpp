@@ -61,6 +61,7 @@ CShader* ResourceManager::LoadShader(std::string name, std::string vsPath, std::
 
 Texture* ResourceManager::LoadTexture(std::string name, std::string path, GLenum target, GLenum format, bool srgb)
 {
+	LOG_INFO(name + "\n");
 	unsigned int id = SID(name);
 	if (m_textuers.find(id) != ResourceManager::m_textuers.end())
 	{
@@ -77,7 +78,7 @@ Texture* ResourceManager::LoadTexture(std::string name, std::string path, GLenum
 	}
 	else
 	{
-		Log("º”‘ÿŒ∆¿Ì ß∞‹£°£°£°\n");
+		LOG_ERROR("º”‘ÿŒ∆¿Ì ß∞‹£°£°£°\n");
 		return nullptr;
 	}
 

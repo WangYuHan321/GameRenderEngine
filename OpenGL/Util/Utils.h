@@ -63,7 +63,7 @@ static string G_GetTextFromFile(string strFilePath)
 	if (strFilePath.length() != 0)
 	{
 		std::ifstream streamV(strFilePath);
-		Assert(streamV.fail(), "Error ifstream");
+		assert(streamV.fail(), "Error ifstream");
 		std::stringstream strStreamV;
 		strStreamV << streamV.rdbuf();
 		string fileContent = strStreamV.str();

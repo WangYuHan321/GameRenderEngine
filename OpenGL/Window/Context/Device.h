@@ -28,9 +28,13 @@ public:
 	~Device();
 
 	void CreateCursor();
-	void BindErrorwCallback();
+	void BindErrorCallback();
 	void DestroyCursors();
 	void PollEvents() const;
+	void LogInfo(DeviceError error_Code, std::string p_desc);
+
+	void OnInit();
+	void OnEnd();
 
 	GLFWcursor* GetCursorInstance(CursorShape shape);
 

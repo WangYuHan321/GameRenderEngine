@@ -1,0 +1,5 @@
+enum class MemoryMode
+{
+	INTERNAL_MANAGMENT,
+	EXTERNAL_MANAGMENT
+};

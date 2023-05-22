@@ -9,6 +9,7 @@ class PBR;
 class Quad;
 class Sphere;
 class Camera;
+class PBRCapture;
 class PointLight;
 class PostProcess;
 class RenderTarget;
@@ -30,7 +31,7 @@ public:
 	RenderTarget* m_customTarget;
 	CommandBuffer* m_commandBuffer;
 	MaterialLibrary* m_materialLibrary;
-	RenderTarget* m_currentRenderTarget;
+	RenderTarget* m_currentRenderTargetCustom;
 	listenerID m_frameReSizeListener;
 	PBR* m_pbrCapture;
 
@@ -63,7 +64,9 @@ public:
 	~Renderer();
 
 	void Init();
+	void Clear();
 	void UpdateUBO();
+	void SetTarget(RenderTarget* renderTarget, GLenum type);
 	void PushRender(Mesh* mesh,Material* material,glm::mat4 transofrm = glm::mat4(1.0), glm::mat4 prevTransoform = glm::mat4(1.0));
 	void PushRender(SceneNode* node);
 	void PushPostProcessor(Material* postProcessor);
@@ -90,4 +93,5 @@ public:
 	//void Blit(Texture* src, RenderTarget* dst = nullptr, Material* material = nullptr, std::string texturUniform = "TexSrc");
 
 	void SetCamera(Camera* cam) { m_camera = cam; }
+	PBRCapture* GetSkyCapture();
 };

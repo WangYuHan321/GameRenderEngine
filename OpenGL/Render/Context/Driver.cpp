@@ -14,7 +14,7 @@ Driver::Driver(bool isDebugModel)
 		glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 		if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
 		{
-			Log("------enable OpenGL Debug -------\n");
+			LOG("------enable OpenGL Debug -------\n");
 			glEnable(GL_DEBUG_OUTPUT);
 			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 			glDebugMessageCallback(GLDebugMessageCallback, nullptr);
@@ -30,7 +30,7 @@ void Driver::InitGlew()
 	{
 		std::string message = "Error Init GLEW: ";
 		std::string glewError = reinterpret_cast<const char*>(glewGetErrorString(error));
-		Log(message + glewError);
+		LOG_ERROR(message + glewError);
 	}
 }
 
@@ -82,9 +82,9 @@ void Driver::GLDebugMessageCallback(uint32_t source, uint32_t type, uint32_t id,
 
 	switch (severity)
 	{
-	case GL_DEBUG_SEVERITY_HIGH:			Log(output);	break;
-	case GL_DEBUG_SEVERITY_MEDIUM:			Log(output);	break;
-	case GL_DEBUG_SEVERITY_LOW:				Log(output);		break;
-	case GL_DEBUG_SEVERITY_NOTIFICATION:	Log(output);			break;
+	case GL_DEBUG_SEVERITY_HIGH:			LOG_ERROR(output);	break;
+	case GL_DEBUG_SEVERITY_MEDIUM:			LOG_ERROR(output);	break;
+	case GL_DEBUG_SEVERITY_LOW:				LOG_ERROR(output);		break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION:	LOG_ERROR(output);			break;
 	}
 }

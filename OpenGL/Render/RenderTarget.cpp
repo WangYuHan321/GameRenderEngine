@@ -45,7 +45,7 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		Log("Framebuffer not complete!");
+		LOG_ERROR("Framebuffer not complete!");
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -77,7 +77,7 @@ Texture* RenderTarget::GetColorTexture(unsigned int index)
 		return &m_colorAttachments[index];
 	else
 	{
-		Log("RenderTarget color texture requested, but not available: " + std::to_string(index));
+		LOG_ERROR("RenderTarget color texture requested, but not available: " + std::to_string(index));
 		return nullptr;
 	}
 }

@@ -1,8 +1,16 @@
 #include<stdio.h>
 #include "Render/Lighting/DirectionalLight.h"
 #include "Render/Lighting/PointLight.h"
+#include "Scene/Background.h"
+#include "pbr_capture.h"
 #include "Util/Utils.h"
+#include "UI/Widgets/Button/Button.h"
+#include "UI/Widgets/Button/ButtonImage.h"
+#include "UI/Panel/PanelMenuBar.h"
+#include "UI/Module/Canvas.h"
+#include "UI/Widgets/Text/Text.h"
 #include "Global/GlobalContext.h"
+
 
 GlobalContext* g_pGlobalContext = new GlobalContext();
 
@@ -21,7 +29,7 @@ int main()
 	std::vector<PointLight> torchLights;
 	{
 		PointLight torch;
-		torch.Radius = 2.5;
+		torch.Radius = 1000.0f;
 		torch.Color = glm::vec3(0.1f, 0.3f, 0.05f);
 		torch.Intensity = 50.0f;
 		torch.RenderMesh = true;
@@ -40,26 +48,6 @@ int main()
 		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[3]);
 	}
 
-	//std::vector<PointLight> randomLights;
-	//std::vector<glm::vec3> randomLightStartPositions;
-	//{
-	//	for (int i = 0; i < 100; ++i)
-	//	{
-	//		PointLight light;
-	//		light.Radius = 1.0 + 0.5 * 3.0;
-	//		light.Intensity = 10.0 + 0.5 * 1000.0;
-	//		light.Color = glm::vec3(0.5, 0.3, 0.4);
-	//		light.RenderMesh = true;
-	//		randomLights.push_back(light);
-	//		randomLightStartPositions.push_back(glm::vec3(0.5 * 12.0f, 0.5 * 5.0f, 0.5 * 6.0f));
-	//	}
-	//	for (int i = 0; i < randomLights.size(); ++i)
-	//	{
-	//		// uncomment for deferred lighting madness
-	//		g_pGlobalContext->m_renderer->AddPointLight(&randomLights[i]);
-	//	}
-	//}
-
 	g_pGlobalContext->m_Camera->SetPerspective(Deg2Rad(60.0f), 
 		g_pGlobalContext->m_renderer->m_renderSize.x / g_pGlobalContext->m_renderer->m_renderSize.y, 0.001f, 100.0f);
 	g_pGlobalContext->m_renderer->SetCamera(g_pGlobalContext->m_Camera);
@@ -70,19 +58,28 @@ int main()
 	sponza->SetPosition(glm::vec3(0.0, -1.0, 0.0));
 	sponza->SetScale(0.01f);
 
-	//g_pGlobalContext->m_window->SetCursorShape(CursorShape::CROSSHAIR);
+	Background* background = new Background();
+	PBRCapture* p = g_pGlobalContext->m_renderer->GetSkyCapture();
+	background->SetCubeMap(p->PrefilteredMap);
+	background->Material->SetFloat("lodLevel", 1.5f);
+
+
+	//g_pGlobalContext->m_window->SetCursorShape(CursorShape::VRESIZE);
 
 	while (!g_pGlobalContext->m_window->ShouldClose())
 	{
 		g_pGlobalContext->m_device->PollEvents();
-		g_pGlobalContext->m_timeMgr->Update();
+
+		g_pGlobalContext->m_renderer->Clear();
 
 		//¼üÅÌÊó±êÊäÈë
-
 		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_ESCAPE))
 		{
 			g_pGlobalContext->m_window->SetShouldClose(true);
+			break;
 		}
+
+		g_pGlobalContext->m_timeMgr->Update();
 
 		if (g_pGlobalContext->m_inputMgr->IsMouseButtonReleased(EMouseButton::MOUSE_BUTTON_RIGHT))
 		{
@@ -125,11 +122,15 @@ int main()
 
 		g_pGlobalContext->m_Camera->Update(g_pGlobalContext->m_timeMgr->GetDeltaTime());
 
+		g_pGlobalContext->m_renderer->PushRender(background);
 		g_pGlobalContext->m_renderer->PushRender(sponza);
 		g_pGlobalContext->m_renderer->RenderPushedCommands();
 		
+		g_pGlobalContext->m_uiMgr->Render();
+
 		g_pGlobalContext->m_window->SwapBuffer();
 		g_pGlobalContext->m_inputMgr->ClearEvents();
+
 	}
 
 	delete g_pGlobalContext;

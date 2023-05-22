@@ -22,19 +22,22 @@ public:
 	Window();
 	~Window();
 
-	void CreateGLFWWindow();
 	void BindKeyCallback();
 	void BindMouseCallback();
 	void BindCloseCallback();
 	void BindResizeCallback();
 	void BindMousePosCallback();
 	void BindFrameBufferCallback();
+	void CreateGLFWWindow(uint32 width, uint32 height);
 
 	void SwapBuffer();
 	bool ShouldClose() const;
 	void SetShouldClose(bool p_value) const;
 	void OnResize(uint32 width, uint32 height);
 	void SetCursorShape(CursorShape p_cursorShape);
+
+	void OnEnd();
+	void OnInit(uint32 width = 800, uint32 height = 600);
 
 	GLFWwindow* GetWindow() { return m_glfwWindow; }
 	glm::vec2 GetWindowSize() { return m_glfwWindowSize; }
@@ -43,6 +46,6 @@ public:
 private:
 	GLFWwindow* m_glfwWindow;
 	CursorShape m_cursorShape;
-	glm::vec2 m_glfwWindowSize = glm::vec2(800, 600);
+	glm::vec2 m_glfwWindowSize;
 };
 

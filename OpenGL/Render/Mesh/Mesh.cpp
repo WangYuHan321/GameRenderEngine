@@ -3,7 +3,13 @@
 
 Mesh::Mesh()
 {
+}
 
+Mesh::~Mesh()
+{
+    glDeleteVertexArrays(1, &m_VAO);
+    glDeleteBuffers(1, &m_EBO);
+    glDeleteBuffers(1, &m_VBO);
 }
 
 Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<unsigned int> indices)
@@ -218,7 +224,7 @@ void Mesh::Finalize(bool interleaved)
 
 void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution)
 {
-    Log("Generating 3D mesh from SDF");
+    LOG_INFO("Generating 3D mesh from SDF");
 
     // tables from: http://paulbourke.net/geometry/polygonise/
     static int edgeTable[256] =
@@ -669,7 +675,7 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
     Topology = TRIANGLES;
     Finalize();
 
-    Log("SDF mesh generation complete!");
+    LOG_INFO("SDF mesh generation complete!");
 }
 // --------------------------------------------------------------------------------------------
 void Mesh::calculateNormals(bool smooth)

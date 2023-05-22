@@ -9,7 +9,9 @@
 #include<intrin.h>
 #include<map>
 #include"string_id.hpp"
-#include"../Log/ILog.h"
+#include"../Log/Logger.h"
+#include"../ThirdLib/ImGui/imgui.h"
+#include"../ThirdLib/ImGui/imgui_internal.h"
 
 #define MSAA_NUM 4
 
@@ -29,7 +31,6 @@ namespace EasyGraphics {
 #else
 
 #endif // DEBUG
-
 	struct EWINDOWINFO
 	{
 		uint32 WINDOW_WIDTH;
@@ -67,6 +68,8 @@ namespace EasyGraphics {
 	};
 }
 
+#if 0
+
 #define Assert(exp, desc)\
 if(!___assert(exp, desc, __FILE__, __LINE__))\
 { __debugbreak(); }\
@@ -74,12 +77,51 @@ if(!___assert(exp, desc, __FILE__, __LINE__))\
 static bool ___assert(bool exp, const char* desc,const char* filename, int line)
 {
 	if (!exp) {
-		GTipWindowLog.OutputError(desc);
-		GTipWindowLog.OutputError(filename);
-		GTipWindowLog.OutputError("" + line);
+		//ELOG_ERROR(desc);
+		//ELOG_ERROR(filename);
+		//ELOG_ERROR("" + line);
 	}
 	return exp;
 }
 
-//static EasyGraphics::EWINDOWINFO GWindowInfo(1024,1024,"EasyEngine");
-//static EasyGraphics::EINPUTMODEL GInputModel(true, true);
+#endif
+
+struct Color3   
+{
+	float r, g, b;
+
+	Color3& operator=(ImVec4& right)
+	{
+		r = right.x;
+		g = right.y;
+		b = right.z;
+		return *this;
+	}
+};
+
+struct Color4
+{
+	float r, g, b, a;
+	Color4() :r(0.0), g(0.0), b(0.0), a(0.0) {}
+	Color4(float x, float y, float z, float w)
+		:r(x), g(y), b(z), a(w) {}
+
+	Color4& operator=(ImVec4& right)
+	{
+		r = right.x;
+		g = right.y;
+		b = right.z;
+		a = right.w;
+		return *this;
+	}
+
+	ImVec4 toImVec4()
+	{
+		ImVec4 imv;
+		imv.x = r;
+		imv.y = g;
+		imv.z = b;
+		imv.w = a;
+		return imv;
+	}
+};

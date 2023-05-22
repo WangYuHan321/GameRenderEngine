@@ -45,7 +45,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(OPENGL)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -63,11 +63,46 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(OPENGL)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(GLFW)\lib\x64;$(GLEW)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Time\Date.h" />
+    <ClInclude Include="Log\ConsoleColor.h" />
+    <ClInclude Include="Log\ConsoleHandler.h" />
+    <ClInclude Include="Editor\Profiler.h" />
+    <ClInclude Include="Analytics\ProfilterReport.h" />
+    <ClInclude Include="Log\Logger.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="UI\Layout\Columns.h" />
+    <ClInclude Include="UI\Visual\ProgressBar.h" />
+    <ClInclude Include="UI\Visual\Image.h" />
+    <ClInclude Include="UI\Widgets\Selection\CheckBox.h" />
+    <ClInclude Include="UI\Widgets\Text\TextSelectable.h" />
+    <ClInclude Include="UI\Widgets\Text\TextColored.h" />
+    <ClInclude Include="UI\Panel\PanelWindow.h" />
+    <ClInclude Include="UI\Widgets\Text\Text.h" />
+    <ClInclude Include="UI\Plugin\DataDispatcher.h" />
+    <ClInclude Include="UI\Widgets\DataWidget.h" />
+    <ClInclude Include="UI\Module\Canvas.h" />
+    <ClInclude Include="UI\Panel\PanelMenuBar.h" />
+    <ClInclude Include="UI\Panel\APanelTransformable.h" />
+    <ClInclude Include="UI\Panel\APanel.h" />
+    <ClInclude Include="UI\UIManager.h" />
+    <ClInclude Include="UI\Internel\UI_Common.h" />
+    <ClInclude Include="UI\Widgets\Button\ButtonImage.h" />
+    <ClInclude Include="ThirdLib\ImGui\imconfig.h" />
+    <ClInclude Include="ThirdLib\ImGui\imgui.h" />
+    <ClInclude Include="ThirdLib\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="ThirdLib\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="ThirdLib\ImGui\imgui_internal.h" />
+    <ClInclude Include="ThirdLib\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ThirdLib\ImGui\imstb_textedit.h" />
+    <ClInclude Include="ThirdLib\ImGui\imstb_truetype.h" />
+    <ClInclude Include="UI\Widgets\Button\Button.h" />
+    <ClInclude Include="UI\Widgets\Button\AButton.h" />
+    <ClInclude Include="Scene\Background.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Camera\CameraFrustum.h" />
     <ClInclude Include="Camera\FlyCamera.h" />
@@ -80,6 +115,11 @@
     <ClInclude Include="Render\ShaderConfig.h" />
     <ClInclude Include="Render\Shader\ShaderType.h" />
     <ClInclude Include="Time\TimeManager.h" />
+    <ClInclude Include="UI\API\IDrawable.h" />
+    <ClInclude Include="UI\Plugin\IPlugin.h" />
+    <ClInclude Include="UI\Plugin\Pluginable.h" />
+    <ClInclude Include="UI\Widgets\AWidget.h" />
+    <ClInclude Include="UI\Internel\WidgetContainer.h" />
     <ClInclude Include="Window\Input\InputManager.h" />
     <ClInclude Include="Render\Context\Driver.h" />
     <ClInclude Include="Window\Context\Device.h" />
@@ -92,7 +132,7 @@
     <ClInclude Include="Render\Material\MaterialLibrary.h" />
     <ClInclude Include="Render\Lighting\DirectionalLight.h" />
     <ClInclude Include="Log\DumpFileManager.h" />
-    <ClInclude Include="Log\ILog.h" />
+    <ClInclude Include="Log\ILogHandler.h" />
     <ClInclude Include="Render\CommandBuffer.h" />
     <ClInclude Include="Render\GLCache.h" />
     <ClInclude Include="Render\Mesh\AABB.h" />
@@ -122,6 +162,38 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Time\Date.cpp" />
+    <ClCompile Include="Log\ConsoleHandler.cpp" />
+    <ClCompile Include="Editor\Profiler.cpp" />
+    <ClCompile Include="Analytics\ProfilterReport.cpp" />
+    <ClCompile Include="Log\Logger.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="UI\Layout\Columns.cpp" />
+    <ClCompile Include="UI\Visual\ProgressBar.cpp" />
+    <ClCompile Include="UI\Visual\Image.cpp" />
+    <ClCompile Include="UI\Widgets\Selection\CheckBox.cpp" />
+    <ClCompile Include="UI\Widgets\Text\TextSelectable.cpp" />
+    <ClCompile Include="UI\Widgets\Text\TextColored.cpp" />
+    <ClCompile Include="UI\Panel\PanelWindow.cpp" />
+    <ClCompile Include="UI\Widgets\Text\Text.cpp" />
+    <ClCompile Include="UI\Plugin\DataDispatcher.cpp" />
+    <ClCompile Include="UI\Widgets\DataWidget.cpp" />
+    <ClCompile Include="UI\Module\Canvas.cpp" />
+    <ClCompile Include="UI\Panel\PanelMenuBar.cpp" />
+    <ClCompile Include="UI\Panel\APanelTransformable.cpp" />
+    <ClCompile Include="UI\Panel\APanel.cpp" />
+    <ClCompile Include="UI\Internel\UI_MemoryModel.h" />
+    <ClCompile Include="UI\UIManager.cpp" />
+    <ClCompile Include="UI\Widgets\Button\ButtonImage.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="ThirdLib\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="UI\Widgets\Button\Button.cpp" />
+    <ClCompile Include="UI\Widgets\Button\AButton.cpp" />
+    <ClCompile Include="Scene\Background.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Camera\CameraFrustum.cpp" />
     <ClCompile Include="Camera\FlyCamera.cpp" />
@@ -131,6 +203,8 @@
     <ClCompile Include="Render\Mesh\Cube.cpp" />
     <ClCompile Include="Render\Shader\MaterialLoader.cpp" />
     <ClCompile Include="Time\TimeManager.cpp" />
+    <ClCompile Include="UI\Widgets\AWidget.cpp" />
+    <ClCompile Include="UI\Internel\WidgetContainer.cpp" />
     <ClCompile Include="Window\Input\InputManager.cpp" />
     <ClCompile Include="Render\Context\Driver.cpp" />
     <ClCompile Include="Window\Context\Device.cpp" />
@@ -140,7 +214,7 @@
     <ClCompile Include="Render\Mesh\Quad.cpp" />
     <ClCompile Include="Render\Material\MaterialLibrary.cpp" />
     <ClCompile Include="Render\Lighting\DirectionalLight.cpp" />
-    <ClCompile Include="Log\ILog.cpp" />
+    <ClCompile Include="Log\ILogHandler.cpp" />
     <ClCompile Include="Render\CommandBuffer.cpp" />
     <ClCompile Include="Render\GLCache.cpp" />
     <ClCompile Include="Render\Mesh\AABB.cpp" />

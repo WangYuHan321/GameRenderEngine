@@ -1,24 +1,10 @@
 #include "Device.h"
 Device::Device()
 {	
-	int initCode = glfwInit();
-
-	if (initCode == GLFW_FALSE)
-	{
-		Log("glfwInit error !!!\n");
-		glfwTerminate();
-	}
-	else
-	{
-		CreateCursor();
-	}
-	BindErrorwCallback();
 }
 
 Device::~Device()
 {
-	DestroyCursors();
-	glfwTerminate();
 }
 
 void Device::CreateCursor()
@@ -31,7 +17,7 @@ void Device::CreateCursor()
 	m_cursor[CursorShape::VRESIZE] = glfwCreateStandardCursor(static_cast<int>(CursorShape::VRESIZE));
 }
 
-void Device::BindErrorwCallback()
+void Device::BindErrorCallback()
 {
 	auto errorCallback = [](int p_code, const char* p_desc)
 	{
@@ -50,9 +36,45 @@ void Device::DestroyCursors()
 	glfwDestroyCursor(m_cursor[CursorShape::VRESIZE]);
 }
 
+void Device::OnInit()
+{
+	int initCode = glfwInit();
+
+	if (initCode == GLFW_FALSE)
+	{
+		LOG_ERROR("glfwInit error !!!\n");
+		glfwTerminate();
+	}
+	else
+	{
+		CreateCursor();
+	}
+	BindErrorCallback();
+	ErrorEvent.AddListenerID(std::bind(&Device::LogInfo,
+		this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void Device::OnEnd()
+{
+	DestroyCursors();
+	glfwTerminate();
+}
+
 void Device::PollEvents() const
 {
 	glfwPollEvents();
+}
+
+void Device::LogInfo(DeviceError error, std::string p_desc)
+{
+	switch (error)
+	{
+	case DeviceError::NOT_INITIALIZED:
+	case DeviceError::NO_CURRENT_CONTEXT:
+	case DeviceError::INVALID_ENUM:
+	default:
+		LOG_ERROR(p_desc);
+	}
 }
 
 GLFWcursor* Device::GetCursorInstance(CursorShape shape)

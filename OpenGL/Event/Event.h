@@ -1,9 +1,8 @@
 #pragma once
-#include "../Util/common.h"
 #include <functional>
 #include <unordered_map>
-
-using listenerID = uint64;
+#include "../Util/common.h"
+using listenerID = uint64_t;
 
 template <class... ArgTypes>
 class Event
@@ -21,7 +20,7 @@ public:
 
 	void RemoveAllListeners();
 
-	uint64 GetListenerCount();
+	listenerID GetListenerCount();
 
 	void Invoke(ArgTypes... arg);
 

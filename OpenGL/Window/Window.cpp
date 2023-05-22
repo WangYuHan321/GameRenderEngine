@@ -5,30 +5,24 @@
 
 Window::Window()
 {
-	CreateGLFWWindow();
-	BindKeyCallback();
-	BindMouseCallback();
-	BindCloseCallback();
-	BindResizeCallback();
-	BindMousePosCallback();
-	BindFrameBufferCallback();
-
-	ReSizeWindowEvent.AddListenerID(std::bind(&Window::OnResize,
-		this, std::placeholders::_1, std::placeholders::_2));
 }
 
-void Window::CreateGLFWWindow()
+void Window::CreateGLFWWindow(uint32 width, uint32 height)
 {
 	glfwWindowHint(GLFW_RESIZABLE, true);
 	glfwWindowHint(GLFW_DECORATED, true);
 	glfwWindowHint(GLFW_FOCUSED, true);
 	glfwWindowHint(GLFW_MAXIMIZED, false);
-	glfwWindowHint(GLFW_FLOATING, true);
+	// «∑Ò÷√∂•
+	glfwWindowHint(GLFW_FLOATING, false);
 	glfwWindowHint(GLFW_VISIBLE, true);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, true);
 	glfwWindowHint(GLFW_REFRESH_RATE, 60);
 	glfwWindowHint(GLFW_SAMPLES, 12);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
+	m_glfwWindowSize.x = width;
+	m_glfwWindowSize.y = height;
 
 	m_glfwWindow = glfwCreateWindow(m_glfwWindowSize.x, m_glfwWindowSize.y,
 		"EasyEngine -- by WangYuHan", nullptr, nullptr);
@@ -38,7 +32,7 @@ void Window::CreateGLFWWindow()
 //#endif 
 
 	glfwMakeContextCurrent(m_glfwWindow);
-	glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(m_glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Window::OnResize(uint32 width, uint32 height)
@@ -50,6 +44,25 @@ void Window::OnResize(uint32 width, uint32 height)
 void Window::SwapBuffer()
 {
 	glfwSwapBuffers(m_glfwWindow);
+}
+
+void Window::OnInit(uint32 width, uint32 height)
+{
+	CreateGLFWWindow(width, height);
+	BindKeyCallback();
+	BindMouseCallback();
+	BindCloseCallback();
+	BindResizeCallback();
+	BindMousePosCallback();
+	BindFrameBufferCallback();
+
+	ReSizeWindowEvent.AddListenerID(std::bind(&Window::OnResize,
+		this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void Window::OnEnd()
+{
+	glfwDestroyWindow(m_glfwWindow);
 }
 
 void Window::SetCursorShape(CursorShape p_cursorShape)

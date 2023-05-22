@@ -15,7 +15,7 @@ void Texture::Generate(uint32 width, GLenum internalFormat, GLenum format, GLenu
 	Format = format;
 	Type = type;
 
-	Assert((Target == GL_TEXTURE_1D), "Texture Generate is not GL_TEXTURE_2D");
+	assert((Target == GL_TEXTURE_1D), "Texture Generate is not GL_TEXTURE_2D");
 	Bind();
 	{
 		glTexImage1D(Target, MipLevel, InternalFormat, Width, 0, Format, Type, data);
@@ -40,7 +40,7 @@ void Texture::Generate(uint32 width, uint32 height, GLenum internalFormat, GLenu
 	Format = format;
 	Type = type;
 	
-	Assert((Target == GL_TEXTURE_2D), "Texture Generate is not GL_TEXTURE_2D");
+	assert((Target == GL_TEXTURE_2D), "Texture Generate is not GL_TEXTURE_2D");
 	Bind();
 	{
 		glTexImage2D(Target, MipLevel, InternalFormat, Width, Height, 0, Format, Type, data);
@@ -66,7 +66,7 @@ void Texture::Generate(uint32 width, uint32 height,uint32 depth, GLenum internal
 	Format = format;
 	Type = type;
 
-	Assert((Target == GL_TEXTURE_2D), "Texture Generate is not GL_TEXTURE_2D");
+	assert((Target == GL_TEXTURE_2D), "Texture Generate is not GL_TEXTURE_2D");
 	Bind();
 	{
 		glTexImage3D(Target, MipLevel, InternalFormat, Width, Height, Depth, 0, Format, Type, data);

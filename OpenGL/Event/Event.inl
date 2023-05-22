@@ -11,7 +11,7 @@ listenerID Event<ArgTypes...>::AddListenerID(Callback callback)
 template <class... ArgTypes>
 listenerID Event<ArgTypes...>::operator +=(Callback callback)
 {
-	AddListenerID(callback);
+	return AddListenerID(callback);
 }
 
 template <class... ArgTypes>
@@ -33,7 +33,7 @@ void Event<ArgTypes...>::RemoveAllListeners()
 }
 
 template <class... ArgTypes>
-uint64 Event<ArgTypes...>::GetListenerCount()
+listenerID Event<ArgTypes...>::GetListenerCount()
 {
 	return m_activeIDCount;
 }
