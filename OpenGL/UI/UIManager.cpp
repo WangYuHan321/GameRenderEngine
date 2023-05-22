@@ -50,33 +50,10 @@ void UIManager::Render()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Columns(3, "hellow", true);
 
-	for(uint32 i =0; i<3; i++)
-	{
-		ImGui::Button(std::to_string(i).c_str(),ImVec2(200, 40));
 
-		ImGui::SetColumnWidth(40, 200);
-
-		ImGui::NextColumn();
-	}
-	ImGui::Columns(1);
-
-	ImGui::Columns(3, "hellow1", true);
-
-	for (uint32 i = 0; i < 3; i++)
-	{
-		ImGui::Button(std::to_string(i).c_str(), ImVec2(200, 40));
-
-		ImGui::SetColumnWidth(40, 200);
-
-		ImGui::NextColumn();
-	}
-	//ImGui::Begin("Hello, world!");                         
-
-	//ImGui::Text("This is some useful text.");             
-	//ImGui::End();
 	ImGui::Render();
+	ImGui::EndFrame();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	//success
 
