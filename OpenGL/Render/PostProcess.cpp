@@ -133,7 +133,7 @@ void PostProcess::ProcessPreLighting()
         m_ssaoShader->SetMatrix("projection", m_renderer->m_camera->Projection);
         m_ssaoShader->SetMatrix("view", m_renderer->m_camera->View);
 
-        glBindFramebuffer(GL_FRAMEBUFFER, m_ssaoRenderTarget->ID);
+        glBindFramebufferEXT(GL_FRAMEBUFFER, m_ssaoRenderTarget->ID);
         glViewport(0, 0, m_ssaoRenderTarget->Width, m_ssaoRenderTarget->Height);
         glClear(GL_COLOR_BUFFER_BIT);
         m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
@@ -146,7 +146,7 @@ void PostProcess::ProcessPostLighting(RenderTarget* renderTarget)
     {
         m_bloomShader->activeShader();
         renderTarget->GetColorTexture(0)->Bind(0);
-        glBindFramebuffer(GL_FRAMEBUFFER, m_bloomRenderTarget0->ID);
+        glBindFramebufferEXT(GL_FRAMEBUFFER, m_bloomRenderTarget0->ID);
         glViewport(0, 0, m_bloomRenderTarget0->Width, m_bloomRenderTarget0->Height);
         glClear(GL_COLOR_BUFFER_BIT);
         m_bloomShader->activeShader();
@@ -191,27 +191,27 @@ void PostProcess::Resize(uint32 width, uint32 height)
 {
     m_ssaoRenderTarget->Resize(width, height);
 
-    //m_bloomRenderTarget0->Resize(uint32(width*2), uint32(height * 2));
-    //m_bloomRenderTarget1->Resize(uint32(width * 2), uint32(height * 2));
-    //m_bloomRenderTarget2->Resize(uint32(width * 2), uint32(height * 2));
-    //m_bloomRenderTarget3->Resize(uint32(width * 2), uint32(height * 2));
-    //m_bloomRenderTarget4->Resize(uint32(width * 2), uint32(height * 2));
+    m_bloomRenderTarget0->Resize(uint32(width * 2), uint32(height * 2));
+    m_bloomRenderTarget1->Resize(uint32(width * 2), uint32(height * 2));
+    m_bloomRenderTarget2->Resize(uint32(width * 2), uint32(height * 2));
+    m_bloomRenderTarget3->Resize(uint32(width * 2), uint32(height * 2));
+    m_bloomRenderTarget4->Resize(uint32(width * 2), uint32(height * 2));
 
-    //m_gaussianRTHalf_H->Resize(uint32(width * 2), uint32(height * 2));
-    //m_gaussianRTQuarter_H->Resize(uint32(width * 2), uint32(height * 2));
-    //m_gaussianRTEight_H->Resize(uint32(width * 2), uint32(height * 2));
-    //m_gaussianRTSixteenth_H->Resize(uint32(width * 2), uint32(height * 2));
+    m_gaussianRTHalf_H->Resize(uint32(width * 2), uint32(height * 2));
+    m_gaussianRTQuarter_H->Resize(uint32(width * 2), uint32(height * 2));
+    m_gaussianRTEight_H->Resize(uint32(width * 2), uint32(height * 2));
+    m_gaussianRTSixteenth_H->Resize(uint32(width * 2), uint32(height * 2));
     
-    m_bloomRenderTarget0->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    m_bloomRenderTarget1->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    m_bloomRenderTarget2->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
-    m_bloomRenderTarget3->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
-    m_bloomRenderTarget4->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
-    
-    m_gaussianRTHalf_H->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
-    m_gaussianRTQuarter_H->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
-    m_gaussianRTEight_H->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
-    m_gaussianRTSixteenth_H->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
+    //m_bloomRenderTarget0->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    //m_bloomRenderTarget1->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    //m_bloomRenderTarget2->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
+    //m_bloomRenderTarget3->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
+    //m_bloomRenderTarget4->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
+    //
+    //m_gaussianRTHalf_H->Resize(uint32(width * 0.5f), uint32(height * 0.5f));
+    //m_gaussianRTQuarter_H->Resize(uint32(width * 0.25f), uint32(height * 0.25f));
+    //m_gaussianRTEight_H->Resize(uint32(width * 0.125f), uint32(height * 0.125f));
+    //m_gaussianRTSixteenth_H->Resize(uint32(width * 0.0675f), uint32(height * 0.0675f));
 }
 
 Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int count)
@@ -257,7 +257,7 @@ Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int cou
         {
             rtHorizontal->GetColorTexture(0)->Bind(0);
         }
-        glBindFramebuffer(GL_FRAMEBUFFER, horizontal ? rtHorizontal->ID : rtVertical->ID);
+        glBindFramebufferEXT(GL_FRAMEBUFFER, horizontal ? rtHorizontal->ID : rtVertical->ID);
         m_onePassGaussianShader->activeShader();
         m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
     }
@@ -269,7 +269,7 @@ Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int cou
 void PostProcess::DebugDisplayTexture(Texture* src)
 {
     //ÆÁÄ»ÏÔÊ¾ÎÆÀí
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, m_renderer->m_renderSize.x, m_renderer->m_renderSize.y);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     src->Bind(0);
@@ -279,7 +279,7 @@ void PostProcess::DebugDisplayTexture(Texture* src)
 
 void PostProcess::Blit(RenderTarget* renderTarget)
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, renderTarget->Width, renderTarget->Height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 

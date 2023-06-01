@@ -32,6 +32,7 @@ public:
 	Renderer* m_renderer;
 
 	bool SSAO = true;
+	bool SSR = true;
 	bool Bloom = true;
 	bool MotionBlur = true;
 

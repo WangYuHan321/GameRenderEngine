@@ -13,21 +13,12 @@ FlyCamera::FlyCamera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : Came
     Forward = forward;
     m_WorldUp = Up;
     m_TargetPosition = position;
-    
 }
 
 void FlyCamera::Update(float dt)
 {
     if (dt > 1.0f) dt = 0.0f;
     Camera::Update(dt);
-
-    //Log("Position = %d\n", Position);
-    //Log("TargetPosition = %d\n", m_TargetPosition);
-    //Log("Yaw = %d\n", Yaw);
-    //Log("TargetYaw = %d\n", m_TargetYaw);
-    //Log("Pitch = %d\n", Pitch);
-    //Log("TargetPitch = %d\n", m_TargetPitch);
-
     Position = lerp(Position, m_TargetPosition, dt * 5.0);
     Yaw = lerp(Yaw, m_TargetYaw, dt * 10.0);
     Pitch = lerp(Pitch,m_TargetPitch, dt * 10.0);
@@ -75,7 +66,7 @@ void FlyCamera::InputMouse(double deltaX, double deltaY)
     if (m_TargetPitch > 89.0f)  m_TargetPitch = 89.0f;
     if (m_TargetPitch < -89.0f) m_TargetPitch = -89.0f;
 }
-// --------------------------------------------------------------------------------------------
+
 void FlyCamera::InputScroll(float deltaX, float deltaY)
 {
     MovementSpeed = glm::clamp(MovementSpeed + deltaY * 1.0f, 1.0f, 25.0f);

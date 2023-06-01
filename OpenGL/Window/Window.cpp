@@ -55,6 +55,8 @@ void Window::OnInit(uint32 width, uint32 height)
 	BindResizeCallback();
 	BindMousePosCallback();
 	BindFrameBufferCallback();
+	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+	fprintf(stdout, "Status: Using GLFW %s\n", glfwGetVersionString());
 
 	ReSizeWindowEvent.AddListenerID(std::bind(&Window::OnResize,
 		this, std::placeholders::_1, std::placeholders::_2));

@@ -45,7 +45,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -64,10 +64,17 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(GLFW)\lib\x64;$(GLEW)\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Actor.h" />
+    <ClInclude Include="Core\ECS\Components\AComponent.h" />
+    <ClInclude Include="Core\API\ISerializable.h" />
+    <ClInclude Include="Core\API\tinyxml2.h" />
+    <ClInclude Include="Core\API\IInspectorItem.h" />
+    <ClInclude Include="Core\ECS\Components\Behaviour.h" />
+    <ClInclude Include="Core\Util\common.h" />
     <ClInclude Include="Time\Date.h" />
     <ClInclude Include="Log\ConsoleColor.h" />
     <ClInclude Include="Log\ConsoleHandler.h" />
@@ -75,6 +82,7 @@
     <ClInclude Include="Analytics\ProfilterReport.h" />
     <ClInclude Include="Log\Logger.h" />
     <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Core\ECS\Components\Transform.h" />
     <ClInclude Include="UI\Layout\Columns.h" />
     <ClInclude Include="UI\Visual\ProgressBar.h" />
     <ClInclude Include="UI\Visual\Image.h" />
@@ -162,12 +170,18 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Actor.cpp" />
+    <ClCompile Include="Core\ECS\Components\AComponent.cpp" />
+    <ClCompile Include="Core\API\ISerializable.cpp" />
+    <ClCompile Include="Core\API\tinyxml2.cpp" />
+    <ClCompile Include="Core\API\IInspectorItem.cpp" />
     <ClCompile Include="Time\Date.cpp" />
     <ClCompile Include="Log\ConsoleHandler.cpp" />
     <ClCompile Include="Editor\Profiler.cpp" />
     <ClCompile Include="Analytics\ProfilterReport.cpp" />
     <ClCompile Include="Log\Logger.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Core\ECS\Components\Transform.cpp" />
     <ClCompile Include="UI\Layout\Columns.cpp" />
     <ClCompile Include="UI\Visual\ProgressBar.cpp" />
     <ClCompile Include="UI\Visual\Image.cpp" />
@@ -238,6 +252,7 @@
     <ClCompile Include="Window\GLFWWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Core\ECS\Components\Behaviour.inl" />
     <None Include="Event\Event.inl" />
     <None Include="Shader\ambient.fs" />
     <None Include="Shader\pbr\pbr.glsl" />

@@ -9,7 +9,7 @@ public:
 	float Intensity = 1.0f;
 
 	bool CastShadow = true;
-	RenderTarget* ShadowMapRT;
+	RenderTarget* ShadowMapRT = NULL;
 	glm::mat4 LightSpaceViewProjection;
 
 };

@@ -29,8 +29,8 @@ int main()
 	std::vector<PointLight> torchLights;
 	{
 		PointLight torch;
-		torch.Radius = 1000.0f;
-		torch.Color = glm::vec3(0.1f, 0.3f, 0.05f);
+		torch.Radius = 2.5;
+		torch.Color = glm::vec3(1.0f, 0.3f, 0.05f);
 		torch.Intensity = 50.0f;
 		torch.RenderMesh = true;
 
@@ -63,21 +63,82 @@ int main()
 	background->SetCubeMap(p->PrefilteredMap);
 	background->Material->SetFloat("lodLevel", 1.5f);
 
+	{
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(3.0f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(6.0f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.5f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(11.4f, 0.5f, -0.5f), 4.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-3.0f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-6.2f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-9.5f, 0.5f, -0.5f), 3.25);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-12.1f, 0.5f, -0.5f), 4.25);
+		// bottom floor - left wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 0.5f, 4.0f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-12.0f, 0.5f, 4.0f), 4.0);
+		// bottom floor - right wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 0.5f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-12.0f, 0.5f, -4.5f), 4.0);
+		// 1st floor - center wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 5.0f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 5.0f, -0.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 5.0f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 5.0f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 5.0f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 5.0f, -0.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-12.0f, 5.0f, -0.5f), 4.5);
+		// 1st floor - left wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 5.0f, 4.0), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-11.5f, 5.0f, 4.0), 4.0);
+		// 1st floor - right wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 5.0f, -4.5f), 4.0);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-11.5f, 5.0f, -4.5f), 4.0);
+		// 2nd floor - center wing
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(0.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(4.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(8.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(12.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-4.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-8.0f, 9.5f, -0.5f), 4.5);
+		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-11.5f, 9.5f, -0.5f), 4.5);
+
+		// bake before rendering
+		g_pGlobalContext->m_renderer->BakeProbes();
+	}
 
 	//g_pGlobalContext->m_window->SetCursorShape(CursorShape::VRESIZE);
 
 	while (!g_pGlobalContext->m_window->ShouldClose())
 	{
 		g_pGlobalContext->m_device->PollEvents();
-
-		g_pGlobalContext->m_renderer->Clear();
-
 		//¼üÅÌÊó±êÊäÈë
 		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_ESCAPE))
 		{
 			g_pGlobalContext->m_window->SetShouldClose(true);
 			break;
 		}
+
+		g_pGlobalContext->m_renderer->Clear();
 
 		g_pGlobalContext->m_timeMgr->Update();
 
@@ -118,7 +179,10 @@ int main()
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F))
 			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_DOWN);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F9))
-			g_pGlobalContext->m_renderer->enableDebug = !g_pGlobalContext->m_renderer->enableDebug;
+			g_pGlobalContext->m_renderer->enableWireframe = !g_pGlobalContext->m_renderer->enableWireframe;
+		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F8))
+			g_pGlobalContext->m_renderer->enableIrradianceGI = !g_pGlobalContext->m_renderer->enableIrradianceGI;
+
 
 		g_pGlobalContext->m_Camera->Update(g_pGlobalContext->m_timeMgr->GetDeltaTime());
 

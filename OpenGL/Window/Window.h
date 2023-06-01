@@ -37,7 +37,7 @@ public:
 	void SetCursorShape(CursorShape p_cursorShape);
 
 	void OnEnd();
-	void OnInit(uint32 width = 800, uint32 height = 600);
+	void OnInit(uint32 width = 1920, uint32 height = 1080);
 
 	GLFWwindow* GetWindow() { return m_glfwWindow; }
 	glm::vec2 GetWindowSize() { return m_glfwWindowSize; }

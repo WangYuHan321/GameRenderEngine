@@ -1,4 +1,7 @@
 #pragma once
+#include <glm/glm.hpp>  
+#include <glm/gtc/matrix_transform.hpp>
+#include <GLM/gtx/transform.hpp>
 #include"GLCache.h"
 #include"../Render/Mesh/Mesh.h"
 #include"../Render/Mesh/Material.h"
@@ -17,7 +20,6 @@ class CommandBuffer;
 class RenderCommand;
 class MaterialLibrary;
 class DirectionalLight;
-
 
 class Renderer 
 {
@@ -44,6 +46,9 @@ public:
 	//点光源模型
 	Sphere* m_deferredPointMesh;
 
+	//Probe Position
+	std::vector<glm::vec4> m_probeSaptials;
+
 	//方向光
 	std::vector<DirectionalLight*>m_directionalLights;
 	std::vector<RenderTarget*> m_shadowRenderTarget;
@@ -52,12 +57,14 @@ public:
 	//自定义前向渲染
 	std::vector<RenderTarget*> m_renderTargetsCustom;
 
-	bool enableIrradianceGI = true;
+	bool enableIrradianceGI = false;
 	bool enableLights = true;
 	bool enableWireframe = false;
 	bool enableShadows = true;
-	bool enableDebug = false;
+	bool enableDebugLight = true;
 
+
+	std::vector<RenderCommand> test;
 public:
 
 	Renderer();
@@ -69,10 +76,11 @@ public:
 	void SetTarget(RenderTarget* renderTarget, GLenum type);
 	void PushRender(Mesh* mesh,Material* material,glm::mat4 transofrm = glm::mat4(1.0), glm::mat4 prevTransoform = glm::mat4(1.0));
 	void PushRender(SceneNode* node);
+	void SetRenderSize(uint32 width, uint32 height);
 	void PushPostProcessor(Material* postProcessor);
 	void AddDirLight(DirectionalLight* directionLight);
 	void AddPointLight(PointLight* pointLight);
-	void SetRenderSize(uint32 width, uint32 height);
+	void AddIrradianceProbe(glm::vec3 pos, float radiuse);
 
 	Camera* GetCamera() { return m_camera; }
 	RenderTarget* GetCurrentRenderTarget();
@@ -81,7 +89,8 @@ public:
 	void RenderPushedCommands();
 	void RenderMesh(Mesh* mesh);
 	void RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, uint32 mip = 0);
-	void RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube, uint32 mip);
+	void RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube,
+		glm::vec3 position, uint32 mip);
 	void RenderCustomCommand(RenderCommand* command, Camera* customCamera, bool updateGLState = true);
 	void RenderShadowCastCommand(RenderCommand* command, const glm::mat4& porj, const glm::mat4& view);
 	
@@ -92,6 +101,7 @@ public:
 	void Blit(RenderTarget* renderTarget, Material* renderMaterial);
 	//void Blit(Texture* src, RenderTarget* dst = nullptr, Material* material = nullptr, std::string texturUniform = "TexSrc");
 
+	void BakeProbes(SceneNode* scene = nullptr);
 	void SetCamera(Camera* cam) { m_camera = cam; }
 	PBRCapture* GetSkyCapture();
 };

@@ -50,7 +50,12 @@ void UIManager::Render()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-
+	ImGui::Begin("control");
+	ImGui::Text("W S A D forward back left right");
+	ImGui::TextUnformatted("E F up down");
+	ImGui::TextUnformatted("F9 draw wireframe");
+	ImGui::TextUnformatted("F8 irradiancGI");
+	ImGui::End();
 
 	ImGui::Render();
 	ImGui::EndFrame();

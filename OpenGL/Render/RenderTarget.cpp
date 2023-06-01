@@ -7,8 +7,8 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 	Type(type),
 	hasDepthAndStenCil(depthandstencil)
 {
-	glGenFramebuffers(1, &ID);
-	glBindFramebuffer(GL_FRAMEBUFFER, ID);
+	glGenFramebuffersEXT(1, &ID);
+	glBindFramebufferEXT(GL_FRAMEBUFFER, ID);
 	for (uint32 i = 0; i < attachemnts; i++)
 	{
 		Texture texture;
@@ -24,7 +24,7 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 		else if (type == GL_FLOAT)
 			internalFormat = GL_RGBA32F;
 		texture.Generate(width, height, internalFormat, GL_RGBA, type, 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.ID, 0);
+		glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texture.ID, 0);
 		m_colorAttachments.push_back(texture);
 	}
 
@@ -39,16 +39,16 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 		texture.MipMapping = false;
 
 		texture.Generate(Width, Height, GL_DEPTH_STENCIL, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture.ID, 0);
+		glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, texture.ID, 0);
 		m_depthStencil = texture;
 	}
 
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		LOG_ERROR("Framebuffer not complete!");
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 }
 
 void RenderTarget::Resize(uint32 width, uint32 height)

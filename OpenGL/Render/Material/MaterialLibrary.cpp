@@ -27,7 +27,7 @@ MaterialLibrary::MaterialLibrary()
 		"Shader\\deferred\\directional.vs", "Shader\\deferred\\directional.fs");
 
 	deferredPointShader = ResourceManager::getInstance()->LoadShader("deferred pointLight",
-		"Shader\\deferred/point_light.vs", "Shader\\deferred\\point_light.fs");
+		"Shader\\deferred\\point_light.vs", "Shader\\deferred\\point_light.fs");
 }
 
 MaterialLibrary::~MaterialLibrary()

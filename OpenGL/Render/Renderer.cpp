@@ -1,6 +1,5 @@
 #include <stack>
 #include <iostream>
-#include <GLM/gtx/transform.hpp>
 
 #include "PBR.h"
 #include "Mesh/Quad.h"
@@ -17,6 +16,7 @@
 #include "../Util/Utils.h"
 #include "../Window/GLFWWindow.h"
 #include "Lighting/PointLight.h"
+#include "../../Scene/Scene.h"
 #include "../Window/Window.h"
 #include "Resource/ResourceManager.h"
 
@@ -46,6 +46,7 @@ Renderer::~Renderer()
 	LOG("delete m_materialLibrary");
 	delete m_deferredPointMesh;
 	LOG("delete m_deferredPointMesh");
+
 	//delete m_currentRenderTarget;
 
 	//for (auto item : m_directionalLights)
@@ -170,7 +171,6 @@ void Renderer::UpdateUBO()
 
 void Renderer::Init()
 {
-	m_renderSize = glm::vec2(1920, 1080);
 	m_commandBuffer = new CommandBuffer(this);
 	LOG("new m_commandBuffer");
 
@@ -185,8 +185,8 @@ void Renderer::Init()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClearDepth(1.0f);
 
-	glGenFramebuffers(1, &m_frameBufferCubeMapID);
-	glGenRenderbuffers(1, &m_frameBufferCubeMapRBO);
+	glGenFramebuffersEXT(1, &m_frameBufferCubeMapID);
+	glGenRenderbuffersEXT(1, &m_frameBufferCubeMapRBO);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -254,6 +254,12 @@ void Renderer::SetRenderSize(uint32 width, uint32 height)
 	m_postProcess->Resize(width, height);
 
 	LOG_INFO("Set Render Size (%d, %d) \n", width, height );
+}
+
+void Renderer::AddIrradianceProbe(glm::vec3 pos, float radiuse)
+{
+	glm::vec4 info(pos.x, pos.y, pos.z, radiuse);
+	m_probeSaptials.push_back(info);
 }
 
 Material* Renderer::CreateMaterial(string name)
@@ -405,18 +411,18 @@ void Renderer::RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, u
 	commandBuffer.Sort();
 	std::vector<RenderCommand> renderCommands = commandBuffer.GetCustomRenderCommand(nullptr);
 
-	RenderToCubeMap(renderCommands, textureCube, mip);
+	RenderToCubeMap(renderCommands, textureCube, glm::vec3(0.0f), mip);
 }
 
-void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube, uint32 mip)
+void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube, glm::vec3 position, uint32 mip)
 {
 	Camera faceCameras[6] = {
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f,-1.0f)),
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
-		Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+		Camera(position, glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(position, glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(position, glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+		Camera(position, glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f,-1.0f)),
+		Camera(position, glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+		Camera(position, glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
 	float width = (float)textureCube->FaceWidth * pow(0.5, mip);
 	float height = (float)textureCube->FaceHeight * pow(0.5, mip);
@@ -448,6 +454,7 @@ void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, Textu
 
 void Renderer::RenderPushedCommands()
 {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_commandBuffer->Sort();
@@ -620,33 +627,34 @@ void Renderer::RenderPushedCommands()
 		RenderCustomCommand(&alphaRenderCommand[i], nullptr);
 	}
 
-	//bloom
-	m_postProcess->ProcessPostLighting(m_customTarget);
-
 	//Debug PointLight Mesh
 
-	m_glCache.SetPolyonMode(GL_LINE);
-	m_glCache.SetCullFace(GL_FRONT);
-	for (auto it = m_pointLights.begin(); it != m_pointLights.end(); it++)
+	if (enableDebugLight)
 	{
-		if ((*it)->RenderMesh)
+		m_glCache.SetCullFace(GL_FRONT);
+		for (auto it = m_pointLights.begin(); it != m_pointLights.end(); it++)
 		{
-			m_materialLibrary->debugLightMaterial->SetVector("lightColor", 
-				(*it)->Color * (*it)->Intensity * 0.25f);
+			if ((*it)->RenderMesh)
+			{
+				m_materialLibrary->debugLightMaterial->SetVector("lightColor",
+					(*it)->Color * (*it)->Intensity * 0.25f);
 
-			RenderCommand command;
-			command.material = m_materialLibrary->debugLightMaterial;
-			command.mesh = m_deferredPointMesh;
-			glm::mat4 model;
-			glm::translate(model, (*it)->Position);
-			glm::scale(model, glm::vec3(0.25f));
-			command.Transfrom = model;
+				RenderCommand command;
+				command.material = m_materialLibrary->debugLightMaterial;
+				command.mesh = m_deferredPointMesh;
+				glm::mat4 model(1.0f);
+				translate(model, (*it)->Position);
+				scale(model, glm::vec3(0.25f));
+				command.Transfrom = model;
 
-			RenderCustomCommand(&command, nullptr);
+				RenderCustomCommand(&command, nullptr);
+			}
 		}
+		m_glCache.SetCullFace(GL_BACK);
 	}
-	m_glCache.SetPolyonMode(GL_FILL);
-	m_glCache.SetCullFace(GL_BACK);
+
+	//bloom
+	m_postProcess->ProcessPostLighting(m_customTarget);
 
 	std::vector<RenderCommand>postProcessingCommands = m_commandBuffer->GetPostProcessRenderCommand();
 
@@ -655,6 +663,8 @@ void Renderer::RenderPushedCommands()
 
 	}
 
+	//m_pbrCapture->RenderProbes();
+
 	m_postProcess->Blit(m_customTarget);
 
 	m_prevViewProjection = m_camera->Projection * m_camera->View;
@@ -662,7 +672,6 @@ void Renderer::RenderPushedCommands()
 	m_commandBuffer->Clear();
 
 	m_renderTargetsCustom.clear();
-
 }
 
 void Renderer::RenderDeferredAmbient()
@@ -693,6 +702,7 @@ void Renderer::RenderDeferredAmbient()
 				irradianceShader->SetVector("probePos", probe->Position);
 				irradianceShader->SetFloat("probeRadius", probe->Radius);
 				irradianceShader->SetInt("SSAO", m_postProcess->SSAO);
+				irradianceShader->SetInt("SSR", m_postProcess->SSR);
 
 				glm::mat4 model;
 				glm::translate(model, probe->Position);
@@ -746,9 +756,9 @@ void Renderer::RenderDeferredPointLight(PointLight* light)
 	pointShader->SetFloat("lightRadius", light->Radius);
 	pointShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
 
-	glm::mat4 model;
-	glm::translate(model, light->Position);
-	glm::scale(model, glm::vec3(light->Radius));
+	glm::mat4 model(1.0f);
+	translate(model, light->Position);
+	scale(model, glm::vec3(light->Radius));
 	pointShader->SetMatrix("model", model);
 
 	RenderMesh(m_deferredPointMesh);
@@ -769,6 +779,78 @@ void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& 
 	shadowShader->SetMatrix("model", command->Transfrom);
 
 	RenderMesh(command->mesh);
+}
+
+void Renderer::BakeProbes(SceneNode* scene)
+{
+	if (!scene)
+	{
+		scene = Scene::getInstance()->Root;
+	}
+
+	scene->UpdateTransform();
+
+	CommandBuffer commandBuffer(this);
+	std::vector<Material*> materials;
+
+	std::stack<SceneNode*> scenStack;
+	scenStack.push(scene);
+	while (!scenStack.empty())
+	{
+		SceneNode* node = scenStack.top();
+		scenStack.pop();
+		if (node->Mesh)
+		{
+			auto samplerUniforms = *(node->Material->GetSamplerUniforms());
+			if (samplerUniforms.find("TexAlbedo") != samplerUniforms.end())
+			{
+				materials.push_back(new Material(m_pbrCapture->m_probeCaptureShader));
+				materials[materials.size() - 1]->SetTexture("TexAlbedo", samplerUniforms["TexAlbedo"].TEXTURE, 0);
+				if (samplerUniforms.find("TexNormal") != samplerUniforms.end())
+				{
+					materials[materials.size() - 1]->SetTexture("TexNormal", samplerUniforms["TexNormal"].TEXTURE, 1);
+				}
+				if (samplerUniforms.find("TexMetallic") != samplerUniforms.end())
+				{
+					materials[materials.size() - 1]->SetTexture("TexMetallic", samplerUniforms["TexMetallic"].TEXTURE, 2);
+				}
+				if (samplerUniforms.find("TexRoughness") != samplerUniforms.end())
+				{
+					materials[materials.size() - 1]->SetTexture("TexRoughness", samplerUniforms["TexRoughness"].TEXTURE, 3);
+				}
+				commandBuffer.Push(node->Mesh, materials[materials.size() - 1], node->GetTransform());
+			}
+			else if (samplerUniforms.find("background") != samplerUniforms.end())
+			{   // we have a background scene node, add those as well
+				materials.push_back(new Material(m_pbrCapture->m_probeCaptureBackgroundShader));
+				materials[materials.size() - 1]->SetTextureCube("background", samplerUniforms["background"].TEXTURE_CUBE, 0);
+				materials[materials.size() - 1]->DepthCompare = node->Material->DepthCompare;
+				commandBuffer.Push(node->Mesh, materials[materials.size() - 1], node->GetTransform());
+			}
+		}
+		for (unsigned int i = 0; i < node->GetChildCount(); ++i)
+			scenStack.push(node->GetChildByIndex(i));
+	}
+	commandBuffer.Sort();
+	std::vector<RenderCommand> renderCommand = commandBuffer.GetCustomRenderCommand(nullptr);
+
+	m_pbrCapture->ClearIrradianceProbes();
+	for (int i = 0; i < m_probeSaptials.size(); i++)
+	{
+		TextureCube renderResult;
+		renderResult.DefaultInitialize(32, 32, GL_RGB, GL_FLOAT);
+
+		RenderToCubeMap(renderCommand, &renderResult, glm::vec3(m_probeSaptials[i].x,
+			m_probeSaptials[i].y, m_probeSaptials[i].z), 0);
+
+		PBRCapture* capture = m_pbrCapture->ProcessCubeTest(&renderResult, true);
+		m_pbrCapture->AddIrradianceProbe(capture, glm::vec3(m_probeSaptials[i].x, 
+			m_probeSaptials[i].y, m_probeSaptials[i].z), m_probeSaptials[i].w);
+	}
+	for (int i = 0; i < materials.size(); ++i)
+	{
+		delete materials[i];
+	}
 }
 
 //将材质粘贴到纹理渲染对象上

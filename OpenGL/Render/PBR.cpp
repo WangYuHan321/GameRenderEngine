@@ -79,6 +79,40 @@ PBRCapture* PBR::ProcessEquirectangular(Texture* envMap)
 	return ProcessCube(&hdrEnvMap);
 }
 
+PBRCapture* PBR::ProcessCubeTest(TextureCube* capture, bool prefilter)
+{
+	PBRCapture* captureProbe = nullptr;
+	{
+		captureProbe = new PBRCapture;
+		captureProbe->Irradiance = new TextureCube;
+		captureProbe->PrefilteredMap = new TextureCube;
+	}
+	//·øÕÕÍ¼
+
+	captureProbe->Irradiance->DefaultInitialize(32, 32, GL_RGB, GL_FLOAT);
+	m_pbrIrradiance->SetTextureCube("environment", capture, 0);
+	m_sceneNode->Material = m_pbrIrradiance;
+	m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->Irradiance, 0);
+
+	//Ä£ºýÍ¼
+	if (prefilter)
+	{
+		captureProbe->PrefilteredMap->FilterMin = GL_LINEAR_MIPMAP_LINEAR;
+		captureProbe->PrefilteredMap->DefaultInitialize(128, 128, GL_RGB, GL_FLOAT, true);
+
+		m_pbrPrefilterCapture->SetTextureCube("environment", capture, 0);
+		m_sceneNode->Material = m_pbrPrefilterCapture;
+		// calculate prefilter for multiple roughness levels
+		unsigned int maxMipLevels = 5;
+		for (unsigned int i = 0; i < maxMipLevels; ++i)
+		{
+			m_pbrPrefilterCapture->SetFloat("roughness", (float)i / (float)(maxMipLevels - 1));
+			m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->PrefilteredMap, i);
+		}
+	}
+	return captureProbe;
+}
+
 PBRCapture* PBR::ProcessCube(TextureCube* capture, bool prefilter)
 {
 	PBRCapture* captureProbe = nullptr;
@@ -144,6 +178,18 @@ void PBR::RenderProbes()
 		m_probeDebugShader->activeShader();
 		m_renderer->RenderMesh(m_probeDebugSphere);
 	}
+}
+
+void PBR::ClearIrradianceProbes()
+{
+	for (int i = 0; i < m_pbrCaputreProbe.size(); ++i)
+	{
+		delete m_pbrCaputreProbe[i]->Irradiance;
+		delete m_pbrCaputreProbe[i]->PrefilteredMap;
+		delete m_pbrCaputreProbe[i];
+	}
+	LOG("delete m_pbrCaputreProbe");
+	m_pbrCaputreProbe.clear();
 }
 
 void PBR::AddIrradianceProbe(PBRCapture* capture, glm::vec3 position, float radius)
