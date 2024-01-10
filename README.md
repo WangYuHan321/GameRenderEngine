@@ -1,4 +1,4 @@
-	<p align="center"><img src="https://img-blog.csdnimg.cn/direct/a93eba61bc904f13979436ae2b879af2.png" /></p>
+![](https://img-blog.csdnimg.cn/direct/30212855c68b46bfb2a363f3a32674dc.png)
 
 打开OpenGL/ThirdLib文件夹下运行Graphic.bat注册环境变量。
 
