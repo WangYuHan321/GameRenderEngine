@@ -44,11 +44,11 @@ GlobalContext::GlobalContext():
 GlobalContext::~GlobalContext()
 {
 	if (m_Camera)
-		/*delete m_Camera;*/
+		delete m_Camera;
 	LOG("delete FlyCamera");
 	
 	if (m_renderer)
-	/*	delete m_renderer;*/
+		delete m_renderer;
 
 	LOG("delete Renderer");
 
