@@ -178,9 +178,11 @@ int main()
 			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_UP);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F))
 			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_DOWN);
-		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F9))
+		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_F9))
 			g_pGlobalContext->m_renderer->enableWireframe = !g_pGlobalContext->m_renderer->enableWireframe;
-		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F8))
+		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_F10))
+			g_pGlobalContext->m_renderer->enableDebugGBuffer = !g_pGlobalContext->m_renderer->enableDebugGBuffer;
+		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_F8))
 			g_pGlobalContext->m_renderer->enableIrradianceGI = !g_pGlobalContext->m_renderer->enableIrradianceGI;
 
 
