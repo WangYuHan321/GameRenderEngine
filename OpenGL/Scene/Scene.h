@@ -5,7 +5,7 @@ class SceneNode;
 class Mesh;
 class Material;
 
-class Scene : public CSingleton<Scene>
+class Scene 
 {
 public:
 	SceneNode* Root;

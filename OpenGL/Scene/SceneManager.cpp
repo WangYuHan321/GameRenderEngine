@@ -41,3 +41,8 @@ void SceneManager::UnloadCurScene()
 	}
 
 }
+
+void SceneManager::SetActiveScene(Scene* p_scene)
+{
+	m_curScene = p_scene;
+}
