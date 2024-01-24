@@ -12,7 +12,8 @@ APanelTransformable::APanelTransformable(
     m_defaultSize(p_defaultSize),
     m_defaultHorizontalAlignment(p_defaultHorizontalAlignment),
     m_defaultVerticalAlignment(p_defaultVerticalAlignment),
-    m_ignoreConfigFile(p_ignoreConfigFile)
+    m_ignoreConfigFile(p_ignoreConfigFile),
+    APanel()
 {
 }
 
@@ -65,6 +66,11 @@ void APanelTransformable::CopyImGuiPosition()
 void APanelTransformable::CopyImGuiSize()
 {
     m_size = ImGui::GetWindowSize();
+}
+
+Vector2 APanelTransformable::GetSize() const 
+{
+    return m_size;
 }
 
 void APanelTransformable::UpdatePosition()

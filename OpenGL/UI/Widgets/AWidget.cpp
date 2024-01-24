@@ -25,3 +25,14 @@ void AWidget::Destroy()
 {
 	m_destroyed = true;
 }
+
+
+bool AWidget::HasParent() const
+{
+	return m_parent;
+}
+
+WidgetContainer* AWidget::GetParent()
+{
+	return m_parent;
+}

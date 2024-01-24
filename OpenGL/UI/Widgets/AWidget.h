@@ -18,6 +18,10 @@ public:
 
 	bool IsDestroyed() { return m_destroyed; }//WidgwetContainer
 
+	WidgetContainer* GetParent();
+
+	bool HasParent() const;
+
 protected:
 
 	virtual void _Draw_Impl() = 0;

@@ -17,6 +17,8 @@ protected:
     void Update();
     virtual void _Draw_Impl() = 0;
 
+    Vector2 GetSize() const;
+
 private:
     Vector2 CalculatePositionAlignmebtOffset(bool p_default = false);
 
@@ -25,6 +27,7 @@ private:
 
     void CopyImGuiPosition();
     void CopyImGuiSize();
+
 
 protected:
 

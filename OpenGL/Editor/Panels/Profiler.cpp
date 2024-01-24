@@ -1,8 +1,8 @@
 #include "Profiler.h"
-#include "../../UI/Widgets/Selection/CheckBox.h"
-#include "../../UI/Widgets/Text/Text.h"
-#include "../../UI/Widgets/Text/TextColored.h"
-#include "../../UI/Widgets/Button/Button.h"
+#include "../../../UI/Widgets/Selection/CheckBox.h"
+#include "../../../UI/Widgets/Text/Text.h"
+#include "../../../UI/Widgets/Text/TextColored.h"
+#include "../../../UI/Widgets/Button/Button.h"
 
 Profiler::Profiler(
 	const std::string& p_title,
@@ -41,5 +41,10 @@ void Profiler::Enable(bool p_value, bool p_disableLog)
 	{
 
 	}
+}
+
+void Profiler::Update(float m_deltaTime)
+{
+
 }
 

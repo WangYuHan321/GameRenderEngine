@@ -18,7 +18,7 @@ void Canvas::Draw()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		if (m_isDockspace)
+	/*	if (m_isDockspace)
 		{
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->Pos);
@@ -37,11 +37,15 @@ void Canvas::Draw()
 			ImGui::End();
 
 			ImGui::PopStyleVar(3);
-		}
+		}*/
 
+		//Profilter panelwindow 没有重写draw方法会报错
 		for (auto& panel : m_panels)
 			panel.get().Draw();
 
 		ImGui::Render();
+		ImGui::EndFrame();
+
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 }

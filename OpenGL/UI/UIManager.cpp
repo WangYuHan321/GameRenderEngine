@@ -1,5 +1,6 @@
 #include "UIManager.h"
 #include "Module/Canvas.h"
+#include "../Editor/Panels/Hierarchy.h"
 
 UIManager::UIManager()
 {
@@ -21,6 +22,12 @@ void UIManager::OnInit(GLFWwindow* p_window, const std::string& p_glslVersion)
 	ImGui_ImplGlfw_InitForOpenGL(p_window, true);
 	ImGui_ImplOpenGL3_Init(p_glslVersion.c_str());
 	ImGui::StyleColorsDark();
+
+	m_currentCanvas = new Canvas;
+
+	PanelWindowSetting set;
+	m_testPanel = new Hierarchy("test", true, set);
+	m_currentCanvas->AddPanel(*m_testPanel);
 }
 
 void UIManager::OnEnd()
@@ -30,21 +37,15 @@ void UIManager::OnEnd()
 	ImGui::DestroyContext();
 }
 
-void UIManager::SetCanvas(Canvas& p_canvas)
-{
-	m_currentCanvas = &p_canvas;
-}
-
 void UIManager::Render()
 {
-#if 0 
+
 	if (m_currentCanvas)
 	{
 		m_currentCanvas->Draw();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
-#endif
+#if 0
 	//success
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
@@ -61,6 +62,7 @@ void UIManager::Render()
 	ImGui::EndFrame();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	//success
+#endif
 
 
 }

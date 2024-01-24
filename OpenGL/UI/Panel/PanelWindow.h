@@ -20,6 +20,7 @@ public:
     void ScrollToTop() { m_mustScrollToTop = true; }
     bool IsHovered()const { return m_hovered; }
     bool IsFocused()const { return m_focused; }
+    bool IsOpened() const { return m_opened;  }
 
     Event<>OpenEvent;
     Event<>CloseEvent;

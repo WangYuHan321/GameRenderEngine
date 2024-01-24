@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../UI/Panel/PanelWindow.h"
-#include "../UI/Layout/Columns.h"
+#include "../../UI/Panel/PanelWindow.h"
+#include "../../UI/Layout/Columns.h"
 
 class Button;
 class TextColored;

@@ -17,6 +17,10 @@ public:
 
 	void ReverseDrawOrder(const bool reversed);// «∑Ò∞¥’’À≥–Ú‰÷»æ
 
+	void ConsiderWidget(AWidget& p_widget, bool p_manageMemory = true);
+
+	void UnconsiderWidget(AWidget& p_widget);
+
 	template <typename T, typename ... Args>
 	T& CreateWidget(Args&&... p_args)
 	{

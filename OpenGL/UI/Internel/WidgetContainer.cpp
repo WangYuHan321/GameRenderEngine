@@ -60,3 +60,23 @@ void WidgetContainer::ReverseDrawOrder(const bool reversed)
 {
 	m_reversedDrawOrder = reversed;
 }
+
+void WidgetContainer::ConsiderWidget(AWidget& p_widget, bool p_manageMemory)
+{
+	m_widgets.emplace_back(std::make_pair(&p_widget, p_manageMemory ? MemoryMode::INTERNAL_MANAGMENT : MemoryMode::EXTERNAL_MANAGMENT));
+	p_widget.SetParent(this);
+}
+
+void WidgetContainer::UnconsiderWidget(AWidget& p_widget)
+{
+	auto found = std::find_if(m_widgets.begin(), m_widgets.end(), [&p_widget](std::pair<AWidget*, MemoryMode>& p_pair)
+		{
+			return p_pair.first == &p_widget;
+		});
+
+	if (found != m_widgets.end())
+	{
+		p_widget.SetParent(nullptr);
+		m_widgets.erase(found);
+	}
+}

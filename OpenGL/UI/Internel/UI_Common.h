@@ -36,7 +36,7 @@ struct PanelWindowSetting
 	bool closable = false;
 	bool resizable = true;
 	bool movable = true;
-	bool docakable = false;
+	bool dockable = false;
 	bool scrollable = true;
 	bool hideBackground = false;
 	bool forceHorizontalScrollbar = false;
@@ -67,7 +67,7 @@ struct PanelWindowSetting
 		closable(_closable),
 		resizable(_resizable),
 		movable(_movable),
-		docakable(_docakable),
+		dockable(_docakable),
 		scrollable(_scrollable),
 		hideBackground(_hideBackground),
 		forceHorizontalScrollbar(_forceHorizontalScrollbar),
