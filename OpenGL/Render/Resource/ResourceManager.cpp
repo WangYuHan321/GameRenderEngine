@@ -7,6 +7,7 @@
 #include "../Mesh/Mesh_ID.h"
 
 #include "../../Scene/Scene.h"
+#include "../../Scene/SceneManager.h"
 #include"../../Util/Utils.h"
 
 string ResourceManager::GetLocatPath(string path)
@@ -109,15 +110,14 @@ SceneNode* ResourceManager::LoadMesh(std::string name, std::string path)
 	unsigned int id = SID(name);
 	if (m_meshes.find(id) != m_meshes.end())
 	{
-		return Scene::getInstance()->MakeSceneNode(m_meshes[id]);
+		return SceneManager::getInstance()->GetActiveScene()->MakeSceneNode(m_meshes[id]);
 	}
 	path = GetLocatPath(path);
 
 	SceneNode* node = MeshLoader::getInstance()->LoadMesh(path);
 	m_meshes[id] = node;
 
-
-	return Scene::getInstance()->MakeSceneNode(node);
+	return SceneManager::getInstance()->GetActiveScene()->MakeSceneNode(node);
 }
 
 Material* ResourceManager::CreateMaterial(std::string name)

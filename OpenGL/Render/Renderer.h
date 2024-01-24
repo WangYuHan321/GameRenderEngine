@@ -57,11 +57,14 @@ public:
 	//自定义前向渲染
 	std::vector<RenderTarget*> m_renderTargetsCustom;
 
+	uint32 blitToFrameID = 0;
+
 	bool enableIrradianceGI = false;
 	bool enableLights = true;
 	bool enableWireframe = false;
 	bool enableShadows = true;
 	bool enableDebugLight = true;
+	bool enableDebugGBuffer = false;
 
 
 	std::vector<RenderCommand> test;

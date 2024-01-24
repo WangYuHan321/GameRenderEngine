@@ -18,6 +18,7 @@
 #include "Lighting/PointLight.h"
 #include "../../Scene/Scene.h"
 #include "../Window/Window.h"
+#include "../Scene/SceneManager.h"
 #include "Resource/ResourceManager.h"
 
 
@@ -665,7 +666,11 @@ void Renderer::RenderPushedCommands()
 
 	//m_pbrCapture->RenderProbes();
 
-	m_postProcess->Blit(m_customTarget);
+
+	if (blitToFrameID != 0)
+		m_postProcess->BlitTo(m_customTarget, blitToFrameID);
+	else
+		m_postProcess->Blit(m_customTarget);
 
 	m_prevViewProjection = m_camera->Projection * m_camera->View;
 
@@ -785,7 +790,7 @@ void Renderer::BakeProbes(SceneNode* scene)
 {
 	if (!scene)
 	{
-		scene = Scene::getInstance()->Root;
+		scene = SceneManager::getInstance()->GetActiveScene()->Root;
 	}
 
 	scene->UpdateTransform();
