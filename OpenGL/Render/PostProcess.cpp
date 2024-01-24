@@ -4,6 +4,7 @@
 #include "ShaderConfig.h"
 #include "../Math/Math.h"
 #include "../Camera/Camera.h"
+#include "../Render/Mesh/DebugScreenQuad.h"
 #include "../Render/RenderTarget.h"
 #include "Resource/ResourceManager.h"
 
@@ -117,6 +118,13 @@ PostProcess::PostProcess(Renderer* render):
         m_postProcessShader->SetInt("TexBloom3", 3);
         m_postProcessShader->SetInt("TexBloom4", 4);
         m_postProcessShader->SetInt("gMotion", 5);
+    }
+
+    {
+        m_debugPostProcessShader = ResourceManager::getInstance()->LoadShader("DebugPostProcess",
+            "Shader\\scene\\screen_quad.vs", "Shader\\post\\debug.fs");
+        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->SetInt("GBufferTexture", 0);
     }
 }
 
@@ -300,4 +308,93 @@ void PostProcess::Blit(RenderTarget* renderTarget)
 
     m_postProcessShader->activeShader();
     m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
+
+    if (m_renderer->enableDebugGBuffer)
+    {
+        glDisable(GL_DEPTH_TEST);
+        DebugScreenQuad quad(8, 4);
+
+        quad.FinalizeMesh(0);
+
+        m_renderer->m_gBuffer->GetColorTexture(0)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(1);
+
+        m_renderer->m_gBuffer->GetColorTexture(1)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(2);
+
+        m_renderer->m_gBuffer->GetColorTexture(2)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(3);
+
+        m_renderer->m_gBuffer->GetColorTexture(3)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        glEnable(GL_DEPTH_TEST);
+    }
+}
+
+void PostProcess::BlitTo(RenderTarget* renderTarget, uint32 frameBufferID)
+{
+    glBindFramebufferEXT(GL_FRAMEBUFFER, frameBufferID);
+    glViewport(0, 0, renderTarget->Width, renderTarget->Height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    renderTarget->GetColorTexture(0)->Bind(0);
+    BloomOutput1->Bind(1);
+    BloomOutput2->Bind(2);
+    BloomOutput3->Bind(3);
+    BloomOutput4->Bind(4);
+    m_renderer->m_gBuffer->GetColorTexture(3)->Bind(5);
+
+    m_postProcessShader->activeShader();
+    m_postProcessShader->SetBool("SSAO", SSAO);
+    m_postProcessShader->SetBool("Bloom", Bloom);
+
+    m_postProcessShader->SetBool("MotionBlur", MotionBlur);
+    m_postProcessShader->SetFloat("MotionScale", 0.2);
+    m_postProcessShader->SetInt("MotionSamples", 8);
+
+    m_postProcessShader->activeShader();
+    m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
+
+    if (m_renderer->enableDebugGBuffer)
+    {
+        glDisable(GL_DEPTH_TEST);
+        DebugScreenQuad quad(8, 4);
+
+        quad.FinalizeMesh(0);
+
+        m_renderer->m_gBuffer->GetColorTexture(0)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(1);
+
+        m_renderer->m_gBuffer->GetColorTexture(1)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(2);
+
+        m_renderer->m_gBuffer->GetColorTexture(2)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        quad.FinalizeMesh(3);
+
+        m_renderer->m_gBuffer->GetColorTexture(3)->Bind(0);
+        m_debugPostProcessShader->activeShader();
+        m_renderer->RenderMesh(&quad);
+
+        glEnable(GL_DEPTH_TEST);
+    }
 }

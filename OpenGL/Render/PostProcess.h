@@ -29,6 +29,8 @@ public:
 
 	CShader* m_postProcessShader;
 
+	CShader* m_debugPostProcessShader;
+
 	Renderer* m_renderer;
 
 	bool SSAO = true;
@@ -64,4 +66,6 @@ public:
 	void Resize(uint32 width, uint32 height);
 
 	void Blit(RenderTarget* renderTarget);
+
+	void BlitTo(RenderTarget* renderTarget, uint32 frameBufferID);
 };
