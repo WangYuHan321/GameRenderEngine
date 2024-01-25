@@ -23,6 +23,10 @@ typedef unsigned __int64 uint64;
 typedef __int64 int64;  
 typedef std::string string;
 
+using Vector3 = glm::vec3;
+using Vector2 = glm::vec2;
+using Vector4 = glm::vec4;
+
 namespace EasyGraphics {
 
 #ifdef _DEBUG
