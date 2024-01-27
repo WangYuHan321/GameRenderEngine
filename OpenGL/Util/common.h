@@ -2,12 +2,14 @@
 #include<GL/glew.h>
 #include<GLM/glm.hpp>
 #include<GLFW/glfw3.h>
+#include <glm/gtx/quaternion.hpp>
 #include<string>
 #include<sstream>
 #include<fstream>
 #include<vector>
 #include<intrin.h>
 #include<map>
+#include <functional>
 #include"string_id.hpp"
 #include"../Log/Logger.h"
 #include"../ThirdLib/ImGui/imgui.h"
@@ -26,6 +28,183 @@ typedef std::string string;
 using Vector3 = glm::vec3;
 using Vector2 = glm::vec2;
 using Vector4 = glm::vec4;
+using Quaternion = glm::quat;
+using Matrix2 = glm::mat2;
+using Matrix3 = glm::mat3;
+using Matrix4 = glm::mat4;
+
+
+struct TransformNotifer
+{
+public:
+	enum class ENotification
+	{
+		TRANSFORM_CHANGED,
+		TRANSFORM_DESTROYED
+	};
+
+	using NotificationHandler = std::function<void(ENotification)>;
+
+	using NotificationHandlerID = uint64_t;
+
+	NotificationHandlerID AddNotificationHandler(NotificationHandler p_notificationHandler)
+	{
+		NotificationHandlerID handlerID = m_availableHandlerID++;
+		m_notificationHandlers.emplace(handlerID, p_notificationHandler);
+		return handlerID;
+	}
+
+	void NotifyChildren(ENotification p_notification)
+	{
+		if (!m_notificationHandlers.empty())
+			for (auto const& [id, handler] : m_notificationHandlers)
+				handler(p_notification);
+	}
+
+	bool RemoveNotificationHandler(const NotificationHandlerID& p_notificationHandlerID)
+	{
+		return m_notificationHandlers.erase(p_notificationHandlerID) != 0;
+	}
+private:
+	std::unordered_map<NotificationHandlerID, NotificationHandler> m_notificationHandlers;
+	NotificationHandlerID m_availableHandlerID = 0;
+};
+
+
+struct FTransform
+{
+	FTransform(Vector3 p_localPostion = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRot = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f)):
+		m_notificationHandlerID(-1),
+		m_parent(nullptr)
+	{
+		GenerateMatrices(p_localPostion, p_localRot, p_localScale);
+	}
+
+	~FTransform()
+	{
+		Notifier.NotifyChildren(TransformNotifer::ENotification::TRANSFORM_DESTROYED);
+	}
+
+	void GenerateMatrices(Vector3 p_position, Quaternion p_rotation, Vector3 p_scale)
+	{
+		m_localMatrix = glm::mat4(1, 0, 0, p_position.x,
+								  0, 1, 0, p_position.y,
+			                      0, 0, 1, p_position.z,
+			                      0, 0, 0, 1) * 
+		glm::mat4(glm::normalize(p_rotation)) * glm::mat4(p_scale.x, 0, 0, 0,
+														  0, p_scale.y, 0, 0,
+														  0, 0, p_scale.z, 0,
+														  0, 0, 0, 1);
+		m_localPosition = p_position;
+		m_localRot = p_rotation;
+		m_localScale = p_scale;
+
+		UpdateWorldMatrix();
+	}
+
+	void UpdateWorldMatrix()
+	{
+		m_worldMatrix = HasParent() ? m_parent->m_worldMatrix * m_localMatrix : m_localMatrix;
+		PreDecomposeWorldMatrix();
+
+		Notifier.NotifyChildren(TransformNotifer::ENotification::TRANSFORM_CHANGED);
+	}
+
+	void PreDecomposeWorldMatrix()
+	{
+		m_worldPosition.x = m_worldMatrix[0][3];
+		m_worldPosition.y = m_worldMatrix[1][3];
+		m_worldPosition.z = m_worldMatrix[2][3];
+
+		Vector3 columns[3] =
+		{
+			{ m_worldMatrix[0][0], m_worldMatrix[1][0], m_worldMatrix[2][0]},
+			{ m_worldMatrix[0][1], m_worldMatrix[1][1], m_worldMatrix[2][1]},
+			{ m_worldMatrix[0][2], m_worldMatrix[1][2], m_worldMatrix[2][2]},
+		};
+
+		m_worldScale.x = glm::length(columns[0]);
+		m_worldScale.y = glm::length(columns[1]);
+		m_worldScale.z = glm::length(columns[2]);
+
+		if (m_worldScale.x)
+		{
+			columns[0] /= m_worldScale.x;
+		}
+		if (m_worldScale.y)
+		{
+			columns[1] /= m_worldScale.y;
+		}
+		if (m_worldScale.z)
+		{
+			columns[2] /= m_worldScale.z;
+		}
+
+		Matrix3 rotationMatrix
+		(
+			columns[0].x, columns[1].x, columns[2].x,
+			columns[0].y, columns[1].y, columns[2].y,
+			columns[0].z, columns[1].z, columns[2].z
+		);
+
+		m_worldRot = Quaternion(rotationMatrix);
+	}
+
+
+	bool HasParent() const
+	{
+		return m_parent != nullptr;
+	}
+
+	const Vector3& GetLocalPosition() const
+	{
+		return m_localPosition;
+	}
+
+	const Quaternion& GetLocalRotation() const
+	{
+		return m_localRot;
+	}
+
+	const Vector3& GetLocalScale() const
+	{
+		return m_localScale;
+	}
+
+	void SetLocalPosition(Vector3 p_newPosition)
+	{
+		GenerateMatrices(p_newPosition, m_localRot, m_localScale);
+	}
+
+	void SetLocalRotation(Quaternion p_newRotation)
+	{
+		GenerateMatrices(m_localPosition, p_newRotation, m_localScale);
+	}
+
+	void SetLocalScale(Vector3 p_newScale)
+	{
+		GenerateMatrices(m_localPosition, m_localRot, p_newScale);
+	}
+
+public:
+	TransformNotifer Notifier;
+	TransformNotifer::NotificationHandlerID m_notificationHandlerID;
+
+private:
+	Vector3 m_localPosition;
+	Quaternion m_localRot;
+	Vector3 m_localScale;
+
+	Vector3 m_worldPosition;
+	Quaternion m_worldRot;
+	Vector3 m_worldScale;
+
+	Matrix4 m_localMatrix;
+	Matrix4 m_worldMatrix;
+
+	FTransform* m_parent;
+};
+
 
 namespace EasyGraphics {
 
