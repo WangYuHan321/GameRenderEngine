@@ -28,6 +28,9 @@ void SceneManager::LoadEmptyScene()
 	
 	m_curScene = new Scene();
 
+
+
+
 	SceneLoadEvent.Invoke();
 }
 

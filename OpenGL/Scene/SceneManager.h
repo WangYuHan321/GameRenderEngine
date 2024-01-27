@@ -16,6 +16,7 @@ public:
 	void Update();
 	void LoadEmptyScene();
 	void UnloadCurScene();
+
 	void SetActiveScene(Scene* p_scene);
 	Scene* GetActiveScene() const { return m_curScene; }
 
