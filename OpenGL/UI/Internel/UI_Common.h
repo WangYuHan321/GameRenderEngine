@@ -1,12 +1,9 @@
 #pragma once
 #include<iostream>
 
-using Vector2 = ImVec2;
-using Vector4 = ImVec4;
-
-inline Vector2 AddVector2(const Vector2& left, const Vector2& right)
+inline ImVec2 AddVector2(const ImVec2& left, const ImVec2& right)
 {
-	Vector2 result(0.0f, 0.0f);
+	ImVec2 result(0.0f, 0.0f);
 	result.x = left.x + right.x;
 	result.y = left.y + right.y;
 	return result;
