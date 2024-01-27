@@ -19,6 +19,7 @@ public:
 
 	static void CreateTitle(WidgetContainer& p_root, string& p_name);
 
+	static void DrawVec3(WidgetContainer& p_root, const std::string& p_name, std::function<Vector3(void)> p_gatherer, std::function<void(Vector3)> p_provider, float p_step, float p_min, float p_max);
 
 
 
