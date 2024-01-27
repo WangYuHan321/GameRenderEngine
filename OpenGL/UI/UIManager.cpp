@@ -1,9 +1,16 @@
 #include "UIManager.h"
 #include "Module/Canvas.h"
+#include "../../UI/Internel/WidgetContainer.h"
 #include "../Editor/Panels/Hierarchy.h"
 
 UIManager::UIManager()
 {
+
+	PanelWindowSetting set;
+	set.closable = true;
+	set.collapsable = true;
+	set.dockable = true;
+	m_testPanel = new Hierarchy("test", true, set);
 }
 
 UIManager::~UIManager()
@@ -25,8 +32,7 @@ void UIManager::OnInit(GLFWwindow* p_window, const std::string& p_glslVersion)
 
 	m_currentCanvas = new Canvas;
 
-	PanelWindowSetting set;
-	m_testPanel = new Hierarchy("test", true, set);
+
 	m_currentCanvas->AddPanel(*m_testPanel);
 }
 

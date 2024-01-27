@@ -7,12 +7,12 @@ class ProgressBar :
     public AWidget
 {
 public:
-    ProgressBar(float p_fraction = 0.0f, const Vector2& p_sze = Vector2( 0.0f, 0.0f) , const std::string&p_overlay = "");
+    ProgressBar(float p_fraction = 0.0f, const ImVec2& p_sze = ImVec2( 0.0f, 0.0f) , const std::string&p_overlay = "");
 protected:
     void _Draw_Impl()override;
 public:
     float fraction;
-    Vector2 size;
+    ImVec2 size;
     std::string overlay;
 };
 

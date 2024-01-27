@@ -1,6 +1,6 @@
 #include "Image.h"
 
-Image::Image(uint32_t p_textureID, const Vector2& p_size):
+Image::Image(uint32_t p_textureID, const ImVec2& p_size):
 	textureID{ p_textureID },size(p_size)
 {
 
