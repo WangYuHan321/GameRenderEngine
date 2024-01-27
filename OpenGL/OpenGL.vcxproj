@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Release|x64">
@@ -46,7 +46,7 @@
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
       <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -63,11 +63,33 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "$(THIRD_LUA)\bin" "$(THIRD_LUA)\..\..\..\Bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\CLight.h" />
+    <ClInclude Include="Core\ECS\Components\CModelRenderer.h" />
+    <ClInclude Include="Editor\Panels\MenuBar.h" />
+    <ClInclude Include="Core\Scripting\LuaBinder.h" />
+    <ClInclude Include="Render\ForwardRenderer.h" />
+    <ClInclude Include="Render\BaseRenderer.h" />
+    <ClInclude Include="Render\Resource\TextureManager.h" />
+    <ClInclude Include="UI\Widgets\Menu\MenuList.h" />
+    <ClInclude Include="UI\Widgets\Menu\MenuItem.h" />
+    <ClInclude Include="UI\Plugin\DDTarget.h" />
+    <ClInclude Include="UI\Widgets\InputField\InputText.h" />
+    <ClInclude Include="UI\Plugin\ContextualMenu.h" />
+    <ClInclude Include="Editor\Panels\AssetBrowser.h" />
+    <ClInclude Include="Editor\Core\Application.h" />
+    <ClInclude Include="Editor\Core\Editor.h" />
+    <ClInclude Include="Editor\Core\EditorAction.h" />
+    <ClInclude Include="Editor\Core\Context.h" />
+    <ClInclude Include="Editor\Core\EditorRender.h" />
+    <ClInclude Include="Editor\Panels\AView.h" />
     <ClInclude Include="Core\ECS\Actor.h" />
     <ClInclude Include="Core\ECS\Components\AComponent.h" />
     <ClInclude Include="Core\API\ISerializable.h" />
@@ -75,10 +97,19 @@
     <ClInclude Include="Core\API\IInspectorItem.h" />
     <ClInclude Include="Core\ECS\Components\Behaviour.h" />
     <ClInclude Include="Core\Util\common.h" />
+    <ClInclude Include="Editor\Helper\GUIDrawer.h" />
+    <ClInclude Include="Editor\Panels\GameView.h" />
+    <ClInclude Include="Editor\Core\PanelsManager.h" />
+    <ClInclude Include="Editor\Panels\Hierarchy.h" />
+    <ClInclude Include="UI\Layout\TreeNode.h" />
+    <ClInclude Include="UI\Layout\Group.h" />
+    <ClInclude Include="Render\Mesh\DebugScreenQuad.h" />
+    <ClInclude Include="Editor\Panels\ProjectSettings.h" />
+    <ClInclude Include="Global\ServiceLocator.h" />
     <ClInclude Include="Time\Date.h" />
     <ClInclude Include="Log\ConsoleColor.h" />
     <ClInclude Include="Log\ConsoleHandler.h" />
-    <ClInclude Include="Editor\Profiler.h" />
+    <ClInclude Include="Editor\Panels\Profiler.h" />
     <ClInclude Include="Analytics\ProfilterReport.h" />
     <ClInclude Include="Log\Logger.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -128,6 +159,8 @@
     <ClInclude Include="UI\Plugin\Pluginable.h" />
     <ClInclude Include="UI\Widgets\AWidget.h" />
     <ClInclude Include="UI\Internel\WidgetContainer.h" />
+    <ClInclude Include="Render\Shader\UniformBuffer.h" />
+    <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Window\Input\InputManager.h" />
     <ClInclude Include="Render\Context\Driver.h" />
     <ClInclude Include="Window\Context\Device.h" />
@@ -166,18 +199,46 @@
     <ClInclude Include="Util\Utils.h" />
     <ClInclude Include="Window\Input\Key.h" />
     <ClInclude Include="Window\Input\MouseBtn.h" />
-    <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\CLight.cpp" />
+    <ClCompile Include="Core\ECS\Components\CModelRenderer.cpp" />
+    <ClCompile Include="Core\ECS\Components\Behaviour.cpp" />
+    <ClCompile Include="Editor\Panels\MenuBar.cpp" />
+    <ClCompile Include="Core\Scripting\LuaBinder.cpp" />
+    <ClCompile Include="Render\ForwardRenderer.cpp" />
+    <ClCompile Include="Render\BaseRenderer.cpp" />
+    <ClCompile Include="Render\Resource\TextureManager.cpp" />
+    <ClCompile Include="UI\Widgets\Menu\MenuList.cpp" />
+    <ClCompile Include="UI\Widgets\Menu\MenuItem.cpp" />
+    <ClCompile Include="UI\Plugin\DDTarget.cpp" />
+    <ClCompile Include="UI\Widgets\InputField\InputText.cpp" />
+    <ClCompile Include="UI\Plugin\ContextualMenu.cpp" />
+    <ClCompile Include="Editor\Panels\AssetBrowser.cpp" />
+    <ClCompile Include="Editor\Core\Application.cpp" />
+    <ClCompile Include="Editor\Core\Editor.cpp" />
+    <ClCompile Include="Editor\Core\EditorAction.cpp" />
+    <ClCompile Include="Editor\Core\Context.cpp" />
+    <ClCompile Include="Editor\Core\EditorRender.cpp" />
+    <ClCompile Include="Editor\Panels\AView.cpp" />
     <ClCompile Include="Core\ECS\Actor.cpp" />
     <ClCompile Include="Core\ECS\Components\AComponent.cpp" />
     <ClCompile Include="Core\API\ISerializable.cpp" />
     <ClCompile Include="Core\API\tinyxml2.cpp" />
     <ClCompile Include="Core\API\IInspectorItem.cpp" />
+    <ClCompile Include="Editor\Helper\GUIDrawer.cpp" />
+    <ClCompile Include="Editor\Panels\GameView.cpp" />
+    <ClCompile Include="Editor\Core\PanelsManager.cpp" />
+    <ClCompile Include="Editor\Panels\Hierarchy.cpp" />
+    <ClCompile Include="UI\Layout\TreeNode.cpp" />
+    <ClCompile Include="UI\Layout\Group.cpp" />
+    <ClCompile Include="Render\Mesh\DebugScreenQuad.cpp" />
+    <ClCompile Include="Editor\Panels\ProjectSettings.cpp" />
+    <ClCompile Include="Global\ServiceLocator.cpp" />
     <ClCompile Include="Time\Date.cpp" />
     <ClCompile Include="Log\ConsoleHandler.cpp" />
-    <ClCompile Include="Editor\Profiler.cpp" />
+    <ClCompile Include="Editor\Panels\Profiler.cpp" />
     <ClCompile Include="Analytics\ProfilterReport.cpp" />
     <ClCompile Include="Log\Logger.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -219,6 +280,8 @@
     <ClCompile Include="Time\TimeManager.cpp" />
     <ClCompile Include="UI\Widgets\AWidget.cpp" />
     <ClCompile Include="UI\Internel\WidgetContainer.cpp" />
+    <ClCompile Include="Render\Shader\UniformBuffer.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Window\Input\InputManager.cpp" />
     <ClCompile Include="Render\Context\Driver.cpp" />
     <ClCompile Include="Window\Context\Device.cpp" />
@@ -248,12 +311,12 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Render\Shader\TextureLoader.cpp" />
     <ClCompile Include="Render\Mesh\Sphere.cpp" />
-    <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Window\GLFWWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\ECS\Components\Behaviour.inl" />
     <None Include="Event\Event.inl" />
+    <None Include="Render\Resource\ResourceManager.inl" />
     <None Include="Shader\ambient.fs" />
     <None Include="Shader\pbr\pbr.glsl" />
     <None Include="Shader\post\down_sample.fs" />
