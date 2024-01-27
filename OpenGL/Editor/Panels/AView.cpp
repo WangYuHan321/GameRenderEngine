@@ -12,14 +12,16 @@ PanelWindow(p_title, p_opened, p_panelSetting)
 {
 	m_camPos = { -10.0f, 3.0f, 10.0f };
 	m_camRot = glm::quat({ 0.0f, 135.0f, 0.0f });
+	m_renderTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 
-	m_img = &CreateWidget<Image>(m_renderTarget->GetColorTexture(0)->ID, Vector2(0.f, 0.f));
+
+	m_img = &CreateWidget<Image>(m_renderTarget->GetColorTexture(0)->ID, ImVec2(0.f, 0.f));
 	scrollable = false;
 }
 
 void AView::Update(float p_deltaTime)
 {
-	Vector2 size(GetSize().x - 0.f, GetSize().y - 25.f);
+	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
 	m_img->size = size;
 	m_renderTarget->Resize(size.x, size.y);
 }

@@ -7,7 +7,7 @@ Editor::Editor(Context& p_context):
 	m_panelsMgr(m_canvas),
 	m_editorAction(m_context, m_editorRender, m_panelsMgr)
 {
-
+	SetUpUI();
 }
 
 void Editor::SetUpUI()

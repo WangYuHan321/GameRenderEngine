@@ -41,6 +41,8 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_Camera = new Camera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	LOG("new FlyCamera");
 	m_renderer->SetRenderSize(m_window->GetWindowSize().x, m_window->GetWindowSize().y);
+
+	m_renderer->SetCamera(m_Camera);
 }
 
 Context::~Context()
