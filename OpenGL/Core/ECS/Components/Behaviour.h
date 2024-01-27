@@ -20,10 +20,12 @@ public:
 
 	virtual void OnInspector(WidgetContainer& p_root) override;
 
+	virtual std::string GetName() override;
+
 public:
 
-	Event<Behaviour*> CreateEvent;
-	Event<Behaviour*> DestroyedEvent;
+	static Event<Behaviour*> CreateEvent;
+	static Event<Behaviour*> DestroyedEvent;
 
 	const std::string name;
 

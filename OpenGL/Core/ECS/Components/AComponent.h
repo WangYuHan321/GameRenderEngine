@@ -27,6 +27,8 @@ public:
 
 	virtual void OnLateUpdate(float p_deltaTime) {}
 
+	virtual std::string GetName() = 0;
+
 public:
 	Actor& owner;
 };
