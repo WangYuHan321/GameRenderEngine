@@ -15,6 +15,7 @@ public:
 
     void Open();
     void Close();
+    void SetOpened(bool p_value);
     
     void ScrollToBottom() { m_mustScrollToBottom = true; }
     void ScrollToTop() { m_mustScrollToTop = true; }
@@ -31,8 +32,8 @@ public:
     
     std::string name;
 
-    Vector2 minSize = { 0.0f, 0.0f };
-    Vector2 maxSize = { 0.0f,0.0f };
+    ImVec2 minSize = { 0.0f, 0.0f };
+    ImVec2 maxSize = { 0.0f,0.0f };
 
     bool resizeable = true;
     bool closeable = false;

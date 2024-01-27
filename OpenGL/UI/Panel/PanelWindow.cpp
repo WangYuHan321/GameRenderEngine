@@ -37,6 +37,19 @@ void PanelWindow::Close()
 	}
 }
 
+void PanelWindow::SetOpened(bool p_value)
+{
+	if (p_value != m_opened)
+	{
+		m_opened = p_value;
+
+		if (m_opened)
+			OpenEvent.Invoke();
+		else
+			CloseEvent.Invoke();
+	}
+}
+
 void PanelWindow::_Draw_Impl()
 {
 	if (m_opened)
