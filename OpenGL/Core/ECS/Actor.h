@@ -31,6 +31,14 @@ public:
 
 	bool IsActive();
 
+	Actor* GetParent() const;
+
+	void SetParent(Actor& p_parent);
+
+	int64_t GetParentID() const;
+
+	int64_t GetID()const ;
+
 	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
 
 	virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
@@ -51,6 +59,8 @@ private:
 	std::string m_tag;
 	bool m_active = true;
 	bool& m_playing;
+
+	Actor* m_parent = nullptr;
 
 	std::vector<std::shared_ptr<AComponent>> m_components;
 

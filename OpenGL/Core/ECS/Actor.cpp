@@ -58,6 +58,26 @@ bool Actor::IsActive()
 	return true;
 }
 
+Actor* Actor::GetParent() const
+{
+	return m_parent;
+}
+
+void Actor::SetParent(Actor& p_parent)
+{
+
+}
+
+int64_t Actor::GetParentID() const
+{
+	return m_actorID;
+}
+
+int64_t Actor::GetID()const
+{
+	return m_actorID;
+}
+
 void Actor::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot)
 {
 	tinyxml2::XMLNode* actorNode = p_doc.NewElement("actor");
