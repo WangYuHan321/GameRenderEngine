@@ -10,6 +10,8 @@
 #include "../../Scene/SceneManager.h"
 #include"../../Util/Utils.h"
 
+#include "../../Global/GlobalContext.h"
+
 string ResourceManager::GetLocatPath(string path)
 {
 	bool isAddPath = (path.find(m_assetPath) != 0);
@@ -17,9 +19,8 @@ string ResourceManager::GetLocatPath(string path)
 	return path;
 }
 
-ResourceManager::ResourceManager() 
+ResourceManager::ResourceManager()
 {
-
 }
 
 ResourceManager::~ResourceManager()
@@ -110,14 +111,14 @@ SceneNode* ResourceManager::LoadMesh(std::string name, std::string path)
 	unsigned int id = SID(name);
 	if (m_meshes.find(id) != m_meshes.end())
 	{
-		return SceneManager::getInstance()->GetActiveScene()->MakeSceneNode(m_meshes[id]);
+		return m_context->m_sceneMgr->GetActiveScene()->MakeSceneNode(m_meshes[id]);
 	}
 	path = GetLocatPath(path);
 
 	SceneNode* node = MeshLoader::getInstance()->LoadMesh(path);
 	m_meshes[id] = node;
 
-	return SceneManager::getInstance()->GetActiveScene()->MakeSceneNode(node);
+	return m_context->m_sceneMgr->GetActiveScene()->MakeSceneNode(node);
 }
 
 Material* ResourceManager::CreateMaterial(std::string name)

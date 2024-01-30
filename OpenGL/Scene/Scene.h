@@ -38,4 +38,3 @@ private:
 	int64_t m_availableID = 1;
 	std::vector<Actor*> m_actors;
 };
-

@@ -1,5 +1,6 @@
 #include "EditorRender.h"
 #include "Context.h"
+#include "../../Camera/Camera.h"
 #include "../../Scene/SceneManager.h"
 
 
@@ -16,12 +17,11 @@ void EditorRender::InitMaterials()
 
 void EditorRender::RenderScene()
 {
-	m_context.m_renderer->SetCamera(m_context.m_Camera);
-	for (int i = 0; i < SceneManager::getInstance()->GetActiveScene()->Root->GetChildCount(); i++)
+	for (int i = 0; i < m_context.m_sceneMgr->GetActiveScene()->Root->GetChildCount(); i++)
 	{
-		m_context.m_renderer->PushRender(SceneManager::getInstance()->GetActiveScene()->Root->GetChildByIndex(i));
+		/*m_context.m_renderer->PushRender(m_context.m_sceneMgr->GetActiveScene()->Root->GetChildByIndex(i), m_camera);*/
 	}
-	m_context.m_renderer->RenderPushedCommands();
+	/*m_context.m_renderer->RenderPushedCommands(m_camera);*/
 }
 
 void EditorRender::RenderUI()

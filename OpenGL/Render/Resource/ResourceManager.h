@@ -2,13 +2,13 @@
 #include "../Shader/Texture.h"
 #include "../Shader/TextureCube.h"
 #include "../Shader/EShader.h"
-#include "../../Util/Singleton.h"
 #include "../../Scene/SceneNode.h"
 #include "../../Util/common.h"
 
 class Renderer;
+class GlobalContext;
 
-class ResourceManager : public CSingleton<ResourceManager>
+class ResourceManager :public CSingleton<ResourceManager>
 {
 private:
 	std::map<uint32, CShader> m_shaders;
@@ -39,12 +39,16 @@ public:
 	string GetLocatPath(string path);
 	void SetAssetPath(const string strPath) { m_assetPath = strPath; }
 
+	void SetContext(GlobalContext* p_context) { m_context = p_context; }
 
 	void OnStartUp();
 	void OnEnd();
 
 	void GenerateDefaultMaterials();
 	void GenerateInternalMaterials();
+
+private:
+	GlobalContext* m_context=0;
 };
 
 

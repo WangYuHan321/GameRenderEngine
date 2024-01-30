@@ -2,12 +2,15 @@
 #include "../Render/Mesh/Cube.h"
 #include "../Render/Mesh/Material.h"
 #include "../Scene/SceneManager.h"
+#include "../Global/GlobalContext.h"
 #include "../Render/Resource/ResourceManager.h"
 
 
-Background::Background() : SceneNode(SceneManager::getInstance()->GetActiveScene()->CounterID++)
+Background::Background(GlobalContext& p_context) :
+    m_context(p_context),
+    SceneNode(SceneManager::getInstance()->GetActiveScene()->CounterID++)
 {
-    SceneManager::getInstance()->GetActiveScene()->Root->AddChild(this);
+    m_context.m_sceneMgr->GetActiveScene()->Root->AddChild(this);
 
     m_shader = ResourceManager::getInstance()->LoadShader("background",
         "Shader\\background.vs", "Shader\\background.fs");

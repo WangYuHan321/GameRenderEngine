@@ -3,7 +3,7 @@
 #include "../../Render/Mesh/Material.h"
 
 class Context;
-
+class Camera;
 
 class EditorRender
 {
@@ -18,6 +18,8 @@ public:
 	void RenderUI();
 
 private:
+
+	Camera* m_camera;
 	Context& m_context;
 
 	Material m_gridMaterial;
@@ -32,6 +34,8 @@ private:
 	Material m_gizmoBallMaterial;
 	Material m_gizmoPickingMaterial;
 	Material m_actorPickingMaterial;
+
+
 
 };
 

@@ -14,6 +14,8 @@ public:
 
 	void Run();
 
+	bool IsRunning() const;
+
 private:
 	Context m_context;
 	Editor m_editor;

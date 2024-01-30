@@ -13,8 +13,19 @@ Application::~Application()
 
 void Application::Run()
 {
-	m_editor.PreUpdate();
-	m_editor.Update(TimeManager::getInstance()->GetDeltaTime());
-	m_editor.PostUpdate();
-	TimeManager::getInstance()->Update();
+	Time clock;
+
+	while (IsRunning())
+	{
+		m_editor.PreUpdate();
+		m_editor.Update(clock.GetDeltaTime());
+		m_editor.PostUpdate();
+
+		clock.Update();
+	}
+}
+
+bool Application::IsRunning() const
+{
+	return m_context.m_window->ShouldClose();
 }

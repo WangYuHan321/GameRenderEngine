@@ -23,12 +23,10 @@ void GameView::Update(float p_deltaTime)
 
 	if (currentScene)
 	{
-		auto cam = EDITOR_CONTEXT(m_renderer)->GetCamera();
-		if (cam)
+		//auto cam = EDITOR_CONTEXT(m_renderer)->GetCamera();
+		if (true)
 		{
-			m_camera = *cam;
-			m_camPos = cam->Position;
-			//m_camRot = cam->rot;
+
 		}
 		else
 		{
@@ -43,12 +41,5 @@ void GameView::Update(float p_deltaTime)
 
 void GameView::_Render_Impl()
 {
-	auto baseRenderer = EDITOR_CONTEXT(m_renderer);
-	auto curScene = EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene();
 
-	baseRenderer->blitToFrameID = m_renderTarget->ID;
-
-	baseRenderer->RenderPushedCommands();
-
-	baseRenderer->blitToFrameID = 0;
 }

@@ -8,7 +8,7 @@
 
 Scene::Scene()
 {
-	Scene::Root = new SceneNode(0);
+	Root = new SceneNode(0);
 }
 
 Scene::~Scene()
@@ -96,19 +96,6 @@ void Scene::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 	}
 }
 
-Actor* Scene::FindActorByID(int64_t p_id)
-{
-	auto result = std::find_if(m_actors.begin(), m_actors.end(), [p_id](Actor* element)
-		{
-			return element->GetID() == p_id;
-		});
-
-	if (result != m_actors.end())
-		return *result;
-	else
-		return nullptr;
-}
-
 void Scene::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 
@@ -139,3 +126,18 @@ void Scene::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_nod
 		}
 	}	
 }
+
+Actor* Scene::FindActorByID(int64_t p_id)
+{
+	auto result = std::find_if(m_actors.begin(), m_actors.end(), [p_id](Actor* element)
+		{
+			return element->GetID() == p_id;
+		});
+
+	if (result != m_actors.end())
+		return *result;
+	else
+		return nullptr;
+}
+
+
