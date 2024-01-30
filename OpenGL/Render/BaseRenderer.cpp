@@ -13,3 +13,8 @@ void BaseRenderer::Initialize()
 {
 
 }
+
+void BaseRenderer::Clear()
+{
+
+}

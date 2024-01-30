@@ -11,6 +11,7 @@ public:
 	~BaseRenderer();
 
 	virtual void Initialize();
+	virtual void Clear();
 	virtual void DoRender() = 0;
 	virtual void OnReSize(uint32 width, uint32 height) = 0;
 
