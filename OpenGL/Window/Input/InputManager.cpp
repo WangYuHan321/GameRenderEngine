@@ -1,19 +1,21 @@
 #include "InputManager.h"
 #include "../Window.h"
+#include "../WindowManager.h"
 
-InputManager::InputManager()
+InputManager::InputManager(Window& p_window):
+	m_window(p_window)
 {
 	//处理事件
-	m_keyDownListener = Window::getInstance()->KeyDownEvent.
+	m_keyDownListener = m_window.KeyDownEvent.
 		AddListenerID(std::bind(&InputManager::OnKeyDown, this, std::placeholders::_1));
 
-	m_keyReleaseListener = Window::getInstance()->KeyReleaseEvent.
+	m_keyReleaseListener = m_window.KeyReleaseEvent.
 		AddListenerID(std::bind(&InputManager::OnKeyRelease, this, std::placeholders::_1));
 
-	m_mouseButtonDownListener = Window::getInstance()->MouseButtonDownEvent.
+	m_mouseButtonDownListener = m_window.MouseButtonDownEvent.
 		AddListenerID(std::bind(&InputManager::OnMouseDown, this, std::placeholders::_1));
 	
-	m_mouseButtonReleaseListener = Window::getInstance()->MouseButtonReleaseEvent.
+	m_mouseButtonReleaseListener = m_window.MouseButtonReleaseEvent.
 		AddListenerID(std::bind(&InputManager::OnMouseRelease, this, std::placeholders::_1));
 	
 }
@@ -62,7 +64,7 @@ bool InputManager::IsKeyPressed(EKey p_key)
 std::pair<double, double> InputManager::GetMousePosition() const
 {
 	std::pair<double, double> result;
-	glfwGetCursorPos(Window::getInstance()->GetWindow(), &result.first, &result.second);
+	glfwGetCursorPos(m_window.GetWindow(), &result.first, &result.second);
 	return result;
 }
 

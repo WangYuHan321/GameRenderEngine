@@ -8,11 +8,13 @@
 #include "../../Util/Singleton.h"
 #include "../../Event/Event.h"
 
-class InputManager : public CSingleton<InputManager>
+class Window;
+
+class InputManager 
 {
 public:
 
-	InputManager();
+	InputManager(Window& p_window);
 	~InputManager();
 
 	void OnMouseRelease(uint32 mouse_btn);
@@ -40,5 +42,8 @@ private:
 
 	std::unordered_map<EKey, EKeyState> m_keyEvents;
 	std::unordered_map<EMouseButton, EMouseButtonState> m_mouseState;
+
+private:
+	Window& m_window;
 };
 

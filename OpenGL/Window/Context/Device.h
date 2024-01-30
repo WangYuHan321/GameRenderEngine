@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Util/Singleton.h"
 #include"../../Event/Event.h"
 #include"../../Util/Utils.h"
 
@@ -17,10 +16,10 @@ enum class DeviceError
 	NO_WINDOW_CONTEXT = 0x0001000A
 };
 
-class Device: public CSingleton<Device>
+class Device
 {
 private:
-	Event<DeviceError, std::string> ErrorEvent;
+	static Event<DeviceError, std::string> ErrorEvent;
 	std::unordered_map<CursorShape, GLFWcursor*> m_cursor;
 
 public:

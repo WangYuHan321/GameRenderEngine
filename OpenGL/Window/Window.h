@@ -3,7 +3,9 @@
 #include "../Util/Singleton.h"
 #include "../Util/Utils.h"
 
-class Window : public CSingleton<Window>
+class Device;
+
+class Window
 {
 public:
 	Event<uint32> KeyDownEvent;
@@ -19,7 +21,7 @@ public:
 	Event<> CloseEvent;
 
 public:
-	Window();
+	Window(Device& p_device);
 	~Window();
 
 	void BindKeyCallback();
@@ -44,6 +46,7 @@ public:
 	void SetWindowSize(glm::vec2 size);
 
 private:
+	Device& m_device;
 	GLFWwindow* m_glfwWindow;
 	CursorShape m_cursorShape;
 	glm::vec2 m_glfwWindowSize;

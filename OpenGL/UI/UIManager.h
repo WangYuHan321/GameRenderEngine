@@ -12,7 +12,7 @@ class GLFWwindow;
 class Canvas;
 class Hierarchy;
 
-class UIManager : public CSingleton<UIManager>
+class UIManager
 {
 public:
 	UIManager();

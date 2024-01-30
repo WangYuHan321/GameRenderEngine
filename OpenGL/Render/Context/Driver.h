@@ -5,7 +5,7 @@
 
 //glew от©╗Ё╖ил╣д
 
-class Driver : public CSingleton<Driver>
+class Driver
 {
 public:
 	Driver(bool isDebugModel = true);

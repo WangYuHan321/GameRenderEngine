@@ -59,7 +59,7 @@ static void CreateMiniDump(EXCEPTION_POINTERS* pep)
     }
 }
 
-class DumpFileManager : public CSingleton<DumpFileManager>
+class DumpFileManager 
 {
 private:
 

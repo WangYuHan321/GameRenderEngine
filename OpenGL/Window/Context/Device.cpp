@@ -1,4 +1,7 @@
 #include "Device.h"
+
+Event<DeviceError, std::string> Device::ErrorEvent;
+
 Device::Device()
 {	
 }
@@ -21,7 +24,7 @@ void Device::BindErrorCallback()
 {
 	auto errorCallback = [](int p_code, const char* p_desc)
 	{
-		Device::getInstance()->ErrorEvent.Invoke(static_cast<DeviceError>(p_code), p_desc);
+		ErrorEvent.Invoke(static_cast<DeviceError>(p_code), p_desc);
 	};
 	glfwSetErrorCallback(errorCallback);
 }
