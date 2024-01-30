@@ -156,7 +156,7 @@
     <ClInclude Include="Render\Mesh\Mesh_ID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Time\TimeManager.h">
+    <ClInclude Include="Time\Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="File\ConfigManager.h">
@@ -408,6 +408,9 @@
     <ClInclude Include="Render\Shader\UniformBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Window\WindowManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -512,7 +515,7 @@
     <ClCompile Include="Global\GlobalContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Time\TimeManager.cpp">
+    <ClCompile Include="Time\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="File\ConfigManager.cpp">
@@ -738,6 +741,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Shader\UniformBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

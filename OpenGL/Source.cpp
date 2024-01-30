@@ -1,4 +1,9 @@
+
 #include<stdio.h>
+#include "Util/common.h"
+
+
+#ifdef USE_NO_EDITOR
 #include "Render/Lighting/DirectionalLight.h"
 #include "Render/Lighting/PointLight.h"
 #include "Scene/Background.h"
@@ -11,8 +16,14 @@
 #include "UI/Widgets/Text/Text.h"
 #include "Global/GlobalContext.h"
 
+#else
+	#include "Editor/Core/Application.h"
+#endif
+
+#ifdef USE_NO_EDITOR
 
 GlobalContext* g_pGlobalContext = new GlobalContext();
+FlyCamera* cam = new FlyCamera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 std::pair<double, double> oldDelta;
 std::pair<double, double> newDelta;
@@ -48,9 +59,8 @@ int main()
 		g_pGlobalContext->m_renderer->AddPointLight(&torchLights[3]);
 	}
 
-	g_pGlobalContext->m_Camera->SetPerspective(Deg2Rad(60.0f), 
+	cam->SetPerspective(Deg2Rad(60.0f),
 		g_pGlobalContext->m_renderer->m_renderSize.x / g_pGlobalContext->m_renderer->m_renderSize.y, 0.001f, 100.0f);
-	g_pGlobalContext->m_renderer->SetCamera(g_pGlobalContext->m_Camera);
 
 	SceneNode* sponza = ResourceManager::getInstance()->LoadMesh(
 		"sponza", "Asset\\meshes\\sponza\\sponza.obj");
@@ -58,7 +68,8 @@ int main()
 	sponza->SetPosition(glm::vec3(0.0, -1.0, 0.0));
 	sponza->SetScale(0.01f);
 
-	Background* background = new Background();
+	Background* background = new Background(*g_pGlobalContext);
+	g_pGlobalContext->m_renderer->InitSkyBox(*cam);
 	PBRCapture* p = g_pGlobalContext->m_renderer->GetSkyCapture();
 	background->SetCubeMap(p->PrefilteredMap);
 	background->Material->SetFloat("lodLevel", 1.5f);
@@ -123,7 +134,7 @@ int main()
 		g_pGlobalContext->m_renderer->AddIrradianceProbe(glm::vec3(-11.5f, 9.5f, -0.5f), 4.5);
 
 		// bake before rendering
-		g_pGlobalContext->m_renderer->BakeProbes();
+		g_pGlobalContext->m_renderer->BakeProbes(nullptr, cam);
 	}
 
 	//g_pGlobalContext->m_window->SetCursorShape(CursorShape::VRESIZE);
@@ -161,23 +172,23 @@ int main()
 				newDelta = g_pGlobalContext->m_inputMgr->GetMousePosition();
 				std::pair<double, double>  diff = { oldDelta.first - newDelta.first,
 					oldDelta.second - newDelta.second };
-				g_pGlobalContext->m_Camera->InputMouse(diff.first, diff.second);
+				cam->InputMouse(diff.first, diff.second);
 				oldDelta = newDelta;
 			}
 		}
 
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_W))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_FORWARD);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_FORWARD);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_S))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_BACK);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_BACK);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_A))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_LEFT);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_LEFT);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_D))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_RIGHT);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_RIGHT);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_E))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_UP);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_UP);
 		if (g_pGlobalContext->m_inputMgr->IsKeyPressed(EKey::KEY_F))
-			g_pGlobalContext->m_Camera->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_DOWN);
+			cam->InputKey(g_pGlobalContext->m_timeMgr->GetDeltaTime(), CAMERA_DOWN);
 		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_F9))
 			g_pGlobalContext->m_renderer->enableWireframe = !g_pGlobalContext->m_renderer->enableWireframe;
 		if (g_pGlobalContext->m_inputMgr->IsKeyReleased(EKey::KEY_F10))
@@ -186,11 +197,11 @@ int main()
 			g_pGlobalContext->m_renderer->enableIrradianceGI = !g_pGlobalContext->m_renderer->enableIrradianceGI;
 
 
-		g_pGlobalContext->m_Camera->Update(g_pGlobalContext->m_timeMgr->GetDeltaTime());
+		cam->Update(g_pGlobalContext->m_timeMgr->GetDeltaTime());
 
 		g_pGlobalContext->m_renderer->PushRender(background);
 		g_pGlobalContext->m_renderer->PushRender(sponza);
-		g_pGlobalContext->m_renderer->RenderPushedCommands();
+		g_pGlobalContext->m_renderer->RenderPushedCommands(*cam);
 		
 		g_pGlobalContext->m_uiMgr->Render();
 
@@ -203,3 +214,17 @@ int main()
 
 	return 0;
 }
+
+#else
+
+int main()
+{
+	Application app("", "");
+
+	while (1)
+	{
+		app.Run();
+	}
+}
+
+#endif
