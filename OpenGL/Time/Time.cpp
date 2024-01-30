@@ -1,18 +1,18 @@
-#include "TimeManager.h"
+#include "Time.h"
 
 
-TimeManager::TimeManager():
+Time::Time():
 	m_currentFrameTime(0.0f),
 	m_deltaTime(0.0f),
 	m_lastFrameTime(0.0f)
 {
 }
 
-TimeManager::~TimeManager()
+Time::~Time()
 {
 }
 
-void TimeManager::Update()
+void Time::Update()
 {
 	m_currentFrameTime = glfwGetTime();
 	m_deltaTime = m_currentFrameTime - m_lastFrameTime;

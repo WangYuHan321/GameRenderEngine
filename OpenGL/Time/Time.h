@@ -1,9 +1,8 @@
 #pragma once
 
 #include<GLFW/glfw3.h>
-#include "../Util/Singleton.h"
 
-class TimeManager : public CSingleton<TimeManager>
+class Time
 {
 
 private:
@@ -13,8 +12,8 @@ private:
 
 public:
 
-	TimeManager();
-	~TimeManager();
+	Time();
+	~Time();
 
 	void Update();
 	float GetDeltaTime() { return m_deltaTime; }
