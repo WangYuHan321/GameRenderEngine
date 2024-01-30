@@ -12,10 +12,12 @@ class PBR;
 class Quad;
 class Sphere;
 class Camera;
+class Window;
 class PBRCapture;
 class PointLight;
 class PostProcess;
 class RenderTarget;
+class GlobalContext;
 class CommandBuffer;
 class RenderCommand;
 class MaterialLibrary;
@@ -27,7 +29,6 @@ public:
 	GLCache m_glCache;
 	glm::mat4 m_prevViewProjection;
 	Quad* m_quadNDC;
-	Camera* m_camera;
 	RenderTarget* m_gBuffer;
 	PostProcess* m_postProcess;
 	RenderTarget* m_customTarget;
@@ -70,12 +71,13 @@ public:
 	std::vector<RenderCommand> test;
 public:
 
-	Renderer();
+	Renderer(GlobalContext& p_context);
 	~Renderer();
 
 	void Init();
 	void Clear();
-	void UpdateUBO();
+	void InitSkyBox(Camera& cam);
+	void UpdateUBO(Camera& cam);
 	void SetTarget(RenderTarget* renderTarget, GLenum type);
 	void PushRender(Mesh* mesh,Material* material,glm::mat4 transofrm = glm::mat4(1.0), glm::mat4 prevTransoform = glm::mat4(1.0));
 	void PushRender(SceneNode* node);
@@ -85,26 +87,28 @@ public:
 	void AddPointLight(PointLight* pointLight);
 	void AddIrradianceProbe(glm::vec3 pos, float radiuse);
 
-	Camera* GetCamera() { return m_camera; }
+
 	RenderTarget* GetCurrentRenderTarget();
 	Material* CreateMaterial(std::string name = "default");
 
-	void RenderPushedCommands();
+	void RenderPushedCommands(Camera& cam);
 	void RenderMesh(Mesh* mesh);
-	void RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, uint32 mip = 0);
+	void RenderToCubeMap(SceneNode* sceneNode, Camera& cam, TextureCube* textureCube, uint32 mip = 0);
 	void RenderToCubeMap(std::vector<RenderCommand>& renderCommands, TextureCube* textureCube,
 		glm::vec3 position, uint32 mip);
 	void RenderCustomCommand(RenderCommand* command, Camera* customCamera, bool updateGLState = true);
 	void RenderShadowCastCommand(RenderCommand* command, const glm::mat4& porj, const glm::mat4& view);
 	
-	void RenderDeferredAmbient();
-	void RenderDeferredDirLight(DirectionalLight* light);
-	void RenderDeferredPointLight(PointLight* light);
+	void RenderDeferredAmbient(Camera& cam);
+	void RenderDeferredDirLight(DirectionalLight* light, Camera& cam);
+	void RenderDeferredPointLight(PointLight* light, Camera& cam);
 
 	void Blit(RenderTarget* renderTarget, Material* renderMaterial);
 	//void Blit(Texture* src, RenderTarget* dst = nullptr, Material* material = nullptr, std::string texturUniform = "TexSrc");
 
-	void BakeProbes(SceneNode* scene = nullptr);
-	void SetCamera(Camera* cam) { m_camera = cam; }
+	void BakeProbes(SceneNode* scene = nullptr, Camera* cam = nullptr);
 	PBRCapture* GetSkyCapture();
+
+private:
+	GlobalContext& m_context;
 };

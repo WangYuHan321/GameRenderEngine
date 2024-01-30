@@ -18,14 +18,16 @@
 #include "Lighting/PointLight.h"
 #include "../../Scene/Scene.h"
 #include "../Window/Window.h"
+#include "../Global/GlobalContext.h"
 #include "../Scene/SceneManager.h"
 #include "Resource/ResourceManager.h"
 
 
-Renderer::Renderer()
+Renderer::Renderer(GlobalContext& p_context) :
+	m_context(p_context)
 {
 	Init();
-	m_frameReSizeListener = Window::getInstance()->ReSizeWindowEvent.
+	m_frameReSizeListener = m_context.m_window->ReSizeWindowEvent.
 	AddListenerID(std::bind(&Renderer::SetRenderSize, this, std::placeholders::_1, std::placeholders::_2));
 }
 
@@ -59,7 +61,7 @@ Renderer::~Renderer()
 	//	delete item;
 	//for (auto item : m_renderTargetsCustom)
 	//	delete item;
-	Window::getInstance()->ReSizeWindowEvent.RemoveListenerID(m_frameReSizeListener);
+	m_context.m_window->ReSizeWindowEvent.RemoveListenerID(m_frameReSizeListener);
 }
 
 void Renderer::PushRender(Mesh* mesh, Material* material, glm::mat4 transofrm, glm::mat4 prevTransoform)
@@ -115,16 +117,16 @@ void Renderer::SetTarget(RenderTarget* renderTarget, GLenum type)
 	}
 }
 
-void Renderer::UpdateUBO()
+void Renderer::UpdateUBO(Camera& cam)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, m_globalUBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &(m_camera->Projection * m_camera->View)[0][0]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &(cam.Projection * cam.View)[0][0]);
 	glBufferSubData(GL_UNIFORM_BUFFER, 64, sizeof(glm::mat4), &m_prevViewProjection[0][0]);
-	glBufferSubData(GL_UNIFORM_BUFFER, 128, sizeof(glm::mat4), &m_camera->Projection[0][0]);
-	glBufferSubData(GL_UNIFORM_BUFFER, 192, sizeof(glm::mat4), &m_camera->View[0][0]);
-	glBufferSubData(GL_UNIFORM_BUFFER, 256, sizeof(glm::mat4), &m_camera->View[0][0]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 128, sizeof(glm::mat4), &cam.Projection[0][0]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 192, sizeof(glm::mat4), &cam.View[0][0]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 256, sizeof(glm::mat4), &cam.View[0][0]);
 
-	glBufferSubData(GL_UNIFORM_BUFFER, 320, sizeof(glm::vec4), &m_camera->Position[0]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 320, sizeof(glm::vec4), &cam.Position[0]);
 
 #if 0
 	printf("--------------------projection------------------------------\n");
@@ -222,11 +224,16 @@ void Renderer::Init()
 	glBufferData(GL_UNIFORM_BUFFER, 720, nullptr, GL_STREAM_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_globalUBO);
 
-	Texture* hdrMap = ResourceManager::getInstance()->LoadHDRTexture("sky env",
+}
+
+void Renderer::InitSkyBox(Camera& cam)
+{
+	Texture* hdrMap = m_context.m_resourceMgr->LoadHDRTexture("sky env",
 		"Asset\\texture\\backgrounds\\alley.hdr");
-	PBRCapture* envBridge = m_pbrCapture->ProcessEquirectangular(hdrMap);
+	PBRCapture* envBridge = m_pbrCapture->ProcessEquirectangular(cam, hdrMap);
 	m_pbrCapture->SetSkyCapture(envBridge);
 }
+
 void Renderer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT /*| GL_STENCIL_BUFFER_BIT*/);
@@ -384,7 +391,7 @@ void Renderer::RenderMesh(Mesh * mesh)
 
 }
 
-void Renderer::RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, uint32 mip)
+void Renderer::RenderToCubeMap(SceneNode* sceneNode, Camera& cam, TextureCube* textureCube, uint32 mip)
 {
 	CommandBuffer commandBuffer(this);
 	commandBuffer.Push(sceneNode->Mesh, sceneNode->Material, sceneNode->GetTransform());
@@ -410,7 +417,7 @@ void Renderer::RenderToCubeMap(SceneNode* sceneNode, TextureCube* textureCube, u
 			childStack.push(child->GetChildByIndex(i));
 	}
 	commandBuffer.Sort();
-	std::vector<RenderCommand> renderCommands = commandBuffer.GetCustomRenderCommand(nullptr);
+	std::vector<RenderCommand> renderCommands = commandBuffer.GetCustomRenderCommand(nullptr, cam);
 
 	RenderToCubeMap(renderCommands, textureCube, glm::vec3(0.0f), mip);
 }
@@ -453,13 +460,13 @@ void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, Textu
 	}
 }
 
-void Renderer::RenderPushedCommands()
+void Renderer::RenderPushedCommands(Camera& cam)
 {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	m_commandBuffer->Sort();
-	UpdateUBO();
+	UpdateUBO(cam);
 
 	m_glCache.SetBlend(false);
 	m_glCache.SetCull(true);
@@ -468,7 +475,7 @@ void Renderer::RenderPushedCommands()
 	m_glCache.SetDepthFunction(GL_LESS);
 	
 	// first step :  geometry buffer
-	std::vector<RenderCommand> deferredRenderCommand = m_commandBuffer->GetDeferredRenderCommand(true);
+	std::vector<RenderCommand> deferredRenderCommand = m_commandBuffer->GetDeferredRenderCommand(cam, true);
 	glViewport(0, 0, m_renderSize.x, m_renderSize.y);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer->ID);
 	unsigned int attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 ,GL_COLOR_ATTACHMENT2 ,GL_COLOR_ATTACHMENT3 };
@@ -528,7 +535,7 @@ void Renderer::RenderPushedCommands()
 	glDrawBuffers(4, attachments);
 
 	//SSAO 保存在PostPrwocess下的m_ssaoRenderTarget
-	m_postProcess->ProcessPreLighting();
+	m_postProcess->ProcessPreLighting(cam);
 	//-------------------------
 
 	//--------------------------
@@ -549,7 +556,7 @@ void Renderer::RenderPushedCommands()
 
 	//渲染环境光照
 	//使用SSAO 和Cook-Torance模型 记录 m_customTarget
-	RenderDeferredAmbient();
+	RenderDeferredAmbient(cam);
 
 	if (enableLights)
 	{
@@ -557,7 +564,7 @@ void Renderer::RenderPushedCommands()
 		//方向光照
 		for (auto it = m_directionalLights.begin(); it != m_directionalLights.end(); ++it)
 		{
-			RenderDeferredDirLight(*it);
+			RenderDeferredDirLight(*it, cam);
 		}
 
 		//点光源
@@ -565,9 +572,9 @@ void Renderer::RenderPushedCommands()
 		for (auto it = m_pointLights.begin(); it != m_pointLights.end(); ++it)
 		{
 			//粗粒度处理
-			if (m_camera->Frustum.Intersect((*it)->Position, (*it)->Radius))
+			if (cam.Frustum.Intersect((*it)->Position, (*it)->Radius))
 			{
-				RenderDeferredPointLight(*it);
+				RenderDeferredPointLight(*it, cam);
 			}
 		}
 		m_glCache.SetCull(GL_BACK);
@@ -599,17 +606,17 @@ void Renderer::RenderPushedCommands()
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			else
 				glClear(GL_COLOR_BUFFER_BIT);
-			m_camera->SetPerspective(m_camera->FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
+			cam.SetPerspective(cam.FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
 		}
 		else
 		{
 			//渲染默认的framebuffer
 			glViewport(0, 0, m_renderSize.x, m_renderSize.y);
 			glBindFramebuffer(GL_FRAMEBUFFER, m_customTarget->ID);
-			m_camera->SetPerspective(m_camera->FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
+			cam.SetPerspective(cam.FOV, m_renderSize.x / m_renderSize.y, 0.1f, 100.0f);
 		}
 
-		std::vector<RenderCommand> renderCommands = m_commandBuffer->GetCustomRenderCommand(renderTarget);
+		std::vector<RenderCommand> renderCommands = m_commandBuffer->GetCustomRenderCommand(renderTarget, cam);
 
 		m_glCache.SetPolyonMode(enableWireframe ? GL_LINE : GL_FILL);
 		for (uint32 i = 0; i < renderCommands.size(); i++)
@@ -672,14 +679,14 @@ void Renderer::RenderPushedCommands()
 	else
 		m_postProcess->Blit(m_customTarget);
 
-	m_prevViewProjection = m_camera->Projection * m_camera->View;
+	m_prevViewProjection = cam.Projection * cam.View;
 
 	m_commandBuffer->Clear();
 
 	m_renderTargetsCustom.clear();
 }
 
-void Renderer::RenderDeferredAmbient()
+void Renderer::RenderDeferredAmbient(Camera& cam)
 {
 	//Material 内置函数
 	PBRCapture* skyCapture = m_pbrCapture->GetSkyCapture();
@@ -697,13 +704,13 @@ void Renderer::RenderDeferredAmbient()
 		{
 			PBRCapture* probe = irradianceProbe[i];
 
-			if (m_camera->Frustum.Intersect(probe->Position, probe->Radius))
+			if (cam.Frustum.Intersect(probe->Position, probe->Radius))
 			{
 				probe->Irradiance->Bind(3);
 
 				CShader* irradianceShader = m_materialLibrary->deferredIrradianceShader;
 				irradianceShader->activeShader();
-				irradianceShader->SetVector("camPos", m_camera->Position);
+				irradianceShader->SetVector("camPos", cam.Position);
 				irradianceShader->SetVector("probePos", probe->Position);
 				irradianceShader->SetFloat("probeRadius", probe->Radius);
 				irradianceShader->SetInt("SSAO", m_postProcess->SSAO);
@@ -733,12 +740,12 @@ void Renderer::RenderDeferredAmbient()
 
 }
 
-void Renderer::RenderDeferredDirLight(DirectionalLight* light)
+void Renderer::RenderDeferredDirLight(DirectionalLight* light, Camera& cam)
 {
 	CShader* dirShader = m_materialLibrary->deferredDirectionalShader;
 
 	dirShader->activeShader();
-	dirShader->SetVector("camPos", m_camera->Position);
+	dirShader->SetVector("camPos", cam.Position);
 	dirShader->SetVector("lightDir", light->Direction);
 	dirShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
 	dirShader->SetBool("ShadowsEnabled", enableShadows);
@@ -751,12 +758,12 @@ void Renderer::RenderDeferredDirLight(DirectionalLight* light)
 	RenderMesh(m_quadNDC);
 }
 
-void Renderer::RenderDeferredPointLight(PointLight* light)
+void Renderer::RenderDeferredPointLight(PointLight* light, Camera& cam)
 {
 	CShader* pointShader = m_materialLibrary->deferredPointShader;
 	
 	pointShader->activeShader();
-	pointShader->SetVector("camPos", m_camera->Position);
+	pointShader->SetVector("camPos", cam.Position);
 	pointShader->SetVector("lightPos", light->Position);
 	pointShader->SetFloat("lightRadius", light->Radius);
 	pointShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
@@ -786,11 +793,11 @@ void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& 
 	RenderMesh(command->mesh);
 }
 
-void Renderer::BakeProbes(SceneNode* scene)
+void Renderer::BakeProbes(SceneNode* scene, Camera* cam)
 {
 	if (!scene)
 	{
-		scene = SceneManager::getInstance()->GetActiveScene()->Root;
+		scene = m_context.m_sceneMgr->GetActiveScene()->Root;
 	}
 
 	scene->UpdateTransform();
@@ -837,7 +844,7 @@ void Renderer::BakeProbes(SceneNode* scene)
 			scenStack.push(node->GetChildByIndex(i));
 	}
 	commandBuffer.Sort();
-	std::vector<RenderCommand> renderCommand = commandBuffer.GetCustomRenderCommand(nullptr);
+	std::vector<RenderCommand> renderCommand = commandBuffer.GetCustomRenderCommand(nullptr, *cam);
 
 	m_pbrCapture->ClearIrradianceProbes();
 	for (int i = 0; i < m_probeSaptials.size(); i++)
@@ -848,7 +855,7 @@ void Renderer::BakeProbes(SceneNode* scene)
 		RenderToCubeMap(renderCommand, &renderResult, glm::vec3(m_probeSaptials[i].x,
 			m_probeSaptials[i].y, m_probeSaptials[i].z), 0);
 
-		PBRCapture* capture = m_pbrCapture->ProcessCubeTest(&renderResult, true);
+		PBRCapture* capture = m_pbrCapture->ProcessCubeTest(*cam, &renderResult, true);
 		m_pbrCapture->AddIrradianceProbe(capture, glm::vec3(m_probeSaptials[i].x, 
 			m_probeSaptials[i].y, m_probeSaptials[i].z), m_probeSaptials[i].w);
 	}

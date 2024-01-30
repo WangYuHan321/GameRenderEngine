@@ -10,6 +10,7 @@ class PBRCapture;
 class SceneNode;
 class TextureCube;
 class CShader;
+class Camera;
 class Texture;
 class Mesh;
 
@@ -47,13 +48,13 @@ public:
 
 	void SetSkyCapture(PBRCapture* capture);
 	//‰÷»æLight Probe
-	void RenderProbes();
+	void RenderProbes(Camera& cam);
 	void ClearIrradianceProbes();
 	void AddIrradianceProbe(PBRCapture* capture, glm::vec3 position, float radius);
 
-	PBRCapture* ProcessEquirectangular(Texture* envMap);
-	PBRCapture* ProcessCubeTest(TextureCube* capture, bool prefilter = true);
-	PBRCapture* ProcessCube(TextureCube* capture, bool prefilter = true);
+	PBRCapture* ProcessEquirectangular(Camera& cam, Texture* envMap);
+	PBRCapture* ProcessCubeTest(Camera& cam, TextureCube* capture, bool prefilter = true);
+	PBRCapture* ProcessCube(Camera& cam, TextureCube* capture, bool prefilter = true);
 	PBRCapture* GetSkyCapture() { return m_skyCapture; }
 };
 

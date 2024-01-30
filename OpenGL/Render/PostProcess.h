@@ -3,6 +3,7 @@ class CShader;
 class RenderTarget;
 class Texture;
 class Renderer;
+class Camera;
 
 class PostProcess
 {
@@ -59,7 +60,7 @@ public:
 
 	void DebugDisplayTexture(Texture* source);
 
-	void ProcessPreLighting();
+	void ProcessPreLighting(Camera& cam);
 
 	void ProcessPostLighting(RenderTarget* renderTarget);
 

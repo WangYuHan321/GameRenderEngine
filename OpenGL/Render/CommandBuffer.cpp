@@ -78,14 +78,14 @@ void CommandBuffer::Sort()
 	}
 }
 
-std::vector<RenderCommand> CommandBuffer::GetDeferredRenderCommand(bool isCull)
+std::vector<RenderCommand> CommandBuffer::GetDeferredRenderCommand(Camera& cam, bool isCull)
 {
 	if (isCull)
 	{
 		std::vector<RenderCommand> culledCommandBuffer;
 		for (auto item : m_deferredRenderCommand)
 		{
-			if (m_renderer->GetCamera()->Frustum.Intersect(item.BoxMin, item.BoxMax))
+			if (cam.Frustum.Intersect(item.BoxMin, item.BoxMax))
 			{
 				culledCommandBuffer.push_back(item);
 			}
@@ -106,7 +106,7 @@ std::vector<RenderCommand> CommandBuffer::GetPostProcessRenderCommand()
 	return m_postProcessRenderCommand;
 }
 
-std::vector<RenderCommand> CommandBuffer::GetCustomRenderCommand(RenderTarget* target, bool cull)
+std::vector<RenderCommand> CommandBuffer::GetCustomRenderCommand(RenderTarget* target, Camera& cam, bool cull)
 {
 	// only cull when on main/null render target
 	if (target == nullptr && cull)
@@ -115,7 +115,7 @@ std::vector<RenderCommand> CommandBuffer::GetCustomRenderCommand(RenderTarget* t
 		for (auto it = m_customRenderComamnd[target].begin(); it != m_customRenderComamnd[target].end(); ++it)
 		{
 			RenderCommand command = *it;
-			if (m_renderer->GetCamera()->Frustum.Intersect(command.BoxMin, command.BoxMax)) {
+			if (cam.Frustum.Intersect(command.BoxMin, command.BoxMax)) {
 				commands.push_back(command);
 			}
 		}

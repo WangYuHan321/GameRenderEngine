@@ -68,18 +68,18 @@ PBR::PBR(Renderer* renderer)
 	("pbr_probeRender", "Shader\\pbr\\probe_render.vs", "Shader\\pbr\\probe_render.fs");
 }
 
-PBRCapture* PBR::ProcessEquirectangular(Texture* envMap)
+PBRCapture* PBR::ProcessEquirectangular(Camera& cam, Texture* envMap)
 {
 	// 平面坐标系转球坐标系
 	m_sceneNode->Material = m_pbrHdrToCubeMap;
 	m_pbrHdrToCubeMap->SetTexture("environment", envMap, 0);
 	TextureCube hdrEnvMap;
 	hdrEnvMap.DefaultInitialize(128, 128, GL_RGB, GL_FLOAT);
-	m_renderer->RenderToCubeMap(m_sceneNode, &hdrEnvMap);
-	return ProcessCube(&hdrEnvMap);
+	m_renderer->RenderToCubeMap(m_sceneNode, cam, &hdrEnvMap);
+	return ProcessCube(cam, &hdrEnvMap);
 }
 
-PBRCapture* PBR::ProcessCubeTest(TextureCube* capture, bool prefilter)
+PBRCapture* PBR::ProcessCubeTest(Camera& cma,TextureCube* capture, bool prefilter)
 {
 	PBRCapture* captureProbe = nullptr;
 	{
@@ -92,7 +92,7 @@ PBRCapture* PBR::ProcessCubeTest(TextureCube* capture, bool prefilter)
 	captureProbe->Irradiance->DefaultInitialize(32, 32, GL_RGB, GL_FLOAT);
 	m_pbrIrradiance->SetTextureCube("environment", capture, 0);
 	m_sceneNode->Material = m_pbrIrradiance;
-	m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->Irradiance, 0);
+	m_renderer->RenderToCubeMap(m_sceneNode, cma, captureProbe->Irradiance, 0);
 
 	//模糊图
 	if (prefilter)
@@ -107,13 +107,13 @@ PBRCapture* PBR::ProcessCubeTest(TextureCube* capture, bool prefilter)
 		for (unsigned int i = 0; i < maxMipLevels; ++i)
 		{
 			m_pbrPrefilterCapture->SetFloat("roughness", (float)i / (float)(maxMipLevels - 1));
-			m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->PrefilteredMap, i);
+			m_renderer->RenderToCubeMap(m_sceneNode, cma, captureProbe->PrefilteredMap, i);
 		}
 	}
 	return captureProbe;
 }
 
-PBRCapture* PBR::ProcessCube(TextureCube* capture, bool prefilter)
+PBRCapture* PBR::ProcessCube(Camera& cam, TextureCube* capture, bool prefilter)
 {
 	PBRCapture* captureProbe = nullptr;
 	if (m_skyCapture != nullptr)
@@ -129,7 +129,7 @@ PBRCapture* PBR::ProcessCube(TextureCube* capture, bool prefilter)
 	captureProbe->Irradiance->DefaultInitialize(32, 32, GL_RGB, GL_FLOAT);
 	m_pbrIrradiance->SetTextureCube("environment", capture, 0);
 	m_sceneNode->Material = m_pbrIrradiance;
-	m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->Irradiance, 0);
+	m_renderer->RenderToCubeMap(m_sceneNode, cam, captureProbe->Irradiance, 0);
 	
 	//模糊图
 	if (prefilter)
@@ -144,7 +144,7 @@ PBRCapture* PBR::ProcessCube(TextureCube* capture, bool prefilter)
 		for (unsigned int i = 0; i < maxMipLevels; ++i)
 		{
 			m_pbrPrefilterCapture->SetFloat("roughness", (float)i / (float)(maxMipLevels - 1));
-			m_renderer->RenderToCubeMap(m_sceneNode, captureProbe->PrefilteredMap, i);
+			m_renderer->RenderToCubeMap(m_sceneNode, cam, captureProbe->PrefilteredMap, i);
 		}
 	}
 	return captureProbe;
@@ -155,13 +155,13 @@ void PBR::SetSkyCapture(PBRCapture* capture)
 	m_skyCapture = capture;
 }
 
-void PBR::RenderProbes()
+void PBR::RenderProbes(Camera& cam)
 {
 	//首先把镜面反射的贴图
 	m_probeDebugShader->activeShader();
-	m_probeDebugShader->SetMatrix("projection", m_renderer->GetCamera()->Projection);
-	m_probeDebugShader->SetMatrix("view", m_renderer->GetCamera()->View);
-	m_probeDebugShader->SetVector("CamPos", m_renderer->GetCamera()->Position);
+	m_probeDebugShader->SetMatrix("projection", cam.Projection);
+	m_probeDebugShader->SetMatrix("view", cam.View);
+	m_probeDebugShader->SetVector("CamPos", cam.Position);
 
 	m_probeDebugShader->SetVector("Position", glm::vec3(0.0f, 2.0f, 0.0f));
 	m_skyCapture->PrefilteredMap->Bind(0);

@@ -4,6 +4,7 @@
 #include<GLM/glm.hpp>
 
 class Mesh;
+class Camera;
 class Material;
 class Renderer;
 class RenderCommand;
@@ -28,9 +29,9 @@ public:
 	void Clear();
 	void Sort();
 
-	std::vector<RenderCommand> GetDeferredRenderCommand(bool isCull = false);
+	std::vector<RenderCommand> GetDeferredRenderCommand(Camera& cam, bool isCull = false);
 	std::vector<RenderCommand> GetAlphaRenderCommand();
 	std::vector<RenderCommand> GetPostProcessRenderCommand();
-	std::vector<RenderCommand> GetCustomRenderCommand(RenderTarget* target, bool cull = false);
+	std::vector<RenderCommand> GetCustomRenderCommand(RenderTarget* target, Camera& cam, bool cull = false);
 	std::vector<RenderCommand> GetShadowCastRenderCommands();
 };

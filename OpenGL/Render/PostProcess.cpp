@@ -128,7 +128,7 @@ PostProcess::PostProcess(Renderer* render):
     }
 }
 
-void PostProcess::ProcessPreLighting()
+void PostProcess::ProcessPreLighting(Camera& cam)
 {
     if (SSAO)
     {
@@ -138,8 +138,8 @@ void PostProcess::ProcessPreLighting()
 
         m_ssaoShader->activeShader();
         m_ssaoShader->SetVector("renderSize", m_renderer->m_renderSize);
-        m_ssaoShader->SetMatrix("projection", m_renderer->m_camera->Projection);
-        m_ssaoShader->SetMatrix("view", m_renderer->m_camera->View);
+        m_ssaoShader->SetMatrix("projection", cam.Projection);
+        m_ssaoShader->SetMatrix("view", cam.View);
 
         glBindFramebufferEXT(GL_FRAMEBUFFER, m_ssaoRenderTarget->ID);
         glViewport(0, 0, m_ssaoRenderTarget->Width, m_ssaoRenderTarget->Height);
