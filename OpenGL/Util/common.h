@@ -15,6 +15,8 @@
 #include"../ThirdLib/ImGui/imgui.h"
 #include"../ThirdLib/ImGui/imgui_internal.h"
 
+#define USE_NO_EDITOR //使用不是编辑器下面
+
 #define MSAA_NUM 4
 
 #define DUMP_FILE L"C://dump.dmp" 
