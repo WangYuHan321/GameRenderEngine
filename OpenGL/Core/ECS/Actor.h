@@ -39,6 +39,16 @@ public:
 
 	int64_t GetID()const ;
 
+	template<typename T>
+	T* GetComponent();
+
+	template<typename T>
+	bool RemoveComponent(T& type);
+
+	template<typename T, typename... Args>
+	T& AddComponent(Args&&... p_args);
+
+
 	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
 
 	virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
@@ -68,3 +78,4 @@ public:
 	
 };
 
+#include "Actor.inl"
