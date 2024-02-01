@@ -1,22 +1,23 @@
 #pragma once
 
 #include "../../../Util/common.h"
+#include"AComponent.h"
 
 class Actor;
 
-#include"AComponent.h"
-
-class Transform : public AComponent
+class CTransform : public AComponent
 {
 public:
 
-	Transform(Actor& p_owner, Vector3 p_localPosition = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRotation = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f));
+	CTransform(Actor& p_owner, Vector3 p_localPosition = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRotation = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f));
 
 	std::string GetName() override;
 
 	const Quaternion& GetLocalRotation() const;
 	const Vector3& GetLocalPosition() const;
 	const Vector3& GetLocalScale() const;
+
+	const FTransform& GetFTransform()const;
 
 	void SetLocalRotation(Quaternion p_newQuaternion);
 	void SetLocalPosition(Vector3 p_newPosition);
