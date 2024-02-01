@@ -76,9 +76,11 @@
     <ClInclude Include="Core\ECS\Components\CModelRenderer.h" />
     <ClInclude Include="Editor\Panels\MenuBar.h" />
     <ClInclude Include="Core\Scripting\LuaBinder.h" />
+    <ClInclude Include="Core\Util\Light.h" />
     <ClInclude Include="Render\ForwardRenderer.h" />
     <ClInclude Include="Render\BaseRenderer.h" />
     <ClInclude Include="Render\Resource\TextureManager.h" />
+    <ClInclude Include="Core\Helper\Serializer.h" />
     <ClInclude Include="UI\Widgets\Menu\MenuList.h" />
     <ClInclude Include="UI\Widgets\Menu\MenuItem.h" />
     <ClInclude Include="UI\Plugin\DDTarget.h" />
@@ -97,7 +99,6 @@
     <ClInclude Include="Core\API\tinyxml2.h" />
     <ClInclude Include="Core\API\IInspectorItem.h" />
     <ClInclude Include="Core\ECS\Components\Behaviour.h" />
-    <ClInclude Include="Core\Util\common.h" />
     <ClInclude Include="Editor\Helper\GUIDrawer.h" />
     <ClInclude Include="Editor\Panels\GameView.h" />
     <ClInclude Include="Editor\Core\PanelsManager.h" />
@@ -114,7 +115,7 @@
     <ClInclude Include="Analytics\ProfilterReport.h" />
     <ClInclude Include="Log\Logger.h" />
     <ClInclude Include="Scene\SceneManager.h" />
-    <ClInclude Include="Core\ECS\Components\Transform.h" />
+    <ClInclude Include="Core\ECS\Components\CTransform.h" />
     <ClInclude Include="UI\Layout\Columns.h" />
     <ClInclude Include="UI\Visual\ProgressBar.h" />
     <ClInclude Include="UI\Visual\Image.h" />
@@ -210,9 +211,11 @@
     <ClCompile Include="Core\ECS\Components\Behaviour.cpp" />
     <ClCompile Include="Editor\Panels\MenuBar.cpp" />
     <ClCompile Include="Core\Scripting\LuaBinder.cpp" />
+    <ClCompile Include="Core\Util\Light.cpp" />
     <ClCompile Include="Render\ForwardRenderer.cpp" />
     <ClCompile Include="Render\BaseRenderer.cpp" />
     <ClCompile Include="Render\Resource\TextureManager.cpp" />
+    <ClCompile Include="Core\Helper\Serializer.cpp" />
     <ClCompile Include="UI\Widgets\Menu\MenuList.cpp" />
     <ClCompile Include="UI\Widgets\Menu\MenuItem.cpp" />
     <ClCompile Include="UI\Plugin\DDTarget.cpp" />
@@ -245,7 +248,7 @@
     <ClCompile Include="Analytics\ProfilterReport.cpp" />
     <ClCompile Include="Log\Logger.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Core\ECS\Components\Transform.cpp" />
+    <ClCompile Include="Core\ECS\Components\CTransform.cpp" />
     <ClCompile Include="UI\Layout\Columns.cpp" />
     <ClCompile Include="UI\Visual\ProgressBar.cpp" />
     <ClCompile Include="UI\Visual\Image.cpp" />
@@ -320,6 +323,7 @@
   <ItemGroup>
     <None Include="Core\ECS\Actor.inl" />
     <None Include="Core\ECS\Components\Behaviour.inl" />
+    <None Include="Editor\Helper\GUIDrawer.inl" />
     <None Include="Event\Event.inl" />
     <None Include="Render\Resource\ResourceManager.inl" />
     <None Include="Shader\ambient.fs" />

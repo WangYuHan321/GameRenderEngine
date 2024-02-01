@@ -309,13 +309,10 @@
     <ClInclude Include="Core\ECS\Actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Util\common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\ECS\Components\Behaviour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\ECS\Components\Transform.h">
+    <ClInclude Include="Core\ECS\Components\CTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Window\Window.h">
@@ -412,6 +409,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Util\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Helper\Serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -650,7 +653,7 @@
     <ClCompile Include="Core\ECS\Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\ECS\Components\Transform.cpp">
+    <ClCompile Include="Core\ECS\Components\CTransform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Window\Window.cpp">
@@ -752,6 +755,12 @@
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Util\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Helper\Serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ambient.fs" />
@@ -767,6 +776,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Core\ECS\Actor.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Editor\Helper\GUIDrawer.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
