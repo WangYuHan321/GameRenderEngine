@@ -411,6 +411,9 @@
     <ClInclude Include="Window\WindowManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -746,6 +749,9 @@
     <ClCompile Include="Window\WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ambient.fs" />
@@ -758,6 +764,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Render\Resource\ResourceManager.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Core\ECS\Actor.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

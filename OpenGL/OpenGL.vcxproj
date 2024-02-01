@@ -71,6 +71,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h" />
     <ClInclude Include="Core\ECS\Components\CLight.h" />
     <ClInclude Include="Core\ECS\Components\CModelRenderer.h" />
     <ClInclude Include="Editor\Panels\MenuBar.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\CLight.cpp" />
     <ClCompile Include="Core\ECS\Components\CModelRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\Behaviour.cpp" />
@@ -316,6 +318,7 @@
     <ClCompile Include="Window\GLFWWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Core\ECS\Actor.inl" />
     <None Include="Core\ECS\Components\Behaviour.inl" />
     <None Include="Event\Event.inl" />
     <None Include="Render\Resource\ResourceManager.inl" />
