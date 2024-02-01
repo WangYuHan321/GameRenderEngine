@@ -17,6 +17,8 @@
 
 #define USE_NO_EDITOR //使用不是编辑器下面
 
+//#define USE_EDITOR //使用不是编辑器下面
+
 #define MSAA_NUM 4
 
 #define DUMP_FILE L"C://dump.dmp" 
@@ -168,6 +170,11 @@ struct FTransform
 		return m_localRot;
 	}
 
+	const Vector3& GetWorldPosition() const
+	{
+		return m_worldPosition;
+	}
+
 	const Vector3& GetLocalScale() const
 	{
 		return m_localScale;
@@ -206,7 +213,6 @@ private:
 
 	FTransform* m_parent;
 };
-
 
 namespace EasyGraphics {
 

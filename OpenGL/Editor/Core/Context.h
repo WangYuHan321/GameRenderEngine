@@ -4,7 +4,7 @@
 
 #include "../../UI/UIManager.h"
 #include "../../Window/Window.h"
-#include "../../Render/Renderer.h"
+//#include "../../Render/Renderer.h"
 #include "../../Camera/Camera.h"
 #include "../../Time/Time.h"
 #include "../../Log/DumpFileManager.h"
@@ -35,7 +35,6 @@ public:
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
-	std::unique_ptr<ResourceManager> m_resourceMgr;
 
 private:
 	

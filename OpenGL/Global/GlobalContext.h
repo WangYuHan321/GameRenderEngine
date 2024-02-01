@@ -24,7 +24,9 @@ public:
 
 	std::unique_ptr<Window> m_window;
 	std::unique_ptr < Renderer> m_renderer;
+
 	std::shared_ptr<SceneManager> m_sceneMgr;
+
 	std::unique_ptr < InputManager> m_inputMgr;
 
 	GlobalContext();

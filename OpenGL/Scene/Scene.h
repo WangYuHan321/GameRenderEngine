@@ -6,9 +6,23 @@ class SceneNode;
 class Mesh;
 class Material;
 class Actor;
+class CModelRender;
+class CCamera;
+class CLight;
+
 
 class Scene : public ISerializable
 {
+	
+	struct FastAccessComponents
+	{
+		
+	};
+
+
+
+
+
 public:
 	SceneNode* Root;
 	uint32 CounterID = 0;
@@ -38,3 +52,4 @@ private:
 	int64_t m_availableID = 1;
 	std::vector<Actor*> m_actors;
 };
+

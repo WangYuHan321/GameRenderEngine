@@ -30,8 +30,10 @@ GlobalContext::GlobalContext() :
 	LOG_INFO("Dump inited success!!!\n");
 	//m_dumpFileMgr->OnStartUp();
 
+#ifndef USE_EDITOR
 	m_sceneMgr = SceneManager::getInstance();
 	LOG_INFO("scene inited success!!!\n");
+#endif
 
 	m_resourceMgr = ResourceManager::getInstance();
 	m_resourceMgr->SetAssetPath(m_engineAssetsPath);

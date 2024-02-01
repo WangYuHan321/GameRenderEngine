@@ -6,6 +6,8 @@ class GlobalContext;
 class TextureCube;
 class CShader;
 
+#ifndef USE_EDITOR
+
 class Background : public SceneNode
 {
 private:
@@ -20,3 +22,4 @@ public:
 
 };
 
+#endif

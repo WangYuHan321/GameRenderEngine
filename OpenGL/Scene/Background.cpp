@@ -5,6 +5,7 @@
 #include "../Global/GlobalContext.h"
 #include "../Render/Resource/ResourceManager.h"
 
+#ifndef USE_EDITOR
 
 Background::Background(GlobalContext& p_context) :
     m_context(p_context),
@@ -36,3 +37,5 @@ void Background::SetCubeMap(TextureCube* cubeMap)
     m_cubeMap = cubeMap;
     Material->SetTextureCube("background", m_cubeMap, 0);
 }
+
+#endif

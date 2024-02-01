@@ -23,11 +23,6 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_inputMgr = std::make_unique<InputManager>(*m_window);
 	LOG_INFO("Input inited success!!!\n");
 
-	m_resourceMgr = std::make_unique<ResourceManager>();
-	m_resourceMgr->SetAssetPath(m_engineAssetsPath);
-	m_resourceMgr->OnStartUp();
-	LOG_INFO("Resource inited success!!!\n");
-
 	m_dumpFileMgr = std::make_unique<DumpFileManager>();
 	LOG_INFO("Dump inited success!!!\n");
 	//m_dumpFileMgr->OnStartUp();
