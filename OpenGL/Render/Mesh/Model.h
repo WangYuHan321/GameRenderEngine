@@ -45,15 +45,27 @@ private:
 #include <functional>
 #include <GLM/glm.hpp>
 #include <vector>
+#include "../Bounding/BoundingSphere.h"
 
 class Mesh;
 class Material;
+class BoundingSphere;
+
 
 class Model
 {
 private:
-	std::vector<Mesh*> m_mesh;
-	std::vector<Material*> m_material;
+	std::vector<Mesh*> m_meshes;
+	std::vector<Material*> m_materials;
+	BoundingSphere m_boundingSphere;
 
 public:
+
+	Model(std::vector<Mesh*>& p_mesh, std::vector<Material*>& p_material);
+	~Model();
+
+	const BoundingSphere& GetBoundingSphere() const;
+
+private:
+	void ComputeBoundingSphere();
 };
