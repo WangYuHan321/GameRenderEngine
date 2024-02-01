@@ -1,6 +1,7 @@
 #pragma once
 /// Actor.h ºÍ AComponent.h 2
 #include "../../API/IInspectorItem.h"
+#include "../../Event/Event.h"
 
 class Actor;
 
