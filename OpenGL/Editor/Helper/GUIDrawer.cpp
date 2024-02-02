@@ -1,7 +1,9 @@
 #include "GUIDrawer.h"
 #include "../../UI/Internel/WidgetContainer.h"
 #include "../../UI/Widgets/Text/TextColored.h"
+#include "../../UI/Widgets/Drag/DragMultipleScalars.h"
 #include "../../Render/Shader/Texture.h"
+#include "../../UI/Widgets/Selection/ColorEdit.h"
 
 Color4 GUIDrawer::titleColor = { 0.85f, 0.65f, 0.0f, 1.0f };
 Color4 GUIDrawer::clearBtnColor = { 0.5f, 0.0f, 0.0f, 1.0f };
@@ -15,14 +17,17 @@ void GUIDrawer::ProvideEmptyTexture(Texture& p_emptyTexture)
 	__EMPTY_TEXTURE = &p_emptyTexture;
 }
 
-void GUIDrawer::CreateTitle(WidgetContainer& p_root, string& p_name)
+void GUIDrawer::CreateTitle(WidgetContainer& p_root, const string& p_name)
 {
 	p_root.CreateWidget<TextColored>(p_name, titleColor);
 }
 
 void GUIDrawer::DrawBoolean(WidgetContainer& p_root, const std::string& p_name, bool& p_data)
 {
-
+	//CreateTitle(p_root, p_name);
+	//auto& widget = p_root.CreateWidget<CheckBox>();
+	//auto& dispatcher = widget.AddPlugin<DataDispatcher<bool>>();
+	//dispatcher.RegisterReference(reinterpret_cast<bool&>(p_data));
 }
 void GUIDrawer::DrawVec2(WidgetContainer& p_root, const std::string& p_name, Vector2& p_data, float p_step, float p_min, float p_max)
 {
@@ -35,7 +40,10 @@ void GUIDrawer::DrawVec3(WidgetContainer& p_root, const std::string& p_name, Vec
 }
 void GUIDrawer::DrawVec4(WidgetContainer& p_root, const std::string& p_name, Vector4& p_data, float p_step, float p_min, float p_max)
 {
-
+	CreateTitle(p_root, p_name);
+	auto& widget = p_root.CreateWidget<DragMultipleScalars<float, 4>>(GetDataType<float>(), p_min, p_max, 0.f, p_step, "", GetFormat<float>());
+	auto& dispatcher = widget.AddPlugin<DataDispatcher<std::array<float, 4>>>();
+	dispatcher.RegisterReference(reinterpret_cast<std::array<float, 4>&>(p_data));
 }
 
 void GUIDrawer::DrawQuat(WidgetContainer& p_root, const std::string& p_name, Quaternion& p_data, float p_step, float p_min, float p_max)
@@ -50,7 +58,10 @@ void GUIDrawer::DrawString(WidgetContainer& p_root, const std::string& p_name, s
 
 void GUIDrawer::DrawColor4(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha)
 {
-
+	CreateTitle(p_root, p_name);
+	auto& widget = p_root.CreateWidget<ColorEdit>(p_hasAlpha);
+	auto& dispatcher = widget.AddPlugin<DataDispatcher<Color4>>();
+	dispatcher.RegisterReference(p_color);
 }
 
 void GUIDrawer::DrawBoolean(WidgetContainer& p_root, const std::string& p_name, std::function<bool(void)> p_gatherer, std::function<void(bool)> p_provider)

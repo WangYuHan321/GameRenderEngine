@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../Util/common.h"
+
 class Texture;
 class WidgetContainer;
 
@@ -17,7 +18,7 @@ public:
 
 	static void ProvideEmptyTexture(Texture& p_emptyTexture);
 
-	static void CreateTitle(WidgetContainer& p_root, string& p_name);
+	static void CreateTitle(WidgetContainer& p_root,const string& p_name);
 
 	template <typename T>
 	static void DrawScalar(WidgetContainer& p_root, const std::string& p_name, T& p_data, float p_step = 1.0f, T p_min = std::numeric_limits<T>::min(), T p_max = std::numeric_limits<T>::max());
@@ -39,7 +40,11 @@ public:
 	static void DrawString(WidgetContainer& p_root, const std::string& p_name, std::function<std::string(void)> p_gatherer, std::function<void(std::string)> p_provider);
 	static void DrawColor4(WidgetContainer& p_root, const std::string& p_name, std::function<Color4(void)> p_gatherer, std::function<void(Color4)> p_provider, bool p_hasAlpha = false);
 
+	template <typename T>
+	static std::string GetFormat();
 
+	template <typename T>
+	static ImGuiDataType_ GetDataType();
 
 private:
 	static Texture* __EMPTY_TEXTURE;
