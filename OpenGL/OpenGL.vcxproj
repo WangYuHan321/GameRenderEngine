@@ -71,9 +71,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI\Widgets\Selection\ColorEdit.h" />
     <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h" />
     <ClInclude Include="Core\ECS\Components\CLight.h" />
     <ClInclude Include="Core\ECS\Components\CModelRenderer.h" />
+    <ClInclude Include="UI\Widgets\Drag\DragMultipleScalars.h" />
+    <ClInclude Include="UI\Widgets\Drag\DragSingleScalar.h" />
     <ClInclude Include="Editor\Panels\MenuBar.h" />
     <ClInclude Include="Core\Scripting\LuaBinder.h" />
     <ClInclude Include="Core\Util\Light.h" />
@@ -205,10 +208,13 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp" />
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\CLight.cpp" />
     <ClCompile Include="Core\ECS\Components\CModelRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\Behaviour.cpp" />
+    <ClCompile Include="UI\Widgets\Drag\DragMultipleScalars.cpp" />
+    <ClCompile Include="UI\Widgets\Drag\DragSingleScalar.cpp" />
     <ClCompile Include="Editor\Panels\MenuBar.cpp" />
     <ClCompile Include="Core\Scripting\LuaBinder.cpp" />
     <ClCompile Include="Core\Util\Light.cpp" />

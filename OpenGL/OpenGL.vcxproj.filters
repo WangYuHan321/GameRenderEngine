@@ -417,6 +417,15 @@
     <ClInclude Include="Core\Helper\Serializer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Widgets\Drag\DragSingleScalar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Widgets\Drag\DragMultipleScalars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Widgets\Selection\ColorEdit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -759,6 +768,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Helper\Serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Widgets\Drag\DragSingleScalar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Widgets\Drag\DragMultipleScalars.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
