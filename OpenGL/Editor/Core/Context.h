@@ -15,7 +15,8 @@
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Window/Input/InputManager.h"
-#include "../../Render/Resource/ResourceManager.h"
+#include "../../Render/Resource/ModelManager.h"
+
 
 class Context
 {
@@ -27,6 +28,8 @@ public:
 	~Context();
 
 
+
+
 	std::unique_ptr<Window> m_window;
 	std::unique_ptr<Driver> m_dirve;
 	std::unique_ptr<Device> m_device;
@@ -35,6 +38,9 @@ public:
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
+
+	
+
 
 private:
 	
