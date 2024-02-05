@@ -1,9 +1,11 @@
 #include "Actor.h"
+
 Actor::Actor(int64_t p_actionID, const std::string& p_name, const std::string& p_tag, bool& p_playing):
 	m_actorID(p_actionID),
 	m_name(p_name),
 	m_tag(p_tag),
-	m_playing(p_playing)
+	m_playing(p_playing),
+	m_transform(AddComponent<CTransform>())
 {
 	CreateEvent.Invoke(*this);
 }

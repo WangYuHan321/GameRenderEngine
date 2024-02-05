@@ -4,7 +4,7 @@
 #include "../../../Event/Event.h"
 #include"../API/ISerializable.h"
 #include"../ECS/Components/AComponent.h"
-
+#include"Components/CTransform.h"
 
 class Actor : public ISerializable
 {
@@ -75,7 +75,7 @@ private:
 	std::vector<std::shared_ptr<AComponent>> m_components;
 
 public:
-	
+	CTransform& m_transform;
 };
 
 #include "Actor.inl"
