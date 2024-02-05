@@ -26,6 +26,11 @@ const Vector3& CTransform::GetLocalScale() const
 	return m_transform.GetLocalScale();
 }
 
+const Vector3& CTransform::GetWorldPosition() const
+{
+	return m_transform.GetWorldPosition();
+}
+
 const FTransform& CTransform::GetFTransform() const
 {
 	return m_transform;

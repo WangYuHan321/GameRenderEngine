@@ -17,6 +17,9 @@ public:
 	const Vector3& GetLocalPosition() const;
 	const Vector3& GetLocalScale() const;
 
+	const Vector3& GetWorldPosition() const;
+
+
 	const FTransform& GetFTransform()const;
 
 	void SetLocalRotation(Quaternion p_newQuaternion);
