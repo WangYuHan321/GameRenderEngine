@@ -3,6 +3,10 @@
 #include "../../API/IInspectorItem.h"
 #include "../../Event/Event.h"
 
+//Helper
+#include "../../Core/Helper/Serializer.h"
+#include "../../Editor/Helper/GUIDrawer.h"
+
 class Actor;
 
 class AComponent : public IInspectorItem
