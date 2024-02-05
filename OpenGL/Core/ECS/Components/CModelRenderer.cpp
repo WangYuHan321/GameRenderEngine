@@ -11,7 +11,7 @@ CModelRenderer::CModelRenderer(Actor& p_owner):
 
 void CModelRenderer::SetModel(Model* p_model)
 {
-
+	m_model = p_model;
 }
 
 Model* CModelRenderer::GetModel() const
