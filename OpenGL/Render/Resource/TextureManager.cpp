@@ -1,5 +1,5 @@
 #include "TextureManager.h"
-#include "../Shader/TextureLoader.h"
+#include "Loader/TextureLoader.h"
 
 Texture* TextureManager::CreateResource(const std::string& p_path)
 {

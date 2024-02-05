@@ -1,9 +1,9 @@
 #include"ResourceManager.h"
 
-#include "../Shader/TextureLoader.h"
-#include "../Shader/ShaderLoader.h"
-#include "../Shader/MeshLoader.h"
-#include "../Shader/MaterialLoader.h"
+#include "Loader/TextureLoader.h"
+#include "Loader/ShaderLoader.h"
+#include "Loader/MeshLoader.h"
+#include "Loader/MaterialLoader.h"
 #include "../Mesh/Mesh_ID.h"
 
 #include "../../Scene/Scene.h"

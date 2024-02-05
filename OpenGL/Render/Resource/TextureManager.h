@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ResourceManager.h"
+#include "AResourceManager.h"
 #include "../Shader/Texture.h"
 
 class TextureManager : public AResourceManager<Texture>
