@@ -1,11 +1,12 @@
 #pragma once
 
 #include "../../Render/Mesh/Material.h"
+#include "../../Render/ForwardRenderer.h"
 
 class Context;
 class Camera;
 
-class EditorRender
+class EditorRender : ForwardRenderer
 {
 
 
@@ -16,6 +17,8 @@ public:
 	void InitMaterials();
 	void RenderScene();
 	void RenderUI();
+
+	virtual void DoRender();
 
 private:
 
@@ -34,8 +37,6 @@ private:
 	Material m_gizmoBallMaterial;
 	Material m_gizmoPickingMaterial;
 	Material m_actorPickingMaterial;
-
-
 
 };
 
