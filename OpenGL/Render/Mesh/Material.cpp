@@ -46,6 +46,11 @@ CShader* Material::GetShader()
     return m_Shader;
 }
 
+void Material::SetShader(CShader& pShader)
+{
+    m_Shader = &pShader;
+}
+
 void Material::SetFloat(std::string name, float value)
 {
     m_uniforms[name].Type = SHADER_FLOAT;

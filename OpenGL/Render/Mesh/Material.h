@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../Util/common.h"
 #include"../Shader/EShader.h"
 
 enum MaterialType
@@ -8,6 +9,7 @@ enum MaterialType
 	MATERIAL_CUSTOM,//custom
 	MATERIAL_POSTPROCESS,//postprocess
 };
+
 
 class Material
 {
@@ -21,7 +23,7 @@ private:
 public:
 
 	MaterialType Type = MATERIAL_CUSTOM;
-	
+
 	//
 	bool DepthTest = true;
 	bool DepthWrite = true;
@@ -49,6 +51,8 @@ public:
 	Material Copy();
 	CShader* GetShader();
 
+
+	void SetShader(CShader& p_Shader);
 	void SetFloat(std::string name, float value);
 	void SetVector(std::string name, glm::vec3 value);
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
