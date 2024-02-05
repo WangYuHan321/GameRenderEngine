@@ -63,18 +63,24 @@ private:
 #include "Model.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "../Bounding/BoundingSphere.h"
 #include <GLM/glm.hpp>
 
-Model::Model(std::vector<Mesh*>& p_mesh, std::vector<Material*>& p_material):
+Model::Model(std::vector<Mesh*>& p_mesh, std::vector<std::string>& p_material):
     m_meshes(p_mesh),
-    m_materials(p_material)
+    m_materialNames(p_material)
 {
     ComputeBoundingSphere();
 }
 
+Model::Model()
+{
+}
+
 Model::~Model()
 {
-
+    for (auto mesh : m_meshes)
+        delete mesh;
 }
 
 const BoundingSphere& Model::GetBoundingSphere() const
@@ -84,12 +90,16 @@ const BoundingSphere& Model::GetBoundingSphere() const
 
 void Model::ComputeBoundingSphere()
 {
-    for (auto& item : m_meshes)
+    if (m_meshes.size() == 1)
+    {
+        m_boundingSphere = m_meshes[0]->m_boundingSphere;
+    }
+    else
     {
         m_boundingSphere.position = glm::vec3(0.0f);
         m_boundingSphere.radius = 0.0f;
 
-        if (!item->Positions.empty())
+        if (!m_meshes.empty())
         {
             float minX = std::numeric_limits<float>::max();
             float minY = std::numeric_limits<float>::max();
@@ -99,24 +109,20 @@ void Model::ComputeBoundingSphere()
             float maxY = std::numeric_limits<float>::min();
             float maxZ = std::numeric_limits<float>::min();
 
-            for (const auto& vertex : item->Positions)
+            for (const auto& mesh : m_meshes)
             {
-                minX = std::min(minX, vertex.x);
-                minY = std::min(minY, vertex.y);
-                minZ = std::min(minZ, vertex.z);
+                const auto& boundingSphere = mesh->m_boundingSphere;
+                minX = std::min(minX, boundingSphere.position.x - boundingSphere.radius);
+                minY = std::min(minY, boundingSphere.position.y - boundingSphere.radius);
+                minZ = std::min(minZ, boundingSphere.position.z - boundingSphere.radius);
 
-                maxX = std::max(maxX, vertex.x);
-                maxY = std::max(maxY, vertex.y);
-                maxZ = std::max(maxZ, vertex.z);
+                maxX = std::max(maxX, boundingSphere.position.x + boundingSphere.radius);
+                maxY = std::max(maxY, boundingSphere.position.y + boundingSphere.radius);
+                maxZ = std::max(maxZ, boundingSphere.position.z + boundingSphere.radius);
             }
 
-            m_boundingSphere.position = glm::vec3{ minX + maxX, minY + maxY, minZ + maxZ } / 2.0f;
-
-            for (const auto& vertex : item->Positions)
-            {
-                const auto& position = reinterpret_cast<const glm::vec3&>(vertex);
-                m_boundingSphere.radius = std::max(m_boundingSphere.radius, glm::distance(m_boundingSphere.position, position));
-            }
+            m_boundingSphere.position = Vector3{ minX + maxX, minY + maxY, minZ + maxZ } / 2.0f;
+            m_boundingSphere.radius = glm::distance(m_boundingSphere.position, { minX, minY, minZ });
         }
     }
 }

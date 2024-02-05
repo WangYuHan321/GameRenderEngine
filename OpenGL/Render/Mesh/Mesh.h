@@ -2,6 +2,7 @@
 #include <functional>
 #include <glm/glm.hpp>
 #include <vector>
+#include "../Bounding/BoundingSphere.h"
 
 enum TOPOLOGY
 {
@@ -27,6 +28,9 @@ public:
     std::vector<glm::vec3> Tangents;
     std::vector<glm::vec3> Bitangents;
 
+    uint32 MaterialIndex;
+    BoundingSphere m_boundingSphere;
+
     TOPOLOGY Topology = TOPOLOGY::TRIANGLES;
     std::vector<unsigned int> Indices;
 
@@ -47,6 +51,9 @@ public:
     void FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution);
 
 private:
+
     void calculateNormals(bool smooth = true);
     void calculateTangents();
+
+    void ComputeBoundingSphere();
 };

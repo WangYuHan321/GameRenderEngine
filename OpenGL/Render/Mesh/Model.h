@@ -54,18 +54,20 @@ class BoundingSphere;
 
 class Model
 {
-private:
+public:
 	std::vector<Mesh*> m_meshes;
-	std::vector<Material*> m_materials;
+	std::vector<std::string> m_materialNames;
+private:
 	BoundingSphere m_boundingSphere;
 
 public:
 
-	Model(std::vector<Mesh*>& p_mesh, std::vector<Material*>& p_material);
+	Model();
+	Model(std::vector<Mesh*>& p_mesh, std::vector<std::string>& p_material);
 	~Model();
 
 	const BoundingSphere& GetBoundingSphere() const;
 
-private:
+public:
 	void ComputeBoundingSphere();
 };

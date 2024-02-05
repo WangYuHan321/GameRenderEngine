@@ -66,7 +66,6 @@ void Mesh::SetTangents(std::vector<glm::vec3> tangents, std::vector<glm::vec3> b
 
 void Mesh::Finalize(bool interleaved)
 {
-
     if (!m_VAO)
     {
         glGenVertexArrays(1, &m_VAO);
@@ -677,6 +676,43 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
 
     LOG_INFO("SDF mesh generation complete!");
 }
+
+void Mesh::ComputeBoundingSphere()
+{
+    m_boundingSphere.position = glm::vec3(0.0f);
+    m_boundingSphere.radius = 0.0f;
+
+    if (!Positions.empty())
+    {
+        float minX = std::numeric_limits<float>::max();
+        float minY = std::numeric_limits<float>::max();
+        float minZ = std::numeric_limits<float>::max();
+
+        float maxX = std::numeric_limits<float>::min();
+        float maxY = std::numeric_limits<float>::min();
+        float maxZ = std::numeric_limits<float>::min();
+
+        for (const auto& vertex : Positions)
+        {
+            minX = std::min(minX, vertex.x);
+            minY = std::min(minY, vertex.y);
+            minZ = std::min(minZ, vertex.z);
+
+            maxX = std::max(maxX, vertex.x);
+            maxY = std::max(maxY, vertex.y);
+            maxZ = std::max(maxZ, vertex.z);
+        }
+
+        m_boundingSphere.position = glm::vec3{ minX + maxX, minY + maxY, minZ + maxZ } / 2.0f;
+
+        for (const auto& vertex : Positions)
+        {
+            const auto& position = reinterpret_cast<const glm::vec3&>(vertex);
+            m_boundingSphere.radius = std::max(m_boundingSphere.radius, glm::distance(m_boundingSphere.position, position));
+        }
+    }
+}
+
 // --------------------------------------------------------------------------------------------
 void Mesh::calculateNormals(bool smooth)
 {
