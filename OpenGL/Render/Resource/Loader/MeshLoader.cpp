@@ -3,12 +3,12 @@
 #include <assimp/postprocess.h>
 
 #include "MeshLoader.h"
-#include "Texture.h"
+#include "../../Shader/Texture.h"
 
-#include "../Mesh/Material.h"
-#include "../Mesh/Mesh_ID.h"
-#include "../Mesh/Mesh.h"
-#include"../Resource/ResourceManager.h"
+#include "../../Mesh/Material.h"
+#include "../../Mesh/Mesh_ID.h"
+#include "../../Mesh/Mesh.h"
+#include"../../Resource/ResourceManager.h"
 #include "../../Scene/SceneNode.h"
 #include "../../Scene/Scene.h"
 
@@ -155,7 +155,7 @@ Mesh* MeshLoader::parseMesh(aiMesh* aMesh, const aiScene* aScene, glm::vec3& out
 }
 // --------------------------------------------------------------------------------------------
 Material* MeshLoader::parseMaterial(aiMaterial* aMaterial, const aiScene* aScene, std::string directory)
-{   
+{
     Material* material;
 
     aiString file;
@@ -168,7 +168,7 @@ Material* MeshLoader::parseMaterial(aiMaterial* aMaterial, const aiScene* aScene
         material = ResourceManager::getInstance()->CreateMaterial("alpha discard");
         alpha = true;
     }
-    else 
+    else
     {
         material = ResourceManager::getInstance()->CreateMaterial("default");
     }

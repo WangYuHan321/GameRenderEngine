@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../Util/Singleton.h"
-#include "Texture.h"
-#include "TextureCube.h"
+#include "../../Shader/Texture.h"
+#include "../../Shader/TextureCube.h"
 #include <iostream>
 
 class TextureLoader : public CSingleton<TextureLoader>

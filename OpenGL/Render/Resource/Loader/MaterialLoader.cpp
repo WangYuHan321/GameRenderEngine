@@ -9,3 +9,15 @@ Material MaterialLoader::LoadMaterial(CShader* p_shader)
 {
 	return Material(p_shader);
 }
+
+
+
+Material* MaterialLoader::Create(const std::string& p_path)
+{
+	return nullptr;
+}
+
+bool MaterialLoader::Destroy(Material*& p_material)
+{
+	return true;
+}
