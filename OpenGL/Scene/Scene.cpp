@@ -1,43 +1,13 @@
 #include"../Render/Mesh/Material.h"
 #include"../Render/Mesh/Mesh.h"
 #include "../Core/ECS/Actor.h"
+#include "../Core/ECS/Components/CCamera.h"
+#include "../Core/ECS/Components/CLight.h"
+#include "../Core/ECS/Components/CModelRenderer.h"
 #include"SceneNode.h"
 #include"Scene.h"
 #include<stack>
 #include <algorithm>
-
-Scene::Scene()
-{
-	Root = new SceneNode(0);
-}
-
-Scene::~Scene()
-{
-	Scene::DeleteSceneNode(Root);
-}
-
-void Scene::Clear()
-{
-	Scene::DeleteSceneNode(Root);
-	Scene::Root = new SceneNode(0);
-}
-
-Actor* Scene::CreateActor()
-{
-	return nullptr;
-}
-
-Actor* Scene::CreateActor(const std::string& p_name, const std::string& p_tag)
-{
-	return nullptr;
-}
-
-SceneNode* Scene::MakeSceneNode(Mesh mesh, Material material)
-{
-	SceneNode* node = new SceneNode(Scene::CounterID++);
-	Root->AddChild(node);
-	return node;
-}
 
 SceneNode* Scene::MakeSceneNode(SceneNode* node)
 {
@@ -80,6 +50,55 @@ void Scene::DeleteSceneNode(SceneNode* node)
 	}
 	Scene::CounterID = 0;
 	delete node;
+}
+
+SceneNode* Scene::MakeSceneNode(Mesh mesh, Material material)
+{
+	SceneNode* node = new SceneNode(Scene::CounterID++);
+	Root->AddChild(node);
+	return node;
+}
+
+Scene::Scene()
+{
+	Root = new SceneNode(0);
+}
+
+Scene::~Scene()
+{
+	Scene::DeleteSceneNode(Root);
+}
+
+void Scene::Clear()
+{
+
+	Scene::DeleteSceneNode(Root);
+	Scene::Root = new SceneNode(0);
+}
+
+Actor* Scene::CreateActor()
+{
+	return CreateActor("New Actor");
+}
+
+Actor* Scene::CreateActor(const std::string& p_name, const std::string& p_tag)
+{
+	m_actors.push_back(new Actor(m_availableID++, p_name, p_tag, m_isPlaying));
+	auto& instance = *m_actors.back();
+	instance.ComponentAddedEvent += std::bind(&Scene::OnComponentAdded, this, std::placeholders::_1);
+	instance.ComponentRemovedEvent += std::bind(&Scene::OnComponentRemoved, this, std::placeholders::_1);
+
+	if (m_isPlaying)
+	{
+
+		if (instance.IsActive())
+		{
+			instance.OnAwake();
+			instance.OnEnable();
+			instance.OnStart();
+		}
+	}
+	return &instance;
 }
 
 void Scene::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
@@ -138,6 +157,36 @@ Actor* Scene::FindActorByID(int64_t p_id)
 		return *result;
 	else
 		return nullptr;
+}
+
+const Scene::FastAccessComponents Scene::GetFastAccessComponents() const
+{
+	return m_fastAccessComponents;
+}
+
+void Scene::OnComponentAdded(AComponent& p_component)
+{
+	if (auto result = dynamic_cast<CCamera*>(&p_component); result)
+		m_fastAccessComponents.cameras.push_back(result);
+	if(auto result = dynamic_cast<CLight*>(&p_component); result)
+		m_fastAccessComponents.lights.push_back(result);
+	if (auto result = dynamic_cast<CModelRenderer*>(&p_component); result)
+		m_fastAccessComponents.modelRenderers.push_back(result);
+
+}
+
+void Scene::OnComponentRemoved(AComponent& p_component)
+{
+	//std::remove
+	//函数不改变所包含的“范围对象”的属性（换句话说，函数不改变数组或者容器的真实 size ）：
+	//元素被移动是通过下一个不等于 val 的元素，来替换当前等于 val 的元素，而且会通过返回一个指向新 end 的迭代器，
+	//来指示出新的稍“短”一些的范围（返回的迭代器所指向的元素是新的 past-the-end 元素）。
+	if (auto result = dynamic_cast<CCamera*>(&p_component); result)
+		m_fastAccessComponents.cameras.erase(std::remove(m_fastAccessComponents.cameras.begin(), m_fastAccessComponents.cameras.end(), result), m_fastAccessComponents.cameras.end());
+	if (auto result = dynamic_cast<CLight*>(&p_component); result)
+		m_fastAccessComponents.lights.erase(std::remove(m_fastAccessComponents.lights.begin(), m_fastAccessComponents.lights.end(), result), m_fastAccessComponents.lights.end());
+	if (auto result = dynamic_cast<CModelRenderer*>(&p_component); result)
+		m_fastAccessComponents.modelRenderers.erase(std::remove(m_fastAccessComponents.modelRenderers.begin(), m_fastAccessComponents.modelRenderers.end(), result), m_fastAccessComponents.modelRenderers.end());
 }
 
 

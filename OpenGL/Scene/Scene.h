@@ -6,9 +6,10 @@ class SceneNode;
 class Mesh;
 class Material;
 class Actor;
-class CModelRender;
 class CCamera;
 class CLight;
+class AComponent;
+class CModelRenderer;
 
 
 class Scene : public ISerializable
@@ -16,12 +17,10 @@ class Scene : public ISerializable
 	
 	struct FastAccessComponents
 	{
-		
+		std::vector<CModelRenderer*>	modelRenderers;
+		std::vector<CCamera*>			cameras;
+		std::vector<CLight*>			lights;
 	};
-
-
-
-
 
 public:
 	SceneNode* Root;
@@ -32,17 +31,23 @@ public:
 
 	void Clear();
 
-	Actor* CreateActor();
-
-	Actor* CreateActor(const std::string& p_name, const std::string& p_tag = "");
-
 	SceneNode* MakeSceneNode(Mesh mesh, Material material);
 
 	SceneNode* MakeSceneNode(SceneNode* node);
 
 	void DeleteSceneNode(SceneNode* node);
 
+	Actor* CreateActor();
+
+	Actor* CreateActor(const std::string& p_name, const std::string& p_tag = "");
+
 	Actor* FindActorByID(int64_t p_id);
+
+	const FastAccessComponents GetFastAccessComponents() const;
+
+	void OnComponentAdded(AComponent& p_component);
+
+	void OnComponentRemoved(AComponent& p_component);
 
 	void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 
@@ -51,5 +56,7 @@ public:
 private:
 	int64_t m_availableID = 1;
 	std::vector<Actor*> m_actors;
+	bool m_isPlaying = false;
+	FastAccessComponents m_fastAccessComponents;
 };
 
