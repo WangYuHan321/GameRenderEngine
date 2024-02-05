@@ -71,6 +71,16 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Render\Resource\Parser\AssimpParser.h" />
+    <ClInclude Include="Render\Resource\Parser\EModelParserFlags.h" />
+    <ClInclude Include="Render\Resource\Parser\IModelParser.h" />
+    <ClInclude Include="Render\Resource\Loader\ModelLoader.h" />
+    <ClInclude Include="Render\Resource\AResourceManager.h" />
+    <ClInclude Include="Core\ECS\Components\CCamera.h" />
+    <ClInclude Include="Editor\Core\CameraController.h" />
+    <ClInclude Include="Core\ECS\Components\CDirectionalLight.h" />
+    <ClInclude Include="Render\Resource\ModelManager.h" />
+    <ClInclude Include="Render\Resource\ShaderManager.h" />
     <ClInclude Include="UI\Widgets\Selection\ColorEdit.h" />
     <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h" />
     <ClInclude Include="Core\ECS\Components\CLight.h" />
@@ -153,7 +163,7 @@
     <ClInclude Include="File\ConfigManager.h" />
     <ClInclude Include="Global\GlobalContext.h" />
     <ClInclude Include="Render\Mesh\Cube.h" />
-    <ClInclude Include="Render\Shader\MaterialLoader.h" />
+    <ClInclude Include="Render\Resource\Loader\MaterialLoader.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Render\Mesh\Mesh_ID.h" />
     <ClInclude Include="Render\ShaderConfig.h" />
@@ -171,7 +181,7 @@
     <ClInclude Include="Render\Context\Driver.h" />
     <ClInclude Include="Window\Context\Device.h" />
     <ClInclude Include="Event\Event.h" />
-    <ClInclude Include="Render\Shader\MeshLoader.h" />
+    <ClInclude Include="Render\Resource\Loader\MeshLoader.h" />
     <ClInclude Include="pbr_capture.h" />
     <ClInclude Include="Render\Lighting\PointLight.h" />
     <ClInclude Include="Render\PBR.h" />
@@ -196,8 +206,8 @@
     <ClInclude Include="Render\Shader\TextureCube.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\SceneNode.h" />
-    <ClInclude Include="Render\Shader\ShaderLoader.h" />
-    <ClInclude Include="Render\Shader\TextureLoader.h" />
+    <ClInclude Include="Render\Resource\Loader\ShaderLoader.h" />
+    <ClInclude Include="Render\Resource\Loader\TextureLoader.h" />
     <ClInclude Include="Render\Mesh\Sphere.h" />
     <ClInclude Include="Util\common.h" />
     <ClInclude Include="Util\Singleton.h" />
@@ -208,6 +218,15 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Render\Resource\Parser\AssimpParser.cpp" />
+    <ClCompile Include="Render\Resource\Parser\IModelParser.cpp" />
+    <ClCompile Include="Render\Resource\Loader\ModelLoader.cpp" />
+    <ClCompile Include="Render\Resource\AResourceManager.cpp" />
+    <ClCompile Include="Core\ECS\Components\CCamera.cpp" />
+    <ClCompile Include="Editor\Core\CameraController.cpp" />
+    <ClCompile Include="Core\ECS\Components\CDirectionalLight.cpp" />
+    <ClCompile Include="Render\Resource\ModelManager.cpp" />
+    <ClCompile Include="Render\Resource\ShaderManager.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp" />
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\CLight.cpp" />
@@ -288,7 +307,7 @@
     <ClCompile Include="Global\GlobalContext.cpp" />
     <ClCompile Include="Math\Math.cpp" />
     <ClCompile Include="Render\Mesh\Cube.cpp" />
-    <ClCompile Include="Render\Shader\MaterialLoader.cpp" />
+    <ClCompile Include="Render\Resource\Loader\MaterialLoader.cpp" />
     <ClCompile Include="Time\Time.cpp" />
     <ClCompile Include="UI\Widgets\AWidget.cpp" />
     <ClCompile Include="UI\Internel\WidgetContainer.cpp" />
@@ -298,7 +317,7 @@
     <ClCompile Include="Window\Input\InputManager.cpp" />
     <ClCompile Include="Render\Context\Driver.cpp" />
     <ClCompile Include="Window\Context\Device.cpp" />
-    <ClCompile Include="Render\Shader\MeshLoader.cpp" />
+    <ClCompile Include="Render\Resource\Loader\MeshLoader.cpp" />
     <ClCompile Include="pbr_capture.cpp" />
     <ClCompile Include="Render\PBR.cpp" />
     <ClCompile Include="Render\Mesh\Quad.cpp" />
@@ -320,9 +339,9 @@
     <ClCompile Include="Render\Shader\TextureCube.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\SceneNode.cpp" />
-    <ClCompile Include="Render\Shader\ShaderLoader.cpp" />
+    <ClCompile Include="Render\Resource\Loader\ShaderLoader.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Render\Shader\TextureLoader.cpp" />
+    <ClCompile Include="Render\Resource\Loader\TextureLoader.cpp" />
     <ClCompile Include="Render\Mesh\Sphere.cpp" />
     <ClCompile Include="Window\GLFWWindow.cpp" />
   </ItemGroup>
@@ -331,7 +350,7 @@
     <None Include="Core\ECS\Components\Behaviour.inl" />
     <None Include="Editor\Helper\GUIDrawer.inl" />
     <None Include="Event\Event.inl" />
-    <None Include="Render\Resource\ResourceManager.inl" />
+    <None Include="Render\Resource\AResourceManager.inl" />
     <None Include="Shader\ambient.fs" />
     <None Include="Shader\pbr\pbr.glsl" />
     <None Include="Shader\post\down_sample.fs" />
