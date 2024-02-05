@@ -1,4 +1,4 @@
-#include "ResourceManager.h"
+#include "AResourceManager.h"
 
 template<typename T>
 std::string AResourceManager<T>::__ENGINE_ASSET_PATH = "Data\\Engine\\";
