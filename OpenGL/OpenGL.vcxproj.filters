@@ -836,6 +836,9 @@
     <ClCompile Include="Render\Resource\ShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Render\Setting\EPrimitiveMode.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ambient.fs" />

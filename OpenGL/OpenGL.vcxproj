@@ -227,6 +227,7 @@
     <ClCompile Include="Core\ECS\Components\CDirectionalLight.cpp" />
     <ClCompile Include="Render\Resource\ModelManager.cpp" />
     <ClCompile Include="Render\Resource\ShaderManager.cpp" />
+    <ClCompile Include="Render\Setting\EPrimitiveMode.h" />
     <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp" />
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\CLight.cpp" />
