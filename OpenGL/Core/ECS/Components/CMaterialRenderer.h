@@ -18,7 +18,13 @@ public:
 	void UpdateMaterialList();
 
 	virtual std::string GetName() override;
+
+	const Matrix4& GetUserMatrix() const;
+
+	MaterialList GetMaterialList() { return m_materials; }
 	
+	MaterialField GetMaterialFields() { return m_materialFields; }
+
 	virtual void OnInspector(WidgetContainer& p_root) override;
 
 	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
@@ -27,8 +33,10 @@ public:
 
 private:
 	MaterialList m_materials;
-	MaterialField m_materialFileds;
+	MaterialField m_materialFields;
 	std::array<std::string, MAX_MATERIAL_COUNT> m_materialNames;
+	Matrix4 m_userMatrix;
+
 
 };
 
