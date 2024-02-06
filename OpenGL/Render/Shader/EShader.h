@@ -29,6 +29,7 @@ public:
     CShader(string name, string cmPath);
 
 	void activeShader();
+    void inactiveShader();
 
 	void SetInt(std::string location, int value);
     void SetBool(std::string location, bool  value);

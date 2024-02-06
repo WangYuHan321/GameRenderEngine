@@ -677,6 +677,16 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
     LOG_INFO("SDF mesh generation complete!");
 }
 
+void Mesh::Bind()
+{
+    glBindVertexArray(m_VAO);
+}
+
+void Mesh::UnBind()
+{
+    glBindVertexArray(0);
+}
+
 void Mesh::ComputeBoundingSphere()
 {
     m_boundingSphere.position = glm::vec3(0.0f);

@@ -46,6 +46,48 @@ CShader* Material::GetShader()
     return m_Shader;
 }
 
+void Material::Bind()
+{
+    if (m_Shader)
+    {
+        m_Shader->activeShader();
+
+        for (auto& [name, value]: m_uniforms)
+        {
+            switch (value.Type)
+            {
+            case SHADER_TYPE::SHADER_BOOL: m_Shader->SetBool(name, value.BOOL);
+            case SHADER_TYPE::SHADER_FLOAT:m_Shader->SetFloat(name, value.FLOAT);
+            case SHADER_TYPE::SHADER_INT:m_Shader->SetInt(name, value.INT);
+            case SHADER_TYPE::SHADER_MAT2:m_Shader->SetMatrix(name, value.MAT2);
+            case SHADER_TYPE::SHADER_MAT3:m_Shader->SetMatrix(name, value.MAT3);
+            case SHADER_TYPE::SHADER_MAT4:m_Shader->SetMatrix(name, value.MAT4);
+            }
+        }
+
+        int textureSlot = 0;
+        for (auto& [name, value] : m_uniformSampler)
+        {
+            switch (value.Type)
+            {
+            case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
+            case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
+            case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
+            }
+        }
+
+
+    }
+
+    
+}
+
+void Material::UnBind()
+{
+    m_Shader->inactiveShader();
+}
+
 void Material::SetShader(CShader& pShader)
 {
     m_Shader = &pShader;
@@ -102,6 +144,22 @@ void Material::SetTextureCube(std::string name, TextureCube* value, unsigned int
         m_Shader->activeShader();
         m_Shader->SetInt(name, unit);
     }
+}
+
+uint8_t Material::GenerateStateMask() const
+{
+    uint8_t result = 0;
+
+    if (DepthWrite) result |= 0b0000'0001;
+    if(ColorWrite) result |= 0b0000'0010;
+    if(Blend) result |= 0b0000'0100;
+    if(Cull) result |= 0b0000'1000;
+
+    if (DepthTest) result |= 0b0001'0000;
+    if (CullFace == GL_BACK) result |= 0b0010'0000;
+    if (CullFace == GL_FRONT) result |= 0b0100'0000;
+
+    return result;
 }
 
 std::map<string, UniformSampler>* Material::GetSamplerUniforms()

@@ -336,6 +336,11 @@ void CShader::activeShader()
 	glUseProgram(m_ID);
 }
 
+void CShader::inactiveShader()
+{
+	glUseProgram(0);
+}
+
 void CShader::SetInt(std::string location, int value)
 {
     int loc = getUniformLocation(location);

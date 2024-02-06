@@ -50,6 +50,9 @@ public:
 
     void FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution);
 
+    void Bind();
+    void UnBind();
+
 private:
 
     void calculateNormals(bool smooth = true);

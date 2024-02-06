@@ -40,9 +40,13 @@ public:
 	GLenum BlendDst = GL_ONE_MINUS_SRC_ALPHA;
 	GLenum BlendEquation = GL_FUNC_ADD;
 
+	bool ColorWrite = true;
+
 	//
 	bool ShadowCast = true;
 	bool ShadowReceive = true;
+
+	uint32 GPUInstance = 1;
 
 public:
 	Material();
@@ -52,11 +56,16 @@ public:
 	CShader* GetShader();
 
 
+	void Bind();
+	void UnBind();
+
 	void SetShader(CShader& p_Shader);
 	void SetFloat(std::string name, float value);
 	void SetVector(std::string name, glm::vec3 value);
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
 	void SetTextureCube(std::string name, TextureCube* value, unsigned int unit);
+
+	uint8_t GenerateStateMask() const;
 
 	std::map<string, UniformValue>* GetUniforms();
 	std::map<string, UniformSampler>* GetSamplerUniforms();
