@@ -35,7 +35,6 @@ public:
 	virtual void Initialize() ;
 	virtual void Clear() ;
 
-protected:
 
 	void RenderScene(Scene& p_scene,
 		const Vector3& p_cameraPosition,

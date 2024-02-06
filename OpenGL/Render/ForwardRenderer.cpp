@@ -47,6 +47,13 @@ void ForwardRenderer::RenderScene(Scene& p_scene,
 	OpaqueDrawables	opaqueMeshes;
 	TransparentDrawables transparentMeshes;
 
+	std::tie(opaqueMeshes, transparentMeshes) = FindAndSortDRawables(p_scene, p_cameraPosition, p_defaultMaterial);
+
+	for (const auto& [distance, drawable] : opaqueMeshes)
+		DrawDrawable(drawable);
+
+	for (const auto& [distance, drawable] : transparentMeshes)
+		DrawDrawable(drawable);
 
 }
 
