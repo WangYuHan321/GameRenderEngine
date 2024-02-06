@@ -175,6 +175,11 @@ struct FTransform
 		return m_worldPosition;
 	}
 
+	const Matrix4& GetWorldMatrix() const
+	{
+		return m_worldMatrix;
+	}
+
 	const Vector3& GetLocalScale() const
 	{
 		return m_localScale;
