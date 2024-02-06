@@ -29,6 +29,8 @@ public:
 	void SetCull(bool enable);
 	void SetCullFace(GLenum face);
 	void SetPolyonMode(GLenum mode);
+	void SetColorMask(bool enable);
+	void SetDepthMask(bool enable);
 
 	void SwitchShader(uint32 id);
 

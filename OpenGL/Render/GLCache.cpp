@@ -87,3 +87,13 @@ void GLCache::SwitchShader(uint32 id)
 		glUseProgram(id);
 	}
 }
+
+void GLCache::SetColorMask(bool enable)
+{
+	glColorMask(enable, enable, enable, enable);
+}
+
+void GLCache::SetDepthMask(bool enable)
+{
+	glDepthMask(enable);
+}
