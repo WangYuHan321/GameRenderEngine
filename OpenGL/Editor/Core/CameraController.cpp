@@ -17,3 +17,8 @@ bool p_enableFocusInputs):
 	m_camera.SetPerspective(Deg2Rad(60.0f),
 		m_window.GetWindowSize().x / m_window.GetWindowSize().y, 0.001f, 100000.0f);
 }
+
+void CameraController::HandleInputs(float p_deltaTime)
+{
+
+}

@@ -15,6 +15,7 @@ public:
 		Quaternion& p_quat,
 		bool p_enableFocusInputs = false);
 
+	void HandleInputs(float p_deltaTime);
 
 private:
 	Window& m_window;
