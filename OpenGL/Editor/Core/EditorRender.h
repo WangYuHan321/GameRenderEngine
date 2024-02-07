@@ -15,7 +15,7 @@ public:
 	EditorRender(Context& p_context);
 
 	void InitMaterials();
-	void RenderScene();
+	void RenderScene(const Vector3& p_cameraPos, const Camera& p_camera);
 	void RenderUI();
 
 	virtual void DoRender();
