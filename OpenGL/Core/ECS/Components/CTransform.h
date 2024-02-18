@@ -18,7 +18,8 @@ public:
 	const Vector3& GetLocalScale() const;
 
 	const Vector3& GetWorldPosition() const;
-
+	const Vector3& GetWorldScale() const;
+	const Quaternion& GetWorldRotation() const;
 
 	const FTransform& GetFTransform()const;
 
@@ -26,6 +27,8 @@ public:
 	void SetLocalPosition(Vector3 p_newPosition);
 	void SetLocalScale(Vector3 p_newScale);
 
+	void SetParent(CTransform& p_parent);
+	bool RemoveParent();
 
 	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 

@@ -31,6 +31,17 @@ const Vector3& CTransform::GetWorldPosition() const
 	return m_transform.GetWorldPosition();
 }
 
+const Vector3& CTransform::GetWorldScale() const
+{
+	return m_transform.GetWorldScale();
+}
+
+const Quaternion& CTransform::GetWorldRotation() const
+{
+	return m_transform.GetWorldRotation();
+}
+
+
 const FTransform& CTransform::GetFTransform() const
 {
 	return m_transform;
@@ -49,6 +60,16 @@ void CTransform::SetLocalPosition(Vector3 p_newPosition)
 void CTransform::SetLocalScale(Vector3 p_newScale)
 {
 	m_transform.SetLocalScale(p_newScale);
+}
+
+void CTransform::SetParent(CTransform& p_parent)
+{
+	m_transform.SetParent(p_parent.m_transform);
+}
+
+bool CTransform::RemoveParent()
+{
+	return m_transform.RemoveParent();
 }
 
 void CTransform::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
