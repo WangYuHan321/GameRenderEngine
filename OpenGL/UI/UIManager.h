@@ -22,6 +22,8 @@ public:
 	void OnEnd();
 	void Render();
 
+	void SetCanvas(Canvas& p_canvas);
+
 private:
 	Canvas* m_currentCanvas = nullptr;
 	Hierarchy* m_testPanel;

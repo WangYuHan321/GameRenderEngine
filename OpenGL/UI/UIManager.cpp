@@ -33,7 +33,7 @@ void UIManager::OnInit(GLFWwindow* p_window, const std::string& p_glslVersion)
 	m_currentCanvas = new Canvas;
 
 
-	m_currentCanvas->AddPanel(*m_testPanel);
+	//m_currentCanvas->AddPanel(*m_testPanel);
 }
 
 void UIManager::OnEnd()
@@ -71,4 +71,9 @@ void UIManager::Render()
 #endif
 
 
+}
+
+void UIManager::SetCanvas(Canvas& p_canvas)
+{
+	m_currentCanvas = &p_canvas;
 }
