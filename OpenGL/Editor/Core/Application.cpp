@@ -27,5 +27,5 @@ void Application::Run()
 
 bool Application::IsRunning() const
 {
-	return m_context.m_window->ShouldClose();
+	return !m_context.m_window->ShouldClose();
 }
