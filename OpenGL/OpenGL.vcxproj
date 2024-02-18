@@ -83,6 +83,7 @@
     <ClInclude Include="Render\Resource\ModelManager.h" />
     <ClInclude Include="Render\Resource\ShaderManager.h" />
     <ClInclude Include="Editor\Panels\SceneView.h" />
+    <ClInclude Include="UI\Visual\Separator.h" />
     <ClInclude Include="UI\Widgets\Selection\ColorEdit.h" />
     <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h" />
     <ClInclude Include="Core\ECS\Components\CLight.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="Render\Resource\ShaderManager.cpp" />
     <ClCompile Include="Render\Setting\EPrimitiveMode.h" />
     <ClCompile Include="Editor\Panels\SceneView.cpp" />
+    <ClCompile Include="UI\Visual\Separator.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp" />
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
     <ClCompile Include="Core\ECS\Components\CLight.cpp" />

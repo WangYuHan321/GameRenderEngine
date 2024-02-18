@@ -462,6 +462,9 @@
     <ClInclude Include="Editor\Panels\SceneView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Visual\Separator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -849,6 +852,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Editor\Panels\SceneView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Visual\Separator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
