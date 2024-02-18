@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../UI/Module/Canvas.h"
+#include "../../Editor/Panels/MenuBar.h"
 #include "../../UI/Panel/PanelWindow.h"
 
 class PanelsManager
@@ -16,7 +17,7 @@ public:
 		{
 			m_panels.emplace(p_id, std::make_unique<T>(p_id, std::forward<Args>(p_args)...));
 			T& instance = *static_cast<T*>(m_panels.at(p_id).get());
-			//GetPanelAs<MenuBar>("Menu Bar").RegisterPanel(instance.name, instance);
+			GetPanelAs<MenuBar>("Menu Bar").RegisterPanel(instance.name, instance);
 		}
 		else
 		{
