@@ -1,5 +1,6 @@
 #include "AView.h"
 #include "../../Render/RenderTarget.h"
+#include "../../Editor/Core/EditorAction.h"
 #include "../../UI/Visual/Image.h"
 
 AView::AView
@@ -8,7 +9,8 @@ AView::AView
 	bool p_opened,
 	const PanelWindowSetting& p_panelSetting
 ):
-PanelWindow(p_title, p_opened, p_panelSetting)
+	PanelWindow(p_title, p_opened, p_panelSetting),
+	m_editorRenderer(EDITOR_RENDERER())
 {
 	m_camPos = { -10.0f, 3.0f, 10.0f };
 	m_camRot = glm::quat({ 0.0f, 135.0f, 0.0f });
@@ -36,7 +38,11 @@ void AView::_Draw_Impl()
 
 void AView::Render()
 {
+	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
 
+	//EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
+
+	//EDITOR_CONTEXT(m_renderer)->SetViewPort(0, 0, winWidth, winHeight);
 	_Render_Impl();
 }
 
@@ -48,4 +54,11 @@ void AView::SetCameraPosition(glm::vec3& p_position)
 void AView::SetCameraRotation(glm::quat& p_rotation)
 {
 	m_camRot = p_rotation;
+}
+
+void AView::PrepareCamera()
+{
+	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
+
+	m_camera.CalculateProjectMatrix(size.x, size.y);
 }
