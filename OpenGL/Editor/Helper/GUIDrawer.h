@@ -2,9 +2,13 @@
 
 #include "../../Util/common.h"
 
+#undef min
+#undef max
+
+#include <limits.h>
+
 class Texture;
 class WidgetContainer;
-
 
 class GUIDrawer 
 {
@@ -22,6 +26,7 @@ public:
 
 	template <typename T>
 	static void DrawScalar(WidgetContainer& p_root, const std::string& p_name, T& p_data, float p_step = 1.0f, T p_min = std::numeric_limits<T>::min(), T p_max = std::numeric_limits<T>::max());
+
 	static void DrawBoolean(WidgetContainer& p_root, const std::string& p_name, bool& p_data);
 	static void DrawVec2(WidgetContainer& p_root, const std::string& p_name, Vector2& p_data, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawVec3(WidgetContainer& p_root, const std::string& p_name, Vector3& p_data, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
