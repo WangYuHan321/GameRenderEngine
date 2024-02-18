@@ -82,4 +82,15 @@ Texture* RenderTarget::GetColorTexture(unsigned int index)
 	}
 }
 
+void RenderTarget::Bind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, ID);
+}
+
+void RenderTarget::Unbind()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
 

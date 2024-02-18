@@ -30,6 +30,9 @@ public:
 	Texture* GetDepthStencilTexture();
 	void Resize(uint32 width, uint32 height);
 
+	void Bind();
+	void Unbind();
+
 	////深度测试必备函数
 	//void SetFilterMin(GLenum filter);
 	//void SetFilterMax(GLenum filter);
