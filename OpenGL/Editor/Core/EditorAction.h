@@ -5,6 +5,7 @@
 #include "PanelsManager.h"
 #include "../../Global/ServiceLocator.h"
 
+#define EDITOR_RENDERER()		 ServiceLocator::getInstance()->Get<EditorAction>().GetRenderer()
 #define EDITOR_CONTEXT(instance) ServiceLocator::getInstance()->Get<EditorAction>().GetContext().instance
 
 enum class EEditorMode { EDIT, PLAY, PAUSE, FRAME_BY_FRAME };
@@ -24,7 +25,6 @@ private:
 	Context& m_context;
 	PanelsManager& m_panelMgr;
 	EditorRender& m_renderer;
-
 
 
 };
