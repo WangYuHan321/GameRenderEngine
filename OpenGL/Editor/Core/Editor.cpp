@@ -1,5 +1,6 @@
 #include "Editor.h"
 #include "../../Editor/Panels/GameView.h"
+#include "../../Editor/Panels/SceneView.h"
 
 Editor::Editor(Context& p_context):
 	m_context(p_context),
@@ -17,7 +18,11 @@ void Editor::SetUpUI()
 	settings.collapsable = true;
 	settings.dockable = true;
 
+	m_panelsMgr.CreatePanel<MenuBar>("Menu Bar");
 	m_panelsMgr.CreatePanel<GameView>("Game View", true, settings);
+	m_panelsMgr.CreatePanel<SceneView>("Scene View", true, settings);
+
+	m_context.m_uiMgr->SetCanvas(m_canvas);
 }
 
 void Editor::PreUpdate()
@@ -43,10 +48,21 @@ void Editor::PostUpdate()
 void Editor::RenderViews(float p_deltaTime)
 {
 	auto& gameView = m_panelsMgr.GetPanelAs<GameView>("Game View");
+	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>("Scene View");
+
+	{
+		gameView.Update(p_deltaTime);
+		sceneView.Update(p_deltaTime);
+	}
 
 	if (gameView.IsOpened())
 	{
 		gameView.Render();
+	}
+
+	if (sceneView.IsOpened())
+	{
+		sceneView.Render();
 	}
 
 }

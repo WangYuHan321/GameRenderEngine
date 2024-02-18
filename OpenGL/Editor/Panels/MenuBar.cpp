@@ -1,8 +1,9 @@
 #include "MenuBar.h"
+#include "../../../UI/Visual/Separator.h"
 
 MenuBar::MenuBar()
 {
-
+	CreateWindowMenu();
 }
 
 void MenuBar::CreateWindowMenu()
@@ -10,7 +11,7 @@ void MenuBar::CreateWindowMenu()
 	m_windowMenu = &CreateWidget<MenuList>("Window");
 	m_windowMenu->CreateWidget<MenuItem>("Close all").ClickedEvent += std::bind(&MenuBar::OpenEveryWindows, this, false);
 	m_windowMenu->CreateWidget<MenuItem>("Open all").ClickedEvent += std::bind(&MenuBar::OpenEveryWindows, this, true);
-	//m_windowMenu->CreateWidget<Separator>();
+	m_windowMenu->CreateWidget<Separator>();
 
 }
 

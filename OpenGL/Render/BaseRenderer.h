@@ -16,7 +16,6 @@ public:
 	virtual void OnReSize(uint32 width, uint32 height) = 0;
 
 protected:
-	Camera* activeCam;
 
 };
 
