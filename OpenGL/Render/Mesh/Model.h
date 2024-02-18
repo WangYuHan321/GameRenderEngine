@@ -41,6 +41,9 @@ private:
 };
 
 #endif
+
+#pragma once
+
 #include <vector>
 #include <functional>
 #include <GLM/glm.hpp>
