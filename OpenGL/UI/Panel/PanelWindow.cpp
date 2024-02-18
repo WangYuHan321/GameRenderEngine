@@ -3,6 +3,7 @@
 PanelWindow::PanelWindow(const std::string& p_name,
 	bool m_opened,
 	const PanelWindowSetting& p_panelSetting):
+	name(p_name),
 	m_opened(m_opened),
 	resizeable(p_panelSetting.resizable),
 	closeable(p_panelSetting.closable),
