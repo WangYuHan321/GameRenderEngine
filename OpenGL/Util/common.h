@@ -154,6 +154,22 @@ struct FTransform
 		m_worldRot = Quaternion(rotationMatrix);
 	}
 
+	void NotificationHandler(TransformNotifer::ENotification p_notification)
+	{
+		switch (p_notification)
+		{
+		case TransformNotifer::ENotification::TRANSFORM_CHANGED:
+			UpdateWorldMatrix();
+			break;
+
+		case TransformNotifer::ENotification::TRANSFORM_DESTROYED:
+			GenerateMatrices(m_worldPosition, m_worldRot, m_worldScale);
+			m_parent = nullptr;
+			UpdateWorldMatrix();
+			break;
+		}
+	}
+
 
 	bool HasParent() const
 	{
@@ -173,6 +189,16 @@ struct FTransform
 	const Vector3& GetWorldPosition() const
 	{
 		return m_worldPosition;
+	}
+
+	const Vector3& GetWorldScale() const
+	{
+		return m_worldScale;
+	}
+
+	const Quaternion& GetWorldRotation() const
+	{
+		return m_worldRot;
 	}
 
 	const Matrix4& GetWorldMatrix() const
@@ -198,6 +224,29 @@ struct FTransform
 	void SetLocalScale(Vector3 p_newScale)
 	{
 		GenerateMatrices(m_localPosition, m_localRot, p_newScale);
+	}
+
+	void SetParent(FTransform& p_parent)
+	{
+		m_parent = &p_parent;
+
+		m_notificationHandlerID = m_parent->Notifier.AddNotificationHandler(std::bind(&FTransform::NotificationHandler, this, std::placeholders::_1));
+
+		UpdateWorldMatrix();
+	}
+
+	bool RemoveParent()
+	{
+		if (m_parent != nullptr)
+		{
+			m_parent->Notifier.RemoveNotificationHandler(m_notificationHandlerID);
+			m_parent = nullptr;
+			UpdateWorldMatrix();
+
+			return true;
+		}
+
+		return false;
 	}
 
 public:
