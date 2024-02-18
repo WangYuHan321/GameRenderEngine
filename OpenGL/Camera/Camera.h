@@ -1,5 +1,6 @@
 #pragma once
 #include <GLM/glm.hpp>
+#include "../../Util/common.h"
 #include "CameraFrustum.h"
 
 enum CAMERA_MOVEMENT {
@@ -40,6 +41,9 @@ public:
     void SetOrthographic(float left, float right, float top, float bottom, float near, float far);
 
     void UpdateView();
+
+    void CalculateProjectMatrix(uint32 p_windowWidth, uint32 p_windowHeight);
+
 
     float FrustumHeightAtDistance(float distance);
     float DistanceAtFrustumHeight(float frustumHeight);

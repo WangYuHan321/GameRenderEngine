@@ -8,40 +8,47 @@ Camera::Camera()
 {
 
 }
-// --------------------------------------------------------------------------------------------
+
 Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : Position(position), Forward(forward), Up(up)
 {
     UpdateView();
 }
-// --------------------------------------------------------------------------------------------
+
 void Camera::Update(float dt)
 {
     Frustum.Update(this);
 }
-// --------------------------------------------------------------------------------------------
+
 void Camera::SetPerspective(float fov, float aspect, float near, float far)
 {
     Perspective = true;
-    Projection = glm::perspective (fov, aspect, near, far);
     FOV = fov;
     Aspect = aspect;
     Near = near;
     Far = far;
+
+    Projection = glm::perspective(FOV, Aspect, Near, Far);
 }
-// --------------------------------------------------------------------------------------------
+
 void Camera::SetOrthographic(float left, float right, float top, float bottom, float near, float far)
 {
     Perspective = false;
-    Projection = glm::ortho(left, right, top, bottom, near, far);
     Near = near;
     Far = far;
+
+    Projection = glm::ortho(left, right, top, bottom, near, far);
 }
-// --------------------------------------------------------------------------------------------
+
 void Camera::UpdateView()
 {
     View = glm::lookAt(Position, Position + Forward, Up);
 }
-// --------------------------------------------------------------------------------------------
+
+void Camera::CalculateProjectMatrix(uint32 p_windowWidth, uint32 p_windowHeight)
+{
+    Aspect = p_windowWidth / p_windowHeight;
+}
+
 float Camera::FrustumHeightAtDistance(float distance)
 {
     if (Perspective)
@@ -53,7 +60,7 @@ float Camera::FrustumHeightAtDistance(float distance)
         return Frustum.Top.D;
     }
 }
-// --------------------------------------------------------------------------------------------
+
 float Camera::DistanceAtFrustumHeight(float frustumHeight)
 {
     if (Perspective)
