@@ -67,12 +67,40 @@ Actor* Actor::GetParent() const
 
 void Actor::SetParent(Actor& p_parent)
 {
+	DetachFromParent();
 
+	m_parent = &p_parent;
+	m_parentID = p_parent.m_actorID;
+	m_transform.SetParent(p_parent.m_transform);
+
+}
+
+void Actor::DetachFromParent()
+{
+	DettachEvent.Invoke(*this);
+
+	if (m_parent)
+	{
+		m_parent->m_children.erase(std::remove_if(m_parent->m_children.begin(), m_parent->m_children.end(), [this](Actor* p_element)
+			{
+				return p_element == this;
+			}));
+	}
+
+	m_parent = nullptr;
+	m_parentID = 0;
+
+	m_transform.RemoveParent();
 }
 
 int64_t Actor::GetParentID() const
 {
 	return m_actorID;
+}
+
+std::vector<Actor*>& Actor::GetChildren()
+{
+	return m_children;
 }
 
 int64_t Actor::GetID()const

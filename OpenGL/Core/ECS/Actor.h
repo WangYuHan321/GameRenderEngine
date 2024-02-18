@@ -35,7 +35,11 @@ public:
 
 	void SetParent(Actor& p_parent);
 
+	void DetachFromParent();
+
 	int64_t GetParentID() const;
+
+	std::vector<Actor*>& GetChildren();
 
 	int64_t GetID()const ;
 
@@ -48,7 +52,6 @@ public:
 	template<typename T, typename... Args>
 	T& AddComponent(Args&&... p_args);
 
-
 	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
 
 	virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
@@ -59,6 +62,8 @@ public:
 	
 	Event<Actor&> CreateEvent;
 	Event<Actor&> DestroyedEvent;
+	Event<Actor&, Actor&> AttachEvent;// attach this£¬ other actor 
+	Event<Actor&> DettachEvent;// dettach this 
 private:
 	//È¥³ýcopy¹¹Ôì
 	Actor(const Actor& p_actor) = delete;
@@ -70,7 +75,9 @@ private:
 	bool m_active = true;
 	bool& m_playing;
 
+	int64_t m_parentID = 0;
 	Actor* m_parent = nullptr;
+	std::vector<Actor*> m_children;
 
 	std::vector<std::shared_ptr<AComponent>> m_components;
 
