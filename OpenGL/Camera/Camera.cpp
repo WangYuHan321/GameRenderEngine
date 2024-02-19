@@ -46,7 +46,8 @@ void Camera::UpdateView()
 
 void Camera::CalculateProjectMatrix(uint32 p_windowWidth, uint32 p_windowHeight)
 {
-    Aspect = p_windowWidth / p_windowHeight;
+    if( p_windowHeight != 0.0f)
+        Aspect = p_windowWidth / p_windowHeight;
 }
 
 float Camera::FrustumHeightAtDistance(float distance)
