@@ -2,6 +2,7 @@
 #include "../../Render/RenderTarget.h"
 #include "../../Editor/Core/EditorAction.h"
 #include "../../UI/Visual/Image.h"
+#include "../../Render/ForwardRenderer.h"
 
 AView::AView
 (
@@ -23,9 +24,8 @@ AView::AView
 
 void AView::Update(float p_deltaTime)
 {
-	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
-	m_img->size = size;
-	m_renderTarget->Resize(size.x, size.y);
+	m_img->size = GetSafeSize();
+	m_renderTarget->Resize(GetSafeSize().x, GetSafeSize().y);
 }
 
 void AView::_Draw_Impl()
@@ -38,11 +38,12 @@ void AView::_Draw_Impl()
 
 void AView::Render()
 {
-	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
+	ImVec2 size(GetSafeSize());
 
 	//EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
 
-	//EDITOR_CONTEXT(m_renderer)->SetViewPort(0, 0, winWidth, winHeight);
+	dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->SetViewPort(0, 0, size.x, size.y);
+
 	_Render_Impl();
 }
 
@@ -58,7 +59,14 @@ void AView::SetCameraRotation(glm::quat& p_rotation)
 
 void AView::PrepareCamera()
 {
-	ImVec2 size(GetSize().x - 0.f, GetSize().y - 25.f);
+	ImVec2 size(GetSafeSize());
 
 	m_camera.CalculateProjectMatrix(size.x, size.y);
+}
+
+ImVec2 AView::GetSafeSize()
+{
+	ImVec2 result = GetSize();
+	result.y = result.y - 25.f > 0.0f ? result.y - 25.f : 0.0f;
+	return result;
 }

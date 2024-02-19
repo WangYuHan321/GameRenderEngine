@@ -35,6 +35,8 @@ public:
 
 	void PrepareCamera();
 
+	ImVec2 GetSafeSize();
+
 protected:
 
 	Camera m_camera;
