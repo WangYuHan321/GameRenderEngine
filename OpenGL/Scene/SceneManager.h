@@ -47,7 +47,8 @@ public:
 	~SceneManager();
 
 	void Update();
-	void LoadEmptyScene();
+	void LoadEmptyScene();	
+	void LoadEmptyLightedScene();
 	void UnloadCurScene();
 
 	void SetActiveScene(Scene* p_scene);
