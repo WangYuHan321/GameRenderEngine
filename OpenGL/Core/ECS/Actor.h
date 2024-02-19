@@ -37,6 +37,8 @@ public:
 
 	void DetachFromParent();
 
+	std::string& GetName();
+
 	int64_t GetParentID() const;
 
 	std::vector<Actor*>& GetChildren();
@@ -60,10 +62,10 @@ public:
 	Event<AComponent&> ComponentAddedEvent;
 	Event<AComponent&> ComponentRemovedEvent;
 	
-	Event<Actor&> CreateEvent;
-	Event<Actor&> DestroyedEvent;
-	Event<Actor&, Actor&> AttachEvent;// attach this£¬ other actor 
-	Event<Actor&> DettachEvent;// dettach this 
+	static Event<Actor&> CreateEvent;
+	static Event<Actor&> DestroyedEvent;
+	static Event<Actor&, Actor&> AttachEvent;// attach this£¬ other actor 
+	static Event<Actor&> DettachEvent;// dettach this 
 private:
 	//È¥³ýcopy¹¹Ôì
 	Actor(const Actor& p_actor) = delete;

@@ -1,5 +1,10 @@
 #include "Actor.h"
 
+ Event<Actor&> Actor::CreateEvent;
+ Event<Actor&> Actor::DestroyedEvent;
+ Event<Actor&, Actor&> Actor::AttachEvent;// attach this£¬ other actor 
+ Event<Actor&> Actor::DettachEvent;// dettach this 
+
 Actor::Actor(int64_t p_actionID, const std::string& p_name, const std::string& p_tag, bool& p_playing):
 	m_actorID(p_actionID),
 	m_name(p_name),
@@ -91,6 +96,11 @@ void Actor::DetachFromParent()
 	m_parentID = 0;
 
 	m_transform.RemoveParent();
+}
+
+std::string& Actor::GetName()
+{
+	return m_name;
 }
 
 int64_t Actor::GetParentID() const
