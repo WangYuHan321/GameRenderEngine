@@ -5,6 +5,8 @@
 class Canvas : public IDrawable
 {
 public:
+	void MakeDockspace(bool p_state);
+
 	void AddPanel(APanel& p_panel);
 
 	void Draw()override;

@@ -23,9 +23,10 @@ public:
 	void Render();
 
 	void SetCanvas(Canvas& p_canvas);
+	void EnableDocking(bool p_value);
 
 private:
+	bool m_dockingState;
 	Canvas* m_currentCanvas = nullptr;
-	Hierarchy* m_testPanel;
 };
 

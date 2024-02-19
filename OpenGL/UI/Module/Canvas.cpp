@@ -4,6 +4,10 @@
 #include "../../ThirdLib/ImGui/imgui_impl_glfw.h"
 #include "../../ThirdLib/ImGui/imgui_impl_opengl3.h"
 
+void Canvas::MakeDockspace(bool p_state)
+{
+	m_isDockspace = p_state;
+}
 
 void Canvas::AddPanel(APanel& p_panel)
 {
@@ -18,7 +22,7 @@ void Canvas::Draw()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-	/*	if (m_isDockspace)
+		if (m_isDockspace)
 		{
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
 			ImGui::SetNextWindowPos(viewport->Pos);
@@ -37,15 +41,13 @@ void Canvas::Draw()
 			ImGui::End();
 
 			ImGui::PopStyleVar(3);
-		}*/
+		}
 
-		//Profilter panelwindow 没有重写draw方法会报错
 		for (auto& panel : m_panels)
 			panel.get().Draw();
 
 		ImGui::Render();
-		ImGui::EndFrame();
+		//ImGui::EndFrame();
 
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 }

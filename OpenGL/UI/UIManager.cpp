@@ -5,12 +5,12 @@
 
 UIManager::UIManager()
 {
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
 
-	PanelWindowSetting set;
-	set.closable = true;
-	set.collapsable = true;
-	set.dockable = true;
-	m_testPanel = new Hierarchy("test", true, set);
+	ImGui::GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
+	EnableDocking(false);
+
 }
 
 UIManager::~UIManager()
@@ -19,21 +19,33 @@ UIManager::~UIManager()
 
 void UIManager::OnInit(GLFWwindow* p_window, const std::string& p_glslVersion)
 {
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-
-	/* Disable moving windows by dragging another thing than the title bar */
-	//ImGui::GetIO().ConfigWindowsMoveFromTitleBarOnly = true;
 
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplGlfw_InitForOpenGL(p_window, true);
 	ImGui_ImplOpenGL3_Init(p_glslVersion.c_str());
-	ImGui::StyleColorsDark();
 
 	m_currentCanvas = new Canvas;
 
+	ImGuiStyle* style = &ImGui::GetStyle();
+	style->WindowPadding = ImVec2(15, 15);
+	style->WindowRounding = 0.0f;
+	style->FramePadding = ImVec2(5, 5);
+	style->FrameRounding = 0.0f;
+	style->ItemSpacing = ImVec2(12, 8);
+	style->ItemInnerSpacing = ImVec2(8, 6);
+	style->IndentSpacing = 25.0f;
+	style->ScrollbarSize = 15.0f;
+	style->ScrollbarRounding = 0.0f;
+	style->GrabMinSize = 5.0f;
+	style->GrabRounding = 0.0f;
+	style->TabRounding = 0.0f;
+	style->ChildRounding = 0.0f;
+	style->PopupRounding = 0.0f;
 
-	//m_currentCanvas->AddPanel(*m_testPanel);
+	style->WindowBorderSize = 1.0f;
+	style->FrameBorderSize = 0.0f;
+	style->PopupBorderSize = 1.0f;
+
 }
 
 void UIManager::OnEnd()
@@ -43,12 +55,23 @@ void UIManager::OnEnd()
 	ImGui::DestroyContext();
 }
 
+void UIManager::EnableDocking(bool p_value)
+{
+	m_dockingState = p_value;
+
+	if (p_value)
+		ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	else
+		ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_DockingEnable;
+}
+
 void UIManager::Render()
 {
 
 	if (m_currentCanvas)
 	{
 		m_currentCanvas->Draw();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 #if 0
