@@ -1,6 +1,7 @@
 #include "Editor.h"
 #include "../../Editor/Panels/GameView.h"
 #include "../../Editor/Panels/SceneView.h"
+#include "../../Editor/Panels/Hierarchy.h"
 
 Editor::Editor(Context& p_context):
 	m_context(p_context),
@@ -9,6 +10,8 @@ Editor::Editor(Context& p_context):
 	m_editorAction(m_context, m_editorRender, m_panelsMgr)
 {
 	SetUpUI();
+
+	m_context.m_sceneMgr->LoadEmptyLightedScene();
 }
 
 void Editor::SetUpUI()
@@ -19,9 +22,11 @@ void Editor::SetUpUI()
 	settings.dockable = true;
 
 	m_panelsMgr.CreatePanel<MenuBar>("Menu Bar");
-	m_panelsMgr.CreatePanel<GameView>("Game View", true, settings);
+	m_panelsMgr.CreatePanel<Hierarchy>("Hierarchy", false, settings);
+	m_panelsMgr.CreatePanel<GameView>("Game View", false, settings);
 	m_panelsMgr.CreatePanel<SceneView>("Scene View", true, settings);
 
+	m_canvas.MakeDockspace(true);
 	m_context.m_uiMgr->SetCanvas(m_canvas);
 }
 
@@ -51,6 +56,7 @@ void Editor::RenderViews(float p_deltaTime)
 	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>("Scene View");
 
 	{
+		
 		gameView.Update(p_deltaTime);
 		sceneView.Update(p_deltaTime);
 	}
