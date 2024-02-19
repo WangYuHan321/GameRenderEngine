@@ -29,14 +29,18 @@ private:
     void CopyImGuiSize();
 
 
-protected:
-
-    bool m_sizeChanged = false;
-    bool m_positionChanged = false;
-    bool m_alignmentChanged = false;
-    bool m_ignoreConfigFile = false;
-    bool m_firstFrame = true;
+public:
     bool autoSize = true;
+
+protected:
+    
+    bool m_positionChanged = false;
+    bool m_sizeChanged = false;
+    
+    bool m_ignoreConfigFile = false;
+    
+    bool m_alignmentChanged = false;
+    bool m_firstFrame = true;
 
     //default
     ImVec2 m_defaultPosition;
@@ -46,9 +50,8 @@ protected:
     VerticalAlignment m_defaultVerticalAlignment;
 
 
-    // normal
-    ImVec2 m_position;
-    ImVec2 m_size;
+    ImVec2 m_position = ImVec2(0.0f, 0.0f);
+    ImVec2 m_size = ImVec2(0.0f, 0.0f);
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment = VerticalAlignment::Top;

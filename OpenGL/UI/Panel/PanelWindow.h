@@ -47,7 +47,7 @@ public:
     bool collapsable = false;
     bool allowInputs = false;
     bool scrollable = false;
-    bool titleBar = false;
+    bool titleBar = true;
 
 private:
 

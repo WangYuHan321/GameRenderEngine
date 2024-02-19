@@ -18,6 +18,7 @@ PanelWindow::PanelWindow(const std::string& p_name,
 	collapsable(p_panelSetting.collapsable),
 	allowInputs(p_panelSetting.allowInputs)
 {
+	autoSize = p_panelSetting.autoSize;
 }
 
 void PanelWindow::Open()
@@ -70,9 +71,9 @@ void PanelWindow::_Draw_Impl()
 		if (!scrollable)                windowFlags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
 		if (!titleBar)					windowFlags |= ImGuiWindowFlags_NoTitleBar;
 
-		if (minSize.x < 0.f || minSize.y < 0.f)
+		if (minSize.x <= 0.f || minSize.y <= 0.f)
 			minSize = { 0.f, 0.f };
-		if (maxSize.x < 0.f || maxSize.y < 0.f)
+		if (maxSize.x <= 0.f || maxSize.y <= 0.f)
 			maxSize = { 10000.0f, 10000.0f };
 
 		ImGui::SetNextWindowSizeConstraints(minSize, maxSize);
