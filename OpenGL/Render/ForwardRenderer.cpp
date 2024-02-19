@@ -28,6 +28,11 @@ void ForwardRenderer::OnReSize(uint32 width, uint32 height)
 	m_renderTarget->Resize(width, height);
 }
 
+void ForwardRenderer::SetViewPort(uint32 x, uint32 y, uint32 width, uint32 height)
+{
+	glViewport(x, y, width, height);
+}
+
 void ForwardRenderer::Initialize()
 {
 	m_renderTarget = new RenderTarget(2048, 2048, GL_UNSIGNED_BYTE, 1, true);

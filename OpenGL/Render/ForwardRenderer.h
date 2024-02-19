@@ -32,6 +32,7 @@ public:
 
 	virtual void DoRender() ;
 	virtual void OnReSize(uint32 width, uint32 height);
+	virtual void SetViewPort(uint32 x, uint32 y, uint32 width, uint32 height) ;
 	virtual void Initialize() ;
 	virtual void Clear() ;
 
