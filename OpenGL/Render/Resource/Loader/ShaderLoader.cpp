@@ -1,7 +1,48 @@
 #include "ShaderLoader.h"
 //#include "../../Util/common.h"
 
-CShader ShaderLoader::Load(std::string name, std::string vsPath, std::string fsPath, std::vector<std::string> defindes)
+std::pair<std::string, std::string> ParseShader(const std::string& source)
+{
+    std::ifstream stream(source);
+
+    enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
+
+    std::string line;
+
+    std::stringstream ss[2];
+
+    ShaderType type = ShaderType::NONE;
+
+    while (std::getline(stream, line))
+    {
+        if (line.find("#shader") != std::string::npos)
+        {
+            if (line.find("vertex") != std::string::npos)			type = ShaderType::VERTEX;
+            else if (line.find("fragment") != std::string::npos)	type = ShaderType::FRAGMENT;
+        }
+        else if (type != ShaderType::NONE)
+        {
+            ss[static_cast<int>(type)] << line << '\n';
+        }
+    }
+
+    return
+    {
+        ss[static_cast<int>(ShaderType::VERTEX)].str(),
+        ss[static_cast<int>(ShaderType::FRAGMENT)].str()
+    };
+
+}
+
+CShader* ShaderLoader::Create(const std::string& pSource)
+{
+    std::pair<std::string, std::string> source = ParseShader(pSource);
+
+    return Load("EngineDefault", source.first, source.second);
+
+}
+
+CShader* ShaderLoader::Load(std::string name, std::string vsPath, std::string fsPath, std::vector<std::string> defindes)
 {
 	std::ifstream vsFile, fsFile;
     
@@ -19,6 +60,32 @@ CShader ShaderLoader::Load(std::string name, std::string vsPath, std::string fsP
 	std::string fsDirectory = fsPath.substr(0, fsPath.find_last_of("/\\"));
 	std::string vsSource = readShader(vsFile, name, vsPath);
 	std::string fsSource = readShader(fsFile, name, fsPath);
+
+    CShader * pShader = new CShader(name, vsSource, fsSource, defindes);
+    vsFile.close();
+    fsFile.close();
+
+    return pShader;
+}
+
+CShader ShaderLoader::Load1(std::string name, std::string vsPath, std::string fsPath, std::vector<std::string> defindes)
+{
+    std::ifstream vsFile, fsFile;
+
+    vsFile.open(vsPath);
+    fsFile.open(fsPath);
+
+
+    if (!vsFile.is_open() || !fsFile.is_open())
+    {
+        Log("open file vs %s error and fs %s error!\n", vsPath.c_str(), fsPath.c_str());
+        std::cerr << "Error: " << strerror(errno);
+    }
+
+    std::string vsDirectory = vsPath.substr(0, vsPath.find_last_of("/\\"));
+    std::string fsDirectory = fsPath.substr(0, fsPath.find_last_of("/\\"));
+    std::string vsSource = readShader(vsFile, name, vsPath);
+    std::string fsSource = readShader(fsFile, name, fsPath);
 
     CShader shader(name, vsSource, fsSource, defindes);
     vsFile.close();
@@ -54,4 +121,17 @@ std::string ShaderLoader::readShader(std::ifstream& file, const std::string& nam
             source += line + "\n";
     }
     return source;
+}
+
+bool ShaderLoader::Destroy(CShader* pShader)
+{
+    if (pShader)
+    {
+        delete pShader;
+        pShader = nullptr;
+
+        return true;
+    }
+
+    return false;
 }
