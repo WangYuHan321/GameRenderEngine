@@ -71,6 +71,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\Core\EditorResource.h" />
     <ClInclude Include="Editor\Panels\AViewControllable.h" />
     <ClInclude Include="Render\Resource\Parser\AssimpParser.h" />
     <ClInclude Include="Render\Resource\Parser\EModelParserFlags.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Render\Resource\ModelManager.h" />
     <ClInclude Include="Render\Resource\ShaderManager.h" />
     <ClInclude Include="Editor\Panels\SceneView.h" />
+    <ClInclude Include="Render\ShapeDrawer.h" />
     <ClInclude Include="UI\Visual\Separator.h" />
     <ClInclude Include="UI\Widgets\Selection\ColorEdit.h" />
     <ClInclude Include="Core\ECS\Components\CMaterialRenderer.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\Core\EditorResource.cpp" />
     <ClCompile Include="Editor\Panels\AViewControllable.cpp" />
     <ClCompile Include="Render\Resource\Parser\AssimpParser.cpp" />
     <ClCompile Include="Render\Resource\Parser\IModelParser.cpp" />
@@ -233,6 +236,7 @@
     <ClCompile Include="Render\Resource\ShaderManager.cpp" />
     <ClCompile Include="Render\Setting\EPrimitiveMode.h" />
     <ClCompile Include="Editor\Panels\SceneView.cpp" />
+    <ClCompile Include="Render\ShapeDrawer.cpp" />
     <ClCompile Include="UI\Visual\Separator.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ColorEdit.cpp" />
     <ClCompile Include="Core\ECS\Components\CMaterialRenderer.cpp" />
@@ -358,6 +362,7 @@
     <None Include="Editor\Helper\GUIDrawer.inl" />
     <None Include="Event\Event.inl" />
     <None Include="Render\Resource\AResourceManager.inl" />
+    <None Include="Render\Shader\UniformBuffer.inl" />
     <None Include="Shader\ambient.fs" />
     <None Include="Shader\pbr\pbr.glsl" />
     <None Include="Shader\post\down_sample.fs" />

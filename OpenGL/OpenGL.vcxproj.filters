@@ -465,6 +465,12 @@
     <ClInclude Include="UI\Visual\Separator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\ShapeDrawer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Core\EditorResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -857,6 +863,12 @@
     <ClCompile Include="UI\Visual\Separator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Render\ShapeDrawer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Core\EditorResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ambient.fs" />
@@ -875,6 +887,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Editor\Helper\GUIDrawer.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Render\Shader\UniformBuffer.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
