@@ -55,7 +55,7 @@ CShader* ResourceManager::LoadShader(std::string name, std::string vsPath, std::
 	vsPath = GetLocatPath(vsPath);
 	fsPath = GetLocatPath(fsPath);
 
-	CShader shader = ShaderLoader::getInstance()->Load(name, vsPath, fsPath, defines);
+	CShader shader = ShaderLoader::getInstance()->Load1(name, vsPath, fsPath, defines);
 	
 	m_shaders[id] = shader;
 	return &m_shaders[id];
@@ -71,7 +71,7 @@ Texture* ResourceManager::LoadTexture(std::string name, std::string path, GLenum
 	}
 	path = GetLocatPath(path);
 
-	Texture texture = TextureLoader::getInstance()->LoadTexture(path, target, format, srgb);
+	Texture texture = TextureLoader::getInstance()->LoadTexture1(path, target, format, srgb);
 
 	if (texture.Width > 0)
 	{
@@ -93,7 +93,7 @@ Texture* ResourceManager::LoadHDRTexture(std::string name, std::string path)
 		return &m_textuers[id];
 	path = GetLocatPath(path);
 
-	Texture texture = TextureLoader::getInstance()->LoadHDRTexture(path);
+	Texture texture = TextureLoader::getInstance()->LoadHDRTexture1(path);
 	if (texture.Width > 0)
 	{
 		m_textuers[id] = texture;

@@ -9,6 +9,8 @@ public:
 
 	void AddPanel(APanel& p_panel);
 
+	bool IsPanelZero();
+
 	void Draw()override;
 
 private:

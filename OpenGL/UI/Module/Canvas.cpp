@@ -14,6 +14,11 @@ void Canvas::AddPanel(APanel& p_panel)
 	m_panels.push_back(std::ref(p_panel));
 }
 
+bool Canvas::IsPanelZero()
+{
+	return (m_panels.size() == 0);
+}
+
 void Canvas::Draw()
 {
 	if (!m_panels.empty())

@@ -11,7 +11,9 @@ Editor::Editor(Context& p_context):
 {
 	SetUpUI();
 
+#ifdef USE_EDITOR
 	m_context.m_sceneMgr->LoadEmptyLightedScene();
+#endif
 }
 
 void Editor::SetUpUI()

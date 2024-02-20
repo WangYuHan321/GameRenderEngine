@@ -71,7 +71,8 @@ void UIManager::Render()
 	if (m_currentCanvas)
 	{
 		m_currentCanvas->Draw();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		if(!m_currentCanvas->IsPanelZero())
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 #if 0
