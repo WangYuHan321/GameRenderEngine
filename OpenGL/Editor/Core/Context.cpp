@@ -30,15 +30,15 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_sceneMgr = std::make_unique<SceneManager>();
 	LOG_INFO("scene inited success!!!\n");
 
+	m_editorResource = std::make_unique<EditorResource>("Data\\Editor\\");
+	LOG_INFO("EditorResource inited success!!!\n");
+
 	m_renderer = std::make_unique<ForwardRenderer>();
 	LOG("new  Render");
-	//m_Camera = std::make_unique<Camera>(new Camera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-	//LOG("new FlyCamera");
 }
 
 Context::~Context()
 {
-
 	m_uiMgr->OnEnd();
 	m_window->OnEnd();
 	m_device->OnEnd();

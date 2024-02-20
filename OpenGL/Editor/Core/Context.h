@@ -14,9 +14,11 @@
 #include "../../Render/BaseRenderer.h"
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
+#include "../../Editor/Core/EditorResource.h"
 #include "../../Window/Input/InputManager.h"
 #include "../../Render/Resource/ModelManager.h"
-
+#include "../../Render/Resource/ShaderManager.h"
+#include "../../Render/Resource/TextureManager.h"
 
 class Context
 {
@@ -27,9 +29,6 @@ public:
 
 	~Context();
 
-
-
-
 	std::unique_ptr<Window> m_window;
 	std::unique_ptr<Driver> m_dirve;
 	std::unique_ptr<Device> m_device;
@@ -37,11 +36,14 @@ public:
 	std::unique_ptr<BaseRenderer> m_renderer;
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
+
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
+	std::unique_ptr<EditorResource> m_editorResource;
 
+	ModelManager modelMgr;
+	ShaderManager shaderMgr;
+	TextureManager textureMgr;
 	
-
-
 private:
 	
 	const std::string m_engineAssetsPath;
