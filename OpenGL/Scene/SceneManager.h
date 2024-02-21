@@ -8,7 +8,7 @@
 class Scene;
 class SceneNode;
 
-#ifdef USE_NO_EDITOR
+#ifndef USE_EDITOR
 
 class SceneManager : public CSingleton<SceneManager>
 {
