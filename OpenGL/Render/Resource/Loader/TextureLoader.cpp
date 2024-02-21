@@ -50,6 +50,29 @@ Texture* TextureLoader::LoadTexture(std::string path, GLenum Target, GLenum inte
     return pTexture;
 }
 
+Texture* TextureLoader::CreateColor(uint32_t p_data, GLenum p_firstFilter, GLenum p_secondFilter, bool p_generateMipmap)
+{
+    Texture* pTexture = new Texture();
+    glGenTextures(1, &pTexture->ID);
+    glBindTexture(GL_TEXTURE_2D, pTexture->ID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &p_data);
+
+    if (p_generateMipmap)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(p_firstFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(p_secondFilter));
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return pTexture;
+}
+
 Texture TextureLoader::LoadTexture1(std::string path, GLenum Target, GLenum internalFormat, bool srgb)
 {
     Texture texture;

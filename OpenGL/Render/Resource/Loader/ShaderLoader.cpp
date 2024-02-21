@@ -1,9 +1,9 @@
 #include "ShaderLoader.h"
 //#include "../../Util/common.h"
 
-std::pair<std::string, std::string> ParseShader(const std::string& source)
+std::pair<std::string, std::string> ParseShader(std::string path)
 {
-    std::ifstream stream(source);
+    std::ifstream stream(path);
 
     enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
 
@@ -36,10 +36,19 @@ std::pair<std::string, std::string> ParseShader(const std::string& source)
 
 CShader* ShaderLoader::Create(const std::string& pSource)
 {
-    std::pair<std::string, std::string> source = ParseShader(pSource);
+    string pNewSource = "Data\\Editor\\Shader\\" + pSource + ".glsl";
 
-    return Load("EngineDefault", source.first, source.second);
+    std::pair<std::string, std::string> source = ParseShader(pNewSource);
 
+    return LoadStream("EngineDefault", source.first, source.second);
+
+}
+
+CShader* ShaderLoader::LoadStream(std::string name, std::string vsPath, std::string fsPath)
+{
+    CShader* pShader = new CShader(name, vsPath, fsPath);
+
+    return pShader;
 }
 
 CShader* ShaderLoader::Load(std::string name, std::string vsPath, std::string fsPath, std::vector<std::string> defindes)
