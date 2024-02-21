@@ -8,6 +8,7 @@ class RenderTarget;
 
 class Scene;
 class Mesh;
+class Model;
 class Material;
 class Frustum;
 
@@ -48,7 +49,9 @@ public:
 
 	void DrawDrawable(const Drawable& p_toDraw);
 
-	void DrawMesh(Mesh& p_mesh, Material& p_material, Matrix4 p_mat4);
+	void DrawModelWithSingleMaterial(Model& p_model, Material& p_material, Matrix4* p_modelMat, Material* p_defaultMaterial = nullptr);
+
+	void DrawMesh(Mesh& p_mesh, Material& p_material, Matrix4* p_mat4);
 
 	void Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj);
 
@@ -57,6 +60,12 @@ public:
 	void ApplyStateMask(uint8_t mask);
 
 	void SetState(uint8_t p_state);
+
+	uint8_t FetchGLState();
+
+	void RegisterModelMatrixSender(std::function<void(Matrix4)> p_modelMatrixSender);
+
+	void RegisterUserMatrixSender(std::function<void(Matrix4)> p_userMatrixSender);
 	
 private:
 	std::function<void(Matrix4)> m_modelMatrixSender;

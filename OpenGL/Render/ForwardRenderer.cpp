@@ -6,6 +6,7 @@
 #include "../Render/Mesh/Material.h"
 #include "../Scene/Scene.h"
 #include "../../Core/ECS/Actor.h"
+#include "../../Render/Mesh/Model.h"
 #include "../Core/ECS/Components/CModelRenderer.h"
 #include "../Core/ECS/Components/CMaterialRenderer.h"
 
@@ -118,14 +119,30 @@ std::pair<ForwardRenderer::OpaqueDrawables, ForwardRenderer::TransparentDrawable
 void ForwardRenderer::DrawDrawable(const Drawable& p_toDraw)
 {
 	m_userMatrixSender(std::get<3>(p_toDraw));
-	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), std::get<0>(p_toDraw));
+	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), (Matrix4*)&std::get<0>(p_toDraw));
 }
 
-void ForwardRenderer::DrawMesh(Mesh& p_mesh, Material& p_material, Matrix4 p_mat4)
+void ForwardRenderer::DrawModelWithSingleMaterial(Model& p_model, Material& p_material, Matrix4* p_modelMat, Material* p_defaultMaterial)
 {
-	if (!p_material.GetShader() && p_material.GPUInstance > 0)
+	if (p_modelMat)
+		m_modelMatrixSender(*p_modelMat);
+
+	for(auto mesh : p_model.GetMeshes())
 	{
-		m_modelMatrixSender(p_mat4);
+		Material* material = p_material.GetShader() ? &p_material : p_defaultMaterial;
+
+		if (material)
+			DrawMesh(*mesh, *material, nullptr);
+	}
+
+}
+
+void ForwardRenderer::DrawMesh(Mesh& p_mesh, Material& p_material, Matrix4* p_mat4)
+{
+	if (p_material.GetShader() && p_material.GPUInstance > 0)
+	{
+		if(p_mat4)
+			m_modelMatrixSender(*p_mat4);
 
 		uint8_t stateMask = p_material.GenerateStateMask();
 		ApplyStateMask(stateMask);
@@ -182,9 +199,24 @@ void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
 	}
 }
 
+uint8_t ForwardRenderer::FetchGLState()
+{
+	return m_state;
+}
+
 void ForwardRenderer::SetState(uint8_t p_state)
 {
 	m_state = p_state;
+}
+
+void ForwardRenderer::RegisterModelMatrixSender(std::function<void(Matrix4)> p_modelMatrixSender)
+{
+	m_modelMatrixSender = p_modelMatrixSender;
+}
+
+void ForwardRenderer::RegisterUserMatrixSender(std::function<void(Matrix4)> p_userMatrixSender)
+{
+	m_userMatrixSender = p_userMatrixSender;
 }
 
 void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
