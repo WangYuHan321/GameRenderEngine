@@ -5,6 +5,7 @@
 
 class Context;
 class Camera;
+class Actor;
 
 class EditorRender : ForwardRenderer
 {
@@ -13,10 +14,14 @@ class EditorRender : ForwardRenderer
 
 public:
 	EditorRender(Context& p_context);
+	~EditorRender();
 
 	void InitMaterials();
 	void RenderScene(const Vector3& p_cameraPos, const Camera& p_camera);
 	void RenderUI();
+
+	void RenderCameras();
+	Matrix4 CalculateCameraModelMatrix(Actor& actor);
 
 	virtual void DoRender();
 
@@ -37,6 +42,8 @@ private:
 	Material m_gizmoBallMaterial;
 	Material m_gizmoPickingMaterial;
 	Material m_actorPickingMaterial;
+
+	Texture* m_pTexture;
 
 };
 
