@@ -6,7 +6,7 @@ std::string AResourceManager<T>::__ENGINE_ASSET_PATH = "Data\\Engine\\";
 template<typename T>
 T* AResourceManager<T>::LoadResource(const std::string& p_path)
 {
-	if (auto resource = GetResource(p_path, false); resource)
+	if (auto resource = GetResource(p_path); resource)
 		return resource;
 	else
 	{
@@ -24,9 +24,9 @@ T* AResourceManager<T>::LoadResource(const std::string& p_path)
 template<typename T>
 T* AResourceManager<T>::GetResource(const std::string& p_path)
 {
-	if (m_resources.find(p_path))
+	if (m_resources.find(SID(p_path)) != m_resources.end())
 	{
-		return m_resources[p_path];
+		return m_resources[SID(p_path)];
 	}
 	return nullptr;
 }

@@ -12,8 +12,9 @@ public:
 
 	virtual void DestroyResource(const std::string& p_path) = 0;
 
-private:
 	T* operator[](const std::string& p_path);
+
+private:
 
 	T* LoadResource(const std::string& p_path);
 
