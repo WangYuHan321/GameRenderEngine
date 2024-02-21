@@ -32,6 +32,8 @@ public:
 	void PollEvents() const;
 	void LogInfo(DeviceError error_Code, std::string p_desc);
 
+	float GetElapsedTime() const;
+
 	void OnInit();
 	void OnEnd();
 

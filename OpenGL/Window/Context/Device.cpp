@@ -80,6 +80,11 @@ void Device::LogInfo(DeviceError error, std::string p_desc)
 	}
 }
 
+float Device::GetElapsedTime() const
+{
+	return static_cast<float>(glfwGetTime());
+}
+
 GLFWcursor* Device::GetCursorInstance(CursorShape shape)
 {
 	return m_cursor.at(shape);
