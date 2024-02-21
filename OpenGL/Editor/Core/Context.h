@@ -14,6 +14,7 @@
 #include "../../Render/BaseRenderer.h"
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
+#include "../../Render/Shader/UniformBuffer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Window/Input/InputManager.h"
 #include "../../Render/Resource/ModelManager.h"
@@ -39,6 +40,8 @@ public:
 
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
 	std::unique_ptr<EditorResource> m_editorResource;
+
+	std::unique_ptr<UniformBuffer> m_engineUBO;
 
 	ModelManager modelMgr;
 	ShaderManager shaderMgr;

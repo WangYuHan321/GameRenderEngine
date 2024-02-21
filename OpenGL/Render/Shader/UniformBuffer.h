@@ -4,8 +4,8 @@
 
 class UniformBuffer
 {
-
-	UniformBuffer(size_t p_size, uint32 p_bindingPoint, uint32 p_offfset);
+public:
+	UniformBuffer(size_t p_size, uint32 p_bindingPoint, uint32 p_offfset, GLenum type = GL_DYNAMIC_DRAW);
 	~UniformBuffer();
 
 	void Bind();

@@ -1,11 +1,11 @@
 #include "UniformBuffer.h"
 
 
-UniformBuffer::UniformBuffer(size_t p_size, uint32 p_bindingPoint, uint32 p_offset)
+UniformBuffer::UniformBuffer(size_t p_size, uint32 p_bindingPoint, uint32 p_offset, GLenum type)
 {
 	glGenBuffers(1, &m_ubo);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-	glBufferData(GL_UNIFORM_BUFFER, p_size, NULL, GL_STREAM_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, p_size, NULL, type);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, p_bindingPoint, m_ubo, p_offset, p_size);
 }

@@ -41,6 +41,8 @@ void Editor::PreUpdate()
 
 void Editor::Update(float deltaTime)
 {
+	PrepareRender(deltaTime);
+
 	RenderViews(deltaTime);
 	RenderEditorUI(deltaTime);
 }
@@ -50,6 +52,11 @@ void Editor::PostUpdate()
 	m_context.m_window->SwapBuffer();
 	m_context.m_inputMgr->ClearEvents();
 	++m_elapsedFrames;
+}
+
+void Editor::PrepareRender(float deltaTime)
+{
+	m_context.m_engineUBO->SetSubData(m_context.m_device->GetElapsedTime(), 3 * sizeof(Matrix4) + sizeof(Vector3));
 }
 
 void Editor::RenderViews(float p_deltaTime)

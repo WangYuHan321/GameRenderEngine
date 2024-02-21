@@ -18,6 +18,7 @@ public:
 	void Update(float deltaTime);
 	void PostUpdate();
 
+	void PrepareRender(float deltaTime);
 
 	void RenderViews(float p_deltaTime);
 	void RenderEditorUI(float p_deltaTime);

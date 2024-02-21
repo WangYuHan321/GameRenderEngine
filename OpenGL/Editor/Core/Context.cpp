@@ -35,6 +35,17 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 
 	m_renderer = std::make_unique<ForwardRenderer>();
 	LOG("new  Render");
+
+	m_engineUBO = std::make_unique<UniformBuffer>(
+		sizeof(Matrix4) +	//model
+		sizeof(Matrix4) +	//view
+		sizeof(Matrix4) +	//projection
+		sizeof(Vector3) +	// view pos
+		sizeof(float) +		//	time
+		sizeof(Matrix4),
+		0, 0,
+		GL_DYNAMIC_DRAW
+		);
 }
 
 Context::~Context()
