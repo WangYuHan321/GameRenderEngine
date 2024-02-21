@@ -12,6 +12,8 @@ public:
 		bool p_opened,
 		const PanelWindowSetting p_windowSetting);
 
+	void AddActorByInstance(Actor& p_actor);
+
 public:
 	Event<Actor&> ActorSelectedEvemt;
 	Event<Actor&> ActorUnselectedEvemt;
