@@ -69,6 +69,7 @@ public:
 	Model(std::vector<Mesh*>& p_mesh, std::vector<std::string>& p_material);
 	~Model();
 
+	std::vector<Mesh*>& GetMeshes();
 	const BoundingSphere& GetBoundingSphere() const;
 
 public:

@@ -83,6 +83,11 @@ Model::~Model()
         delete mesh;
 }
 
+std::vector<Mesh*>& Model::GetMeshes()
+{
+    return m_meshes;
+}
+
 const BoundingSphere& Model::GetBoundingSphere() const
 {
     return m_boundingSphere;
