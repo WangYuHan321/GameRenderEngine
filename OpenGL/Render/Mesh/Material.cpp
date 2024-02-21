@@ -56,12 +56,15 @@ void Material::Bind()
         {
             switch (value.Type)
             {
-            case SHADER_TYPE::SHADER_BOOL: m_Shader->SetBool(name, value.BOOL);
-            case SHADER_TYPE::SHADER_FLOAT:m_Shader->SetFloat(name, value.FLOAT);
-            case SHADER_TYPE::SHADER_INT:m_Shader->SetInt(name, value.INT);
-            case SHADER_TYPE::SHADER_MAT2:m_Shader->SetMatrix(name, value.MAT2);
-            case SHADER_TYPE::SHADER_MAT3:m_Shader->SetMatrix(name, value.MAT3);
-            case SHADER_TYPE::SHADER_MAT4:m_Shader->SetMatrix(name, value.MAT4);
+            case SHADER_TYPE::SHADER_BOOL: m_Shader->SetBool(name, value.BOOL); break;
+            case SHADER_TYPE::SHADER_FLOAT:m_Shader->SetFloat(name, value.FLOAT); break;
+            case SHADER_TYPE::SHADER_INT:m_Shader->SetInt(name, value.INT); break;
+            case SHADER_TYPE::SHADER_VEC2:m_Shader->SetVector(name, value.VEC2); break;
+            case SHADER_TYPE::SHADER_VEC3:m_Shader->SetVector(name, value.VEC3); break;
+            case SHADER_TYPE::SHADER_VEC4:m_Shader->SetVector(name, value.VEC4); break;
+            case SHADER_TYPE::SHADER_MAT2:m_Shader->SetMatrix(name, value.MAT2); break;
+            case SHADER_TYPE::SHADER_MAT3:m_Shader->SetMatrix(name, value.MAT3); break;
+            case SHADER_TYPE::SHADER_MAT4:m_Shader->SetMatrix(name, value.MAT4); break;
             }
         }
 
@@ -70,10 +73,10 @@ void Material::Bind()
         {
             switch (value.Type)
             {
-            case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
-            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
-            case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
-            case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); }
+            case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             }
         }
 
@@ -88,9 +91,9 @@ void Material::UnBind()
     m_Shader->inactiveShader();
 }
 
-void Material::SetShader(CShader& pShader)
+void Material::SetShader(CShader* pShader)
 {
-    m_Shader = &pShader;
+    m_Shader = pShader;
 }
 
 void Material::SetFloat(std::string name, float value)
@@ -99,10 +102,22 @@ void Material::SetFloat(std::string name, float value)
     m_uniforms[name].FLOAT = value;
 }
 
+void Material::SetVector(std::string name, glm::vec2 value)
+{
+    m_uniforms[name].Type = SHADER_VEC2;
+    m_uniforms[name].VEC2 = value;
+}
+
 void Material::SetVector(std::string name, glm::vec3 value)
 {
     m_uniforms[name].Type = SHADER_VEC3;
     m_uniforms[name].VEC3 = value;
+}
+
+void Material::SetVector(std::string name, glm::vec4 value)
+{
+    m_uniforms[name].Type = SHADER_VEC4;
+    m_uniforms[name].VEC4 = value;
 }
 
 void Material::SetTexture(std::string name, Texture* value, unsigned int unit)
