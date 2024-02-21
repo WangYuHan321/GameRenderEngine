@@ -35,6 +35,8 @@ public:
 
 	void PrepareCamera();
 
+	void FillEngineUBO();
+
 	ImVec2 GetSafeSize();
 
 protected:

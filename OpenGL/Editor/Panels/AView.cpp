@@ -38,6 +38,8 @@ void AView::_Draw_Impl()
 
 void AView::Render()
 {
+	FillEngineUBO();
+
 	ImVec2 size(GetSafeSize());
 
 	//EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
@@ -69,4 +71,14 @@ ImVec2 AView::GetSafeSize()
 	ImVec2 result = GetSize();
 	result.y = result.y - 25.f > 0.0f ? result.y - 25.f : 0.0f;
 	return result;
+}
+
+void AView::FillEngineUBO()
+{
+	auto& engineUBO = *EDITOR_CONTEXT(m_engineUBO);
+
+	size_t offset = sizeof(Matrix4);
+	engineUBO.SetSubData(glm::transpose(m_camera.View), sizeof(Matrix4));//这里可以用std::ref
+	engineUBO.SetSubData(glm::transpose(m_camera.Projection), 2 * sizeof(Matrix4));
+	engineUBO.SetSubData(m_camPos, 3 * sizeof(Matrix4));
 }
