@@ -12,7 +12,11 @@ glm::vec3 lerp(glm::vec3 begin, glm::vec3 end, float a);
 
 float Deg2Rad(float degrees);
 
-glm::mat4& translate(glm::mat4& result, const glm::vec3& translation);
+glm::mat4 Translate(const glm::vec3& translation);
 
-glm::mat4& scale(glm::mat4& result, const glm::vec3& scale);
+glm::mat4 Scale(const glm::vec3& scale);
+
+glm::quat Normalize(const glm::quat& quat);
+
+glm::quat Vector3ToQuat(glm::vec3 v);
 

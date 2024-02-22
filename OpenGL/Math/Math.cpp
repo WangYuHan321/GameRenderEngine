@@ -1,4 +1,7 @@
 #include "Math.h"
+#include <glm/gtc/quaternion.hpp>
+
+#define TO_RADIANS(value) value * PI / 180.f
 
 float lerp(float x, float y, float a)
 {
@@ -19,19 +22,56 @@ float Deg2Rad(float degrees)
     return degrees / 180.0f * PI;
 }
 
-glm::mat4& translate(glm::mat4& result, const glm::vec3& translation)
+glm::mat4 Translate(const glm::vec3& translation)
 {
-    glm::mat4 mat;
-    mat[3] = glm::vec4(translation, 1.0f);
-    result = result * mat;
+    glm::mat4 result(1, 0, 0, translation.x,
+                     0, 1, 0, translation.y,
+                     0, 0, 1, translation.z,
+                     0, 0, 0, 1);
     return result;
 }
 
-glm::mat4& scale(glm::mat4& result, const glm::vec3& scale)
+glm::mat4 Scale(const glm::vec3& scale)
 {
-    for (std::size_t i = 0; i < 3; ++i) {
-        result[i][i] *= scale[i];
-    }
+    glm::mat4 result(scale.x, 0, 0, 0,
+                   0, scale.y, 0, 0,
+                   0, 0, scale.z, 0,
+                   0, 0, 0, 1);
     return result;
+}
+
+glm::quat Normalize(const glm::quat& _quat)
+{
+    glm::quat temp = _quat;
+    const float reciprocate = 1.0f / sqrtf(_quat.x * _quat.x + _quat.y * _quat.y + _quat.z * _quat.z + _quat.w * _quat.w);
+    temp.x *= reciprocate;
+    temp.y *= reciprocate;
+    temp.z *= reciprocate;
+    temp.w *= reciprocate;
+
+    return temp;
+}
+
+glm::quat Vector3ToQuat(glm::vec3 v)
+{
+    glm::quat temp(0.0f,0.0f, 0.0f, 0.0f);
+
+    float yaw = TO_RADIANS(v.z) * 0.5f;
+    float pitch = TO_RADIANS(v.y) * 0.5f;
+    float roll = TO_RADIANS(v.x) * 0.5f;
+
+    float cy = cos(yaw);
+    float sy = sin(yaw);
+    float cp = cos(pitch);
+    float sp = sin(pitch);
+    float cr = cos(roll);
+    float sr = sin(roll);
+
+    temp.x = sr * cp * cy - cr * sp * sy;
+    temp.y = cr * sp * cy + sr * cp * sy;
+    temp.z = cr * cp * sy - sr * sp * cy;
+    temp.w = cr * cp * cy + sr * sp * sy;
+    
+    return temp;
 }
 

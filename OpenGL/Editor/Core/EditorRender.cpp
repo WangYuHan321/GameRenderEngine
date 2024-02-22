@@ -53,11 +53,10 @@ void EditorRender::InitMaterials()
 
 Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 {
-	glm::mat4 model(1.0f);
-	auto translation = translate(model, actor.m_transform.GetWorldPosition());
+	auto translation = Translate(actor.m_transform.GetWorldPosition());
 	glm::mat4 rotation = glm::mat4_cast(actor.m_transform.GetWorldRotation());
 
-	return  model * rotation;
+	return  translation * rotation;
 }
 
 void EditorRender::DoRender()
