@@ -54,9 +54,9 @@ public:
 	template<typename T, typename... Args>
 	T& AddComponent(Args&&... p_args);
 
-	virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
+	virtual void OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
 
-	virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
+	virtual void OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot) override;
 
 public:
 	Event<AComponent&> ComponentAddedEvent;

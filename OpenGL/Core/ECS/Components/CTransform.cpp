@@ -72,12 +72,12 @@ bool CTransform::RemoveParent()
 	return m_transform.RemoveParent();
 }
 
-void CTransform::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void CTransform::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 
 }
 
-void CTransform::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void CTransform::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 
 }

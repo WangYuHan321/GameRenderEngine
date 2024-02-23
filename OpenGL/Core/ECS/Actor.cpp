@@ -118,14 +118,14 @@ int64_t Actor::GetID()const
 	return m_actorID;
 }
 
-void Actor::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot)
+void Actor::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot)
 {
 	tinyxml2::XMLNode* actorNode = p_doc.NewElement("actor");
 	
 
 }
 
-void Actor::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot)
+void Actor::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_actorsRoot)
 {
 
 }

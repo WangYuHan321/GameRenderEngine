@@ -101,7 +101,7 @@ Actor* Scene::CreateActor(const std::string& p_name, const std::string& p_tag)
 	return &instance;
 }
 
-void Scene::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void Scene::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 	tinyxml2::XMLNode* sceneNode = p_doc.NewElement("scene");
 	p_node->InsertEndChild(sceneNode);
@@ -115,7 +115,7 @@ void Scene::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 	}
 }
 
-void Scene::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void Scene::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 
 	tinyxml2::XMLNode* actorRoot = p_node->FirstChildElement("actors");

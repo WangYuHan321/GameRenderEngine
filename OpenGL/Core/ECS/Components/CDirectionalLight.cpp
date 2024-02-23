@@ -11,12 +11,12 @@ std::string CDirectionalLight::GetName()
 	return "DirectionalLight";
 }
 
-void CDirectionalLight::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void CDirectionalLight::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 	CLight::OnSerialize(p_doc, p_node);
 }
 
-void CDirectionalLight::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void CDirectionalLight::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 	CLight::OnDeserialize(p_doc, p_node);
 }

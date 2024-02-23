@@ -22,9 +22,9 @@ public:
 
     virtual void OnInspector(WidgetContainer& p_root) ;
 
-    virtual void OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) ;
+    virtual void OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node) ;
 
-    virtual void OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) ;
+    virtual void OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node) ;
 
 protected:
     Light m_data;

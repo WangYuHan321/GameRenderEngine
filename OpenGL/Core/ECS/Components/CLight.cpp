@@ -45,13 +45,13 @@ void CLight::OnInspector(WidgetContainer& p_root)
 	GUIDrawer::DrawScalar<float>(p_root, "Intensity", m_data.intensity, 0.005f, GUIDrawer::_MIN_FLOAT, GUIDrawer::_MAX_FLOAT);
 }
 
-void CLight::OnSerialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node) 
+void CLight::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 	Serializer::SerializeVec3(p_doc, p_node, "color", m_data.color);
 	Serializer::SerializeFloat(p_doc, p_node, "intensity", m_data.intensity);
 }
 
-void CLight::OnDeserialize(tinyxml2::XMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+void CLight::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
 {
 	Serializer::DeserializeVec3(p_doc, p_node, "color", m_data.color);
 	Serializer::DeserializeFloat(p_doc, p_node, "intensity", m_data.intensity);
