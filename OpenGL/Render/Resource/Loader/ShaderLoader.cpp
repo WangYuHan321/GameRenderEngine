@@ -44,6 +44,15 @@ CShader* ShaderLoader::Create(const std::string& pSource)
 
 }
 
+CShader* ShaderLoader::CreateFromSource(std::string name, std::string vsSource, std::string fsSource)
+{
+    CShader* pNewShader = new CShader();
+
+    pNewShader->CreateFromSource(name, vsSource, fsSource);
+
+    return pNewShader;
+}
+
 CShader* ShaderLoader::LoadStream(std::string name, std::string vsPath, std::string fsPath)
 {
     CShader* pShader = new CShader(name, vsPath, fsPath);

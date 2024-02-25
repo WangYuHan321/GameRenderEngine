@@ -331,6 +331,81 @@ CShader::CShader(string name, string cmPath)
 	}
 }
 
+void CShader::CreateFromSource(string name, string vsSource, string fsSource)
+{
+	m_shaderPath = name;
+	unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
+	int status;
+	char log[1024];
+	m_ID = glCreateProgram();
+
+	const char* vsSourceC = vsSource.c_str();
+	const char* fsSourceC = fsSource.c_str();
+	glShaderSource(vs, 1, &vsSourceC, NULL);
+	glShaderSource(fs, 1, &fsSourceC, NULL);
+
+	glCompileShader(vs);
+	glCompileShader(fs);
+
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &status);
+	if (!status)
+	{
+		glGetShaderInfoLog(vs, 1024, NULL, log);
+		Log("Vertex shader compilation error at: " + name + "!\n" + std::string(log));
+	}
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &status);
+	if (!status)
+	{
+		glGetShaderInfoLog(fs, 1024, NULL, log);
+		Log("Fragment shader compilation error at: " + name + "!\n" + std::string(log));
+	}
+
+	glAttachShader(m_ID, vs);
+	glAttachShader(m_ID, fs);
+	glLinkProgram(m_ID);
+
+	glGetProgramiv(m_ID, GL_LINK_STATUS, &status);
+	if (!status)
+	{
+		glGetProgramInfoLog(m_ID, 1024, NULL, log);
+		Log("Shader program linking error: \n" + std::string(log));
+	}
+
+	glDeleteShader(vs);
+	glDeleteShader(fs);
+
+	// query the number of active uniforms and attributes
+	int nrAttributes, nrUniforms;
+	glGetProgramiv(m_ID, GL_ACTIVE_ATTRIBUTES, &nrAttributes);
+	glGetProgramiv(m_ID, GL_ACTIVE_UNIFORMS, &nrUniforms);
+	VertexAttrs.resize(nrAttributes);
+	Uniforms.resize(nrUniforms);
+
+	// iterate over all active attributes
+	char buffer[128];
+	for (unsigned int i = 0; i < nrAttributes; ++i)
+	{
+		GLenum glType;
+		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
+		VertexAttrs[i].Name = std::string(buffer);
+		VertexAttrs[i].Type = SHADER_BOOL;
+
+		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
+	}
+
+	// iterate over all active uniforms
+	for (unsigned int i = 0; i < nrUniforms; ++i)
+	{
+		GLenum glType;
+		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
+		Uniforms[i].Name = std::string(buffer);
+		Uniforms[i].Type = SHADER_BOOL;
+
+		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
+	}
+}
+
 void CShader::activeShader()
 {
 	glUseProgram(m_ID);

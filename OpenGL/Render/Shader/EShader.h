@@ -27,6 +27,8 @@ public:
     /*CShader(string name, string vsPath, string fsPath);*/
     CShader(string name, string vsPath, string fsPath, std::vector<std::string> defines = std::vector<std::string>());
     CShader(string name, string cmPath);
+    void CreateFromSource(string name, string vsSource, string fsSource);
+
 
 	void activeShader();
     void inactiveShader();

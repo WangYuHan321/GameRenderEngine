@@ -8,6 +8,8 @@ public:
 
 	CShader* Create(const std::string& pSource);//仅支持顶点和片元着色器
 
+	CShader* CreateFromSource(std::string name, std::string vsSource, std::string fsSource);
+
 	CShader* LoadStream(std::string name, std::string vsPath, std::string fsPath);
 
 	CShader* Load(std::string name,std::string vsPath, std::string fsPath,std::vector<std::string> defindes = std::vector<std::string>());
