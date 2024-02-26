@@ -451,11 +451,29 @@ void CShader::SetVector(std::string location, glm::vec3 value)
         glUniform3fv(loc, 1, &value[0]);
 }
 
+void CShader::SetVector(std::string location, Color3 value)
+{
+	int loc = getUniformLocation(location);
+	glm::vec3 val(value.r, value.g, value.b);
+
+	if (loc >= 0)
+		glUniform3fv(loc, 1, &val[0]);
+}
+
 void CShader::SetVector(std::string location, glm::vec4 value)
 {
     int loc = getUniformLocation(location);
     if (loc >= 0)
         glUniform4fv(loc, 1, &value[0]);
+}
+
+void CShader::SetVector(std::string location, Color4 value)
+{
+	int loc = getUniformLocation(location);
+	glm::vec4 val(value.r, value.g, value.b, value.a);
+
+	if (loc >= 0)
+		glUniform4fv(loc, 1, &val[0]);
 }
 
 void CShader::SetVectorArray(std::string location, int size, const std::vector<glm::vec2>& values)

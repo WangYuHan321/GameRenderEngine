@@ -38,7 +38,9 @@ public:
     void SetFloat(std::string location, float value);
     void SetVector(std::string location, glm::vec2  value);
     void SetVector(std::string location, glm::vec3  value);
+    void SetVector(std::string location, Color3 value);
     void SetVector(std::string location, glm::vec4  value);
+    void SetVector(std::string location, Color4 value);
     void SetVectorArray(std::string location, int size, const std::vector<glm::vec2>& values);
     void SetVectorArray(std::string location, int size, const std::vector<glm::vec3>& values);
     void SetVectorArray(std::string location, int size, const std::vector<glm::vec4>& values);
