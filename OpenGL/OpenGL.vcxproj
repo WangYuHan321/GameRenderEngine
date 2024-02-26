@@ -65,6 +65,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc140-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ASSIMP)\lib\x64;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(THIRD_LUA)\bin" "$(THIRD_LUA)\..\..\..\Bin"</Command>
@@ -73,6 +75,7 @@
   <ItemGroup>
     <ClInclude Include="Editor\Core\EditorResource.h" />
     <ClInclude Include="Editor\Panels\AViewControllable.h" />
+    <ClInclude Include="Render\Resource\RawShader.h" />
     <ClInclude Include="Render\Resource\Parser\AssimpParser.h" />
     <ClInclude Include="Render\Resource\Parser\EModelParserFlags.h" />
     <ClInclude Include="Render\Resource\Parser\IModelParser.h" />
@@ -225,6 +228,7 @@
   <ItemGroup>
     <ClCompile Include="Editor\Core\EditorResource.cpp" />
     <ClCompile Include="Editor\Panels\AViewControllable.cpp" />
+    <ClCompile Include="Render\Resource\RawShader.cpp" />
     <ClCompile Include="Render\Resource\Parser\AssimpParser.cpp" />
     <ClCompile Include="Render\Resource\Parser\IModelParser.cpp" />
     <ClCompile Include="Render\Resource\Loader\ModelLoader.cpp" />
