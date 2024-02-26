@@ -12,7 +12,7 @@ public:
 		const PanelWindowSetting& p_windowSetting,
 		bool p_enableFocusInputs = false);
 
-	virtual void Update(float p_deltaTime) override;
+	virtual void Update(float p_deltaTime);
 
 	CameraController& GetCameraController();
 
