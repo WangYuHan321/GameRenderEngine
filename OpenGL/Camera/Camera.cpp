@@ -49,9 +49,17 @@ void Camera::CalculateProjectMatrix(uint32 p_windowWidth, uint32 p_windowHeight)
     if (p_windowHeight != 0.0f)
     {
         Aspect = ((float)p_windowWidth / (float)p_windowHeight);
-        UpdateView();
+        SetPerspective(FOV, Aspect, Near, Far);
     }
+}
 
+void Camera::CalculateViewMatrix(Vector3 p_position, Quaternion p_rotation)
+{
+    Position = p_position;
+    Up = p_rotation * DefaultUp;
+    Forward = p_rotation * DefaultForward ;
+
+    UpdateView();
 }
 
 float Camera::FrustumHeightAtDistance(float distance)

@@ -19,9 +19,12 @@ public:
     glm::mat4 View;
 
     glm::vec3 Position = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 Forward = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 Forward = glm::vec3(0.0f, 0.0f, 1.0f);
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 Right = glm::vec3(1.0f, 0.0f, 0.0f);
+
+    glm::vec3 DefaultForward = glm::vec3(0.0f, 0.0f, 1.0f);
+    glm::vec3 DefaultUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
     float FOV;//Ë®Æ½
     float Aspect;//´¹Ö±
@@ -43,6 +46,7 @@ public:
     void UpdateView();
 
     void CalculateProjectMatrix(uint32 p_windowWidth, uint32 p_windowHeight);
+    void CalculateViewMatrix(Vector3 p_position, Quaternion p_rotation);
 
 
     float FrustumHeightAtDistance(float distance);
