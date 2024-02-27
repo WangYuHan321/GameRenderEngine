@@ -10,6 +10,7 @@
 #include<intrin.h>
 #include<map>
 #include <functional>
+#include "../Math/Math.h"
 #include"string_id.hpp"
 #include"../Log/Logger.h"
 #include"../ThirdLib/ImGui/imgui.h"
@@ -77,7 +78,7 @@ private:
 
 struct FTransform
 {
-	FTransform(Vector3 p_localPostion = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRot = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f)):
+	FTransform(Vector3 p_localPostion = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRot = Quaternion(1.0f, 0.0f, 0.0f, 0.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f)):
 		m_notificationHandlerID(-1),
 		m_parent(nullptr)
 	{
@@ -91,14 +92,58 @@ struct FTransform
 
 	void GenerateMatrices(Vector3 p_position, Quaternion p_rotation, Vector3 p_scale)
 	{
-		m_localMatrix = glm::mat4(1, 0, 0, p_position.x,
-								  0, 1, 0, p_position.y,
-			                      0, 0, 1, p_position.z,
-			                      0, 0, 0, 1) * 
-		glm::mat4(glm::normalize(p_rotation)) * glm::mat4(p_scale.x, 0, 0, 0,
-														  0, p_scale.y, 0, 0,
-														  0, 0, p_scale.z, 0,
-														  0, 0, 0, 1);
+
+#if 0 
+
+		Matrix4 mat1 = Translate(p_position);
+
+		Quaternion q = Normalize(p_rotation);
+
+		Matrix4 mat2 = glm::mat4_cast(Normalize(p_rotation));
+		Matrix4 mat3 = Scale(p_scale);
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				printf("[%f]", mat1[i][j]);
+			}
+			printf("\n");
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				printf("[%f]", mat2[i][j]);
+			}
+			printf("\n");
+		}
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				printf("[%f]", mat3[i][j]);
+			}
+			printf("\n\n");
+		}
+
+		m_localMatrix = Scale(p_scale) * glm::mat4_cast(Normalize(p_rotation)) * Translate(p_position);
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				printf("[%f]", m_localMatrix[i][j]);
+			}
+			printf("\n");
+		}
+
+#endif
+
+		m_localMatrix = Scale(p_scale) * glm::mat4_cast(Normalize(p_rotation)) * Translate(p_position);
+
 		m_localPosition = p_position;
 		m_localRot = p_rotation;
 		m_localScale = p_scale;
@@ -341,6 +386,13 @@ struct Color3
 		g = right.y;
 		b = right.z;
 		return *this;
+	}
+
+	Color3(float _r, float _g, float _b)
+	{
+		r = _r;
+		g = _g;
+		b = _b;
 	}
 };
 
