@@ -14,6 +14,6 @@ private:
 
 	void ProcessMaterials(const struct aiScene* p_scene, std::vector<std::string>& p_materials);;
 	void ProcessNode(void* p_transform, struct aiNode* p_node, const struct aiScene* p_scene, std::vector<Mesh*>& p_meshes);
-	Mesh* ProcessMesh(aiMesh* aMesh, const aiScene* aScene, uint32 p_materalIndex);
+	Mesh* ProcessMesh(void* p_transform, aiMesh* aMesh, const aiScene* aScene, uint32 p_materalIndex);
 };
 

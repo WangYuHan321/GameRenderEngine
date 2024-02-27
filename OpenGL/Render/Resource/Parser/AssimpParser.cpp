@@ -44,8 +44,7 @@ void AssimpParser::ProcessNode(void* p_transform, aiNode* p_node, const aiScene*
 	for (uint32_t i = 0; i < p_node->mNumMeshes; ++i)
 	{
 		aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
-		;
-		p_meshes.push_back( ProcessMesh(mesh, p_scene,mesh->mMaterialIndex) ); // The model will handle mesh destruction
+		p_meshes.push_back( ProcessMesh(&nodeTransformation, mesh, p_scene,mesh->mMaterialIndex) ); // The model will handle mesh destruction
 	}
 
 	// Then do the same for each of its children
@@ -55,8 +54,10 @@ void AssimpParser::ProcessNode(void* p_transform, aiNode* p_node, const aiScene*
 	}
 }
 
-Mesh* AssimpParser::ProcessMesh(aiMesh* p_mesh, const aiScene* p_scene, uint32 p_materalIndex)
+Mesh* AssimpParser::ProcessMesh(void* p_transform, aiMesh* p_mesh, const aiScene* p_scene, uint32 p_materalIndex)
 {
+    aiMatrix4x4 meshTransformation = *reinterpret_cast<aiMatrix4x4*>(p_transform);
+
     std::vector<glm::vec3> positions;
     std::vector<glm::vec2> uv;
     std::vector<glm::vec3> normals;
@@ -78,17 +79,23 @@ Mesh* AssimpParser::ProcessMesh(aiMesh* p_mesh, const aiScene* p_scene, uint32 p
 
     for (unsigned int i = 0; i < p_mesh->mNumVertices; ++i)
     {
-        positions[i] = glm::vec3(p_mesh->mVertices[i].x, p_mesh->mVertices[i].y, p_mesh->mVertices[i].z);
-        normals[i] = glm::vec3(p_mesh->mNormals[i].x, p_mesh->mNormals[i].y, p_mesh->mNormals[i].z);
+        aiVector3D _position = meshTransformation * p_mesh->mVertices[i];
+        aiVector3D _normal = meshTransformation * (p_mesh->mNormals ? p_mesh->mNormals[i] : aiVector3D(0.0f, 0.0f, 0.0f));
+        aiVector3D _texCoords = p_mesh->mTextureCoords[0] ? p_mesh->mTextureCoords[0][i] : aiVector3D(0.0f, 0.0f, 0.0f);
+        aiVector3D _tangent = p_mesh->mTangents ? meshTransformation * p_mesh->mTangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+        aiVector3D _bitangent = p_mesh->mBitangents ? meshTransformation * p_mesh->mBitangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+
+        positions[i] = glm::vec3(_position.x, _position.y, _position.z);
+        normals[i] = glm::vec3(_normal.x, _normal.y, _normal.z);
         if (p_mesh->mTextureCoords[0])
         {
-            uv[i] = glm::vec2(p_mesh->mTextureCoords[0][i].x, p_mesh->mTextureCoords[0][i].y);
+            uv[i] = glm::vec2(_texCoords.x, _texCoords.y);
 
         }
         if (p_mesh->mTangents)
         {
-            tangents[i] = glm::vec3(p_mesh->mTangents[i].x, p_mesh->mTangents[i].y, p_mesh->mTangents[i].z);
-            bitangents[i] = glm::vec3(p_mesh->mBitangents[i].x, p_mesh->mBitangents[i].y, p_mesh->mBitangents[i].z);
+            tangents[i] = glm::vec3(_tangent.x, _tangent.y, _tangent.z);
+            bitangents[i] = glm::vec3(_bitangent.x, _bitangent.y, _bitangent.z);
         }
     }
     for (unsigned int f = 0; f < p_mesh->mNumFaces; ++f)
