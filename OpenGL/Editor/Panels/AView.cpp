@@ -14,7 +14,7 @@ AView::AView
 	m_editorRenderer(EDITOR_RENDERER())
 {
 	m_camPos = { -10.0f, 3.0f, 10.0f };
-	m_camRot = glm::quat({ 0.0f, 135.0f, 0.0f });
+	m_camRot = glm::quat(Vector3ToQuat(Vector3(0.0f, 135.0f, 0.0f )));
 	m_renderTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 
 
@@ -42,7 +42,7 @@ void AView::Render()
 
 	ImVec2 size(GetSafeSize());
 
-	//EDITOR_CONTEXT(shapeDrawer)->SetViewProjection(m_camera.GetProjectionMatrix() * m_camera.GetViewMatrix());
+	EDITOR_CONTEXT(m_shapeDrawer)->SetViewProjection(m_camera.Projection * m_camera.View);
 
 	dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->SetViewPort(0, 0, size.x, size.y);
 
@@ -64,6 +64,9 @@ void AView::PrepareCamera()
 	ImVec2 size(GetSafeSize());
 
 	m_camera.CalculateProjectMatrix(size.x, size.y);
+	m_camera.CalculateViewMatrix(m_camPos, m_camRot);
+
+	printf("%f %f %f  %f %f %f %f \n", m_camPos.x, m_camPos.y, m_camPos.z, m_camRot.x, m_camRot.y, m_camRot.z, m_camRot.w);
 }
 
 ImVec2 AView::GetSafeSize()
@@ -78,6 +81,33 @@ void AView::FillEngineUBO()
 	auto& engineUBO = *EDITOR_CONTEXT(m_engineUBO);
 
 	size_t offset = sizeof(Matrix4);
+
+	Matrix4 mat1 = glm::transpose(m_camera.View);
+	Matrix4 mat2 = glm::transpose(m_camera.Projection);
+
+#if 0
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			printf("[%f]", mat1[i][j]);
+		}
+		printf("\n");
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			printf("[%f]", mat2[i][j]);
+		}
+		printf("\n");
+	}
+	printf("----------------------------------------------------------\n");
+
+#endif
+
 	engineUBO.SetSubData(glm::transpose(m_camera.View), sizeof(Matrix4));//这里可以用std::ref
 	engineUBO.SetSubData(glm::transpose(m_camera.Projection), 2 * sizeof(Matrix4));
 	engineUBO.SetSubData(m_camPos, 3 * sizeof(Matrix4));
