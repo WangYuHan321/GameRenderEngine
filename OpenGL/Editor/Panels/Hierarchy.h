@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../../UI/Panel/PanelWindow.h"
-#include "../../Core/ECS/Actor.h"
 #include "../../UI/Layout/TreeNode.h"
+
+class Actor;
 
 class Hierarchy : public PanelWindow
 {

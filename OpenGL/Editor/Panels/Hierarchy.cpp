@@ -1,8 +1,10 @@
 #include "Hierarchy.h"
 
 #include <algorithm>
+#include "../../Core/ECS/Actor.h"
 #include "../../UI/Plugin/ContextualMenu.h"
 #include "../../UI/Plugin/DDTarget.h"
+#include "../../Editor/Core/EditorAction.h"
 #include "../../UI/Widgets/InputField/InputText.h"
 
 class HierarchyContextualMenu : public ContextualMenu
@@ -89,4 +91,9 @@ void Hierarchy::AddActorByInstance(Actor& p_actor)
 	textSelectable.AddPlugin<HierarchyContextualMenu>(&p_actor, textSelectable);
 
 	m_widgetActorLink[&p_actor] = &textSelectable;
+
+	textSelectable.ClickedEvent += EDITOR_BIND(SelectActor, std::ref(p_actor));
 }
+
+
+#include"../Core/EditorAction.h"

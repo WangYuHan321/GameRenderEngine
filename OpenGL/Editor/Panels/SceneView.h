@@ -17,5 +17,7 @@ public:
 
 	void RenderScene(uint8_t p_defaultRenderState);
 
+	void test(Actor& pAct);
+
 };
 
