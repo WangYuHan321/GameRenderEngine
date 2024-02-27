@@ -36,6 +36,9 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_renderer = std::make_unique<ForwardRenderer>();
 	LOG("new  Render");
 
+	m_shapeDrawer = std::make_unique<ShapeDrawer>(*m_renderer);
+	LOG("new  ShapeDrawer");
+
 	m_engineUBO = std::make_unique<UniformBuffer>(
 		sizeof(Matrix4) +	//model
 		sizeof(Matrix4) +	//view

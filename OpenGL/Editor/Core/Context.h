@@ -11,6 +11,7 @@
 #include "../../Window/Context/Device.h"
 #include "../../Render/Context/Driver.h"
 #include "../../Scene/Scene.h"
+#include "../../Render/ShapeDrawer.h"
 #include "../../Render/BaseRenderer.h"
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
@@ -34,6 +35,7 @@ public:
 	std::unique_ptr<Driver> m_dirve;
 	std::unique_ptr<Device> m_device;
 	std::unique_ptr<UIManager> m_uiMgr;
+	std::unique_ptr<ShapeDrawer> m_shapeDrawer;
 	std::unique_ptr<BaseRenderer> m_renderer;
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
