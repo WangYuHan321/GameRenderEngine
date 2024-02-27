@@ -2,6 +2,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #define TO_RADIANS(value) value * PI / 180.f
+#define TO_DEGREES(value) value * 180.f / PI
 
 float lerp(float x, float y, float a)
 {
@@ -73,5 +74,32 @@ glm::quat Vector3ToQuat(glm::vec3 v)
     temp.w = cr * cp * cy + sr * sp * sy;
     
     return temp;
+}
+
+glm::vec3 EulerAngles(glm::quat p_target)
+{
+
+    if (p_target == glm::quat{ 0.5f, 0.5f, -0.5f, 0.5f }) return { 90.0f, 90.0f, 0.0f };
+    if (p_target == glm::quat{ 0.5f, 0.5f, 0.5f, -0.5f }) return { -90.0f, -90.0f, 0.0f };
+
+    // roll (x-axis rotation)
+    const float sinr_cosp = +2.0f * (p_target.w * p_target.x + p_target.y * p_target.z);
+    const float cosr_cosp = +1.0f - 2.0f * (p_target.x * p_target.x + p_target.y * p_target.y);
+    const float roll = atan2(sinr_cosp, cosr_cosp);
+
+    // pitch (y-axis rotation)
+    float pitch = 0.f;
+    const float sinp = +2.0f * (p_target.w * p_target.y - p_target.z * p_target.x);
+    if (fabs(sinp) >= 1)
+        pitch = static_cast<float>(copysign(PI / 2.0f, sinp)); // use 90 degrees if out of range
+    else
+        pitch = asin(sinp);
+
+    // yaw (z-axis rotation)
+    const float siny_cosp = +2.0f * (p_target.w * p_target.z + p_target.x * p_target.y);
+    const float cosy_cosp = +1.0f - 2.0f * (p_target.y * p_target.y + p_target.z * p_target.z);
+    const float yaw = atan2(siny_cosp, cosy_cosp);
+
+    return TO_DEGREES(glm::vec3(roll, pitch, yaw)); // XYZ
 }
 

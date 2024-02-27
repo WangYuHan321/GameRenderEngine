@@ -20,3 +20,6 @@ glm::quat Normalize(const glm::quat& quat);
 
 glm::quat Vector3ToQuat(glm::vec3 v);
 
+glm::vec3 EulerAngles(glm::quat p_target);
+
+
