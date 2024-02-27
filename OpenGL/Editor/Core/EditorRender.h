@@ -20,6 +20,8 @@ public:
 	void RenderScene(const Vector3& p_cameraPos, const Camera& p_camera);
 	void RenderUI();
 
+	void RenderGrid(Vector3& p_viewPos, Vector3& p_color);
+
 	void RenderCameras();
 	Matrix4 CalculateCameraModelMatrix(Actor& actor);
 
