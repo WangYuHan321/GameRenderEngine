@@ -3,22 +3,41 @@
 #include "../../Render/Resource/Loader/TextureLoader.h"
 #include "../../Render/Resource/Loader/ModelLoader.h"
 #include "../../Render/Resource/Loader/ShaderLoader.h"
+#include "../../Render/Resource/RawShader.h"
 
 EditorResource::EditorResource(const std::string& p_editorAssetPath)
 {
 	std::string modelFolder = p_editorAssetPath + "Models\\";
 
-	m_models["Cube"] = ModelLoader::getInstance()->Create(modelFolder + "Cube.fbx");
-	m_models["Cylinder"] = ModelLoader::getInstance()->Create(modelFolder + "Cylinder.fbx");
-	m_models["Plane"] = ModelLoader::getInstance()->Create(modelFolder + "Plane.fbx");
-	m_models["Vertical_Plane"] = ModelLoader::getInstance()->Create(modelFolder + "Vertical_Plane.fbx");
-	m_models["Roll"] = ModelLoader::getInstance()->Create(modelFolder + "Roll.fbx");
+	EModelParserFlags modelParserFlags = EModelParserFlags::NONE;
+	modelParserFlags |= EModelParserFlags::TRIANGULATE;
+	modelParserFlags |= EModelParserFlags::GEN_SMOOTH_NORMALS;
+	modelParserFlags |= EModelParserFlags::OPTIMIZE_MESHES;
+	modelParserFlags |= EModelParserFlags::OPTIMIZE_GRAPH;
+	modelParserFlags |= EModelParserFlags::FIND_INSTANCES;
+	modelParserFlags |= EModelParserFlags::CALC_TANGENT_SPACE;
+	modelParserFlags |= EModelParserFlags::JOIN_IDENTICAL_VERTICES;
+	modelParserFlags |= EModelParserFlags::DEBONE;
+	modelParserFlags |= EModelParserFlags::FIND_INVALID_DATA;
+	modelParserFlags |= EModelParserFlags::IMPROVE_CACHE_LOCALITY;
+	modelParserFlags |= EModelParserFlags::GEN_UV_COORDS;
+	modelParserFlags |= EModelParserFlags::PRE_TRANSFORM_VERTICES;
+	modelParserFlags |= EModelParserFlags::GLOBAL_SCALE;
+
+	m_models["Plane"] = ModelLoader::getInstance()->Create(modelFolder + "Plane.fbx", modelParserFlags);
+	m_models["Cube"] = ModelLoader::getInstance()->Create(modelFolder + "Cube.fbx", modelParserFlags);
+	m_models["Cylinder"] = ModelLoader::getInstance()->Create(modelFolder + "Cylinder.fbx", modelParserFlags);
+	m_models["Vertical_Plane"] = ModelLoader::getInstance()->Create(modelFolder + "Vertical_Plane.fbx", modelParserFlags);
+	m_models["Roll"] = ModelLoader::getInstance()->Create(modelFolder + "Roll.fbx", modelParserFlags);
 	m_models["Sphere"] = ModelLoader::getInstance()->Create(modelFolder + "Sphere.fbx");
-	m_models["Arrow_Translate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Translate.fbx");
-	m_models["Arrow_Rotate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Rotate.fbx");
-	m_models["Arrow_Scale"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Scale.fbx");
-	m_models["Arrow_Picking"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Picking.fbx");
-	m_models["Camera"] = ModelLoader::getInstance()->Create(modelFolder + "Camera.fbx");
+	m_models["Arrow_Translate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Translate.fbx", modelParserFlags);
+	m_models["Arrow_Rotate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Rotate.fbx", modelParserFlags);
+	m_models["Arrow_Scale"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Scale.fbx", modelParserFlags);
+	m_models["Arrow_Picking"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Picking.fbx", modelParserFlags);
+	m_models["Camera"] = ModelLoader::getInstance()->Create(modelFolder + "Camera.fbx", modelParserFlags);
+
+	auto gridsSource = RawShader::GetGrid();
+	m_shaders["Grid"] = ShaderLoader::getInstance()->CreateFromSource("Grid Shader", gridsSource.first, gridsSource.second);
 }
 
 EditorResource::~EditorResource()
