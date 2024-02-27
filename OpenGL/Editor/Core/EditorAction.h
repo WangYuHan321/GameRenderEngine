@@ -5,6 +5,12 @@
 #include "PanelsManager.h"
 #include "../../Global/ServiceLocator.h"
 
+#undef CreateEvent
+
+#define EDITOR_BIND(method, ...) std::bind(&EditorAction::method, ServiceLocator::getInstance()->Get<EditorAction>(), ##__VA_ARGS__)
+
+#define EDITOR_PANEL(type, id) ServiceLocator::getInstance()->Get<EditorAction>().GetPanelsManager().GetPanelAs<type>(id)
+
 #define EDITOR_RENDERER()		 ServiceLocator::getInstance()->Get<EditorAction>().GetRenderer()
 #define EDITOR_CONTEXT(instance) ServiceLocator::getInstance()->Get<EditorAction>().GetContext().instance
 
@@ -20,6 +26,10 @@ public:
 
 	Context& GetContext();
 
+	PanelsManager& GetPanelsManager();
+
+	void SelectActor(Actor& p_target);
+
 
 private:
 	Context& m_context;
@@ -28,4 +38,5 @@ private:
 
 
 };
+
 

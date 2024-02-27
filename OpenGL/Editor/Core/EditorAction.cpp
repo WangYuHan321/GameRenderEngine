@@ -1,5 +1,6 @@
 #include "EditorAction.h"
 
+#include "../Panels/SceneView.h"
 #include "../../Global/ServiceLocator.h"
 
 EditorAction::EditorAction(Context& p_context, EditorRender& p_editorRender, PanelsManager& p_panelMgr):
@@ -20,4 +21,14 @@ EditorAction::EditorAction(Context& p_context, EditorRender& p_editorRender, Pan
 Context& EditorAction::GetContext()
 {
 	return m_context;
+}
+
+PanelsManager& EditorAction::GetPanelsManager()
+{
+	return m_panelMgr;
+}
+
+void EditorAction::SelectActor(Actor& p_target)
+{
+	m_panelMgr.GetPanelAs<SceneView>("Scene View").test(p_target);
 }
