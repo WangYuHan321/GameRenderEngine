@@ -44,6 +44,36 @@ void ForwardRenderer::Clear()
 	Clear(true, true, true);
 }
 
+void ForwardRenderer::SetRasterizationModel(GLenum model)
+{
+	glPolygonMode(GL_FRONT_AND_BACK, model);
+}
+
+void ForwardRenderer::SetRasterizationLineWidth(float p_lineWidth)
+{
+	glLineWidth(p_lineWidth);
+}
+
+void ForwardRenderer::SetCapability(GLenum model, bool p_value)
+{
+	(p_value ? glEnable : glDisable)(model);
+}
+
+void ForwardRenderer::SetStencilOperations(GLenum operation, GLenum depthFail, GLenum bothPass)
+{
+	glStencilOp(static_cast<GLenum>(operation), static_cast<GLenum>(depthFail), static_cast<GLenum>(bothPass));
+}
+
+void ForwardRenderer::SetStencilAlgorithm(GLenum operation, int32_t value, uint32_t mask)
+{
+	glStencilFunc(static_cast<GLenum>(operation), value, mask);
+}
+
+void ForwardRenderer::SetStencilMask(uint32_t p_mask)
+{
+	glStencilMask(p_mask);
+}
+
 void ForwardRenderer::RenderScene(Scene& p_scene,
 	const Vector3& p_cameraPosition,
 	const Camera& p_camera,
@@ -201,6 +231,7 @@ void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
 
 uint8_t ForwardRenderer::FetchGLState()
 {
+
 	return m_state;
 }
 
@@ -223,6 +254,6 @@ void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stenci
 {
 	glClear(p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0 |
 		p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0 |
-		p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0
+		p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0 
 	);
 }

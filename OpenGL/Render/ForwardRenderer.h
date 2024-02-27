@@ -38,6 +38,13 @@ public:
 	virtual void Clear() ;
 
 
+	void SetRasterizationModel(GLenum model);
+	void SetRasterizationLineWidth(float p_lineWidth);
+	void SetCapability(GLenum model, bool p_value);
+	void SetStencilOperations(GLenum operation, GLenum depthFail, GLenum bothPass);
+	void SetStencilAlgorithm(GLenum operation, int32_t value, uint32_t mask);
+	void SetStencilMask(uint32_t p_mask);
+
 	void RenderScene(Scene& p_scene,
 		const Vector3& p_cameraPosition,
 		const Camera& p_camera,
