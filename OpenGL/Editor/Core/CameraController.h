@@ -24,6 +24,8 @@ public:
 private:
 	void HandleCameraFPSMouse(Vector2 mouseOffset, bool isMouseFirst);
 
+	void HandleCameraFPSKeyboard(float p_deltaTime);
+
 private:
 	Window& m_window;
 	AView& m_view;
@@ -37,8 +39,11 @@ private:
 	//Êó±êÓÒ»÷¿ØÖÆ
 	std::pair<double, double> m_oldDelta;
 	std::pair<double, double> m_newDelta;
-	bool m_mouseIsRightPresssed = true;
-	float m_mouseSensitivity = 0.02f;
+	bool m_mouseIsRightPresssed = false;
+	bool m_isFirstRightPressed = true;
+	float m_mouseSensitivity = 0.12f;
+
+	float m_cameraMoveSpeed = 15.0f;
 	//Êó±êÓÒ»÷¿ØÖÆ
 	
 	InputManager& m_inputMgr;

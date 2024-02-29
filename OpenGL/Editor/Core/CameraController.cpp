@@ -20,7 +20,7 @@ bool p_enableFocusInputs):
 		m_camQuat(p_quat)
 {
 	m_camera.SetPerspective(Deg2Rad(60.0f),
-		m_window.GetWindowSize().x / m_window.GetWindowSize().y, 0.001f, 100000.0f);
+		m_window.GetWindowSize().x / m_window.GetWindowSize().y, 0.1f, 100.0f);
 }
 
 float GetActorFocusDist(Actor& p_actor)
@@ -77,39 +77,67 @@ void CameraController::HandleInputs(float p_deltaTime)
 
 		if (m_inputMgr.IsMouseButtonReleased(EMouseButton::MOUSE_BUTTON_RIGHT))
 		{
-			m_mouseIsRightPresssed = true;
+			m_mouseIsRightPresssed = false;
+			m_isFirstRightPressed = true;
 		}
 
 		if (m_inputMgr.IsMouseButtonPressed(EMouseButton::MOUSE_BUTTON_RIGHT))
 		{
-			if (m_mouseIsRightPresssed)
+			m_mouseIsRightPresssed = true;
+			if (m_isFirstRightPressed)
 			{
 				m_newDelta = m_inputMgr.GetMousePosition();
 				m_oldDelta = m_newDelta;
-				m_mouseIsRightPresssed = false;
+				m_isFirstRightPressed = false;
 			}
 			else
 			{
 				m_newDelta = m_inputMgr.GetMousePosition();
 				std::pair<double, double>  diff = { m_oldDelta.first - m_newDelta.first,
-					m_oldDelta.second - m_newDelta.second };
+					m_newDelta.second - m_oldDelta.second  };
+				m_oldDelta = m_newDelta;
+
 				HandleCameraFPSMouse(Vector2(diff.first, diff.second), true);
 			}
 		}
 
-
-		if (m_inputMgr.IsKeyPressed(EKey::KEY_W)) { m_camPos = m_camPos + m_camera.Forward; }
-		if (m_inputMgr.IsKeyPressed(EKey::KEY_S)) { m_camPos = m_camPos - m_camera.Forward; }
-		if (m_inputMgr.IsKeyPressed(EKey::KEY_A)) { m_camPos = m_camPos + m_camera.Right; }
-		if (m_inputMgr.IsKeyPressed(EKey::KEY_D)) { m_camPos = m_camPos - m_camera.Right; }
+		HandleCameraFPSKeyboard(p_deltaTime);
 	}
+}
+
+void CameraController::HandleCameraFPSKeyboard(float p_deltaTime)
+{
+	//鼠标右击移动效果
+	Vector3 m_targetSpeed = Vector3(0.f, 0.f, 0.f);
+	Vector3 m_currentMovementSpeed = m_targetSpeed;
+
+	if (m_mouseIsRightPresssed)
+	{
+		float velocity = m_cameraMoveSpeed * p_deltaTime * (1.0f);
+
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_W))
+			m_targetSpeed += m_camQuat * Vector3(0.0f, 0.0f, 1.0f) * velocity;
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_S))
+			m_targetSpeed += m_camQuat * Vector3(0.0f, 0.0f, 1.0f) * -velocity;
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_A))
+			m_targetSpeed += m_camQuat * Vector3(1.0f, 0.0f, 0.0f) * velocity;
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_D) )
+			m_targetSpeed += m_camQuat * Vector3(1.0f, 0.0f, 0.0f) * -velocity;
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_E))
+			m_targetSpeed += Vector3(0.0f, velocity, 0.0f);
+		if (m_inputMgr.IsKeyPressed(EKey::KEY_Q))
+			m_targetSpeed += Vector3(0.0f, -velocity, 0.0f);
+	}
+
+	m_currentMovementSpeed = Lerp(m_currentMovementSpeed, m_targetSpeed, 10.0f * p_deltaTime);
+	m_camPos += m_currentMovementSpeed;
 }
 
 void CameraController::HandleCameraFPSMouse(Vector2 p_mouseOffset, bool isMouseFirst)
 {
 	auto mouseOffset = p_mouseOffset * m_mouseSensitivity;
+	Vector3 ypr =  EulerAngles(m_camQuat.m_quat);;
 
-	Vector3 ypr = EulerAngles(m_camQuat);
 	if (isMouseFirst)
 	{
 		ypr = RemoveRoll(ypr);
@@ -123,5 +151,5 @@ void CameraController::HandleCameraFPSMouse(Vector2 p_mouseOffset, bool isMouseF
 
 void CameraController::MoveToTarget(Actor& p_target)
 {
-	m_cameraDestinantion.push({ p_target.m_transform.GetWorldPosition() - m_camQuat * Vector3(0.0f, 0.0f, 1.0f) * GetActorFocusDist(p_target), m_camQuat });
+	m_cameraDestinantion.push({ p_target.m_transform.GetWorldPosition() - m_camQuat* Vector3(0.0f, 0.0f, 1.0f) * GetActorFocusDist(p_target), m_camQuat });
 }
