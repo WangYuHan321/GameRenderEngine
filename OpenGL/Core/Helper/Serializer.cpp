@@ -106,20 +106,20 @@ void Serializer::SerializeQuat(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNo
 	p_node->InsertEndChild(element);
 
 	tinyxml2::XMLElement* x = p_doc.NewElement("x");
-	x->SetText(p_value.x);
+	x->SetText(p_value.m_quat.x);
 	element->InsertEndChild(x);
 
 
 	tinyxml2::XMLElement* y = p_doc.NewElement("y");
-	y->SetText(p_value.y);
+	y->SetText(p_value.m_quat.y);
 	element->InsertEndChild(y);
 
 	tinyxml2::XMLElement* z = p_doc.NewElement("y");
-	z->SetText(p_value.z);
+	z->SetText(p_value.m_quat.z);
 	element->InsertEndChild(z);
 
 	tinyxml2::XMLElement* w = p_doc.NewElement("w");
-	w->SetText(p_value.w);
+	w->SetText(p_value.m_quat.w);
 	element->InsertEndChild(w);
 }
 
@@ -247,16 +247,16 @@ void Serializer::DeserializeQuat(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XML
 	if (auto node = p_node->FirstChildElement(p_name.c_str()); node)
 	{
 		if (auto element = node->FirstChildElement("x"); element)
-			element->QueryFloatText(&p_value.x);
+			element->QueryFloatText(&p_value.m_quat.x);
 
 		if (auto element = node->FirstChildElement("y"); element)
-			element->QueryFloatText(&p_value.y);
+			element->QueryFloatText(&p_value.m_quat.y);
 
 		if (auto element = node->FirstChildElement("z"); element)
-			element->QueryFloatText(&p_value.z);
+			element->QueryFloatText(&p_value.m_quat.z);
 
 		if (auto element = node->FirstChildElement("w"); element)
-			element->QueryFloatText(&p_value.w);
+			element->QueryFloatText(&p_value.m_quat.w);
 	}
 }
 

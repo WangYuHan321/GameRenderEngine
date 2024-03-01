@@ -33,10 +33,116 @@ typedef std::string string;
 using Vector3 = glm::vec3;
 using Vector2 = glm::vec2;
 using Vector4 = glm::vec4;
-using Quaternion = glm::quat;
 using Matrix2 = glm::mat2;
 using Matrix3 = glm::mat3;
 using Matrix4 = glm::mat4;
+
+struct Quaternion {
+	glm::quat m_quat;
+
+	Quaternion()
+	{
+		m_quat = glm::quat(0.0f,0.0f,0.0f,0.0f);
+	}
+	
+	Quaternion(glm::quat _quat)
+	{
+		m_quat = _quat;
+	}
+
+	Quaternion(Matrix3 p_rotationMatrix)
+	{
+		float trace = p_rotationMatrix[0][0] + p_rotationMatrix[1][1] + p_rotationMatrix[2][2];
+		if (trace > 0.0f)
+		{
+			// I changed M_EPSILON to 0
+			float s = 0.5f / sqrt(trace + 1.0f);
+			m_quat.w = 0.25f / s;
+			m_quat.x = (p_rotationMatrix[2][1] - p_rotationMatrix[1][2]) * s;
+			m_quat.y = (p_rotationMatrix[0][2] - p_rotationMatrix[2][0]) * s;
+			m_quat.z = (p_rotationMatrix[1][0] - p_rotationMatrix[0][1]) * s;
+		}
+		else
+		{
+			if (p_rotationMatrix[0][0] > p_rotationMatrix[1][1] && p_rotationMatrix[0][0] > p_rotationMatrix[2][2])
+			{
+				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[0][0] - p_rotationMatrix[1][1] - p_rotationMatrix[2][2]);
+				m_quat.w = (p_rotationMatrix[2][1] - p_rotationMatrix[1][2]) / s;
+				m_quat.x = 0.25f * s;
+				m_quat.y = (p_rotationMatrix[0][1] + p_rotationMatrix[1][0]) / s;
+				m_quat.z = (p_rotationMatrix[0][2] + p_rotationMatrix[2][0]) / s;
+			}
+			else if (p_rotationMatrix[1][1] > p_rotationMatrix[2][2])
+			{
+				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[1][1] - p_rotationMatrix[0][0] - p_rotationMatrix[2][2]);
+				m_quat.w = (p_rotationMatrix[0][2] - p_rotationMatrix[2][0]) / s;
+				m_quat.x = (p_rotationMatrix[0][1] + p_rotationMatrix[1][0]) / s;
+				m_quat.y = 0.25f * s;
+				m_quat.z = (p_rotationMatrix[1][2] + p_rotationMatrix[2][1]) / s;
+			}
+			else
+			{
+				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[2][2] - p_rotationMatrix[0][0] - p_rotationMatrix[1][1]);
+				m_quat.w = (p_rotationMatrix[1][0] - p_rotationMatrix[0][1]) / s;
+				m_quat.x = (p_rotationMatrix[0][2] + p_rotationMatrix[2][0]) / s;
+				m_quat.y = (p_rotationMatrix[1][2] + p_rotationMatrix[2][1]) / s;
+				m_quat.z = 0.25f * s;
+			}
+		}
+	}
+
+	Quaternion(Matrix4 mat4)
+	{
+		m_quat = glm::quat(mat4);
+	}
+
+	Quaternion(float x, float y, float z, float w) 
+	{ m_quat.x = x; m_quat.y = y; m_quat.z = z; m_quat.w = w; }
+
+	Vector3 operator* (Vector3 vec3)
+	{
+		return (m_quat * vec3);
+	}
+
+	Vector4 operator* (Vector4 vec4)
+	{
+		return (m_quat * vec4);
+	}
+
+	bool operator==(Quaternion quat)
+	{
+		return m_quat == quat.m_quat;
+	}
+
+	Quaternion& Normalize()
+	{
+		Quaternion temp = m_quat;
+		const float reciprocate = 1.0f / sqrtf(m_quat.x * m_quat.x + m_quat.y * m_quat.y + m_quat.z * m_quat.z + m_quat.w * m_quat.w);
+		temp.m_quat.x *= reciprocate;
+		temp.m_quat.y *= reciprocate;
+		temp.m_quat.z *= reciprocate;
+		temp.m_quat.w *= reciprocate;
+
+		m_quat = temp.m_quat;
+		return *this;
+	}
+
+	Matrix4 ToMatrix4()
+	{
+
+		float y2 = m_quat.y * m_quat.y;	float wz = m_quat.w * m_quat.z;	float x2 = m_quat.x * m_quat.x;
+		float z2 = m_quat.z * m_quat.z;	float xz = m_quat.x * m_quat.z;	float yz = m_quat.y * m_quat.z;
+		float xy = m_quat.x * m_quat.y;	float wy = m_quat.w * m_quat.y;	float wx = m_quat.w * m_quat.x;
+
+		Matrix4 converted;
+		converted[0][0] = 1.0f - (2 * y2) - (2 * z2);		converted[0][1] = (2 * xy) - (2 * wz);				converted[0][2] = (2 * xz) + (2 * wy);			 converted[0][3] = 0;
+		converted[1][0] = (2 * xy) + (2 * wz);				converted[1][1] = 1.0f - (2 * x2) - (2 * z2);		converted[1][2] = (2 * yz) - (2 * wx);			 converted[1][3] = 0;
+		converted[2][0] = (2 * xz) - (2 * wy);				converted[2][1] = (2 * yz) + (2 * wx);			    converted[2][2] = 1.0f - (2 * x2) - (2 * y2);    converted[2][3] = 0;
+		converted[3][0] = 0;								converted[3][1] = 0;								converted[3][2] = 0;							 converted[3][3] = 1;
+		return converted;
+	}
+
+};
 
 
 struct TransformNotifer
@@ -78,7 +184,7 @@ private:
 
 struct FTransform
 {
-	FTransform(Vector3 p_localPostion = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRot = Quaternion(1.0f, 0.0f, 0.0f, 0.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f)):
+	FTransform(Vector3 p_localPostion = Vector3(0.0f, 0.0f, 0.0f), Quaternion p_localRot = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3 p_localScale = Vector3(1.0f, 1.0f, 1.0f)):
 		m_notificationHandlerID(-1),
 		m_parent(nullptr)
 	{
@@ -93,14 +199,15 @@ struct FTransform
 	void GenerateMatrices(Vector3 p_position, Quaternion p_rotation, Vector3 p_scale)
 	{
 
-#if 0 
+
 
 		Matrix4 mat1 = Translate(p_position);
 
-		Quaternion q = Normalize(p_rotation);
+		Quaternion q = p_rotation.Normalize();
 
-		Matrix4 mat2 = glm::mat4_cast(Normalize(p_rotation));
+		Matrix4 mat2 = q.ToMatrix4();
 		Matrix4 mat3 = Scale(p_scale);
+		Matrix4 mat4 = Matrix4(0.0f);
 
 		for (int i = 0; i < 4; i++)
 		{
@@ -129,20 +236,20 @@ struct FTransform
 			printf("\n\n");
 		}
 
-		m_localMatrix = Scale(p_scale) * glm::mat4_cast(Normalize(p_rotation)) * Translate(p_position);
+		mat4 = Translate(p_position) * p_rotation.Normalize().ToMatrix4() * Scale(p_scale);
 
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				printf("[%f]", m_localMatrix[i][j]);
+				printf("[%f]", mat4[i][j]);
 			}
 			printf("\n");
 		}
 
-#endif
 
-		m_localMatrix = Scale(p_scale) * glm::mat4_cast(Normalize(p_rotation)) * Translate(p_position);
+
+		m_localMatrix = Scale(p_scale) * p_rotation.Normalize().ToMatrix4() * Translate(p_position);
 
 		m_localPosition = p_position;
 		m_localRot = p_rotation;
@@ -153,7 +260,7 @@ struct FTransform
 
 	void UpdateWorldMatrix()
 	{
-		m_worldMatrix = HasParent() ? m_parent->m_worldMatrix * m_localMatrix : m_localMatrix;
+		m_worldMatrix = HasParent() ?  m_localMatrix * m_parent->m_worldMatrix : m_localMatrix;
 		PreDecomposeWorldMatrix();
 
 		Notifier.NotifyChildren(TransformNotifer::ENotification::TRANSFORM_CHANGED);
@@ -244,6 +351,11 @@ struct FTransform
 	const Quaternion& GetWorldRotation() const
 	{
 		return m_worldRot;
+	}
+
+	const Matrix4& GetLocalMatrix() const
+	{
+		return m_localMatrix;
 	}
 
 	const Matrix4& GetWorldMatrix() const

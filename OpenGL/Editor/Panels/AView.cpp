@@ -14,7 +14,7 @@ AView::AView
 	m_editorRenderer(EDITOR_RENDERER())
 {
 	m_camPos = { -10.0f, 3.0f, 10.0f };
-	m_camRot = glm::quat(Vector3ToQuat(Vector3(0.0f, 135.0f, 0.0f )));
+	m_camRot = Quaternion(Vector3ToQuat(Vector3(0.0f, 135.0f, 0.0f )));
 	m_renderTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 
 
@@ -63,10 +63,10 @@ void AView::PrepareCamera()
 {
 	ImVec2 size(GetSafeSize());
 
+	//1600 1200
 	m_camera.CalculateProjectMatrix(size.x, size.y);
 	m_camera.CalculateViewMatrix(m_camPos, m_camRot);
 
-	printf("%f %f %f  %f %f %f %f \n", m_camPos.x, m_camPos.y, m_camPos.z, m_camRot.x, m_camRot.y, m_camRot.z, m_camRot.w);
 }
 
 ImVec2 AView::GetSafeSize()

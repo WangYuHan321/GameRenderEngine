@@ -42,8 +42,8 @@ public:
 protected:
 
 	Camera m_camera;
-	glm::vec3 m_camPos;
-	glm::quat m_camRot;
+	Vector3 m_camPos;
+	Quaternion m_camRot;
 	Image *m_img;
 
 	EditorRender& m_editorRenderer;
