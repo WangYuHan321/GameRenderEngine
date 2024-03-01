@@ -5,6 +5,7 @@ class RenderTarget;
 #include "BaseRenderer.h"
 #include "GLCache.h"
 #include "Setting/EPrimitiveMode.h"
+#include "../Render/Shadow/CascadeShadowMap.h"
 
 class Scene;
 class Mesh;
@@ -74,6 +75,8 @@ public:
 	void RegisterModelMatrixSender(std::function<void(Matrix4)> p_modelMatrixSender);
 
 	void RegisterUserMatrixSender(std::function<void(Matrix4)> p_userMatrixSender);
+
+	void ReadPixels(uint32_t x, uint32_t y, uint32_t width, uint32_t height, GLenum format, GLenum type, void* data);
 	
 private:
 	std::function<void(Matrix4)> m_modelMatrixSender;
