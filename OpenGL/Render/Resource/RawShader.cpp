@@ -31,7 +31,7 @@ void main()
 	vs_out.FragPos = vec3(ubo_Model *  vec4(geo_Pos, 1.0));
 	vs_out.TexCoords = vs_out.FragPos.xz;
 
-	gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
+	gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
 }
 
 )";

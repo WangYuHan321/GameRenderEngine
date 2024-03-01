@@ -28,7 +28,7 @@ glm::mat4 Translate(const glm::vec3& translation)
     glm::mat4 result(1, 0, 0, translation.x,
                      0, 1, 0, translation.y,
                      0, 0, 1, translation.z,
-                     0, 0, 0, 1);
+                     0,0,0, 1);
     return result;
 }
 
@@ -101,5 +101,10 @@ glm::vec3 EulerAngles(glm::quat p_target)
     const float yaw = atan2(siny_cosp, cosy_cosp);
 
     return TO_DEGREES(glm::vec3(roll, pitch, yaw)); // XYZ
+}
+
+glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha)
+{
+    return (start + (end - start) * alpha);
 }
 

@@ -22,4 +22,6 @@ glm::quat Vector3ToQuat(glm::vec3 v);
 
 glm::vec3 EulerAngles(glm::quat p_target);
 
+glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha);
+
 
