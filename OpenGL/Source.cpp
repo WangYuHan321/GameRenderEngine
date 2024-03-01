@@ -1,7 +1,7 @@
 
 #include<stdio.h>
 #include "Util/common.h"
-
+#include <glm/gtx/string_cast.hpp>
 
 #ifdef USE_NO_EDITOR
 #include "Render/Lighting/DirectionalLight.h"
@@ -219,6 +219,68 @@ int main()
 
 int main()
 {
+#if 0
+
+	Quaternion quat1(0.2, 0.3, 0.2, 1.0);
+	glm::vec3 vector3(1.2, 1.4, 1.3);
+
+	glm::vec3 q = quat1 * vector3;
+
+	Matrix4 mat1(0.2f, 0.3, 0.1f, 0.0f,
+		0.1f, 0.2f, 0.3f, 0.0f,
+		0.0f, 0.3f, 0.2f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f);
+
+	Matrix4 mat2(0.2f, 0.3, 0.1f, 0.0f,
+		0.2f, 0.3f, 0.3f, 0.0f,
+		0.1f, 0.2f, 0.3f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f);
+
+	Matrix4 mat3(0.2f, 0.3, 0.1f, 0.0f,
+		0.3f, 0.4f, 0.5f, 0.0f,
+		0.2f, 0.2f, 0.2f, 0.0f,
+		0.1f, 0.1f, 0.2f, 0.0f);
+
+	Matrix4 mattt = mat3 * mat2 * mat1;
+
+	printf(" %s ", glm::to_string(mattt).c_str());
+
+	printf("%f %f %f", q.x, q.y, q.z);
+
+	printf("=================================================\n", q.x, q.y, q.z);
+
+	auto scene = new SceneManager();
+	scene->LoadEmptyLightedScene();
+
+	for (auto it : scene->GetActiveScene()->GetActors())
+	{
+		CCamera* pCamera = (CCamera*)it;
+		if (it->GetName() == "Main Camera")
+		{
+			mattt = it->m_transform.GetFTransform().GetLocalMatrix();
+
+			printf(" %s ", glm::to_string(mattt).c_str());
+
+
+			mattt = it->m_transform.GetFTransform().GetWorldMatrix();
+
+			printf(" %s ", glm::to_string(mattt).c_str());
+		}
+	}
+
+	Matrix3 mat33(-1.00000000, -2.99003560e-08, -8.21505211e-08,
+		- 1.77635620e-15, 0.939692616, -0.342020124,
+		8.74227624e-08, -0.342020243, -0.939692616);
+
+	glm::quat qqq = glm::toQuat
+	(mat33);
+
+	printf("---------------------------------------------------------------------------------------------------\n");
+	printf("%s", glm::to_string(qqq).c_str());
+	return 0;
+
+#endif
+
 	Application app("", "");
 
 	while (1)
