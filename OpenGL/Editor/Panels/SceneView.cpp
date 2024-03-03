@@ -36,15 +36,13 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 	uint8_t state = baseRenderer.FetchGLState();
 
 	m_renderTarget->Bind();
-
 	if (m_renderTarget->Width > 0 && m_renderTarget->Height > 0)
 	{
-
 		baseRenderer.SetStencilMask(0xFF);
-		baseRenderer.Clear(true);
 		glClearColor(0.2, 0.2, 0.2, 1);
+		baseRenderer.Clear();
 		baseRenderer.SetStencilMask(0x00);
-		
+
 		Vector3 c(0.176f, 0.176f, 0.176f);
 		m_editorRenderer.RenderGrid(m_camPos, c);
 		m_editorRenderer.RenderCameras();
