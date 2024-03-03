@@ -35,7 +35,6 @@ public:
 	virtual void OnReSize(uint32 width, uint32 height);
 	virtual void SetViewPort(uint32 x, uint32 y, uint32 width, uint32 height) ;
 	virtual void Initialize() ;
-	virtual void Clear() ;
 
 
 	void SetRasterizationModel(GLenum model);
@@ -69,6 +68,8 @@ public:
 	void SetState(uint8_t p_state);
 
 	uint8_t FetchGLState();
+
+	void SetDepthTest(bool val);
 
 	void RegisterModelMatrixSender(std::function<void(Matrix4)> p_modelMatrixSender);
 

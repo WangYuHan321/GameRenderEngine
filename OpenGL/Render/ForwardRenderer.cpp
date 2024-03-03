@@ -39,11 +39,6 @@ void ForwardRenderer::Initialize()
 	m_renderTarget = new RenderTarget(2048, 2048, GL_UNSIGNED_BYTE, 1, true);
 }
 
-void ForwardRenderer::Clear()
-{
-	Clear(true, true, true);
-}
-
 void ForwardRenderer::SetRasterizationModel(GLenum model)
 {
 	glPolygonMode(GL_FRONT_AND_BACK, model);
@@ -252,8 +247,8 @@ void ForwardRenderer::RegisterUserMatrixSender(std::function<void(Matrix4)> p_us
 
 void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
 {
-	glClear(p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0 |
-		p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0 |
-		p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0 
+	glClear((p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0) |
+		(p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0) |
+		(p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0) 
 	);
 }
