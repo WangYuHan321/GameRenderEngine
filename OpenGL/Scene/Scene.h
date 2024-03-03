@@ -45,6 +45,8 @@ public:
 
 	const FastAccessComponents GetFastAccessComponents() const;
 
+	std::vector<Actor*> GetActors()const ;
+
 	void OnComponentAdded(AComponent& p_component);
 
 	void OnComponentRemoved(AComponent& p_component);

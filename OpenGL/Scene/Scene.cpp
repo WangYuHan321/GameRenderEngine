@@ -164,6 +164,11 @@ const Scene::FastAccessComponents Scene::GetFastAccessComponents() const
 	return m_fastAccessComponents;
 }
 
+std::vector<Actor*> Scene::GetActors() const
+{
+	return m_actors;
+}
+
 void Scene::OnComponentAdded(AComponent& p_component)
 {
 	if (auto result = dynamic_cast<CCamera*>(&p_component); result)
