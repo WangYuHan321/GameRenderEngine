@@ -9,6 +9,7 @@ class RenderTarget
 
 public:
 	uint32 ID;
+	//uint32 RenderBufferID;
 
 	uint32 Width;
 	uint32 Height;

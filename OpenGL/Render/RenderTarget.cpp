@@ -8,6 +8,7 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 	hasDepthAndStenCil(depthandstencil)
 {
 	glGenFramebuffersEXT(1, &ID);
+	//glGenRenderbuffers(1, &RenderBufferID);
 	glBindFramebufferEXT(GL_FRAMEBUFFER, ID);
 	for (uint32 i = 0; i < attachemnts; i++)
 	{
@@ -29,7 +30,7 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 	}
 
 	hasDepthAndStenCil = depthandstencil;
-	if (depthandstencil)
+	if (hasDepthAndStenCil)
 	{
 		Texture texture;
 		texture.FilterMax = GL_LINEAR;
@@ -55,6 +56,15 @@ void RenderTarget::Resize(uint32 width, uint32 height)
 {
 	Width = width;
 	Height = height;
+
+	//glBindRenderbuffer(GL_RENDERBUFFER, RenderBufferID);
+	//glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, Width, Height);
+	//glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	//Bind();
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RenderBufferID);
+	//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, RenderBufferID);
+	//Unbind();
 
 	for (uint32 i = 0; i < m_colorAttachments.size(); i++)
 	{
