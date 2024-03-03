@@ -21,8 +21,13 @@ EditorRender::EditorRender(Context& p_context):
 		false
 	))
 {
+
+	//glEnable(GL_STENCIL_TEST);
+	//glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试 深度测试 模和深都成功
+
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetCapability(GL_STENCIL_TEST, true);
-	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilOperations(GL_KEEP,GL_KEEP, GL_REPLACE);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilOperations(GL_KEEP, GL_REPLACE, GL_REPLACE);//模板测试失败 模板通过深度失败 模板和深度都通过
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilAlgorithm(GL_ALWAYS, 1, 0xff); //设置蒙板测试总是通过，参考值设为1，掩码值为x
 
 	InitMaterials();
@@ -55,9 +60,6 @@ void EditorRender::InitMaterials()
 	m_cameraMaterial.SetShader(m_context.shaderMgr["Lambert"]);
 	m_cameraMaterial.SetVector("u_Diffuse", glm::vec4(0.0f, 0.3f, 0.7f, 1.0f));
 	m_cameraMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
-	m_cameraMaterial.Blend = false;
-	m_cameraMaterial.Cull = true;
-	m_cameraMaterial.DepthTest = false;
 
 	m_gridMaterial.SetShader(m_context.m_editorResource->GetShader("Grid"));
 	m_gridMaterial.Blend = true;
@@ -108,7 +110,6 @@ void EditorRender::RenderCameras()
 		{
 			auto& model = *m_context.m_editorResource->GetModel("Camera");
 			auto modelMatrix = CalculateCameraModelMatrix(actor);
-
 			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(model, m_cameraMaterial, &modelMatrix);
 		}
 	}
