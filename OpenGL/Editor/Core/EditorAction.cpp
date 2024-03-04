@@ -1,6 +1,7 @@
 #include "EditorAction.h"
 
 #include "../Panels/SceneView.h"
+#include "../Panels/Inspector.h"
 #include "../../Global/ServiceLocator.h"
 
 EditorAction::EditorAction(Context& p_context, EditorRender& p_editorRender, PanelsManager& p_panelMgr):
@@ -30,5 +31,15 @@ PanelsManager& EditorAction::GetPanelsManager()
 
 void EditorAction::SelectActor(Actor& p_target)
 {
-	m_panelMgr.GetPanelAs<SceneView>("Scene View").test(p_target);
+	EDITOR_PANEL(Inspector, "Inspector").FocusActor(p_target);
+}
+
+bool EditorAction::IsAnyActorSelected() const
+{
+	return (EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor() != nullptr);
+}
+
+Actor& EditorAction::GetSelectedActor() const
+{
+	return *EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor();
 }

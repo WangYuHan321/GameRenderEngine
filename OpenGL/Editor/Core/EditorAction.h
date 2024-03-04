@@ -7,8 +7,9 @@
 
 #undef CreateEvent
 
+#define EDITOR_EXEC(action) ServiceLocator::getInstance()->Get<EditorAction>().action
 #define EDITOR_BIND(method, ...) std::bind(&EditorAction::method, ServiceLocator::getInstance()->Get<EditorAction>(), ##__VA_ARGS__)
-
+#define EDITOR_EVENT(target)  ServiceLocator::getInstance()->Get<EditorAction>().target
 #define EDITOR_PANEL(type, id) ServiceLocator::getInstance()->Get<EditorAction>().GetPanelsManager().GetPanelAs<type>(id)
 
 #define EDITOR_RENDERER()		 ServiceLocator::getInstance()->Get<EditorAction>().GetRenderer()
@@ -30,6 +31,15 @@ public:
 
 	void SelectActor(Actor& p_target);
 
+	bool IsAnyActorSelected() const;
+
+	Actor& GetSelectedActor() const;
+
+public:
+	Event<Actor&> ActorSelectedEvent;
+	Event<Actor&> ActorUnSelectedEvent;
+	Event<EEditorMode> EditorModeChangedEvent;
+	Event<> playEvent;
 
 private:
 	Context& m_context;
