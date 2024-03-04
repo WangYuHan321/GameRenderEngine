@@ -2,6 +2,7 @@
 
 #include "../../Render/Mesh/Material.h"
 #include "../../Render/ForwardRenderer.h"
+#include "../../Editor/Core/GizmoBehaviour.h"
 
 class Context;
 class Camera;
@@ -21,6 +22,8 @@ public:
 	void RenderUI();
 
 	void RenderGrid(Vector3& p_viewPos, Vector3& p_color);
+	void RenderSceneForActorPicking();
+	void RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis = -1);
 
 	void RenderCameras();
 	Matrix4 CalculateCameraModelMatrix(Actor& actor);

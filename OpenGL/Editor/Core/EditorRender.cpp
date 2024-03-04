@@ -8,6 +8,7 @@
 #include "../../Core/ECS/Components/CCamera.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Render/Mesh/Mesh.h"
+#include "../../Render/Mesh/Model.h"
 #include "../../Render/Resource/Loader/TextureLoader.h"
 #include <glm/gtx/string_cast.hpp>
 
@@ -137,4 +138,52 @@ void EditorRender::RenderGrid(Vector3& p_viewPos, Vector3& p_color)
 	m_context.m_shapeDrawer->DrawLine(Vector3(-gridSize + p_viewPos.x, 0.0f, 0.0f), Vector3(gridSize + p_viewPos.x, 0.0f, 0.0f), Color3(1.0f, 0.0f, 0.0f), 1.0f);
 	m_context.m_shapeDrawer->DrawLine(Vector3(0.0f, -gridSize + p_viewPos.y, 0.0f), Vector3(0.0f, gridSize + p_viewPos.y, 0.0f), Color3(0.0f, 1.0f, 0.0f), 1.0f);
 	m_context.m_shapeDrawer->DrawLine(Vector3(0.0f, 0.0f, -gridSize + p_viewPos.z), Vector3(0.0f, 0.0f, gridSize + p_viewPos.z), Color3(0.0f, 0.0f, 1.0f), 1.0f);
+}
+
+void EditorRender::RenderSceneForActorPicking()
+{
+	auto& scene = *m_context.m_sceneMgr->GetActiveScene();
+
+	for (auto modelRender : scene.GetFastAccessComponents().modelRenderers)
+	{
+	}
+
+}
+
+void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis)
+{
+
+	Matrix4 mat4 = p_quat.Normalize().ToMatrix4() * Translate(p_pos);
+
+	Model* arrowModel = nullptr;
+
+	if (!p_pickable)
+	{
+		Matrix4 sphereModel = Scale(Vector3(0.1f)) * mat4;
+
+		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), m_gizmoBallMaterial, &sphereModel);
+		m_gizmoArrowMaterial.SetInt("u_HighlightedAxis", p_highlightedAxis);
+
+		switch (p_operation)
+		{
+		case EGizmoOperation::TRANSLATE:
+			arrowModel = m_context.m_editorResource->GetModel("Arrow_Translate");
+			break;
+		case EGizmoOperation::ROTATE:
+			arrowModel = m_context.m_editorResource->GetModel("Arrow_Rotate");
+			break;
+		case EGizmoOperation::SCALE:
+			arrowModel = m_context.m_editorResource->GetModel("Arrow_Scale");
+			break;
+		}
+	}
+	else
+	{
+		arrowModel = m_context.m_editorResource->GetModel("Arrow_Picking");
+	}
+
+	if (arrowModel)
+	{
+		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*arrowModel, p_pickable ? m_gizmoPickingMaterial : m_gizmoArrowMaterial, &mat4);
+	}
 }

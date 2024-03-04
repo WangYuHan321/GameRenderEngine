@@ -16,8 +16,13 @@ public:
 	virtual void _Render_Impl() override;
 
 	void RenderScene(uint8_t p_defaultRenderState);
+	
+	void RenderSceneForActorPicking();
 
-	void test(Actor& pAct);
+	void HandleActorPicking();
 
+
+private:
+	RenderTarget* m_actorPickRenderTarget;
 };
 

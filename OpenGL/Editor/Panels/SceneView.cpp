@@ -51,7 +51,21 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 	m_renderTarget->Unbind();
 }
 
-void SceneView::test(Actor& pAct)
+void SceneView::RenderSceneForActorPicking()
 {
-	m_cameraController.MoveToTarget(pAct);
+	auto& baseRenderer = *EDITOR_CONTEXT(m_renderer).get();
+
+	auto [winWidth, winHeight] = GetSafeSize();
+
+	m_actorPickRenderTarget->Resize(winWidth, winHeight);
+	m_actorPickRenderTarget->Bind();
+
+
+
+	m_actorPickRenderTarget->Unbind();
+}
+
+void SceneView::HandleActorPicking()
+{
+
 }
