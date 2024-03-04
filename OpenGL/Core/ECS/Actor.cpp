@@ -62,7 +62,12 @@ void Actor::OnLateUpdate(float p_deltaTime)
 
 bool Actor::IsActive()
 {
-	return true;
+	return m_active;
+}
+
+void Actor::SetActive(bool act)
+{
+	m_active = act;
 }
 
 Actor* Actor::GetParent() const
@@ -103,6 +108,21 @@ std::string& Actor::GetName()
 	return m_name;
 }
 
+void Actor::SetName(const std::string& p_name)
+{
+	m_name = p_name;
+}
+
+std::string& Actor::GetTag()
+{
+	return m_tag;
+}
+
+void Actor::SetTag(const std::string& p_tag)
+{
+	m_tag = p_tag;
+}
+
 int64_t Actor::GetParentID() const
 {
 	return m_actorID;
@@ -111,6 +131,11 @@ int64_t Actor::GetParentID() const
 std::vector<Actor*>& Actor::GetChildren()
 {
 	return m_children;
+}
+
+std::vector<std::shared_ptr<AComponent>> Actor::GetComponents()
+{
+	return m_components;
 }
 
 int64_t Actor::GetID()const

@@ -31,6 +31,8 @@ public:
 
 	bool IsActive();
 
+	void SetActive(bool act);
+
 	Actor* GetParent() const;
 
 	void SetParent(Actor& p_parent);
@@ -39,9 +41,17 @@ public:
 
 	std::string& GetName();
 
+	void SetName(const std::string& p_name);
+
+	std::string& GetTag();
+
+	void SetTag(const std::string& p_tag);
+
 	int64_t GetParentID() const;
 
 	std::vector<Actor*>& GetChildren();
+
+	std::vector<std::shared_ptr<AComponent>> GetComponents();
 
 	int64_t GetID()const ;
 
