@@ -84,9 +84,9 @@ void CTransform::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNo
 
 void CTransform::OnInspector(WidgetContainer& p_root)
 {
-	auto Rotat = [this]
+	auto getRot = [this]
 	{
-		return 	GetLocalRotation();
+		return 	EulerAngles(GetLocalRotation().m_quat);
 	};
 
 	auto setRot = [this](Vector3 result)
@@ -94,7 +94,8 @@ void CTransform::OnInspector(WidgetContainer& p_root)
 		SetLocalRotation(Quaternion(result));
 	};
 
-
-
+	GUIDrawer::DrawVec3(p_root, "Position", std::bind(&CTransform::GetLocalPosition, this), std::bind(&CTransform::SetLocalPosition, this, std::placeholders::_1), 0.05f);
+	GUIDrawer::DrawVec3(p_root, "Rotation", getRot, setRot, 0.05f);
+	GUIDrawer::DrawVec3(p_root, "Scale", std::bind(&CTransform::GetLocalScale, this), std::bind(&CTransform::SetLocalScale, this, std::placeholders::_1), 0.05f, 0.0001f);
 
 }
