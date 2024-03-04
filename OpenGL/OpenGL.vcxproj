@@ -73,8 +73,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="UI\Layout\GroupCollapsable.h" />
+    <ClInclude Include="UI\Widgets\Selection\ComboBox.h" />
     <ClInclude Include="Editor\Core\EditorResource.h" />
     <ClInclude Include="Editor\Panels\AViewControllable.h" />
+    <ClInclude Include="Editor\Core\GizmoBehaviour.h" />
+    <ClInclude Include="Editor\Panels\Inspector.h" />
     <ClInclude Include="Render\Resource\RawShader.h" />
     <ClInclude Include="Render\Resource\Parser\AssimpParser.h" />
     <ClInclude Include="Render\Resource\Parser\EModelParserFlags.h" />
@@ -226,8 +230,12 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="UI\Layout\GroupCollapsable.cpp" />
+    <ClCompile Include="UI\Widgets\Selection\ComboBox.cpp" />
     <ClCompile Include="Editor\Core\EditorResource.cpp" />
     <ClCompile Include="Editor\Panels\AViewControllable.cpp" />
+    <ClCompile Include="Editor\Core\GizmoBehaviour.cpp" />
+    <ClCompile Include="Editor\Panels\Inspector.cpp" />
     <ClCompile Include="Render\Resource\RawShader.cpp" />
     <ClCompile Include="Render\Resource\Parser\AssimpParser.cpp" />
     <ClCompile Include="Render\Resource\Parser\IModelParser.cpp" />
