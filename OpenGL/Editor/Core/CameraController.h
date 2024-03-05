@@ -21,6 +21,8 @@ public:
 
 	void MoveToTarget(Actor& p_actor);
 
+	bool IsRightMousePressed() const;
+
 private:
 	void HandleCameraFPSMouse(Vector2 mouseOffset, bool isMouseFirst);
 

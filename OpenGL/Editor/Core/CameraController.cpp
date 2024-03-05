@@ -105,6 +105,11 @@ void CameraController::HandleInputs(float p_deltaTime)
 	}
 }
 
+bool CameraController::IsRightMousePressed() const
+{
+	return m_mouseIsRightPresssed;
+}
+
 void CameraController::HandleCameraFPSKeyboard(float p_deltaTime)
 {
 	//鼠标右击移动效果
