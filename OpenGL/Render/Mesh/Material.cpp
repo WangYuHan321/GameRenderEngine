@@ -108,6 +108,12 @@ void Material::SetFloat(std::string name, float value)
     m_uniforms[name].FLOAT = value;
 }
 
+void Material::SetBoolean(std::string name, bool value)
+{
+    m_uniforms[name].Type = SHADER_BOOL;
+    m_uniforms[name].BOOL = value;
+}
+
 void Material::SetVector(std::string name, glm::vec2 value)
 {
     m_uniforms[name].Type = SHADER_VEC2;

@@ -62,6 +62,7 @@ public:
 	void SetShader(CShader* p_Shader);
 	void SetInt(std::string name, int value);
 	void SetFloat(std::string name, float value);
+	void SetBoolean(std::string name, bool value);
 	void SetVector(std::string name, glm::vec2 value);
 	void SetVector(std::string name, glm::vec3 value);
 	void SetVector(std::string name, glm::vec4 value);
