@@ -6,6 +6,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Core/ECS/Components/CCamera.h"
+#include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Render/Mesh/Mesh.h"
 #include "../../Render/Mesh/Model.h"
@@ -66,6 +67,30 @@ void EditorRender::InitMaterials()
 	m_gridMaterial.Blend = true;
 	m_gridMaterial.Cull = false;
 	m_gridMaterial.DepthTest = false;
+
+	m_gizmoArrowMaterial.SetShader(m_context.m_editorResource->GetShader("Gizmo"));
+	m_gizmoArrowMaterial.GPUInstance = 3;
+	m_gizmoArrowMaterial.SetBoolean("u_IsBall", false);
+	m_gizmoArrowMaterial.SetBoolean("u_IsPickable", false);
+
+	m_gizmoBallMaterial.SetShader(m_context.m_editorResource->GetShader("Gizmo"));
+	m_gizmoBallMaterial.SetBoolean("u_IsBall", true);
+	m_gizmoBallMaterial.SetBoolean("u_IsPickable", false);
+
+	m_gizmoPickingMaterial.SetShader(m_context.m_editorResource->GetShader("Gizmo"));
+	m_gizmoPickingMaterial.GPUInstance = 3;
+	m_gizmoPickingMaterial.SetBoolean("u_IsBall", false);
+	m_gizmoPickingMaterial.SetBoolean("u_IsPickable", true);
+
+	m_outlineMaterial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_outlineMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+	m_outlineMaterial.DepthTest = false;
+
+	m_stencilFillMaerial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_stencilFillMaerial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+	m_stencilFillMaerial.DepthTest = false;
+	m_stencilFillMaerial.ColorWrite = false;
+	m_stencilFillMaerial.DepthWrite = true;
 }
 
 Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
@@ -75,21 +100,20 @@ Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 	Matrix4 rotation = rotQuat.ToMatrix4();
 
 #if 0
-	//Matrix4 mattt = translation;
+	printf(" --------------------------------------------------------- \n");
+	Matrix4 mattt = translation;
 
-	//printf(" %s \n", glm::to_string(mattt).c_str());
+	printf(" %s \n", glm::to_string(mattt).c_str());
 
-	//mattt = rotation;
+	mattt = rotation;
 
-	//printf(" %s \n", glm::to_string(mattt).c_str());
+	printf(" %s \n", glm::to_string(mattt).c_str());
 
-	//mattt = rotation * translation;
+	mattt = rotation * translation;
 
-	//printf(" %s \n", glm::to_string(mattt).c_str());
+	printf(" %s \n", glm::to_string(mattt).c_str());
 
-	//mattt = glm::transpose(rotation * translation);
-
-	//printf(" %s \n", glm::to_string(mattt).c_str());
+	printf(" --------------------------------------------------------- \n");
 
 #endif
 
@@ -146,20 +170,71 @@ void EditorRender::RenderSceneForActorPicking()
 
 	for (auto modelRender : scene.GetFastAccessComponents().modelRenderers)
 	{
+
 	}
 
 }
 
-void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis)
+void EditorRender::RenderModelToStencil(Matrix4& p_worldMatrix, Model& p_model)
+{
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilMask(0xFF);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(p_model, m_stencilFillMaerial, &p_worldMatrix);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilMask(0x00);
+}
+
+void EditorRender::RenderModelOutline(Matrix4& p_worldMatrix, Model& p_model, float p_width)
+{
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilAlgorithm(GL_NOTEQUAL, 1, 0xFF);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetRasterizationModel(GL_LINE);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetRasterizationLineWidth(p_width);
+	
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(p_model, m_outlineMaterial, &p_worldMatrix);
+
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetRasterizationLineWidth(1.f);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetRasterizationModel(GL_FILL);
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilAlgorithm(GL_ALWAYS, 1, 0xFF);
+}
+
+void EditorRender::RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool p_isSelected)
+{
+	float outlineWidth = p_isSelected ? 5.0f : 2.5f;
+
+	m_outlineMaterial.SetVector("u_Diffuse", p_isSelected ? Vector4(1.f, 0.7f, 0.f, 1.0f) : Vector4(1.f, 1.f, 0.f, 1.0f));
+
+	if (p_actor.IsActive())
+	{
+		if (auto modelRenderer = p_actor.GetComponent<CModelRenderer>(); modelRenderer)
+		{
+			if (p_toStencil)
+				RenderModelToStencil((Matrix4&)p_actor.m_transform.GetWorldMatrix(), *modelRenderer->GetModel());
+			else
+				RenderModelOutline((Matrix4&)p_actor.m_transform.GetWorldMatrix(), *modelRenderer->GetModel(), outlineWidth);
+		}
+
+		if (auto cameraComponent = p_actor.GetComponent<CCamera>(); cameraComponent)
+		{
+			auto model = CalculateCameraModelMatrix(p_actor);
+
+			if (p_toStencil)
+				RenderModelToStencil(model, *m_context.m_editorResource->GetModel("Camera"));
+			else
+				RenderModelOutline(model, *m_context.m_editorResource->GetModel("Camera"), outlineWidth);
+		}
+
+	}
+
+}
+
+void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis) //ªÊ÷∆gizmo
 {
 
-	Matrix4 mat4 = p_quat.Normalize().ToMatrix4() * Translate(p_pos);
+	Matrix4 model = p_quat.Normalize().ToMatrix4() * Translate(p_pos);
 
 	Model* arrowModel = nullptr;
 
 	if (!p_pickable)
 	{
-		Matrix4 sphereModel = Scale(Vector3(0.1f)) * mat4;
+		Matrix4 sphereModel = Scale(Vector3(0.1f, 0.1f, 0.1f)) * model;
 
 		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), m_gizmoBallMaterial, &sphereModel);
 		m_gizmoArrowMaterial.SetInt("u_HighlightedAxis", p_highlightedAxis);
@@ -184,6 +259,6 @@ void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperati
 
 	if (arrowModel)
 	{
-		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*arrowModel, p_pickable ? m_gizmoPickingMaterial : m_gizmoArrowMaterial, &mat4);
+		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*arrowModel, p_pickable ? m_gizmoPickingMaterial : m_gizmoArrowMaterial, &model);
 	}
 }

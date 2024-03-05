@@ -23,6 +23,9 @@ public:
 
 	void RenderGrid(Vector3& p_viewPos, Vector3& p_color);
 	void RenderSceneForActorPicking();
+	void RenderModelToStencil(Matrix4& p_worldMatrix, Model& p_model);
+	void RenderModelOutline(Matrix4& p_worldMatrix, Model& p_model, float p_width);
+	void RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool p_isSelected);
 	void RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis = -1);
 
 	void RenderCameras();

@@ -29,7 +29,7 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_models["Cylinder"] = ModelLoader::getInstance()->Create(modelFolder + "Cylinder.fbx", modelParserFlags);
 	m_models["Vertical_Plane"] = ModelLoader::getInstance()->Create(modelFolder + "Vertical_Plane.fbx", modelParserFlags);
 	m_models["Roll"] = ModelLoader::getInstance()->Create(modelFolder + "Roll.fbx", modelParserFlags);
-	m_models["Sphere"] = ModelLoader::getInstance()->Create(modelFolder + "Sphere.fbx");
+	m_models["Sphere"] = ModelLoader::getInstance()->Create(modelFolder + "Sphere.fbx", modelParserFlags);
 	m_models["Arrow_Translate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Translate.fbx", modelParserFlags);
 	m_models["Arrow_Rotate"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Rotate.fbx", modelParserFlags);
 	m_models["Arrow_Scale"] = ModelLoader::getInstance()->Create(modelFolder + "Arrow_Scale.fbx", modelParserFlags);
@@ -37,7 +37,9 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_models["Camera"] = ModelLoader::getInstance()->Create(modelFolder + "Camera.fbx", modelParserFlags);
 
 	auto gridsSource = RawShader::GetGrid();
+	auto gizmoSource = RawShader::GetGrizmo();
 	m_shaders["Grid"] = ShaderLoader::getInstance()->CreateFromSource("Grid Shader", gridsSource.first, gridsSource.second);
+	m_shaders["Gizmo"] = ShaderLoader::getInstance()->CreateFromSource("Gizmo Shader", gizmoSource.first, gizmoSource.second);
 }
 
 EditorResource::~EditorResource()
