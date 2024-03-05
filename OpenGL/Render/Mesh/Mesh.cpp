@@ -219,6 +219,8 @@ void Mesh::Finalize(bool interleaved)
         }
     }
     glBindVertexArray(0);
+
+    ComputeBoundingSphere();
 }
 
 void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution)
