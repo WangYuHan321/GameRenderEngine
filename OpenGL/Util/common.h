@@ -198,9 +198,7 @@ struct FTransform
 
 	void GenerateMatrices(Vector3 p_position, Quaternion p_rotation, Vector3 p_scale)
 	{
-
-
-
+#if 0
 		Matrix4 mat1 = Translate(p_position);
 
 		Quaternion q = p_rotation.Normalize();
@@ -246,9 +244,7 @@ struct FTransform
 			}
 			printf("\n");
 		}
-
-
-
+#endif
 		m_localMatrix = Scale(p_scale) * p_rotation.Normalize().ToMatrix4() * Translate(p_position);
 
 		m_localPosition = p_position;
