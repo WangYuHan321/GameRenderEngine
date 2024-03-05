@@ -24,4 +24,8 @@ glm::vec3 EulerAngles(glm::quat p_target);
 
 glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha);
 
+glm::vec3 ScreenToWorld(glm::vec2 screenPos, float val, glm::mat4 view, glm::mat4 proj);//必须线归一化
+
+glm::vec3 GetScreenToWorldRay(glm::vec2 screenPos, float near, float far, glm::mat4 view, glm::mat4 proj);
+
 

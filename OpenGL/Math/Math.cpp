@@ -108,3 +108,26 @@ glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha)
     return (start + (end - start) * alpha);
 }
 
+glm::vec3 ScreenToWorld(glm::vec2 screenPos, float val, glm::mat4 view, glm::mat4 proj)
+{
+    glm::vec3 ray_ndc(screenPos.x, screenPos.y, val);
+    glm::vec4 ray_clip = glm::vec4(ray_ndc.x, ray_ndc.y, ray_ndc.z, 1.0f);
+    glm::vec4 ray_eye = glm::inverse(proj) * ray_clip;
+    glm::vec4 ray_world = glm::inverse(view) * ray_eye;
+
+    if (ray_world.w != 0.0f)
+    {
+        ray_world.x /= ray_world.w;
+        ray_world.y /= ray_world.w;
+        ray_world.z /= ray_world.w;
+    }
+    return ray_world;
+}
+
+glm::vec3 GetScreenToWorldRay(glm::vec2 screenPos, float near, float far, glm::mat4 view, glm::mat4 proj)
+{
+    glm::vec3 startRay = ScreenToWorld(screenPos, near, view, proj);
+    glm::vec3 endRay = ScreenToWorld(screenPos, far, view, proj);
+
+    return glm::normalize(endRay - startRay);
+}
