@@ -16,10 +16,12 @@ public:
 	const Quaternion& GetLocalRotation() const;
 	const Vector3& GetLocalPosition() const;
 	const Vector3& GetLocalScale() const;
+	const Matrix4& GetLocalMatrix4() const;
 
 	const Vector3& GetWorldPosition() const;
 	const Vector3& GetWorldScale() const;
 	const Quaternion& GetWorldRotation() const;
+	const Matrix4& GetWorldMatrix() const;
 
 	const FTransform& GetFTransform()const;
 

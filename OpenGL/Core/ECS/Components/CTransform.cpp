@@ -26,6 +26,11 @@ const Vector3& CTransform::GetLocalScale() const
 	return m_transform.GetLocalScale();
 }
 
+const Matrix4& CTransform::GetLocalMatrix4() const
+{
+	return m_transform.GetLocalMatrix();
+}
+
 const Vector3& CTransform::GetWorldPosition() const
 {
 	return m_transform.GetWorldPosition();
@@ -41,6 +46,10 @@ const Quaternion& CTransform::GetWorldRotation() const
 	return m_transform.GetWorldRotation();
 }
 
+const Matrix4& CTransform::GetWorldMatrix() const
+{
+	return m_transform.GetWorldMatrix();
+}
 
 const FTransform& CTransform::GetFTransform() const
 {
