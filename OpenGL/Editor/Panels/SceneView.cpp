@@ -46,6 +46,22 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 		Vector3 c(0.176f, 0.176f, 0.176f);
 		m_editorRenderer.RenderGrid(m_camPos, c);
 		m_editorRenderer.RenderCameras();
+
+		if (EDITOR_EXEC(IsAnyActorSelected()))
+		{
+			auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+			
+			if (selectedActor.IsActive())
+			{
+				m_editorRenderer.RenderActorOutlinePass(selectedActor, true, true);
+				m_editorRenderer.RenderActorOutlinePass(selectedActor, false, true);
+			}
+
+			baseRenderer.Clear(false, true, false);
+
+			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
+				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, false);
+		}
 	}
 
 	m_renderTarget->Unbind();
@@ -67,5 +83,24 @@ void SceneView::RenderSceneForActorPicking()
 
 void SceneView::HandleActorPicking()
 {
+	if (IsHovered())
+	{
+		RenderSceneForActorPicking();
+
+		m_highlightedActor = {};
+		m_highlightedGizmoDirection = {};
+
+		if (!m_cameraController.IsRightMousePressed())
+		{
+			auto& inputMgr = *EDITOR_CONTEXT(m_inputMgr);
+			auto [mouseX, mouseY] = inputMgr.GetMousePosition();
+			mouseX -= m_position.x;
+			mouseY -= m_position.y;
+			mouseY = GetSafeSize().y - mouseY + 25;
+
+		}
+
+	}
+
 
 }

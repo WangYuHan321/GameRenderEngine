@@ -1,6 +1,8 @@
 #pragma once
 
+#include <optional>
 #include "AViewControllable.h"
+#include "../../Editor/Core/GizmoBehaviour.h"
 
 class SceneView  :public AViewControllable
 {
@@ -24,5 +26,9 @@ public:
 
 private:
 	RenderTarget* m_actorPickRenderTarget;
+	EGizmoOperation m_currentOperation = EGizmoOperation::TRANSLATE;
+
+	std::optional<std::reference_wrapper<Actor>> m_highlightedActor;
+	std::optional<GizmoBehaviour::EDirection> m_highlightedGizmoDirection;
 };
 
