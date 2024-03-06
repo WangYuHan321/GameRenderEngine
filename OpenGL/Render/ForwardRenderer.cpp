@@ -31,6 +31,8 @@ void ForwardRenderer::OnReSize(uint32 width, uint32 height)
 
 void ForwardRenderer::SetViewPort(uint32 x, uint32 y, uint32 width, uint32 height)
 {
+	if (width <= 0 || height <= 0)
+		return;
 	glViewport(x, y, width, height);
 }
 
@@ -209,8 +211,8 @@ void ForwardRenderer::Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj
 
 void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
 {
-	if (m_state != p_mask)
-	{
+	//if (m_state != p_mask)
+	//{
 
 		if ((p_mask & 0x01) != (m_state & 0x01))    m_glCache.SetDepthMask(p_mask & 0x01);
 		if ((p_mask & 0x02) != (m_state & 0x02))	m_glCache.SetColorMask(p_mask & 0x02);
@@ -221,7 +223,7 @@ void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
 		m_glCache.SetCullFace((p_mask & 0x20) ? GL_BACK : GL_FRONT);
 
 		m_state = p_mask;
-	}
+	//}
 }
 
 uint8_t ForwardRenderer::FetchGLState()
@@ -243,6 +245,11 @@ void ForwardRenderer::RegisterModelMatrixSender(std::function<void(Matrix4)> p_m
 void ForwardRenderer::RegisterUserMatrixSender(std::function<void(Matrix4)> p_userMatrixSender)
 {
 	m_userMatrixSender = p_userMatrixSender;
+}
+
+void ForwardRenderer::ReadPixels(uint32_t x, uint32_t y, uint32_t width, uint32_t height, GLenum format, GLenum type, void* data)
+{
+	glReadPixels(x, y, width, height, static_cast<GLenum>(format), static_cast<GLenum>(type), data);
 }
 
 void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
