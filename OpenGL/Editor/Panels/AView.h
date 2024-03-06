@@ -20,6 +20,8 @@ public:
 		const PanelWindowSetting& p_panelSetting
 	);
 
+	virtual ~AView();
+
 	virtual void Update(float p_deltaTime);
 
 	void _Draw_Impl() override;

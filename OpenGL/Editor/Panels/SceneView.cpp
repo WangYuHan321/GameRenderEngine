@@ -4,6 +4,11 @@
 #include "../../Editor/Core/EditorAction.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../Core/ECS/Components/CCamera.h"
+
+//#define EDITOR_USE_RAY //鼠标移动是否开启射线击中物体
+//
+//#define EDITOR_USE_TEXTURE //鼠标移动是否支持纹理检测击中物体
+
 SceneView::SceneView(
 	const std::string& p_title,
 	bool p_opened,
@@ -12,18 +17,13 @@ SceneView::SceneView(
 	AViewControllable(p_title, p_opened, p_windowSettings)
 {
 	m_camera.SetPerspective(Deg2Rad(60.0f), 0.5, 0.1f, 5000.0f);
+	m_actorPickRenderTarget  = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 }
 
-bool HitSphere(const Vector3& center, float radius, const Ray& r) {
-	Vector3 oc = r.p0 - center;
-	float a = glm::dot(r.dir, r.dir);//2
-	float b = 2.0f * glm::dot(r.dir, oc);
-	float c = dot(oc, oc) - radius * radius;
-	float discriminate = b * b - 4 * a * c;
-	if (discriminate < 0)
-		return false;
-	else
-		return (-b - sqrtf(discriminate)) / (2.0f * a) > 0;//1
+SceneView::~SceneView()
+{
+	if(m_actorPickRenderTarget)
+		delete m_actorPickRenderTarget;
 }
 
 void SceneView::Update(float p_deltaTime)
@@ -38,8 +38,10 @@ void SceneView::_Render_Impl()
 
 	PrepareCamera();
 	uint8_t glState = baseRenderer.FetchGLState();
-	RenderScene(glState);
 	HandleActorPicking();
+	RenderScene(glState);
+	//ray
+	//HandleActorPicking_Ray();
 }
 
 void SceneView::RenderScene(uint8_t p_defaultRenderState)
@@ -75,6 +77,13 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
 				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, false);
 		}
+
+		if (m_highlightedActor.has_value())//鼠标移动到
+		{
+			m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), true, false);
+			baseRenderer.ApplyStateMask(p_defaultRenderState);
+			m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), false, false);
+		}
 	}
 
 	m_renderTarget->Unbind();
@@ -82,16 +91,32 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 
 void SceneView::RenderSceneForActorPicking()
 {
-	auto& baseRenderer = *EDITOR_CONTEXT(m_renderer).get();
+	auto& baseRenderer = *dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get());
 
 	auto [winWidth, winHeight] = GetSafeSize();
 
-	//m_actorPickRenderTarget->Resize(winWidth, winHeight);
-	//m_actorPickRenderTarget->Bind();
+	if (winWidth > 0 && winHeight > 0)
+	{
+		m_actorPickRenderTarget->Resize(winWidth, winHeight);
+		m_actorPickRenderTarget->Bind();
+
+		baseRenderer.SetStencilMask(0xFF);
+		glClearColor(1, 1, 1, 1);
+		baseRenderer.Clear();
+		baseRenderer.SetStencilMask(0x00);
+		m_editorRenderer.RenderSceneForActorPicking();
 
 
+		if (EDITOR_EXEC(IsAnyActorSelected()))
+		{
+			auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
+				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, true);
+		}
 
-	//m_actorPickRenderTarget->Unbind();
+		m_actorPickRenderTarget->Unbind();
+	}
+
 }
 
 void SceneView::HandleActorPicking()
@@ -105,11 +130,42 @@ void SceneView::HandleActorPicking()
 
 		if (!m_cameraController.IsRightMousePressed())
 		{
+			auto& inputManager = *EDITOR_CONTEXT(m_inputMgr);
+
+			auto [mouseX, mouseY] = inputManager.GetMousePosition();
+			mouseX -= m_position.x;
+			mouseY -= m_position.y;
+			mouseY = GetSafeSize().y - mouseY + 25;
+
+			m_actorPickRenderTarget->Bind();
+			uint8_t pixel[3];
+			dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->ReadPixels(static_cast<int>(mouseX), static_cast<int>(mouseY), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
+			m_actorPickRenderTarget->Unbind();
+
+			uint32_t actorID = (0 << 24) | (pixel[2] << 16) | (pixel[1] << 8) | (pixel[0] << 0);
+			auto actorUnderMouse = EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene()->FindActorByID(actorID);
+
+			if(actorUnderMouse != nullptr)
+				m_highlightedActor = std::ref(*actorUnderMouse);
+		}
+
+	}
+}
+
+
+void SceneView::HandleActorPicking_Ray()
+{
+	if (IsHovered())
+	{
+		RenderSceneForActorPicking();
+
+		if (!m_cameraController.IsRightMousePressed())
+		{
 			auto& inputMgr = *EDITOR_CONTEXT(m_inputMgr);
 			auto [mouseX, mouseY] = inputMgr.GetMousePosition();
 			mouseX -= m_position.x;
 			mouseY -= m_position.y;
-			mouseY = /*GetSafeSize().y - */mouseY + 25;
+			mouseY = GetSafeSize().y - mouseY + 25;
 
 			Vector2 ndcCoord;
 			ndcCoord.x = ((2.0f * mouseX) / GetSafeSize().x) - 1.0f;

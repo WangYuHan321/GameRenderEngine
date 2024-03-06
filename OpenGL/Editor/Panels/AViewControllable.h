@@ -12,6 +12,8 @@ public:
 		const PanelWindowSetting& p_windowSetting,
 		bool p_enableFocusInputs = false);
 
+	~AViewControllable() {}
+
 	virtual void Update(float p_deltaTime);
 
 	CameraController& GetCameraController();

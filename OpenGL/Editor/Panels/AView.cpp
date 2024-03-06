@@ -22,6 +22,12 @@ AView::AView
 	scrollable = false;
 }
 
+AView::~AView()
+{
+	if (m_renderTarget)
+		delete m_renderTarget;
+}
+
 void AView::Update(float p_deltaTime)
 {
 	m_img->size = GetSafeSize();
@@ -71,8 +77,7 @@ void AView::PrepareCamera()
 
 ImVec2 AView::GetSafeSize()
 {
-	ImVec2 result = GetSize();
-	result.y = result.y - 25.f > 0.0f ? result.y - 25.f : 0.0f;
+	auto result = ImVec2(GetSize().x, GetSize().y - 25.f); // 25 == title bar height
 	return result;
 }
 
