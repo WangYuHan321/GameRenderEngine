@@ -218,7 +218,7 @@ int main()
 #else
 
 int main()
-{
+{ 
 #if 0
 
 	Quaternion quat1(0.2, 0.3, 0.2, 1.0);
@@ -283,7 +283,7 @@ int main()
 
 	Application app("", "");
 
-	while (1)
+	while (app.IsRunning())
 	{
 		app.Run();
 	}
