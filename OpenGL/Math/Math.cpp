@@ -1,4 +1,5 @@
 #include "Math.h"
+#include "../../Util/common.h"
 #include <glm/gtc/quaternion.hpp>
 
 #define TO_RADIANS(value) value * PI / 180.f
@@ -130,4 +131,16 @@ glm::vec3 GetScreenToWorldRay(glm::vec2 screenPos, float near, float far, glm::m
     glm::vec3 endRay = ScreenToWorld(screenPos, far, view, proj);
 
     return glm::normalize(endRay - startRay);
+}
+
+bool HitSphere(const Vector3& center, float radius, const Ray& r) {
+    Vector3 oc = r.p0 - center;
+    float a = glm::dot(r.dir, r.dir);//2
+    float b = 2.0f * glm::dot(r.dir, oc);
+    float c = dot(oc, oc) - radius * radius;
+    float discriminate = b * b - 4 * a * c;
+    if (discriminate < 0)
+        return false;
+    else
+        return (-b - sqrtf(discriminate)) / (2.0f * a) > 0;//1
 }

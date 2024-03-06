@@ -3,6 +3,8 @@
 #include<GLM/glm.hpp>
 #include<glm/matrix.hpp>
 
+struct Ray;
+
 const float PI = 3.14159265359f;
 const float TAU = 6.28318530717f;
 
@@ -27,5 +29,7 @@ glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha);
 glm::vec3 ScreenToWorld(glm::vec2 screenPos, float val, glm::mat4 view, glm::mat4 proj);//必须线归一化
 
 glm::vec3 GetScreenToWorldRay(glm::vec2 screenPos, float near, float far, glm::mat4 view, glm::mat4 proj);
+
+bool HitSphere(const glm::vec3& center, float radius, const Ray& r);
 
 
