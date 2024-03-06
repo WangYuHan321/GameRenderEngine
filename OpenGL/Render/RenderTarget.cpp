@@ -54,6 +54,10 @@ RenderTarget::RenderTarget(uint32 width, uint32 height, GLenum type, uint32 atta
 
 void RenderTarget::Resize(uint32 width, uint32 height)
 {
+
+	if (width <= 0 || height <= 0)
+		return;
+
 	Width = width;
 	Height = height;
 
