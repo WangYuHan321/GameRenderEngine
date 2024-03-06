@@ -486,6 +486,9 @@
     <ClInclude Include="UI\Layout\GroupCollapsable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Shadow\CascadeShadowMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -897,6 +900,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UI\Layout\GroupCollapsable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shadow\CascadeShadowMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
