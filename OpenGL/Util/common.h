@@ -37,6 +37,11 @@ using Matrix2 = glm::mat2;
 using Matrix3 = glm::mat3;
 using Matrix4 = glm::mat4;
 
+struct Ray {
+	Vector3 p0;
+	Vector3 dir;
+};
+
 struct Quaternion {
 	glm::quat m_quat;
 
