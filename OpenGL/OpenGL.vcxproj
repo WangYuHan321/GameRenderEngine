@@ -73,6 +73,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\Panels\ToolBar.h" />
     <ClInclude Include="Render\Shadow\CascadeShadowMap.h" />
     <ClInclude Include="UI\Layout\GroupCollapsable.h" />
     <ClInclude Include="UI\Widgets\Selection\ComboBox.h" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\Panels\ToolBar.cpp" />
     <ClCompile Include="Render\Shadow\CascadeShadowMap.cpp" />
     <ClCompile Include="UI\Layout\GroupCollapsable.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ComboBox.cpp" />
