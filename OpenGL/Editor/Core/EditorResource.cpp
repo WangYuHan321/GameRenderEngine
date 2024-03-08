@@ -8,6 +8,7 @@
 EditorResource::EditorResource(const std::string& p_editorAssetPath)
 {
 	std::string modelFolder = p_editorAssetPath + "Models\\";
+	std::string iconsFolder = p_editorAssetPath + "Texture\\";
 
 	EModelParserFlags modelParserFlags = EModelParserFlags::NONE;
 	modelParserFlags |= EModelParserFlags::TRIANGULATE;
@@ -40,6 +41,12 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	auto gizmoSource = RawShader::GetGrizmo();
 	m_shaders["Grid"] = ShaderLoader::getInstance()->CreateFromSource("Grid Shader", gridsSource.first, gridsSource.second);
 	m_shaders["Gizmo"] = ShaderLoader::getInstance()->CreateFromSource("Gizmo Shader", gizmoSource.first, gizmoSource.second);
+
+	std::string icon1 = iconsFolder + std::string("ButtonPlay.jpg");
+	m_textures["Button_Play"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Button_Pause"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Button_Stop"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Button_Next"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
 }
 
 EditorResource::~EditorResource()
