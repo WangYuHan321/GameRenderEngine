@@ -3,6 +3,7 @@
 #include "../../Editor/Panels/SceneView.h"
 #include "../../Editor/Panels/Hierarchy.h"
 #include "../../Editor/Panels/Inspector.h"
+#include "../../Editor/Panels/ToolBar.h"
 
 Editor::Editor(Context& p_context):
 	m_context(p_context),
@@ -29,6 +30,7 @@ void Editor::SetUpUI()
 	m_panelsMgr.CreatePanel<GameView>("Game View", false, settings);
 	m_panelsMgr.CreatePanel<SceneView>("Scene View", true, settings);
 	m_panelsMgr.CreatePanel<Inspector>("Inspector", true, settings);
+	m_panelsMgr.CreatePanel<ToolBar>("ToolBar", false, settings);
 
 	m_canvas.MakeDockspace(true);
 	m_context.m_uiMgr->SetCanvas(m_canvas);
