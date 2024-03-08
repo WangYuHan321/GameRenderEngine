@@ -91,6 +91,20 @@ void EditorRender::InitMaterials()
 	m_stencilFillMaerial.DepthTest = false;
 	m_stencilFillMaerial.ColorWrite = false;
 	m_stencilFillMaerial.DepthWrite = true;
+
+	m_actorPickingMaterial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_actorPickingMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 1.f, 1.0f));
+	m_actorPickingMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+}
+
+void EditorRender::PreparePickingMaterial(Actor& p_actor, Material& p_material)
+{
+	uint32_t actorID = static_cast<uint32_t>(p_actor.GetID());
+
+	auto bytes = reinterpret_cast<uint8_t*>(&actorID);
+	auto color = Color4( bytes[0] / 255.0f, bytes[1] / 255.0f, bytes[2] / 255.0f, 1.0f );
+
+	p_material.SetVector("u_Diffuse", Vector4(color.r, color.g, color.b, color.a));
 }
 
 Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
@@ -173,6 +187,19 @@ void EditorRender::RenderSceneForActorPicking()
 
 	}
 
+	for (auto camera : m_context.m_sceneMgr->GetActiveScene()->GetFastAccessComponents().cameras)
+	{
+		auto& actor = camera->owner;
+
+		if (actor.IsActive())
+		{
+			PreparePickingMaterial(actor, m_actorPickingMaterial);
+			auto& model = *m_context.m_editorResource->GetModel("Camera");
+			auto modelMatrix = CalculateCameraModelMatrix(actor);
+
+			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(model, m_actorPickingMaterial, &modelMatrix);
+		}
+	}
 }
 
 void EditorRender::RenderModelToStencil(Matrix4& p_worldMatrix, Model& p_model)

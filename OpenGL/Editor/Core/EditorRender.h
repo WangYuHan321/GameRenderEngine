@@ -18,6 +18,7 @@ public:
 	~EditorRender();
 
 	void InitMaterials();
+	void PreparePickingMaterial(Actor& p_actor, Material& p_material);
 	void RenderScene(const Vector3& p_cameraPos, const Camera& p_camera);
 	void RenderUI();
 
