@@ -11,6 +11,20 @@ public:
 
 	~Behaviour();
 
+	virtual void OnAwake();
+
+	virtual void OnStart();
+
+	virtual void OnEnable();
+
+	virtual void OnDisable();
+
+	virtual void OnDestroy();
+
+	bool RegisterToLuaContext(sol::state& p_luaState, const std::string& p_scriptFolder);
+
+	void UnregisterFromLuaContext();
+
 	template<typename... Args>
 	void LuaCall(const std::string& p_functionName, Args&&... p_args);
 
