@@ -535,3 +535,25 @@ struct Color4
 		return imv;
 	}
 };
+
+
+inline int valCount = 0;
+
+inline void* operator new(std::size_t size) {
+	void* ptr = std::malloc(size);
+	if (ptr == nullptr) {
+		throw std::bad_alloc();
+	}
+	valCount++;
+	return ptr;
+}
+
+inline void operator delete(void* ptr) noexcept {
+	std::free(ptr);
+	valCount--;
+}
+
+inline void checkForMemoryLeaks() {
+	LOG_INFO("%d", valCount);
+}
+
