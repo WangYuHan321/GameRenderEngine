@@ -43,3 +43,8 @@ Actor& EditorAction::GetSelectedActor() const
 {
 	return *EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor();
 }
+
+void EditorAction::StartPlay()
+{
+	m_context.m_sceneMgr->GetActiveScene()->Play();
+}

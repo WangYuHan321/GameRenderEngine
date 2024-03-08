@@ -35,6 +35,8 @@ public:
 
 	Actor& GetSelectedActor() const;
 
+	void StartPlay();
+
 public:
 	Event<Actor&> ActorSelectedEvent;
 	Event<Actor&> ActorUnSelectedEvent;
