@@ -76,6 +76,15 @@ void Scene::Clear()
 	Scene::Root = new SceneNode(0);
 }
 
+void Scene::Play()
+{
+	m_isPlaying = true;
+
+	std::for_each(m_actors.begin(), m_actors.end(), [](Actor* p_element) { if (p_element->IsActive()) p_element->OnAwake(); });
+	std::for_each(m_actors.begin(), m_actors.end(), [](Actor* p_element) { if (p_element->IsActive()) p_element->OnEnable(); });
+	std::for_each(m_actors.begin(), m_actors.end(), [](Actor* p_element) { if (p_element->IsActive()) p_element->OnStart(); });
+}
+
 Actor* Scene::CreateActor()
 {
 	return CreateActor("New Actor");

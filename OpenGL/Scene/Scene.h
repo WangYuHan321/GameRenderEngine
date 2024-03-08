@@ -31,6 +31,8 @@ public:
 
 	void Clear();
 
+	void Play();
+
 	SceneNode* MakeSceneNode(Mesh mesh, Material material);
 
 	SceneNode* MakeSceneNode(SceneNode* node);
