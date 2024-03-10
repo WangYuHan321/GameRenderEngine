@@ -49,6 +49,25 @@ struct Quaternion {
 	{
 		m_quat = glm::quat(0.0f,0.0f,0.0f,0.0f);
 	}
+
+	Quaternion(Vector3 p_euler)
+	{
+		float yaw = TO_RADIANS(p_euler.z) * 0.5f;
+		float pitch = TO_RADIANS(p_euler.y) * 0.5f;
+		float roll = TO_RADIANS(p_euler.x) * 0.5f;
+
+		float cy = cos(yaw);
+		float sy = sin(yaw);
+		float cp = cos(pitch);
+		float sp = sin(pitch);
+		float cr = cos(roll);
+		float sr = sin(roll);
+
+		m_quat.x = sr * cp * cy - cr * sp * sy;
+		m_quat.y = cr * sp * cy + sr * cp * sy;
+		m_quat.z = cr * cp * sy - sr * sp * cy;
+		m_quat.w = cr * cp * cy + sr * sp * sy;
+	}
 	
 	Quaternion(glm::quat _quat)
 	{
