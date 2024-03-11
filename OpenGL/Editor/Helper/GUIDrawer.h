@@ -6,9 +6,14 @@
 #undef max
 
 #include <limits.h>
+#include "../../Event/Event.h"
 
+class Text;
+class CShader;
 class Texture;
+class Material;
 class WidgetContainer;
+
 
 class GUIDrawer 
 {
@@ -34,6 +39,8 @@ public:
 	static void DrawQuat(WidgetContainer& p_root, const std::string& p_name, Quaternion& p_data, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawString(WidgetContainer& p_root, const std::string& p_name, std::string& p_data);
 	static void DrawColor4(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha = false);
+	static Text& DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier);
+	static Text& DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier);
 
 	template <typename T>
 	static void DrawScalar(WidgetContainer& p_root, const std::string& p_name, std::function<T(void)> p_gatherer, std::function<void(T)> p_provider, float p_step = 1.f, T p_min = std::numeric_limits<T>::min(), T p_max = std::numeric_limits<T>::max());

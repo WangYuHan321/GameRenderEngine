@@ -3,6 +3,12 @@
 #include "../../UI/Widgets/Text/TextColored.h"
 #include "../../UI/Widgets/Drag/DragMultipleScalars.h"
 #include "../../Render/Shader/Texture.h"
+#include "../../Render/Mesh/Material.h"
+#include "../../UI/Layout/Group.h"
+#include "../../UI/Plugin/DDTarget.h"
+#include "../../UI/Widgets/Text/Text.h"
+#include "../../Render/Shader/EShader.h"
+#include "../../UI/Widgets/Button/Button.h"
 #include "../../UI/Widgets/Selection/ColorEdit.h"
 
 Color4 GUIDrawer::titleColor = { 0.85f, 0.65f, 0.0f, 1.0f };
@@ -63,6 +69,57 @@ void GUIDrawer::DrawColor4(WidgetContainer& p_root, const std::string& p_name, C
 	auto& dispatcher = widget.AddPlugin<DataDispatcher<Color4>>();
 	dispatcher.RegisterReference(p_color);
 }
+
+Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier)
+{
+	CreateTitle(p_root, p_name);
+	std::string displayText = p_data ? "Default Material" : std::string("Empty");
+
+	auto& rightSide = p_root.CreateWidget<Group>();
+	auto& textEdit = rightSide.CreateWidget<Text>();
+	textEdit.content = displayText;
+	/*textEdit.AddPlugin()*/
+
+	textEdit.lineBreak = false;
+
+	auto& resetBtn = rightSide.CreateWidget<Button>("Reset Button");
+	resetBtn.idleColor = Color4{ 0.5f, 0.0f, 0.0f, 1.0f };
+	resetBtn.ClickedEvent += [&textEdit, &p_data, p_updateNotifier]
+	{
+		p_data = nullptr;
+		textEdit.content = "Empty";
+		if (p_updateNotifier)
+			p_updateNotifier->Invoke();
+	};
+
+	return textEdit;
+}
+
+Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier)
+{
+	CreateTitle(p_root, p_name);
+	std::string displayText = p_data ? "Default Shader" : std::string("Empty");
+
+	auto& rightSide = p_root.CreateWidget<Group>();
+	auto& textEdit = rightSide.CreateWidget<Text>();
+	textEdit.content = displayText;
+	/*textEdit.AddPlugin()*/
+
+	textEdit.lineBreak = false;
+
+	auto& resetBtn = rightSide.CreateWidget<Button>("Reset Button");
+	resetBtn.idleColor = Color4{ 0.5f, 0.0f, 0.0f, 1.0f };
+	resetBtn.ClickedEvent += [&textEdit, &p_data, p_updateNotifier]
+	{
+		p_data = nullptr;
+		textEdit.content = "Empty";
+		if (p_updateNotifier)
+			p_updateNotifier->Invoke();
+	};
+
+	return textEdit;
+}
+
 
 void GUIDrawer::DrawBoolean(WidgetContainer& p_root, const std::string& p_name, std::function<bool(void)> p_gatherer, std::function<void(bool)> p_provider)
 {
