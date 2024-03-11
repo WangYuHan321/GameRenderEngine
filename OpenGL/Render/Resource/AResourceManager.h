@@ -14,8 +14,6 @@ public:
 
 	T* operator[](const std::string& p_path);
 
-private:
-
 	T* LoadResource(const std::string& p_path);
 
 	void UnloadResource(const std::string& p_path);
