@@ -300,7 +300,7 @@ void Renderer::RenderCustomCommand(RenderCommand* command, Camera* customCamera,
 		m_glCache.SetCullFace(material->CullFace);
 	}
 
-	material->GetShader()->activeShader();
+	material->GetShader()->ActiveShader();
 	
 	if (customCamera)
 	{
@@ -510,7 +510,7 @@ void Renderer::RenderPushedCommands(Camera& cam)
 			DirectionalLight* light = m_directionalLights[i];
 			if (light->CastShadow)
 			{
-				m_materialLibrary->dirShadowShader->activeShader();
+				m_materialLibrary->dirShadowShader->ActiveShader();
 				glBindFramebuffer(GL_FRAMEBUFFER, m_shadowRenderTarget[shadowRtIndex]->ID);
 				glViewport(0, 0, m_shadowRenderTarget[shadowRtIndex]->Width, m_shadowRenderTarget[shadowRtIndex]->Height);
 				glClear(GL_DEPTH_BUFFER_BIT);
@@ -709,7 +709,7 @@ void Renderer::RenderDeferredAmbient(Camera& cam)
 				probe->Irradiance->Bind(3);
 
 				CShader* irradianceShader = m_materialLibrary->deferredIrradianceShader;
-				irradianceShader->activeShader();
+				irradianceShader->ActiveShader();
 				irradianceShader->SetVector("camPos", cam.Position);
 				irradianceShader->SetVector("probePos", probe->Position);
 				irradianceShader->SetFloat("probeRadius", probe->Radius);
@@ -729,7 +729,7 @@ void Renderer::RenderDeferredAmbient(Camera& cam)
 	else
 	{
 		CShader* ambientShader = m_materialLibrary->deferredAmbientShader;
-		ambientShader->activeShader();
+		ambientShader->ActiveShader();
 		skyCapture->Irradiance->Bind(3);
 		skyCapture->PrefilteredMap->Bind(4);
 		m_pbrCapture->m_renderTargetBRDFLut->GetColorTexture(0)->Bind(5);
@@ -744,7 +744,7 @@ void Renderer::RenderDeferredDirLight(DirectionalLight* light, Camera& cam)
 {
 	CShader* dirShader = m_materialLibrary->deferredDirectionalShader;
 
-	dirShader->activeShader();
+	dirShader->ActiveShader();
 	dirShader->SetVector("camPos", cam.Position);
 	dirShader->SetVector("lightDir", light->Direction);
 	dirShader->SetVector("lightColor", glm::normalize(light->Color) * light->Intensity);
@@ -762,7 +762,7 @@ void Renderer::RenderDeferredPointLight(PointLight* light, Camera& cam)
 {
 	CShader* pointShader = m_materialLibrary->deferredPointShader;
 	
-	pointShader->activeShader();
+	pointShader->ActiveShader();
 	pointShader->SetVector("camPos", cam.Position);
 	pointShader->SetVector("lightPos", light->Position);
 	pointShader->SetFloat("lightRadius", light->Radius);
@@ -785,7 +785,7 @@ void Renderer::RenderShadowCastCommand(RenderCommand* command, const glm::mat4& 
 {
 	//äÖÈ¾shadow mapÒõÓ°
 	CShader* shadowShader = m_materialLibrary->dirShadowShader;
-	shadowShader->activeShader();
+	shadowShader->ActiveShader();
 	shadowShader->SetMatrix("projection", porj);
 	shadowShader->SetMatrix("view", view);
 	shadowShader->SetMatrix("model", command->Transfrom);

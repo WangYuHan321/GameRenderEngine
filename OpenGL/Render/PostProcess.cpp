@@ -16,7 +16,7 @@ PostProcess::PostProcess(Renderer* render):
     {
         m_downSampleShader = ResourceManager::getInstance()->LoadShader("down sample",
             "Shader\\scene\\screen_quad.vs", "Shader\\scene\\screen_quad.fs");
-        m_downSampleShader->activeShader();
+        m_downSampleShader->ActiveShader();
         m_downSampleShader->SetInt("TexSrc", 0);
     }
 
@@ -27,7 +27,7 @@ PostProcess::PostProcess(Renderer* render):
 
         m_ssaoShader = ResourceManager::getInstance()->LoadShader("ssao",
             "Shader\\ssao\\ssao.vs", "Shader\\ssao\\ssao.fs");
-        m_ssaoShader->activeShader();
+        m_ssaoShader->ActiveShader();
         m_ssaoShader->SetInt("gPositionMetallic", 0);
         m_ssaoShader->SetInt("gNormalRoughness", 1);
         m_ssaoShader->SetInt("texNoise", 2);
@@ -82,7 +82,7 @@ PostProcess::PostProcess(Renderer* render):
 
         m_bloomShader = ResourceManager::getInstance()->LoadShader("bloom",
             "Shader\\scene\\screen_quad.vs", "Shader\\post\\bloom.fs");
-        m_bloomShader->activeShader();
+        m_bloomShader->ActiveShader();
         m_bloomShader->SetInt("HDRScene", 0);
 
         BloomOutput1 = m_bloomRenderTarget1->GetColorTexture(0);
@@ -104,14 +104,14 @@ PostProcess::PostProcess(Renderer* render):
 
         m_onePassGaussianShader = ResourceManager::getInstance()->LoadShader("gaussian blur",
             "Shader\\scene\\screen_quad.vs", "Shader\\post\\blur_guassian.fs");
-        m_onePassGaussianShader->activeShader();
+        m_onePassGaussianShader->ActiveShader();
         m_onePassGaussianShader->SetInt("TexSrc", 0);
     }
 
     {
         m_postProcessShader = ResourceManager::getInstance()->LoadShader("PostProcess",
             "Shader\\scene\\screen_quad.vs", "Shader\\post_processing.fs");
-        m_postProcessShader->activeShader();
+        m_postProcessShader->ActiveShader();
         m_postProcessShader->SetInt("TexSrc", 0);
         m_postProcessShader->SetInt("TexBloom1", 1);
         m_postProcessShader->SetInt("TexBloom2", 2);
@@ -123,7 +123,7 @@ PostProcess::PostProcess(Renderer* render):
     {
         m_debugPostProcessShader = ResourceManager::getInstance()->LoadShader("DebugPostProcess",
             "Shader\\scene\\screen_quad.vs", "Shader\\post\\debug.fs");
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_debugPostProcessShader->SetInt("GBufferTexture", 0);
     }
 }
@@ -136,7 +136,7 @@ void PostProcess::ProcessPreLighting(Camera& cam)
         m_renderer->m_gBuffer->GetColorTexture(1)->Bind(1);
         m_ssaoNoise->Bind(2);
 
-        m_ssaoShader->activeShader();
+        m_ssaoShader->ActiveShader();
         m_ssaoShader->SetVector("renderSize", m_renderer->m_renderSize);
         m_ssaoShader->SetMatrix("projection", cam.Projection);
         m_ssaoShader->SetMatrix("view", cam.View);
@@ -152,12 +152,12 @@ void PostProcess::ProcessPostLighting(RenderTarget* renderTarget)
 {
     if (Bloom)
     {
-        m_bloomShader->activeShader();
+        m_bloomShader->ActiveShader();
         renderTarget->GetColorTexture(0)->Bind(0);
         glBindFramebufferEXT(GL_FRAMEBUFFER, m_bloomRenderTarget0->ID);
         glViewport(0, 0, m_bloomRenderTarget0->Width, m_bloomRenderTarget0->Height);
         glClear(GL_COLOR_BUFFER_BIT);
-        m_bloomShader->activeShader();
+        m_bloomShader->ActiveShader();
         m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
 
         Blur(m_bloomRenderTarget0->GetColorTexture(0), m_bloomRenderTarget1, 8);
@@ -249,7 +249,7 @@ Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int cou
     glViewport(0, 0, renderTarget->Width, renderTarget->Height);
 
     bool horizontal = true;
-    m_onePassGaussianShader->activeShader();
+    m_onePassGaussianShader->ActiveShader();
     for (int i = 0; i < count; ++i, horizontal = !horizontal)
     {
         m_onePassGaussianShader->SetBool("horizontal", horizontal);
@@ -266,7 +266,7 @@ Texture* PostProcess::Blur(Texture* texture, RenderTarget* renderTarget, int cou
             rtHorizontal->GetColorTexture(0)->Bind(0);
         }
         glBindFramebufferEXT(GL_FRAMEBUFFER, horizontal ? rtHorizontal->ID : rtVertical->ID);
-        m_onePassGaussianShader->activeShader();
+        m_onePassGaussianShader->ActiveShader();
         m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
     }
 
@@ -281,7 +281,7 @@ void PostProcess::DebugDisplayTexture(Texture* src)
     glViewport(0, 0, m_renderer->m_renderSize.x, m_renderer->m_renderSize.y);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     src->Bind(0);
-    m_downSampleShader->activeShader();
+    m_downSampleShader->ActiveShader();
     m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
 }
 
@@ -298,7 +298,7 @@ void PostProcess::Blit(RenderTarget* renderTarget)
     BloomOutput4->Bind(4);
     m_renderer->m_gBuffer->GetColorTexture(3)->Bind(5);
 
-    m_postProcessShader->activeShader();
+    m_postProcessShader->ActiveShader();
     m_postProcessShader->SetBool("SSAO", SSAO);
     m_postProcessShader->SetBool("Bloom", Bloom);
 
@@ -306,7 +306,7 @@ void PostProcess::Blit(RenderTarget* renderTarget)
     m_postProcessShader->SetFloat("MotionScale", 0.2);
     m_postProcessShader->SetInt("MotionSamples", 8);
 
-    m_postProcessShader->activeShader();
+    m_postProcessShader->ActiveShader();
     m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
 
     if (m_renderer->enableDebugGBuffer)
@@ -317,25 +317,25 @@ void PostProcess::Blit(RenderTarget* renderTarget)
         quad.FinalizeMesh(0);
 
         m_renderer->m_gBuffer->GetColorTexture(0)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(1);
 
         m_renderer->m_gBuffer->GetColorTexture(1)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(2);
 
         m_renderer->m_gBuffer->GetColorTexture(2)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(3);
 
         m_renderer->m_gBuffer->GetColorTexture(3)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         glEnable(GL_DEPTH_TEST);
@@ -355,7 +355,7 @@ void PostProcess::BlitTo(RenderTarget* renderTarget, uint32 frameBufferID)
     BloomOutput4->Bind(4);
     m_renderer->m_gBuffer->GetColorTexture(3)->Bind(5);
 
-    m_postProcessShader->activeShader();
+    m_postProcessShader->ActiveShader();
     m_postProcessShader->SetBool("SSAO", SSAO);
     m_postProcessShader->SetBool("Bloom", Bloom);
 
@@ -363,7 +363,7 @@ void PostProcess::BlitTo(RenderTarget* renderTarget, uint32 frameBufferID)
     m_postProcessShader->SetFloat("MotionScale", 0.2);
     m_postProcessShader->SetInt("MotionSamples", 8);
 
-    m_postProcessShader->activeShader();
+    m_postProcessShader->ActiveShader();
     m_renderer->RenderMesh((Mesh*)m_renderer->m_quadNDC);
 
     if (m_renderer->enableDebugGBuffer)
@@ -374,25 +374,25 @@ void PostProcess::BlitTo(RenderTarget* renderTarget, uint32 frameBufferID)
         quad.FinalizeMesh(0);
 
         m_renderer->m_gBuffer->GetColorTexture(0)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(1);
 
         m_renderer->m_gBuffer->GetColorTexture(1)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(2);
 
         m_renderer->m_gBuffer->GetColorTexture(2)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         quad.FinalizeMesh(3);
 
         m_renderer->m_gBuffer->GetColorTexture(3)->Bind(0);
-        m_debugPostProcessShader->activeShader();
+        m_debugPostProcessShader->ActiveShader();
         m_renderer->RenderMesh(&quad);
 
         glEnable(GL_DEPTH_TEST);

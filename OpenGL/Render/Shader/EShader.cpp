@@ -406,54 +406,54 @@ void CShader::CreateFromSource(string name, string vsSource, string fsSource)
 	}
 }
 
-void CShader::activeShader()
+void CShader::ActiveShader()
 {
 	glUseProgram(m_ID);
 }
 
-void CShader::inactiveShader()
+void CShader::InActiveShader()
 {
 	glUseProgram(0);
 }
 
 void CShader::SetInt(std::string location, int value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform1i(loc, value);
 }
 
 void CShader::SetBool(std::string location, bool value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform1i(loc, (int)value);
 }
 
 void CShader::SetFloat(std::string location, float value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform1f(loc, value);
 }
 
 void CShader::SetVector(std::string location, glm::vec2 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform2fv(loc, 1, &value[0]);
 }
 
 void CShader::SetVector(std::string location, glm::vec3 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform3fv(loc, 1, &value[0]);
 }
 
 void CShader::SetVector(std::string location, Color3 value)
 {
-	int loc = getUniformLocation(location);
+	int loc = GetUniformLocation(location);
 	glm::vec3 val(value.r, value.g, value.b);
 
 	if (loc >= 0)
@@ -462,14 +462,14 @@ void CShader::SetVector(std::string location, Color3 value)
 
 void CShader::SetVector(std::string location, glm::vec4 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform4fv(loc, 1, &value[0]);
 }
 
 void CShader::SetVector(std::string location, Color4 value)
 {
-	int loc = getUniformLocation(location);
+	int loc = GetUniformLocation(location);
 	glm::vec4 val(value.r, value.g, value.b, value.a);
 
 	if (loc >= 0)
@@ -505,26 +505,26 @@ void CShader::SetVectorArray(std::string location, int size, const std::vector<g
 
 void CShader::SetMatrix(std::string location, glm::mat2 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix2fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
 void CShader::SetMatrix(std::string location, glm::mat3 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix3fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
 void CShader::SetMatrix(std::string location, glm::mat4 value)
 {
-    int loc = getUniformLocation(location);
+    int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
-int CShader::getUniformLocation(std::string name)
+int CShader::GetUniformLocation(std::string name)
 {
 	for (unsigned int i = 0; i < Uniforms.size(); ++i)
 	{
@@ -532,6 +532,11 @@ int CShader::getUniformLocation(std::string name)
 			return Uniforms[i].Location;
 	}
 	return -1;
+}
+
+std::string CShader::GetShaderPath()
+{
+	return m_shaderPath;
 }
 
 uint32 CShader::GetShaderID()

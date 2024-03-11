@@ -50,7 +50,7 @@ PBR::PBR(Renderer* renderer)
 	// 只计算直接光照 diffuse part
 	m_probeCaptureShader = ResourceManager::getInstance()->LoadShader
 	("pbr_capture", "Shader\\capture.vs", "Shader\\capture.fs");
-	m_probeCaptureShader->activeShader();
+	m_probeCaptureShader->ActiveShader();
 	m_probeCaptureShader->SetInt("TexAlbedo", 0);
 	m_probeCaptureShader->SetInt("TexNormal", 1);
 	m_probeCaptureShader->SetInt("TexMetallic", 2);
@@ -58,7 +58,7 @@ PBR::PBR(Renderer* renderer)
 
 	m_probeCaptureBackgroundShader = ResourceManager::getInstance()->LoadShader
 	("pbr_captureBackground", "Shader\\capture_background.vs", "Shader\\capture_background.fs");
-	m_probeCaptureBackgroundShader->activeShader();
+	m_probeCaptureBackgroundShader->ActiveShader();
 	m_probeCaptureBackgroundShader->SetInt("background", 0);
 
 
@@ -158,14 +158,14 @@ void PBR::SetSkyCapture(PBRCapture* capture)
 void PBR::RenderProbes(Camera& cam)
 {
 	//首先把镜面反射的贴图
-	m_probeDebugShader->activeShader();
+	m_probeDebugShader->ActiveShader();
 	m_probeDebugShader->SetMatrix("projection", cam.Projection);
 	m_probeDebugShader->SetMatrix("view", cam.View);
 	m_probeDebugShader->SetVector("CamPos", cam.Position);
 
 	m_probeDebugShader->SetVector("Position", glm::vec3(0.0f, 2.0f, 0.0f));
 	m_skyCapture->PrefilteredMap->Bind(0);
-	m_probeDebugShader->activeShader();
+	m_probeDebugShader->ActiveShader();
 	m_renderer->RenderMesh(m_probeDebugSphere);
 
 	for (int i = 0; i < m_pbrCaputreProbe.size(); ++i)
@@ -175,7 +175,7 @@ void PBR::RenderProbes(Camera& cam)
 			m_pbrCaputreProbe[i]->PrefilteredMap->Bind(0);
 		else
 			m_pbrCaputreProbe[i]->Irradiance->Bind(0);
-		m_probeDebugShader->activeShader();
+		m_probeDebugShader->ActiveShader();
 		m_renderer->RenderMesh(m_probeDebugSphere);
 	}
 }

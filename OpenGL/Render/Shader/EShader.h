@@ -30,8 +30,8 @@ public:
     void CreateFromSource(string name, string vsSource, string fsSource);
 
 
-	void activeShader();
-    void inactiveShader();
+	void ActiveShader();
+    void InActiveShader();
 
 	void SetInt(std::string location, int value);
     void SetBool(std::string location, bool  value);
@@ -50,7 +50,9 @@ public:
     void SetMatrixArray(std::string location, int size, glm::mat2* values);
     void SetMatrixArray(std::string location, int size, glm::mat3* values);
     void SetMatrixArray(std::string location, int size, glm::mat4* values);
-    int getUniformLocation(std::string name);
+    int GetUniformLocation(std::string name);
+
+    std::string GetShaderPath();
 
 	uint32 GetShaderID();
 };

@@ -122,13 +122,13 @@ ShapeDrawer::~ShapeDrawer()
 
 void ShapeDrawer::SetViewProjection(Matrix4 p_mat4)
 {
-	m_lineShader->activeShader();
+	m_lineShader->ActiveShader();
 	m_lineShader->SetMatrix("viewProjection", p_mat4);
-	m_lineShader->inactiveShader();
+	m_lineShader->InActiveShader();
 
-	m_gridShader->activeShader();
+	m_gridShader->ActiveShader();
 	m_gridShader->SetMatrix("viewProjection", p_mat4);
-	m_gridShader->inactiveShader();
+	m_gridShader->InActiveShader();
 
 #if 0
 
@@ -148,7 +148,7 @@ void ShapeDrawer::SetViewProjection(Matrix4 p_mat4)
 
 void ShapeDrawer::DrawLine(Vector3 p_start, Vector3 p_end, Color3 p_color, float p_lineWidth)
 {
-	m_lineShader->activeShader();
+	m_lineShader->ActiveShader();
 
 	m_lineShader->SetVector("start", p_start);
 	m_lineShader->SetVector("end", p_end);
@@ -161,12 +161,12 @@ void ShapeDrawer::DrawLine(Vector3 p_start, Vector3 p_end, Color3 p_color, float
 	dynamic_cast<ForwardRenderer*>(m_renderer)->SetRasterizationLineWidth(1.0f);
 	dynamic_cast<ForwardRenderer*>(m_renderer)->SetRasterizationModel(GL_FILL);
 
-	m_lineShader->inactiveShader();
+	m_lineShader->InActiveShader();
 }
 
 void ShapeDrawer::DrawGrid(Vector3 p_viewPos, Color3& p_color, uint32 p_gridSize, float p_linear, float p_quadratic, float p_fadeThreshold, float p_lineWidth)
 {
-	m_gridShader->activeShader();
+	m_gridShader->ActiveShader();
 	m_gridShader->SetVector("color", p_color);
 	m_gridShader->SetVector("viewPos", p_viewPos);
 	m_gridShader->SetFloat("linear", p_linear);
@@ -191,5 +191,5 @@ void ShapeDrawer::DrawGrid(Vector3 p_viewPos, Color3& p_color, uint32 p_gridSize
 	dynamic_cast<ForwardRenderer*>(m_renderer)->SetCapability(GL_BLEND, false);
 	dynamic_cast<ForwardRenderer*>(m_renderer)->SetRasterizationLineWidth(1.0f);
 	dynamic_cast<ForwardRenderer*>(m_renderer)->SetRasterizationModel(GL_FILL);
-	m_gridShader->inactiveShader();
+	m_gridShader->InActiveShader();
 }

@@ -181,7 +181,7 @@ void ResourceManager::GenerateDefaultMaterials()
 	// alpha blend material
 	CShader* alphaBlendShader = LoadShader("alpha blend", "Shader\\forward_render.vs","Shader\\forward_render.fs", 
 		{ "ALPHA_BLEND" });
-	alphaBlendShader->activeShader();
+	alphaBlendShader->ActiveShader();
 	alphaBlendShader->SetInt("lightShadowMap1", 10);
 	alphaBlendShader->SetInt("lightShadowMap2", 10);
 	alphaBlendShader->SetInt("lightShadowMap3", 10);
@@ -193,7 +193,7 @@ void ResourceManager::GenerateDefaultMaterials()
 	// alpha cutout material
 	CShader* alphaDiscardShader = LoadShader("alpha discard","Shader\\forward_render.vs", "Shader\\forward_render.fs",
 		{ "ALPHA_DISCARD" });
-	alphaDiscardShader->activeShader();
+	alphaDiscardShader->ActiveShader();
 	alphaDiscardShader->SetInt("lightShadowMap1", 10);
 	alphaDiscardShader->SetInt("lightShadowMap2", 10);
 	alphaDiscardShader->SetInt("lightShadowMap3", 10);
@@ -215,7 +215,7 @@ void ResourceManager::GenerateInternalMaterials()
 	// µã¹âÔ´
 	CShader* deferredAmbientShader = LoadShader("deferred ambient",
 		"Shader\\screen_ambient.vs", "Shader\\ambient.fs");
-	deferredAmbientShader->activeShader();
+	deferredAmbientShader->ActiveShader();
 	deferredAmbientShader->SetInt("gPositionMetallic", 0);
 	deferredAmbientShader->SetInt("gNormalRoughness", 1);
 	deferredAmbientShader->SetInt("gAlbedoAO", 2);
@@ -226,7 +226,7 @@ void ResourceManager::GenerateInternalMaterials()
 
 	CShader* deferredIrradianceShader = LoadShader("deferred irradiance",
 		"Shader\\deferred\\ambient_irradiance.vs", "Shader\\deferred\\ambient_irradiance.fs");
-	deferredIrradianceShader->activeShader();
+	deferredIrradianceShader->ActiveShader();
 	deferredIrradianceShader->SetInt("gPositionwwMetallic", 0);
 	deferredIrradianceShader->SetInt("gNormalRoughness", 1);
 	deferredIrradianceShader->SetInt("gAlbedoAO", 2);
@@ -237,7 +237,7 @@ void ResourceManager::GenerateInternalMaterials()
 
 	CShader* deferredDirectionalShader = ResourceManager::getInstance()->LoadShader("deferred directional",
 		"Shader\\deferred\\directional.vs", "Shader\\deferred\\directional.fs");
-	deferredDirectionalShader->activeShader();
+	deferredDirectionalShader->ActiveShader();
 	deferredDirectionalShader->SetInt("gPositionMetallic", 0);
 	deferredDirectionalShader->SetInt("gNormalRoughness", 1);
 	deferredDirectionalShader->SetInt("gAlbedoAO", 2);
@@ -245,7 +245,7 @@ void ResourceManager::GenerateInternalMaterials()
 
 	CShader* deferredPointShader = LoadShader("deferred pointLight",
 		"Shader\\deferred/point_light.vs", "Shader\\deferred\\point_light.fs");
-	deferredPointShader->activeShader();
+	deferredPointShader->ActiveShader();
 	deferredPointShader->SetInt("gPositionMetallic", 0);
 	deferredPointShader->SetInt("gNormalRoughness", 1);
 	deferredPointShader->SetInt("gAlbedoAO", 2);
