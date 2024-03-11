@@ -21,6 +21,7 @@
 #include "../../Render/Resource/ModelManager.h"
 #include "../../Render/Resource/ShaderManager.h"
 #include "../../Render/Resource/TextureManager.h"
+#include "../../Render/Resource/MaterialManager.h"
 
 class Context
 {
@@ -48,6 +49,7 @@ public:
 	ModelManager modelMgr;
 	ShaderManager shaderMgr;
 	TextureManager textureMgr;
+	MaterialManager materialMgr;
 	
 private:
 	
