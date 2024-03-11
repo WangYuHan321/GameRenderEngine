@@ -1,5 +1,7 @@
 #include "Serializer.h"
-
+#include "../../Render/Shader/EShader.h"
+#include "../../Global/ServiceLocator.h"
+#include "../../Render/Resource/ShaderManager.h"
 
 void Serializer::SerializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, bool p_value)
 {
@@ -165,6 +167,11 @@ void Serializer::SerializeColor4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XML
 	element->InsertEndChild(a);
 }
 
+void Serializer::SerializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, CShader* p_value)
+{
+	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? p_value->GetShaderPath() : "Empty Shader");
+}
+
 void Serializer::DeserializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, bool& p_value)
 {
 	if (auto element = p_node->FirstChildElement(p_name.c_str()); element)
@@ -292,3 +299,27 @@ void Serializer::DeserializeColor4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::X
 			element->QueryFloatText(&p_value.a);
 	}
 }
+
+void Serializer::DeserializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, CShader*& p_out)
+{
+	if (std::string path = DeserializeString(p_doc, p_node, p_name.c_str()); path != "?" && path != "")
+		p_out = ServiceLocator::getInstance()->Get<ShaderManager>().GetResource(path);
+	else
+		p_out = nullptr;
+}
+
+
+std::string Serializer::DeserializeString(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	std::string result;
+	DeserializeString(p_doc, p_node, p_name, result);
+	return result;
+}
+
+CShader* Serializer::DeserializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	CShader* result;
+	DeserializeShader(p_doc, p_node, p_name, result);
+	return result;
+}
+
