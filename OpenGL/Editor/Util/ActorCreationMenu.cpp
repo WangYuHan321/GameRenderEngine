@@ -1,0 +1,31 @@
+#include "ActorCreationMenu.h"
+#include "../Core/EditorAction.h"
+
+std::function<void()> Combine(std::function<void()> p_a, std::optional<std::function<void()>> p_b)
+{
+    if (p_b.has_value())
+    {
+        return [=]()
+        {
+            p_a();
+            p_b.value()();
+        };
+    }
+
+    return p_a;
+}
+
+std::function<void()> ActorWithModelComponentCreationHandler(Actor* p_parent, const std::string& p_modelName, std::optional<std::function<void()>> p_onItemClicked)
+{
+    return Combine(EDITOR_BIND(CreateActorWithModel, "Data\\Editor\\Models\\" + p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
+}
+
+void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)
+{
+	p_menuList.CreateWidget<MenuItem>("Create Empty").ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
+
+	auto& primitives = p_menuList.CreateWidget<MenuList>("Primitives");
+
+    primitives.CreateWidget<MenuItem>("Cube").ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cube", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>("Sphere").ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Sphere", p_onItemClicked);
+}
