@@ -74,6 +74,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Editor\Panels\ToolBar.h" />
+    <ClInclude Include="Editor\Util\ActorCreationMenu.h" />
+    <ClInclude Include="Editor\Panels\MaterialEditor.h" />
+    <ClInclude Include="Render\Resource\MaterialManager.h" />
     <ClInclude Include="Render\Shadow\CascadeShadowMap.h" />
     <ClInclude Include="UI\Layout\GroupCollapsable.h" />
     <ClInclude Include="UI\Widgets\Selection\ComboBox.h" />
@@ -233,6 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor\Panels\ToolBar.cpp" />
+    <ClCompile Include="Editor\Util\ActorCreationMenu.cpp" />
+    <ClCompile Include="Editor\Panels\MaterialEditor.cpp" />
+    <ClCompile Include="Render\Resource\MaterialManager.cpp" />
     <ClCompile Include="Render\Shadow\CascadeShadowMap.cpp" />
     <ClCompile Include="UI\Layout\GroupCollapsable.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ComboBox.cpp" />
