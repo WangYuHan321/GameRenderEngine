@@ -16,6 +16,8 @@ public:
 
     void CreateWindowMenu();
 
+    void CreateActorsMenu();
+
     void OpenEveryWindows(bool p_state);
 
 private:
