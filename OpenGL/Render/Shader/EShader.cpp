@@ -169,6 +169,56 @@ CShader::CShader()
 //
 //}
 
+SHADER_TYPE GetShaderTypeByGLType(GLenum type)
+{
+	SHADER_TYPE curType;
+	switch (type)
+	{
+	case GL_BOOL:
+		curType = SHADER_BOOL;
+		break;
+	case GL_INT:
+		curType = SHADER_INT;
+		break;
+	case GL_FLOAT:
+		curType = SHADER_FLOAT;
+		break;
+	case GL_FLOAT_VEC2:
+		curType = SHADER_VEC2;
+		break;
+	case GL_FLOAT_VEC3:
+		curType = SHADER_VEC3;
+		break;
+	case GL_FLOAT_VEC4:
+		curType = SHADER_VEC4;
+		break;
+	case GL_FLOAT_MAT2:
+		curType = SHADER_MAT2;
+		break;
+	case GL_FLOAT_MAT3:
+		curType = SHADER_MAT3;
+		break;
+	case GL_FLOAT_MAT4:
+		curType = SHADER_MAT4;
+		break;
+	case GL_SAMPLER_CUBE:
+		curType = SHADER_SAMPLERCUBE;
+		break;
+	case GL_SAMPLER_1D:
+		curType = SHADER_SAMPLER1D;
+		break;
+	case GL_SAMPLER_2D:
+		curType = SHADER_SAMPLER2D;
+		break;
+	case GL_SAMPLER_3D:
+		curType = SHADER_SAMPLER3D;
+		break;
+	}
+
+	return curType;
+}
+
+
 CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::string> defines)
 {
 	m_shaderPath = name;
@@ -269,7 +319,7 @@ CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::str
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = SHADER_BOOL;
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -280,7 +330,7 @@ CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::str
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = SHADER_BOOL;
+		Uniforms[i].Type = GetShaderTypeByGLType(glType);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
@@ -314,7 +364,7 @@ CShader::CShader(string name, string cmPath)
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = SHADER_BOOL;
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -325,7 +375,7 @@ CShader::CShader(string name, string cmPath)
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = SHADER_BOOL;
+		Uniforms[i].Type = GetShaderTypeByGLType(glType);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
@@ -389,7 +439,7 @@ void CShader::CreateFromSource(string name, string vsSource, string fsSource)
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = SHADER_BOOL;
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -400,7 +450,7 @@ void CShader::CreateFromSource(string name, string vsSource, string fsSource)
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = SHADER_BOOL;
+		Uniforms[i].Type = GetShaderTypeByGLType(glType);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
