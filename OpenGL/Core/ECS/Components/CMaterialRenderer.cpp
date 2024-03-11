@@ -18,6 +18,12 @@ void CMaterialRenderer::UpdateMaterialList()
 
 }
 
+void CMaterialRenderer::FillWithMaterial(Material& p_material)
+{
+	for (uint8_t i = 0; i < m_materials.size(); ++i)
+		m_materials[i] = &p_material;
+}
+
 std::string CMaterialRenderer::GetName()
 {
 	return "CMaterialRenderer";

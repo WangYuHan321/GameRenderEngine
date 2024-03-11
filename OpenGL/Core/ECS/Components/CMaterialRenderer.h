@@ -17,6 +17,8 @@ public:
 
 	void UpdateMaterialList();
 
+	void FillWithMaterial(Material& p_material);
+
 	virtual std::string GetName() override;
 
 	const Matrix4& GetUserMatrix() const;
