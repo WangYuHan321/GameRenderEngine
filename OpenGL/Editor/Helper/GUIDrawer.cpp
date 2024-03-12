@@ -62,7 +62,15 @@ void GUIDrawer::DrawString(WidgetContainer& p_root, const std::string& p_name, s
 
 }
 
-void GUIDrawer::DrawColor4(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha)
+void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, Color3& p_color, bool p_hasAlpha)
+{
+	CreateTitle(p_root, p_name);
+	auto& widget = p_root.CreateWidget<ColorEdit>(p_hasAlpha);
+	auto& dispatcher = widget.AddPlugin<DataDispatcher<Color3>>();
+	dispatcher.RegisterReference(p_color);
+}
+
+void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha)
 {
 	CreateTitle(p_root, p_name);
 	auto& widget = p_root.CreateWidget<ColorEdit>(p_hasAlpha);
@@ -163,7 +171,12 @@ void GUIDrawer::DrawQuat(WidgetContainer& p_root, const std::string& p_name, std
 
  }
 
- void GUIDrawer::DrawColor4(WidgetContainer& p_root, const std::string& p_name, std::function<Color4(void)> p_gatherer, std::function<void(Color4)> p_provider, bool p_hasAlpha)
+ void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, std::function<Color3(void)> p_gatherer, std::function<void(Color3)> p_provider, bool p_hasAlpha)
+ {
+
+ }
+
+void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, std::function<Color4(void)> p_gatherer, std::function<void(Color4)> p_provider, bool p_hasAlpha)
  {
 
  }

@@ -38,7 +38,8 @@ public:
 	static void DrawVec4(WidgetContainer& p_root, const std::string& p_name, Vector4& p_data, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawQuat(WidgetContainer& p_root, const std::string& p_name, Quaternion& p_data, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawString(WidgetContainer& p_root, const std::string& p_name, std::string& p_data);
-	static void DrawColor4(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha = false);
+	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, Color3& p_color, bool p_hasAlpha = false);
+	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha = false);
 	static Text& DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier);
 	static Text& DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier);
 
@@ -50,7 +51,8 @@ public:
 	static void DrawVec4(WidgetContainer& p_root, const std::string& p_name, std::function<Vector4(void)> p_gatherer, std::function<void(Vector4)> p_provider, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawQuat(WidgetContainer& p_root, const std::string& p_name, std::function<Quaternion(void)> p_gatherer, std::function<void(Quaternion)> p_provider, float p_step = 1.f, float p_min = _MIN_FLOAT, float p_max = _MAX_FLOAT);
 	static void DrawString(WidgetContainer& p_root, const std::string& p_name, std::function<std::string(void)> p_gatherer, std::function<void(std::string)> p_provider);
-	static void DrawColor4(WidgetContainer& p_root, const std::string& p_name, std::function<Color4(void)> p_gatherer, std::function<void(Color4)> p_provider, bool p_hasAlpha = false);
+	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, std::function<Color3(void)> p_gatherer, std::function<void(Color3)> p_provider, bool p_hasAlpha = false);
+	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, std::function<Color4(void)> p_gatherer, std::function<void(Color4)> p_provider, bool p_hasAlpha = false);
 
 	template <typename T>
 	static std::string GetFormat();
