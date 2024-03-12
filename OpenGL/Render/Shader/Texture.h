@@ -22,6 +22,8 @@ public:
 	uint32 Depth = 0;
 	uint32 MipLevel = 0;
 
+	std::string Path = "";
+
 public:
 	Texture();
 	//virtual ~Texture() {}; 在共用体中无法带有析构函数

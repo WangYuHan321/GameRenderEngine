@@ -20,6 +20,8 @@ public:
 
     unsigned int FaceWidth  = 0;
     unsigned int FaceHeight = 0;
+
+    std::string Path = "";
 private:
 public:
     TextureCube();
