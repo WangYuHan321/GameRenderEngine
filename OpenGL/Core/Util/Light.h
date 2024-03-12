@@ -9,7 +9,9 @@ public:
 
 	Light(const FTransform& p_tranform, Type p_type); 
 
-	Vector3	color = { 1.f, 1.f, 1.f };
+	Matrix4 GenerateMatrix() const;
+
+	Color3	color = { 1.f, 1.f, 1.f };
 	float				intensity = 1.f;
 	float				constant = 0.0f;
 	float				linear = 0.0f;
