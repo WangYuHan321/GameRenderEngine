@@ -1,10 +1,12 @@
 #pragma once
 
+#include "../../UI/Layout/Columns.h"
 #include "../../UI/Panel/PanelWindow.h"
 
 class Text;
 class CShader;
 class Material;
+class GroupCollapsable;
 
 class MaterialEditor : public PanelWindow
 {
@@ -20,10 +22,24 @@ public:
 	void CreateMaterialSelector();
 	void CreateShaderSelector();
 
+	void CreateMaterialSetting();
+	void CreateShaderSetting();
+
+	void GenerateShaderSettingContent();
+	void GenerateMaterialSettingContent();
 private:
 
 	Material* m_target;
 	CShader* m_shader;
+
+	GroupCollapsable* m_shaderSetting;
+	GroupCollapsable* m_materialSetting;
+
+	Columns<2>* m_shaderSettingColumn;
+	Columns<2>*m_materialSettingColumn;
+
+	Event<> m_materialDroppedEvent;
+	Event<> m_shaderDroppedEvent;
 
 
 };
