@@ -584,6 +584,29 @@ int CShader::GetUniformLocation(std::string name)
 	return -1;
 }
 
+SHADER_TYPE CShader::GetShaderType(std::string name)
+{
+	SHADER_TYPE shaderType = SHADER_NONE;
+
+	for (auto it : Uniforms)
+	{
+		if (it.Name == name)
+		{
+			shaderType = it.Type;
+		}
+	}
+
+	for (auto it : VertexAttrs)
+	{
+		if (it.Name == name)
+		{
+			shaderType = it.Type;
+		}
+	}
+
+	return shaderType;
+}
+
 std::string CShader::GetShaderPath()
 {
 	return m_shaderPath;

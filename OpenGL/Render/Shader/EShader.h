@@ -52,6 +52,8 @@ public:
     void SetMatrixArray(std::string location, int size, glm::mat4* values);
     int GetUniformLocation(std::string name);
 
+    SHADER_TYPE GetShaderType(std::string name);
+
     std::string GetShaderPath();
 
 	uint32 GetShaderID();
