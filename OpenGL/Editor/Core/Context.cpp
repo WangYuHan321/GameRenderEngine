@@ -1,5 +1,6 @@
 #include "Context.h"
 #include "../../Render/ForwardRenderer.h"
+#include "../../Global/ServiceLocator.h"
 #include <memory>
 
 Context::Context(const string& p_projectPath, const string& p_projectName):
@@ -38,6 +39,14 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 
 	m_shapeDrawer = std::make_unique<ShapeDrawer>(*m_renderer);
 	LOG("new  ShapeDrawer");
+
+	ServiceLocator::getInstance()->Provide<ModelManager>(modelMgr);
+	ServiceLocator::getInstance()->Provide<TextureManager>(textureMgr);
+	ServiceLocator::getInstance()->Provide<ShaderManager>(shaderMgr);
+	ServiceLocator::getInstance()->Provide<MaterialManager>(materialMgr);
+	ServiceLocator::getInstance()->Provide<InputManager>(*m_inputMgr);
+	ServiceLocator::getInstance()->Provide<Window>(*m_window);
+	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);
 
 	m_engineUBO = std::make_unique<UniformBuffer>(
 		sizeof(Matrix4) +	//model
