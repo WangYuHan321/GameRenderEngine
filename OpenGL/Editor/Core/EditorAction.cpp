@@ -47,7 +47,7 @@ Actor& EditorAction::CreateActorWithModel(std::string p_model, bool p_focuseonCr
 		modelRenderer.SetModel(model);
 
 	auto& materialRenderer = instance.AddComponent<CMaterialRenderer>();
-	const auto material = m_context.materialMgr["Default"];
+	const auto material = m_context.materialMgr["Data\\Engine\\Material\\Default.opmat"];
 
 	if (material)
 		materialRenderer.FillWithMaterial(*material);
