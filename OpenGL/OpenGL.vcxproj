@@ -73,6 +73,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
     <ClInclude Include="Editor\Panels\ToolBar.h" />
     <ClInclude Include="Editor\Util\ActorCreationMenu.h" />
     <ClInclude Include="Editor\Panels\MaterialEditor.h" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Window\GLFWWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp" />
     <ClCompile Include="Editor\Panels\ToolBar.cpp" />
     <ClCompile Include="Editor\Util\ActorCreationMenu.cpp" />
     <ClCompile Include="Editor\Panels\MaterialEditor.cpp" />

@@ -504,6 +504,9 @@
     <ClInclude Include="Render\Shader\ShaderStorageBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -933,6 +936,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Shader\ShaderStorageBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
