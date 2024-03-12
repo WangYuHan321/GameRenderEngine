@@ -7,6 +7,7 @@
 #include "../Scene/Scene.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Render/Mesh/Model.h"
+#include "../Core/ECS/Components/CLight.h"
 #include "../Core/ECS/Components/CModelRenderer.h"
 #include "../Core/ECS/Components/CMaterialRenderer.h"
 
@@ -209,6 +210,14 @@ void ForwardRenderer::Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj
 	}
 }
 
+void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
+{
+	glClear((p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0) |
+		(p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0) |
+		(p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0)
+	);
+}
+
 void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
 {
 	//if (m_state != p_mask)
@@ -252,10 +261,18 @@ void ForwardRenderer::ReadPixels(uint32_t x, uint32_t y, uint32_t width, uint32_
 	glReadPixels(x, y, width, height, static_cast<GLenum>(format), static_cast<GLenum>(type), data);
 }
 
-void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
+std::vector<Matrix4> ForwardRenderer::GetFindLightMatrices(const Scene& p_scene)
 {
-	glClear((p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0) |
-		(p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0) |
-		(p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0) 
-	);
+	std::vector<Matrix4> result;
+
+	for (auto light : p_scene.GetFastAccessComponents().lights)
+	{
+		if (light->owner.IsActive())
+		{
+			result.push_back(light->GetData().GenerateMatrix());
+		}
+	}
+	return result;
 }
+
+
