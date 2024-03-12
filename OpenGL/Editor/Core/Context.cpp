@@ -58,6 +58,9 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 		0, 0,
 		GL_DYNAMIC_DRAW
 		);
+
+	m_lightSSBO = std::make_unique<ShaderStorageBuffer>(GL_STREAM_DRAW);
+	m_lightSSBO->Bind(0);
 }
 
 Context::~Context()

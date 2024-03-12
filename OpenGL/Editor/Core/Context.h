@@ -16,6 +16,7 @@
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
 #include "../../Render/Shader/UniformBuffer.h"
+#include "../../Render/Shader/ShaderStorageBuffer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Window/Input/InputManager.h"
 #include "../../Render/Resource/ModelManager.h"
@@ -45,6 +46,7 @@ public:
 	std::unique_ptr<EditorResource> m_editorResource;
 
 	std::unique_ptr<UniformBuffer> m_engineUBO;
+	std::unique_ptr<ShaderStorageBuffer> m_lightSSBO;
 
 	ModelManager modelMgr;
 	ShaderManager shaderMgr;
