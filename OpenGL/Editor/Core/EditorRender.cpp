@@ -195,7 +195,16 @@ void EditorRender::RenderSceneForActorPicking()
 
 	for (auto modelRender : scene.GetFastAccessComponents().modelRenderers)
 	{
+		auto& actor = modelRender->owner;
 
+		if (actor.IsActive())
+		{
+			PreparePickingMaterial(actor, m_actorPickingMaterial);
+			auto model = modelRender->GetModel();
+			auto modelMatrix = CalculateCameraModelMatrix(actor);
+
+			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*model, m_actorPickingMaterial, &modelMatrix);
+		}
 	}
 
 	for (auto camera : m_context.m_sceneMgr->GetActiveScene()->GetFastAccessComponents().cameras)
