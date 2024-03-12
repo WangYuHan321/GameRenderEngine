@@ -1,7 +1,9 @@
 #include "Serializer.h"
 #include "../../Render/Shader/EShader.h"
 #include "../../Global/ServiceLocator.h"
+#include "../../Render/Resource/ModelManager.h"
 #include "../../Render/Resource/ShaderManager.h"
+#include "../../Render/Resource/TextureManager.h"
 
 void Serializer::SerializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, bool p_value)
 {
@@ -167,6 +169,16 @@ void Serializer::SerializeColor4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XML
 	element->InsertEndChild(a);
 }
 
+void Serializer::SerializeTexture(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, Texture* p_value)
+{
+	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? p_value->Path : "?");
+}
+
+void Serializer::SerializeTextureCube(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, TextureCube* p_value)
+{
+	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? p_value->Path : "?");
+}
+
 void Serializer::SerializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, CShader* p_value)
 {
 	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? p_value->GetShaderPath() : "Empty Shader");
@@ -300,6 +312,22 @@ void Serializer::DeserializeColor4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::X
 	}
 }
 
+void Serializer::DeserializeTexture(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, Texture*& p_value)
+{
+	if (std::string path = DeserializeString(p_doc, p_node, p_name.c_str()); path != "?" && path != "")
+		p_value = ServiceLocator::getInstance()->Get<TextureManager>().GetResource(path);
+	else
+		p_value = nullptr;
+}
+
+void Serializer::DeserializeTextureCube(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, TextureCube*& p_value)
+{
+	//if (std::string path = DeserializeString(p_doc, p_node, p_name.c_str()); path != "?" && path != "")
+	//	p_value = ServiceLocator::getInstance()->Get<TextureManager>().GetResource(path);
+	//else
+		p_value = nullptr;
+}
+
 void Serializer::DeserializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, CShader*& p_out)
 {
 	if (std::string path = DeserializeString(p_doc, p_node, p_name.c_str()); path != "?" && path != "")
@@ -309,10 +337,101 @@ void Serializer::DeserializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::X
 }
 
 
+bool Serializer::DeserializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	bool result;
+	DeserializeBoolean(p_doc, p_node, p_name, result);
+	return result;
+}
+
 std::string Serializer::DeserializeString(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
 {
 	std::string result;
 	DeserializeString(p_doc, p_node, p_name, result);
+	return result;
+}
+
+float Serializer::DeserializeFloat(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	float result;
+	DeserializeFloat(p_doc, p_node, p_name, result);
+	return result;
+}
+
+double Serializer::DeserializeDouble(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	double result;
+	DeserializeDouble(p_doc, p_node, p_name, result);
+	return result;
+}
+
+uint32 Serializer::DeserializeUInt(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	uint32 result;
+	DeserializeUInt(p_doc, p_node, p_name, result);
+	return result;
+}
+
+int64_t Serializer::DeserializeInt64(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	int64_t result;
+	DeserializeInt64(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Vector2 Serializer::DeserializeVec2(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Vector2 result;
+	DeserializeVec2(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Vector3 Serializer::DeserializeVec3(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Vector3 result;
+	DeserializeVec3(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Vector4 Serializer::DeserializeVec4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Vector4 result;
+	DeserializeVec4(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Quaternion Serializer::DeserializeQuat(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Quaternion result;
+	DeserializeQuat(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Color3 Serializer::DeserializeColor3(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Color3 result(0 , 0, 0);
+	DeserializeColor3(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Color4 Serializer::DeserializeColor4(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Color4 result(0, 0, 0, 1);
+	DeserializeColor4(p_doc, p_node, p_name, result);
+	return result;
+}
+
+Texture* Serializer::DeserializeTexture(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	Texture* result;
+	DeserializeTexture(p_doc, p_node, p_name, result);
+	return result;
+}
+
+TextureCube* Serializer::DeserializeTextureCube(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name)
+{
+	TextureCube* result;
+	DeserializeTextureCube(p_doc, p_node, p_name, result);
 	return result;
 }
 
