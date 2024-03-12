@@ -1,10 +1,11 @@
 #include "Context.h"
+#include "../../File/ConfigManager.h"
 #include "../../Render/ForwardRenderer.h"
 #include "../../Global/ServiceLocator.h"
 #include <memory>
 
 Context::Context(const string& p_projectPath, const string& p_projectName):
-	m_engineAssetsPath("Data\\Engine\\")
+	m_engineAssetsPath(ConfigManager::getInstance()->GetEnginePath())
 {
 	m_device = std::make_unique<Device>();
 	m_device->OnInit();
@@ -31,7 +32,7 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_sceneMgr = std::make_unique<SceneManager>();
 	LOG_INFO("scene inited success!!!\n");
 
-	m_editorResource = std::make_unique<EditorResource>("Data\\Editor\\");
+	m_editorResource = std::make_unique<EditorResource>(ConfigManager::getInstance()->GetEditorPath());
 	LOG_INFO("EditorResource inited success!!!\n");
 
 	m_renderer = std::make_unique<ForwardRenderer>();

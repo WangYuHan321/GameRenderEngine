@@ -17,7 +17,7 @@ std::function<void()> Combine(std::function<void()> p_a, std::optional<std::func
 
 std::function<void()> ActorWithModelComponentCreationHandler(Actor* p_parent, const std::string& p_modelName, std::optional<std::function<void()>> p_onItemClicked)
 {
-    return Combine(EDITOR_BIND(CreateActorWithModel, "Data\\Editor\\Models\\" + p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
+    return Combine(EDITOR_BIND(CreateActorWithModel,  p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
 }
 
 void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)

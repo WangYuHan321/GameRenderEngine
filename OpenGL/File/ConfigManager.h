@@ -11,14 +11,13 @@ private:
 	uint32 m_Width;
 	uint32 m_Height;
 	bool m_isMax;
-
-
 public:
 	ConfigManager();
 	~ConfigManager();
 
-
-
+	std::string GetExecutePath() const;
+	std::string GetEnginePath() const;
+	std::string GetEditorPath() const;
 
 };
 
