@@ -16,6 +16,10 @@
 #include"../ThirdLib/ImGui/imgui.h"
 #include"../ThirdLib/ImGui/imgui_internal.h"
 
+#ifdef _WIN32
+#define WINDOWS_PLATFORM
+#endif
+
 #define USE_NO_EDITOR //使用不是编辑器下面
 
 //#define USE_EDITOR //使用不是编辑器下面
