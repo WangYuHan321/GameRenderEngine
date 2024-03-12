@@ -16,7 +16,7 @@ void CModelRenderer::SetModel(Model* p_model)
 
 Model* CModelRenderer::GetModel() const
 {
-	return nullptr;
+	return m_model;
 }
 
 std::string CModelRenderer::GetName()
