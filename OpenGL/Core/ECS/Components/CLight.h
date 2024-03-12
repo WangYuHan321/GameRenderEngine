@@ -10,13 +10,15 @@ public:
 
     const Light& GetData() const;
 
-    void SetColor(const Vector3& p_color);
+    void SetColor(const Color3& p_color);
+
+    void SetColor(const Color4& p_color);
 
     void SetIntensity(float p_intensity);
 
     float GetIntensity() const;
 
-    Vector3 GetColor() const;
+    Color3 GetColor() const;
 
     virtual std::string GetName();
 
