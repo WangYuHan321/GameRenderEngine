@@ -501,6 +501,9 @@
     <ClInclude Include="Editor\Panels\MaterialEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Shader\ShaderStorageBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -929,6 +932,9 @@
     <ClCompile Include="Editor\Panels\MaterialEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Render\Shader\ShaderStorageBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ambient.fs" />
@@ -950,6 +956,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Render\Shader\UniformBuffer.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Render\Shader\ShaderStorageBuffer.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

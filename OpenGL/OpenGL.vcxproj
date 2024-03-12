@@ -78,6 +78,7 @@
     <ClInclude Include="Editor\Panels\MaterialEditor.h" />
     <ClInclude Include="Render\Resource\MaterialManager.h" />
     <ClInclude Include="Render\Shadow\CascadeShadowMap.h" />
+    <ClInclude Include="Render\Shader\ShaderStorageBuffer.h" />
     <ClInclude Include="UI\Layout\GroupCollapsable.h" />
     <ClInclude Include="UI\Widgets\Selection\ComboBox.h" />
     <ClInclude Include="Editor\Core\EditorResource.h" />
@@ -240,6 +241,7 @@
     <ClCompile Include="Editor\Panels\MaterialEditor.cpp" />
     <ClCompile Include="Render\Resource\MaterialManager.cpp" />
     <ClCompile Include="Render\Shadow\CascadeShadowMap.cpp" />
+    <ClCompile Include="Render\Shader\ShaderStorageBuffer.cpp" />
     <ClCompile Include="UI\Layout\GroupCollapsable.cpp" />
     <ClCompile Include="UI\Widgets\Selection\ComboBox.cpp" />
     <ClCompile Include="Editor\Core\EditorResource.cpp" />
@@ -384,6 +386,7 @@
     <None Include="Editor\Helper\GUIDrawer.inl" />
     <None Include="Event\Event.inl" />
     <None Include="Render\Resource\AResourceManager.inl" />
+    <None Include="Render\Shader\ShaderStorageBuffer.inl" />
     <None Include="Render\Shader\UniformBuffer.inl" />
     <None Include="Shader\ambient.fs" />
     <None Include="Shader\pbr\pbr.glsl" />
