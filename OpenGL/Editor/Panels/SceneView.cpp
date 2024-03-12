@@ -50,6 +50,8 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 
 	uint8_t state = baseRenderer.FetchGLState();
 
+	m_editorRenderer.UpdateLights(*EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene());
+
 	m_renderTarget->Bind();
 	if (m_renderTarget->Width > 0 && m_renderTarget->Height > 0)
 	{
@@ -61,6 +63,8 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 		Vector3 c(0.176f, 0.176f, 0.176f);
 		m_editorRenderer.RenderGrid(m_camPos, c);
 		m_editorRenderer.RenderCameras();
+
+		m_editorRenderer.RenderScene(m_camPos, m_camera);
 
 		if (EDITOR_EXEC(IsAnyActorSelected()))
 		{
