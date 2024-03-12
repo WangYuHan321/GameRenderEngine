@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "../../Core/Helper/Serializer.h"
 
 Material::Material()
 {
@@ -50,7 +51,7 @@ void Material::Bind()
 {
     if (m_Shader)
     {
-        m_Shader->activeShader();
+        m_Shader->ActiveShader();
 
         for (auto& [name, value]: m_uniforms)
         {
@@ -88,7 +89,7 @@ void Material::Bind()
 
 void Material::UnBind()
 {
-    m_Shader->inactiveShader();
+    m_Shader->InActiveShader();
 }
 
 void Material::SetShader(CShader* pShader)
@@ -155,7 +156,7 @@ void Material::SetTexture(std::string name, Texture* value, unsigned int unit)
 
     if (m_Shader)
     {
-        m_Shader->activeShader();
+        m_Shader->ActiveShader();
         m_Shader->SetInt(name, unit);
     }
 }
@@ -168,7 +169,7 @@ void Material::SetTextureCube(std::string name, TextureCube* value, unsigned int
 
     if (m_Shader)
     {
-        m_Shader->activeShader();
+        m_Shader->ActiveShader();
         m_Shader->SetInt(name, unit);
     }
 }
@@ -193,3 +194,166 @@ std::map<string, UniformSampler>* Material::GetSamplerUniforms()
 {
 	return &m_uniformSampler;
 }
+
+#ifdef USE_EDITOR
+
+void Material::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+    Serializer::SerializeShader(p_doc, p_node, "Shader", m_Shader);
+
+    tinyxml2::XMLNode* settingsNode = p_doc.NewElement("Settings");
+
+    Serializer::SerializeBoolean(p_doc, settingsNode, "DepthTest", DepthTest);
+    Serializer::SerializeBoolean(p_doc, settingsNode, "DepthWrite", DepthWrite);
+    Serializer::SerializeUInt(p_doc, settingsNode, "DepthCompare", DepthCompare);
+
+    Serializer::SerializeBoolean(p_doc, settingsNode, "Cull", Cull);
+    Serializer::SerializeUInt(p_doc, settingsNode, "CullFace", CullFace);
+    Serializer::SerializeUInt(p_doc, settingsNode, "CullWindingOrder", CullWindingOrder);
+
+    Serializer::SerializeBoolean(p_doc, settingsNode, "Blend", Blend);
+    Serializer::SerializeUInt(p_doc, settingsNode, "BlendSrc", BlendSrc);
+    Serializer::SerializeUInt(p_doc, settingsNode, "BlendDst", BlendDst);
+    Serializer::SerializeUInt(p_doc, settingsNode, "BlendEquation", BlendEquation);
+
+    Serializer::SerializeBoolean(p_doc, settingsNode, "ColorWrite", ColorWrite);
+
+    Serializer::SerializeBoolean(p_doc, settingsNode, "ShadowCast", ShadowCast);
+    Serializer::SerializeBoolean(p_doc, settingsNode, "ShadowReceive", ShadowReceive);
+
+    Serializer::SerializeUInt(p_doc, settingsNode, "GPUInstance", GPUInstance);
+
+    tinyxml2::XMLNode* uniformsNode = p_doc.NewElement("uniforms");
+
+    p_node->InsertEndChild(uniformsNode);
+
+
+
+    for (auto& [name, value] : m_uniformSampler)
+    {
+        tinyxml2::XMLNode* uniform = p_doc.NewElement("uniform");
+        uniformsNode->InsertEndChild(uniform);
+
+        Serializer::SerializeString(p_doc, uniform, "name", name);
+        switch (value.Type)
+        {
+        case SHADER_TYPE::SHADER_SAMPLER1D: break;
+        case SHADER_TYPE::SHADER_SAMPLER2D: Serializer::SerializeTexture(p_doc, uniform, "value", value.TEXTURE); break;
+        case SHADER_TYPE::SHADER_SAMPLER3D: break;
+        case SHADER_TYPE::SHADER_SAMPLERCUBE: Serializer::SerializeTextureCube(p_doc, uniform, "value", value.TEXTURE_CUBE); break;
+        }
+    }
+
+    for (auto& [name, value] : m_uniforms)
+    {
+        tinyxml2::XMLNode* uniform = p_doc.NewElement("uniform");
+        uniformsNode->InsertEndChild(uniform);
+        // Instead of p_node, use uniformNode (To create)
+
+        Serializer::SerializeString(p_doc, uniform, "name", name);
+        switch (value.Type)
+        {
+        case SHADER_TYPE::SHADER_BOOL:
+            Serializer::SerializeBoolean(p_doc, uniform, "value", value.BOOL);
+            break;
+
+        case SHADER_TYPE::SHADER_INT:
+            Serializer::SerializeUInt(p_doc, uniform, "value", value.INT);
+            break;
+
+        case SHADER_TYPE::SHADER_FLOAT:
+            Serializer::SerializeFloat(p_doc, uniform, "value", value.FLOAT);
+            break;
+
+        case SHADER_TYPE::SHADER_VEC2:
+            Serializer::SerializeVec2(p_doc, uniform, "value", value.VEC2);
+            break;
+
+        case SHADER_TYPE::SHADER_VEC3:
+            Serializer::SerializeVec3(p_doc, uniform, "value", value.VEC3);
+            break;
+
+        case SHADER_TYPE::SHADER_VEC4:
+            Serializer::SerializeVec4(p_doc, uniform, "value", value.VEC4);
+            break;
+        case SHADER_TYPE::SHADER_MAT2:
+            //Serializer::Ser(p_doc, uniform, "value", value.MAT2);
+            break;
+        case SHADER_TYPE::SHADER_MAT3:
+            //Serializer::SerializeVec4(p_doc, uniform, "value", value.VEC4);
+            break;
+        case SHADER_TYPE::SHADER_MAT4:
+            //Serializer::SerializeVec4(p_doc, uniform, "value", value.VEC4);
+            break;
+        }
+    }
+}
+
+void Material::OnDeserialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node)
+{
+    tinyxml2::XMLNode* settingsNode = p_node->FirstChildElement("Settings");
+
+    if (settingsNode)
+    {
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "DepthTest", DepthTest);
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "DepthWrite", DepthWrite);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "DepthCompare", DepthCompare);
+
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "Cull", Cull);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "CullFace", CullFace);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "CullWindingOrder", CullWindingOrder);
+
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "Blend", Blend);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "BlendSrc", BlendSrc);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "BlendDst", BlendDst);
+        Serializer::DeserializeUInt(p_doc, settingsNode, "BlendEquation", BlendEquation);
+
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "ColorWrite", ColorWrite);
+
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "ShadowCast", ShadowCast);
+        Serializer::DeserializeBoolean(p_doc, settingsNode, "ShadowReceive", ShadowReceive);
+
+        Serializer::DeserializeUInt(p_doc, settingsNode, "GPUInstance", GPUInstance);
+    }
+
+    CShader* deserializedShader = Serializer::DeserializeShader(p_doc, p_node, "Shader");
+    if (deserializedShader)
+    {
+        SetShader(deserializedShader);
+        tinyxml2::XMLNode* uniformsNode = p_node->FirstChildElement("uniforms");
+
+
+        if (uniformsNode)
+        {
+            for (auto uniform = uniformsNode->FirstChildElement("uniform"); uniform; uniform = uniform->NextSiblingElement("uniform"))
+            {
+                if (auto uniformNameElement = uniform->FirstChildElement("name"); uniformNameElement)
+                {
+                    const std::string uniformName = uniformNameElement->GetText();
+                    if (m_Shader->GetShaderType(uniformName) != SHADER_NONE)
+                    {
+                        switch (m_Shader->GetShaderType(uniformName))
+                        {
+                        case SHADER_TYPE::SHADER_BOOL: m_uniforms[uniformName].BOOL = Serializer::DeserializeBoolean(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_FLOAT:m_uniforms[uniformName].FLOAT = Serializer::DeserializeFloat(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_VEC2:m_uniforms[uniformName].VEC2 = Serializer::DeserializeVec2(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_VEC3:m_uniforms[uniformName].VEC3 = Serializer::DeserializeVec3(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_VEC4:m_uniforms[uniformName].VEC4 = Serializer::DeserializeVec4(p_doc, uniform, "value"); break;
+                            //case SHADER_TYPE::SHADER_MAT2:m_uniforms[uniformName].MAT2 = Serializer::DeserializeMat2(p_doc, uniform, "value"); break;
+                            //case SHADER_TYPE::SHADER_MAT3:m_uniforms[uniformName].MAT3 = Serializer::DeserializeMat3(p_doc, uniform, "value"); break;
+                            //case SHADER_TYPE::SHADER_MAT4:m_uniforms[uniformName].MAT4 = Serializer::DeserializeMat4(p_doc, uniform, "value"); break;
+                            //case SHADER_TYPE::SHADER_SAMPLER1D:m_uniformSampler[uniformName] = Serializer::DeserializeSampler1D(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_SAMPLER2D:m_uniformSampler[uniformName].TEXTURE = Serializer::DeserializeTexture(p_doc, uniform, "value"); break;
+                            //case SHADER_TYPE::SHADER_SAMPLER3D:m_uniformSampler[uniformName] = Serializer::DeserializeSampler3D(p_doc, uniform, "value"); break;
+                            case SHADER_TYPE::SHADER_SAMPLERCUBE:m_uniformSampler[uniformName].TEXTURE_CUBE = Serializer::DeserializeTextureCube(p_doc, uniform, "value"); break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
+#endif
