@@ -15,7 +15,6 @@ Model* ModelLoader::Create(const std::string& p_filepath, EModelParserFlags p_pa
 
 	delete result;
 
-	return nullptr;
 }
 
 bool ModelLoader::ModelLoader::Destroy(Model*& p_modelInstance)
