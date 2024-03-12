@@ -59,6 +59,11 @@ EditorRender::~EditorRender()
 
 void EditorRender::InitMaterials()
 {
+	m_defaultMaterial.SetShader(m_context.shaderMgr["Standard"]);
+	m_defaultMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 1.f, 1.f));
+	m_defaultMaterial.SetFloat("u_Shininess", 100.0f);
+	m_defaultMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+
 	m_cameraMaterial.SetShader(m_context.shaderMgr["Lambert"]);
 	m_cameraMaterial.SetVector("u_Diffuse", glm::vec4(0.0f, 0.3f, 0.7f, 1.0f));
 	m_cameraMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
@@ -132,6 +137,12 @@ Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 #endif
 
 	return  rotation * translation;
+}
+
+void EditorRender::UpdateLights(Scene& p_scene)
+{
+	auto lightMatrices = dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->GetFindLightMatrices(p_scene);
+	m_context.m_lightSSBO->SetSubData<Matrix4>(lightMatrices.data(), lightMatrices.size() * sizeof(Matrix4));
 }
 
 void EditorRender::DoRender()

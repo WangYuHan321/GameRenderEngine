@@ -32,6 +32,8 @@ public:
 	void RenderCameras();
 	Matrix4 CalculateCameraModelMatrix(Actor& actor);
 
+	void UpdateLights(Scene& p_scene);
+
 	virtual void DoRender();
 
 private:
