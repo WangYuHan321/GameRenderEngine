@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include <imagehlp.h>
+#include "../Util/common.h"
 #include "../Util/Singleton.h"
 
 static LONG WINAPI MyUnhandledExceptionFilter(
@@ -19,6 +20,8 @@ static LONG WINAPI MyUnhandledExceptionFilter(
 
 static void CreateMiniDump(EXCEPTION_POINTERS* pep)
 {
+#ifdef WINDOWS_PLATFORM
+
     // Open the file
     typedef BOOL(*PDUMPFN)(
         HANDLE hProcess,
@@ -57,6 +60,9 @@ static void CreateMiniDump(EXCEPTION_POINTERS* pep)
         CloseHandle(hFile);
 
     }
+#elif
+    return;
+#endif
 }
 
 class DumpFileManager 
@@ -65,6 +71,7 @@ private:
 
     BOOL PreventSetUnhandledExceptionFilter()
     {
+#ifdef WINDOWS_PLATFORM
         DWORD dwOrgEntryAddr = 0;
         HMODULE hKernel32 = NULL;
         void* pOrgEntry = NULL;
@@ -94,6 +101,9 @@ private:
         memcpy(&newJump[1], &dwRelativeAddr, sizeof(pNewFunc));
 
         return WriteProcessMemory(GetCurrentProcess(), pOrgEntry, newJump, sizeof(pNewFunc) + 1, &bytesWritten);
+#elif
+        return;
+#endif
     }
 public:
     DumpFileManager()

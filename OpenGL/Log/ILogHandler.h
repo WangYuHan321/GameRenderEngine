@@ -42,7 +42,7 @@ static void Log(std::string mes, ...)
 	char buffer[MAX_ARGNUM] = { 0 };
 	va_list ap;
 	va_start(ap, mes);
-	vsprintf_s(buffer, mes.c_str(), ap);
+	vsprintf(buffer, mes.c_str(), ap);
 	va_end(ap);
 	printf("%s", buffer);
 }
