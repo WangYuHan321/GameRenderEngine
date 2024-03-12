@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Core/ECS/Components/CCamera.h"
+#include "../../Core/ECS/Components/CAmbientSphereLight.h"
 #include "../../Core/ECS/Components/CDirectionalLight.h"
 
 
@@ -60,12 +61,15 @@ void SceneManager::LoadEmptyLightedScene()
 	auto directionLight = m_curScene->CreateActor("Directional Light");
 	directionLight->AddComponent<CDirectionalLight>().SetIntensity(0.75f);
 	directionLight->m_transform.SetLocalPosition(Vector3(0.0f, 10.0f, 0.0f));
-	directionLight->m_transform.SetLocalRotation(Vector3ToQuat(Vector3(120.0f, -40.0f, 0.0f)));
+	directionLight->m_transform.SetLocalRotation(Quaternion(Vector3(120.0f, -40.0f, 0.0f)));
+
+	auto ambientLight = m_curScene->CreateActor("Ambient Light");
+	ambientLight->AddComponent<CAmbientSphereLight>().SetRadius(10000.0f);
 
 	auto camera = m_curScene->CreateActor("Main Camera");
 	camera->AddComponent<CCamera>();
 	camera->m_transform.SetLocalPosition(Vector3(0.0f, 3.0f, 8.0f));
-	camera->m_transform.SetLocalRotation(Vector3ToQuat(Vector3(20.0f, 180.0f, 0.0f)));
+	camera->m_transform.SetLocalRotation(Quaternion(Vector3(20.0f, 180.0f, 0.0f)));
 }
 
 
