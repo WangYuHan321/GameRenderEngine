@@ -4,6 +4,9 @@
 #include "../../Editor/Core/EditorAction.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../Core/ECS/Components/CCamera.h"
+#include "../../UI/Visual/Image.h"
+#include "../../UI/Plugin/DDTarget.h"
+#include "../../File/Path/PathParser.h"
 
 //#define EDITOR_USE_RAY //鼠标移动是否开启射线击中物体
 //
@@ -16,6 +19,19 @@ SceneView::SceneView(
 		):
 	AViewControllable(p_title, p_opened, p_windowSettings)
 {
+	m_img->AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [this](auto data)
+	{
+		std::string path = data.first;
+
+		switch (PathParser::getInstance()->GetFileType(path))
+		{
+		case EFileType::MODEL: LOG_INFO("Load Model" + path); break;
+		case EFileType::SCENE: LOG_INFO("Load Scene" + path); break;
+		}
+
+
+	};
+
 	m_camera.SetPerspective(Deg2Rad(60.0f), 0.5, 0.1f, 5000.0f);
 	m_actorPickRenderTarget  = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 }
@@ -151,8 +167,21 @@ void SceneView::HandleActorPicking()
 
 			if(actorUnderMouse != nullptr)
 				m_highlightedActor = std::ref(*actorUnderMouse);
-		}
+		
+			/* Click */
+			if (EDITOR_CONTEXT(m_inputMgr)->IsMouseButtonPressed(EMouseButton::MOUSE_BUTTON_LEFT))
+			{
+				if (actorUnderMouse)
+				{
+					EDITOR_EXEC(SelectActor(*actorUnderMouse));
+				}
+				else
+				{
+					EDITOR_EXEC(UnselectActor());
+				}
 
+			}
+		}
 	}
 }
 
