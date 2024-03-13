@@ -128,6 +128,7 @@ void Inspector::UnFocus()
 		m_currentActor->ComponentAddedEvent -= m_componentAddedListener;
 		m_currentActor->ComponentRemovedEvent -= m_componentRemovedListener;
 	}
+	SoftUnFocuse();
 }
 
 void Inspector::SoftUnFocuse()
