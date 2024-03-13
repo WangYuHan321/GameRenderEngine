@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
+    <ClInclude Include="File\LanguageDefine.h" />
     <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
     <ClInclude Include="UI\Plugin\DDSource.h" />
     <ClInclude Include="Editor\Panels\ToolBar.h" />
@@ -238,6 +239,7 @@
     <ClInclude Include="Window\Input\Key.h" />
     <ClInclude Include="Window\Input\MouseBtn.h" />
     <ClInclude Include="Window\GLFWWindow.h" />
+    <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp" />
@@ -387,6 +389,7 @@
     <ClCompile Include="Render\Resource\Loader\TextureLoader.cpp" />
     <ClCompile Include="Render\Mesh\Sphere.cpp" />
     <ClCompile Include="Window\GLFWWindow.cpp" />
+    <ClCompile Include="File\XmlManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\ECS\Actor.inl" />

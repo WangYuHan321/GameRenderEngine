@@ -516,6 +516,12 @@
     <ClInclude Include="UI\Widgets\Text\TextClickable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="File\XmlManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File\LanguageDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -957,6 +963,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UI\Widgets\Text\TextClickable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\XmlManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
