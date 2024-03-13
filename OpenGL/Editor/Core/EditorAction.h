@@ -4,6 +4,7 @@
 #include "EditorRender.h"
 #include "PanelsManager.h"
 #include "../../Global/ServiceLocator.h"
+#include "../../File/XmlManager.h"
 
 #undef CreateEvent
 
@@ -11,6 +12,8 @@
 #define EDITOR_BIND(method, ...) std::bind(&EditorAction::method, ServiceLocator::getInstance()->Get<EditorAction>(), ##__VA_ARGS__)
 #define EDITOR_EVENT(target)  ServiceLocator::getInstance()->Get<EditorAction>().target
 #define EDITOR_PANEL(type, id) ServiceLocator::getInstance()->Get<EditorAction>().GetPanelsManager().GetPanelAs<type>(id)
+
+#define EDITOR_LANGUAGE(id) ServiceLocator::getInstance()->Get<XmlManager>().GetLanguage(id)
 
 #define EDITOR_RENDERER()		 ServiceLocator::getInstance()->Get<EditorAction>().GetRenderer()
 #define EDITOR_CONTEXT(instance) ServiceLocator::getInstance()->Get<EditorAction>().GetContext().instance
@@ -30,6 +33,8 @@ public:
 	PanelsManager& GetPanelsManager();
 
 	void SelectActor(Actor& p_target);
+
+	void UnselectActor();
 
 	Actor& CreateActorWithModel(std::string model, bool p_focuseonCreation = true, Actor* p_parent = nullptr, std::string p_name = "");
 

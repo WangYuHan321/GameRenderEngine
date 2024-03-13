@@ -22,10 +22,10 @@ std::function<void()> ActorWithModelComponentCreationHandler(Actor* p_parent, co
 
 void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)
 {
-	p_menuList.CreateWidget<MenuItem>("Create Empty").ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
+	p_menuList.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CREATE_EMPTY)).ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
 
-	auto& primitives = p_menuList.CreateWidget<MenuList>("Primitives");
+	auto& primitives = p_menuList.CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_PRIMITIVE));
 
-    primitives.CreateWidget<MenuItem>("Cube").ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cube", p_onItemClicked);
-    primitives.CreateWidget<MenuItem>("Sphere").ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Sphere", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CUBE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cube", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_SPHERE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Sphere", p_onItemClicked);
 }

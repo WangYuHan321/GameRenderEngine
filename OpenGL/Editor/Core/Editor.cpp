@@ -1,9 +1,11 @@
 #include "Editor.h"
+#include "../../File/ConfigManager.h"
 #include "../../Editor/Panels/GameView.h"
 #include "../../Editor/Panels/SceneView.h"
 #include "../../Editor/Panels/Hierarchy.h"
 #include "../../Editor/Panels/Inspector.h"
 #include "../../Editor/Panels/ToolBar.h"
+#include "../../Editor/Panels/AssetBrowser.h"
 #include "../../Editor/Panels/MaterialEditor.h"
 
 Editor::Editor(Context& p_context):
@@ -25,14 +27,16 @@ void Editor::SetUpUI()
 	settings.closable = true;
 	settings.collapsable = true;
 	settings.dockable = true;
-
+	
 	m_panelsMgr.CreatePanel<MenuBar>("Menu Bar");
-	m_panelsMgr.CreatePanel<Hierarchy>("Hierarchy", true, settings);
-	m_panelsMgr.CreatePanel<GameView>("Game View", false, settings);
-	m_panelsMgr.CreatePanel<SceneView>("Scene View", true, settings);
-	m_panelsMgr.CreatePanel<Inspector>("Inspector", true, settings);
-	m_panelsMgr.CreatePanel<ToolBar>("ToolBar", false, settings);
-	m_panelsMgr.CreatePanel<MaterialEditor>("MaterialEditor", true, settings);
+	m_panelsMgr.CreatePanel<Hierarchy>(EDITOR_LANGUAGE(MENU_HIERARCHY), true, settings);
+	m_panelsMgr.CreatePanel<GameView>(EDITOR_LANGUAGE(MENU_GAME_VIEW), false, settings);
+	m_panelsMgr.CreatePanel<SceneView>(EDITOR_LANGUAGE(MENU_SCENE_VIEW), true, settings);
+	m_panelsMgr.CreatePanel<Inspector>(EDITOR_LANGUAGE(MENU_INSPECTOR), true, settings);
+	m_panelsMgr.CreatePanel<ToolBar>(EDITOR_LANGUAGE(MENU_TOOLBAR), false, settings);
+	m_panelsMgr.CreatePanel<AssetBrowser>(EDITOR_LANGUAGE(MENU_ASSET_BROWSER), true, settings, ConfigManager::getInstance()->GetEnginePath(),
+		ConfigManager::getInstance()->GetProjectPath() + "\\Asset", ConfigManager::getInstance()->GetProjectPath() + "\\Script");
+	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_SCENE_VIEW), false, settings);
 
 	m_canvas.MakeDockspace(true);
 	m_context.m_uiMgr->SetCanvas(m_canvas);
@@ -67,8 +71,8 @@ void Editor::PrepareRender(float deltaTime)
 
 void Editor::RenderViews(float p_deltaTime)
 {
-	auto& gameView = m_panelsMgr.GetPanelAs<GameView>("Game View");
-	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>("Scene View");
+	auto& gameView = m_panelsMgr.GetPanelAs<GameView>(EDITOR_LANGUAGE(MENU_GAME_VIEW));
+	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>(EDITOR_LANGUAGE(MENU_SCENE_VIEW));
 
 	{
 		

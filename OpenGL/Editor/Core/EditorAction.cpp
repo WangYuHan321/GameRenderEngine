@@ -33,7 +33,12 @@ PanelsManager& EditorAction::GetPanelsManager()
 
 void EditorAction::SelectActor(Actor& p_target)
 {
-	EDITOR_PANEL(Inspector, "Inspector").FocusActor(p_target);
+	EDITOR_PANEL(Inspector, EDITOR_LANGUAGE(MENU_INSPECTOR)).FocusActor(p_target);
+}
+
+void EditorAction::UnselectActor()
+{
+	EDITOR_PANEL(Inspector, EDITOR_LANGUAGE(MENU_INSPECTOR)).UnFocus();
 }
 
 Actor& EditorAction::CreateActorWithModel(std::string p_model, bool p_focuseonCreation, Actor* p_parent, std::string p_name)
@@ -76,12 +81,12 @@ Actor& EditorAction::CreateEmptyActor(bool p_focusOnCreation, Actor* p_parent, s
 
 bool EditorAction::IsAnyActorSelected() const
 {
-	return (EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor() != nullptr);
+	return (EDITOR_PANEL(Inspector, EDITOR_LANGUAGE(MENU_INSPECTOR)).GetCurrentActor() != nullptr);
 }
 
 Actor& EditorAction::GetSelectedActor() const
 {
-	return *EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor();
+	return *EDITOR_PANEL(Inspector, EDITOR_LANGUAGE(MENU_INSPECTOR)).GetCurrentActor();
 }
 
 void EditorAction::StartPlay()

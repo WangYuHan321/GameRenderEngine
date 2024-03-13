@@ -45,6 +45,7 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	ServiceLocator::getInstance()->Provide<TextureManager>(textureMgr);
 	ServiceLocator::getInstance()->Provide<ShaderManager>(shaderMgr);
 	ServiceLocator::getInstance()->Provide<MaterialManager>(materialMgr);
+	ServiceLocator::getInstance()->Provide<XmlManager>(xmlMgr);
 	ServiceLocator::getInstance()->Provide<InputManager>(*m_inputMgr);
 	ServiceLocator::getInstance()->Provide<Window>(*m_window);
 	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);

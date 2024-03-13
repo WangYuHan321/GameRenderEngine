@@ -15,6 +15,7 @@
 #include "../../Render/BaseRenderer.h"
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
+#include "../../File/XmlManager.h"
 #include "../../Render/Shader/UniformBuffer.h"
 #include "../../Render/Shader/ShaderStorageBuffer.h"
 #include "../../Editor/Core/EditorResource.h"
@@ -52,6 +53,7 @@ public:
 	ShaderManager shaderMgr;
 	TextureManager textureMgr;
 	MaterialManager materialMgr;
+	XmlManager xmlMgr;
 	
 private:
 	
