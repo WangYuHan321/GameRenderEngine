@@ -10,6 +10,10 @@
 #include "../../Render/Shader/EShader.h"
 #include "../../UI/Widgets/Button/Button.h"
 #include "../../UI/Widgets/Selection/ColorEdit.h"
+#include "../../File/Path/PathParser.h"
+#include "../../Global/ServiceLocator.h"
+#include"../../Render/Resource/MaterialManager.h"
+#include"../../Render/Resource/ShaderManager.h"
 
 Color4 GUIDrawer::titleColor = { 0.85f, 0.65f, 0.0f, 1.0f };
 Color4 GUIDrawer::clearBtnColor = { 0.5f, 0.0f, 0.0f, 1.0f };
@@ -81,12 +85,25 @@ void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, Co
 Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier)
 {
 	CreateTitle(p_root, p_name);
-	std::string displayText = p_data ? "Default Material" : std::string("Empty");
+	std::string displayText = p_data ? p_data->Path : std::string("Empty");
 
 	auto& rightSide = p_root.CreateWidget<Group>();
-	auto& textEdit = rightSide.CreateWidget<Text>();
-	textEdit.content = displayText;
-	/*textEdit.AddPlugin()*/
+	auto& textEdit = rightSide.CreateWidget<Text>(displayText);
+
+	textEdit.AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [&textEdit, &p_data, p_updateNotifier](auto p_receivedData)
+	{
+		if (PathParser::getInstance()->GetFileType(p_receivedData.first) == EFileType::MATERIAL)
+		{
+			std::string fileName = PathParser::getInstance()->GetFileNameByPath(p_receivedData.first);
+			if (auto resource = ServiceLocator::getInstance()->Get<MaterialManager>()[fileName]; resource)
+			{
+				p_data = resource;
+				textEdit.content = fileName;
+				if (p_updateNotifier)
+					p_updateNotifier->Invoke();
+			}
+		}
+	};
 
 	textEdit.lineBreak = false;
 
@@ -106,12 +123,26 @@ Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name
 Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier)
 {
 	CreateTitle(p_root, p_name);
-	std::string displayText = p_data ? "Default Shader" : std::string("Empty");
+	std::string displayText = p_data ? p_data->GetShaderPath() : std::string("Empty");
 
 	auto& rightSide = p_root.CreateWidget<Group>();
 	auto& textEdit = rightSide.CreateWidget<Text>();
 	textEdit.content = displayText;
-	/*textEdit.AddPlugin()*/
+	
+	textEdit.AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [&textEdit, &p_data, p_updateNotifier](auto p_receivedData)
+	{
+		if (PathParser::getInstance()->GetFileType(p_receivedData.first) == EFileType::SHADER)
+		{
+			std::string fileName = PathParser::getInstance()->GetFileNameByPath(p_receivedData.first);
+			if (auto resource = ServiceLocator::getInstance()->Get<ShaderManager>()[fileName]; resource)
+			{
+				p_data = resource;
+				textEdit.content = fileName;
+				if (p_updateNotifier)
+					p_updateNotifier->Invoke();
+			}
+		}
+	};
 
 	textEdit.lineBreak = false;
 
