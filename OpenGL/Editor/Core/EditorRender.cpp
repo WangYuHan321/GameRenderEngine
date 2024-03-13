@@ -59,12 +59,12 @@ EditorRender::~EditorRender()
 
 void EditorRender::InitMaterials()
 {
-	m_defaultMaterial.SetShader(m_context.shaderMgr["Standard"]);
+	m_defaultMaterial.SetShader(m_context.shaderMgr["Standard.glsl"]);
 	m_defaultMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 1.f, 1.f));
 	m_defaultMaterial.SetFloat("u_Shininess", 100.0f);
 	m_defaultMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 
-	m_cameraMaterial.SetShader(m_context.shaderMgr["Lambert"]);
+	m_cameraMaterial.SetShader(m_context.shaderMgr["Lambert.glsl"]);
 	m_cameraMaterial.SetVector("u_Diffuse", glm::vec4(0.0f, 0.3f, 0.7f, 1.0f));
 	m_cameraMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 
@@ -87,17 +87,17 @@ void EditorRender::InitMaterials()
 	m_gizmoPickingMaterial.SetBoolean("u_IsBall", false);
 	m_gizmoPickingMaterial.SetBoolean("u_IsPickable", true);
 
-	m_outlineMaterial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_outlineMaterial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_outlineMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 	m_outlineMaterial.DepthTest = false;
 
-	m_stencilFillMaerial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_stencilFillMaerial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_stencilFillMaerial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 	m_stencilFillMaerial.DepthTest = false;
 	m_stencilFillMaerial.ColorWrite = false;
 	m_stencilFillMaerial.DepthWrite = true;
 
-	m_actorPickingMaterial.SetShader(m_context.shaderMgr["Unlit"]);
+	m_actorPickingMaterial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_actorPickingMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 1.f, 1.0f));
 	m_actorPickingMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 }
