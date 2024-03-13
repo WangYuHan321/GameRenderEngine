@@ -29,8 +29,8 @@ public:
 	void GenerateMaterialSettingContent();
 private:
 
-	Material* m_target;
-	CShader* m_shader;
+	Material* m_target = nullptr;
+	CShader* m_shader = nullptr;
 
 	GroupCollapsable* m_shaderSetting;
 	GroupCollapsable* m_materialSetting;
