@@ -21,14 +21,14 @@ std::string ConfigManager::GetExecutePath() const
 std::string ConfigManager::GetEnginePath() const
 {
 	std::string exePath = GetExecutePath();
-	std::string path = exePath + "/Data/Engine/";
+	std::string path = exePath + "/Data/Engine";
 	return path;
 }
 
 std::string ConfigManager::GetEditorPath() const
 {
 	std::string exePath = GetExecutePath();
-	std::string path = exePath + "/Data/Editor/";
+	std::string path = exePath + "/Data/Editor";
 	return path;
 }
 

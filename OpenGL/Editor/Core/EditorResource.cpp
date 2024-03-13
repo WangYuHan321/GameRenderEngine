@@ -7,8 +7,8 @@
 
 EditorResource::EditorResource(const std::string& p_editorAssetPath)
 {
-	std::string modelFolder = p_editorAssetPath + "Models\\";
-	std::string iconsFolder = p_editorAssetPath + "Texture\\";
+	std::string modelFolder = p_editorAssetPath + "\\Models\\";
+	std::string iconsFolder = p_editorAssetPath + "\\Texture\\";
 
 	EModelParserFlags modelParserFlags = EModelParserFlags::NONE;
 	modelParserFlags |= EModelParserFlags::TRIANGULATE;
@@ -47,6 +47,28 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_textures["Button_Pause"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Button_Stop"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Button_Next"] = TextureLoader::getInstance()->Create(icon1, GL_TEXTURE_2D, GL_RGBA);
+
+	std::string icon_folder = iconsFolder + std::string("icon_folder.tga");
+	std::string icon_folder_selected = iconsFolder + std::string("icon_folder_selected.tga");
+	std::string icon_model = iconsFolder + std::string("icon_Model.png");
+	std::string icon_texture = iconsFolder + std::string("icon_Texture.png");
+	std::string icon_shader = iconsFolder + std::string("icon_Shader.png");
+	std::string icon_material = iconsFolder + std::string("icon_Material.png");
+	std::string icon_sound = iconsFolder + std::string("icon_Sound.png");
+	std::string icon_scene = iconsFolder + std::string("icon_Scene.png");
+	std::string icon_script = iconsFolder + std::string("icon_Script.png");
+	std::string icon_font = iconsFolder + std::string("icon_Font.png");
+	
+	m_textures["Icon_Folder"] = TextureLoader::getInstance()->Create(icon_folder, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Folder_SELECTED"] = TextureLoader::getInstance()->Create(icon_folder_selected, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Model"] = TextureLoader::getInstance()->Create(icon_model, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Texture"] = TextureLoader::getInstance()->Create(icon_texture, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Shader"] = TextureLoader::getInstance()->Create(icon_shader, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Material"] = TextureLoader::getInstance()->Create(icon_material, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Sound"] = TextureLoader::getInstance()->Create(icon_sound, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Scene"] = TextureLoader::getInstance()->Create(icon_scene, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Script"] = TextureLoader::getInstance()->Create(icon_script, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Font"] = TextureLoader::getInstance()->Create(icon_font, GL_TEXTURE_2D, GL_RGBA);
 }
 
 EditorResource::~EditorResource()
