@@ -27,10 +27,10 @@ void AssetBrowser::Fill()
 {
     m_assetList->CreateWidget<Separator>();
     ConsiderItem(nullptr, std::filesystem::directory_entry(m_engineAssetFolder), true);
-    //m_assetList->CreateWidget<Separator>();
-    //ConsiderItem(nullptr, std::filesystem::directory_entry(m_projectAssetFolder), false);
-    //m_assetList->CreateWidget<Separator>();
-    //ConsiderItem(nullptr, std::filesystem::directory_entry(m_projectScriptFolder), false, false, true);
+    m_assetList->CreateWidget<Separator>();
+    ConsiderItem(nullptr, std::filesystem::directory_entry(m_projectAssetFolder), false);
+    m_assetList->CreateWidget<Separator>();
+    ConsiderItem(nullptr, std::filesystem::directory_entry(m_projectScriptFolder), false, false, true);
 }
 
 void AssetBrowser::Clear()
@@ -85,7 +85,7 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
         if (p_autoOpen)
             treeNode.Open();
 
-        auto& ddSource = treeNode.AddPlugin<DDSource<std::pair<std::string, Group*>>>("Folder", itemPath, std::make_pair(itemPath, &itemGroup));
+        auto& ddSource = treeNode.AddPlugin<DDSource<std::pair<std::string, Group*>>>("Folder", itemName, std::make_pair(itemPath, &itemGroup));
 
         treeNode.OpenedEvent += [this, &treeNode, itemPath, p_isEngineItem, p_scriptFolder]
         {
@@ -104,7 +104,7 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
     {
         auto& clickableText = itemGroup.CreateWidget<TextClickable>(itemName);
 
-        auto& ddSource = clickableText.AddPlugin<DDSource<std::pair<std::string, Group*>>>("File", itemPath, std::make_pair(itemPath, &itemGroup));
+        auto& ddSource = clickableText.AddPlugin<DDSource<std::pair<std::string, Group*>>>("File", itemName, std::make_pair(itemPath, &itemGroup));
 
     }
 
