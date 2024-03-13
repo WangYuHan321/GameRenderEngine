@@ -507,6 +507,15 @@
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="File\Path\PathParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Plugin\DDSource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Widgets\Text\TextClickable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -939,6 +948,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\Path\PathParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Plugin\DDSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Widgets\Text\TextClickable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

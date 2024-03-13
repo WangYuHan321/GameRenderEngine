@@ -74,9 +74,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
+    <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
+    <ClInclude Include="UI\Plugin\DDSource.h" />
     <ClInclude Include="Editor\Panels\ToolBar.h" />
     <ClInclude Include="Editor\Util\ActorCreationMenu.h" />
     <ClInclude Include="Editor\Panels\MaterialEditor.h" />
+    <ClInclude Include="File\Path\PathParser.h" />
     <ClInclude Include="Render\Resource\MaterialManager.h" />
     <ClInclude Include="Render\Shadow\CascadeShadowMap.h" />
     <ClInclude Include="Render\Shader\ShaderStorageBuffer.h" />
@@ -238,9 +241,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp" />
+    <ClCompile Include="UI\Widgets\Text\TextClickable.cpp" />
+    <ClCompile Include="UI\Plugin\DDSource.cpp" />
     <ClCompile Include="Editor\Panels\ToolBar.cpp" />
     <ClCompile Include="Editor\Util\ActorCreationMenu.cpp" />
     <ClCompile Include="Editor\Panels\MaterialEditor.cpp" />
+    <ClCompile Include="File\Path\PathParser.cpp" />
     <ClCompile Include="Render\Resource\MaterialManager.cpp" />
     <ClCompile Include="Render\Shadow\CascadeShadowMap.cpp" />
     <ClCompile Include="Render\Shader\ShaderStorageBuffer.cpp" />
