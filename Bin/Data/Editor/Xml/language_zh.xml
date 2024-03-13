@@ -1,0 +1,18 @@
+<language>
+	<item id="1" language="文件" />
+	<item id="2" language="窗口" />
+	<item id="3" language="关闭所有" />
+	<item id="4" language="打开所有" />
+	<item id="5" language="Actors" />
+	<item id="6" language="分栏" />
+	<item id="7" language="游戏视图" />
+	<item id="8" language="场景视图" />
+	<item id="9" language="面板" />
+	<item id="10" language="工具栏" />
+	<item id="11" language="资源浏览器" />
+	<item id="12" language="材质编辑器" />
+	<item id="13" language="创建空场景" />
+	<item id="14" language="图元" />
+	<item id="15" language="立方体" />
+	<item id="16" language="球" />
+</language>

@@ -1,0 +1,18 @@
+<language>
+	<item id="1" language="File" />
+	<item id="2" language="Window" />
+	<item id="3" language="Close All" />
+	<item id="4" language="Open All" />
+	<item id="5" language="Actors" />
+	<item id="6" language="Hierarchy" />
+	<item id="7" language="Game View" />
+	<item id="8" language="Scene View" />
+	<item id="9" language="Inspector" />
+	<item id="10" language="ToolBar" />
+	<item id="11" language="AssetBrowser" />
+	<item id="12" language="MaterialEditor" />
+	<item id="13" language="Create Empty" />
+	<item id="14" language="Primitive" />
+	<item id="15" language="Cube" />
+	<item id="16" language="Sphere" />
+</language>
