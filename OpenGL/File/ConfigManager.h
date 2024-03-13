@@ -18,6 +18,8 @@ public:
 	std::string GetExecutePath() const;
 	std::string GetEnginePath() const;
 	std::string GetEditorPath() const;
+	std::string GetXmlPath() const;
+	std::string GetProjectPath() const;
 
 };
 

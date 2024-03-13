@@ -32,6 +32,16 @@ std::string ConfigManager::GetEditorPath() const
 	return path;
 }
 
+std::string ConfigManager::GetXmlPath() const
+{
+	return GetEditorPath() + "/Xml";
+}
+
+std::string ConfigManager::GetProjectPath() const
+{
+	return GetEditorPath();
+}
+
 
 
 
