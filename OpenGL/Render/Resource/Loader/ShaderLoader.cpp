@@ -1,4 +1,5 @@
 #include "ShaderLoader.h"
+#include "../../File/ConfigManager.h"
 //#include "../../Util/common.h"
 
 std::pair<std::string, std::string> ParseShader(std::string path)
@@ -36,11 +37,12 @@ std::pair<std::string, std::string> ParseShader(std::string path)
 
 CShader* ShaderLoader::Create(const std::string& pSource)
 {
-    string pNewSource = "Data\\Editor\\Shader\\" + pSource + ".glsl";
+    
+    string pNewSource = ConfigManager::getInstance()->GetEditorPath() + "\\Shader\\" + pSource;
 
     std::pair<std::string, std::string> source = ParseShader(pNewSource);
 
-    return LoadStream("EngineDefault", source.first, source.second);
+    return LoadStream(pNewSource, source.first, source.second);
 
 }
 

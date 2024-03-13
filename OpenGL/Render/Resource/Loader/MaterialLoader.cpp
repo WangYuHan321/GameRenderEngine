@@ -27,6 +27,8 @@ Material* MaterialLoader::Create(const std::string& p_path)
 #ifdef  USE_EDITOR
 		pMaterial->OnDeserialize(doc, root);
 #endif
+		pMaterial->Path = p_path;
+
 		return pMaterial;
 	}
 	return nullptr;
