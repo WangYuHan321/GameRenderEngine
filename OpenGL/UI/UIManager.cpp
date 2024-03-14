@@ -46,6 +46,17 @@ void UIManager::OnInit(GLFWwindow* p_window, const std::string& p_glslVersion)
 	style->FrameBorderSize = 0.0f;
 	style->PopupBorderSize = 1.0f;
 
+#ifdef  WINDOWS_PLATFORM
+	ImFont* font = io.Fonts->AddFontFromFileTTF
+	(
+		"C:/Windows/Fonts/msyh.ttc",
+		30,
+		nullptr,
+		//设置加载中文
+		io.Fonts->GetGlyphRangesChineseFull()
+	);
+#endif //  WINDOWS_PLATFORM
+
 }
 
 void UIManager::OnEnd()
