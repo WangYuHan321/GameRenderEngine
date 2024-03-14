@@ -14,6 +14,7 @@
 #include "../../Global/ServiceLocator.h"
 #include"../../Render/Resource/MaterialManager.h"
 #include"../../Render/Resource/ShaderManager.h"
+#include "../../File/XmlManager.h"
 
 Color4 GUIDrawer::titleColor = { 0.85f, 0.65f, 0.0f, 1.0f };
 Color4 GUIDrawer::clearBtnColor = { 0.5f, 0.0f, 0.0f, 1.0f };
@@ -85,7 +86,7 @@ void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, Co
 Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier)
 {
 	CreateTitle(p_root, p_name);
-	std::string displayText = p_data ? p_data->Path : std::string("Empty");
+	std::string displayText = p_data ? p_data->Path : GLOBALSERVICE(XmlManager).GetLanguage(EMPTY_TEXT);
 
 	auto& rightSide = p_root.CreateWidget<Group>();
 	auto& textEdit = rightSide.CreateWidget<Text>(displayText);
@@ -107,12 +108,12 @@ Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name
 
 	textEdit.lineBreak = false;
 
-	auto& resetBtn = rightSide.CreateWidget<Button>("Reset Button");
+	auto& resetBtn = rightSide.CreateWidget<Button>(GLOBALSERVICE(XmlManager).GetLanguage(MATERIAL_EDITOR_RESET));
 	resetBtn.idleColor = Color4{ 0.5f, 0.0f, 0.0f, 1.0f };
 	resetBtn.ClickedEvent += [&textEdit, &p_data, p_updateNotifier]
 	{
 		p_data = nullptr;
-		textEdit.content = "Empty";
+		textEdit.content = GLOBALSERVICE(XmlManager).GetLanguage(EMPTY_TEXT);
 		if (p_updateNotifier)
 			p_updateNotifier->Invoke();
 	};
@@ -123,7 +124,7 @@ Text& GUIDrawer::DrawMaterial(WidgetContainer& p_root, const std::string& p_name
 Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier)
 {
 	CreateTitle(p_root, p_name);
-	std::string displayText = p_data ? p_data->GetShaderPath() : std::string("Empty");
+	std::string displayText = p_data ? p_data->GetShaderPath() : GLOBALSERVICE(XmlManager).GetLanguage(EMPTY_TEXT);
 
 	auto& rightSide = p_root.CreateWidget<Group>();
 	auto& textEdit = rightSide.CreateWidget<Text>();
@@ -146,12 +147,12 @@ Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, 
 
 	textEdit.lineBreak = false;
 
-	auto& resetBtn = rightSide.CreateWidget<Button>("Reset Button");
+	auto& resetBtn = rightSide.CreateWidget<Button>(GLOBALSERVICE(XmlManager).GetLanguage(MATERIAL_EDITOR_RESET));
 	resetBtn.idleColor = Color4{ 0.5f, 0.0f, 0.0f, 1.0f };
 	resetBtn.ClickedEvent += [&textEdit, &p_data, p_updateNotifier]
 	{
 		p_data = nullptr;
-		textEdit.content = "Empty";
+		textEdit.content = GLOBALSERVICE(XmlManager).GetLanguage(EMPTY_TEXT);
 		if (p_updateNotifier)
 			p_updateNotifier->Invoke();
 	};

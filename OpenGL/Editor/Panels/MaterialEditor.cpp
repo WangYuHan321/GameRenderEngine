@@ -5,6 +5,7 @@
 #include "../../Render/Shader/EShader.h"
 #include "../../Render/Resource/Loader/MaterialLoader.h"
 #include "../../UI/Layout/GroupCollapsable.h"
+#include "../../Editor/Core/EditorAction.h"
 #include <any>
 
 MaterialEditor::MaterialEditor(const std::string& p_title,
@@ -33,7 +34,7 @@ MaterialEditor::MaterialEditor(const std::string& p_title,
 
 void MaterialEditor::CreateHeaderButtons()
 {
-	auto& saveToFileBtn = CreateWidget<Button>("Save To File");
+	auto& saveToFileBtn = CreateWidget<Button>(EDITOR_LANGUAGE(MATERIAL_EDITOR_SAVE));
 	saveToFileBtn.idleColor = Color4(0.2, 0.5, 0.0, 1.0);
 	saveToFileBtn.lineBreak = false;
 	saveToFileBtn.ClickedEvent += [this] {
@@ -44,7 +45,7 @@ void MaterialEditor::CreateHeaderButtons()
 		}
 	};
 
-	auto& reloadToFileBtn = CreateWidget<Button>("Reload To File");
+	auto& reloadToFileBtn = CreateWidget<Button>(EDITOR_LANGUAGE(MATERIAL_EDITOR_RELOAD));
 	reloadToFileBtn.idleColor = Color4(0.2, 0.5, 0.0, 1.0);
 	reloadToFileBtn.lineBreak = false;
 	reloadToFileBtn.ClickedEvent += [this] {
@@ -55,7 +56,7 @@ void MaterialEditor::CreateHeaderButtons()
 		}
 	};
 
-	auto& previewToFileBtn = CreateWidget<Button>("Preview To File");
+	auto& previewToFileBtn = CreateWidget<Button>(EDITOR_LANGUAGE(MATERIAL_EDITOR_PREVIEW));
 	previewToFileBtn.idleColor = Color4(0.2, 0.5, 0.0, 1.0);
 	previewToFileBtn.lineBreak = false;
 	previewToFileBtn.ClickedEvent += [this] {
@@ -66,7 +67,7 @@ void MaterialEditor::CreateHeaderButtons()
 		}
 	};
 
-	auto& resetToFileBtn = CreateWidget<Button>("Reset To File");
+	auto& resetToFileBtn = CreateWidget<Button>(EDITOR_LANGUAGE(MATERIAL_EDITOR_RESET));
 	resetToFileBtn.idleColor = Color4(0.2, 0.5, 0.0, 1.0);
 	resetToFileBtn.lineBreak = false;
 	resetToFileBtn.ClickedEvent += [this] {
@@ -82,27 +83,27 @@ void MaterialEditor::CreateMaterialSelector()
 {
 	auto& columns = CreateWidget<Columns<2>>();
 	columns.widths[0] = 150;
-	GUIDrawer::DrawMaterial(columns, "Material", m_target, &m_materialDroppedEvent);
+	GUIDrawer::DrawMaterial(columns, EDITOR_LANGUAGE(MATERIAL_TEXT), m_target, &m_materialDroppedEvent);
 }
 
 void MaterialEditor::CreateShaderSelector()
 {
 	auto& columns = CreateWidget<Columns<2>>();
 	columns.widths[0] = 150;
-	GUIDrawer::DrawShader(columns, "Shader", m_shader, &m_shaderDroppedEvent);
+	GUIDrawer::DrawShader(columns, EDITOR_LANGUAGE(SHADER_TEXT), m_shader, &m_shaderDroppedEvent);
 }
 
 
 void MaterialEditor::CreateMaterialSetting()
 {
-	m_materialSetting = &CreateWidget<GroupCollapsable>("Material Setting");
+	m_materialSetting = &CreateWidget<GroupCollapsable>(EDITOR_LANGUAGE(MATERIAL_SETTING));
 	m_materialSettingColumn = &m_materialSetting->CreateWidget<Columns<2>>();
 	m_materialSettingColumn->widths[0] = 150;
 }
 
 void MaterialEditor::CreateShaderSetting()
 {
-	m_shaderSetting = &CreateWidget<GroupCollapsable>("Material Setting");
+	m_shaderSetting = &CreateWidget<GroupCollapsable>(EDITOR_LANGUAGE(SHADER_SETTING));
 	m_shaderSettingColumn = &m_materialSetting->CreateWidget<Columns<2>>();
 	m_shaderSettingColumn->widths[0] = 150;
 }

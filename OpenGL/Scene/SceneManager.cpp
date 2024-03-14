@@ -1,7 +1,9 @@
 #include "Scene.h"
 #include "SceneNode.h"
 #include "SceneManager.h"
+#include "../../File/XmlManager.h"
 #include "../../Core/ECS/Actor.h"
+#include "../../Global/ServiceLocator.h"
 #include "../../Core/ECS/Components/CCamera.h"
 #include "../../Core/ECS/Components/CAmbientSphereLight.h"
 #include "../../Core/ECS/Components/CDirectionalLight.h"
@@ -58,15 +60,15 @@ void SceneManager::LoadEmptyLightedScene()
 {
 	LoadEmptyScene();
 
-	auto directionLight = m_curScene->CreateActor("Directional Light");
+	auto directionLight = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(DIRECTIONLIGHT_TEXT));
 	directionLight->AddComponent<CDirectionalLight>().SetIntensity(0.75f);
 	directionLight->m_transform.SetLocalPosition(Vector3(0.0f, 10.0f, 0.0f));
 	directionLight->m_transform.SetLocalRotation(Quaternion(Vector3(120.0f, -40.0f, 0.0f)));
 
-	auto ambientLight = m_curScene->CreateActor("Ambient Light");
+	auto ambientLight = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(AMBIENTLIGHT_TEXT));
 	ambientLight->AddComponent<CAmbientSphereLight>().SetRadius(10000.0f);
 
-	auto camera = m_curScene->CreateActor("Main Camera");
+	auto camera = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(MainCAMERA_TEXT));
 	camera->AddComponent<CCamera>();
 	camera->m_transform.SetLocalPosition(Vector3(0.0f, 3.0f, 8.0f));
 	camera->m_transform.SetLocalRotation(Quaternion(Vector3(20.0f, 180.0f, 0.0f)));

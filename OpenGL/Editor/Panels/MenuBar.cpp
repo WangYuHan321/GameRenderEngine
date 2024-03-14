@@ -7,6 +7,7 @@ MenuBar::MenuBar()
 {
 	CreateWindowMenu();
 	CreateActorsMenu();
+	//CreateSwitchLanguage();
 }
 
 void MenuBar::CreateWindowMenu()
@@ -24,6 +25,14 @@ void MenuBar::CreateActorsMenu()
 	ActorCreationMenu::GenerateActorCreationMenu(actorsMenu);
 }
 
+void MenuBar::CreateSwitchLanguage()
+{
+	LANGUAGE curLang = EDITOR_CONTEXT(xmlMgr).GetLanguageType();
+	m_windowMenu = &CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_LANGUAGE));
+	m_windowMenu->CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_ZH_CN)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)curLang);//ÖÐÎÄ
+	m_windowMenu->CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_EN_US)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)curLang);
+}
+
 void MenuBar::RegisterPanel(const std::string& p_name, PanelWindow& p_panel)
 {
 	auto& menuItem = m_windowMenu->CreateWidget<MenuItem>(p_name, "", true, true);
@@ -36,4 +45,11 @@ void MenuBar::OpenEveryWindows(bool p_state)
 {
 	for (auto& [name, panel] : m_panels)
 		panel.first.get().SetOpened(p_state);
+}
+
+void MenuBar::SwitchLanguage(int type)
+{
+	LANGUAGE curLang = (LANGUAGE)type;
+
+	EDITOR_CONTEXT(xmlMgr).SwitchLanguage(curLang);
 }

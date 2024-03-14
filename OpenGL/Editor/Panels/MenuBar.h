@@ -18,7 +18,11 @@ public:
 
     void CreateActorsMenu();
 
+    void CreateSwitchLanguage();
+
     void OpenEveryWindows(bool p_state);
+
+    void SwitchLanguage(int type);
 
 private:
     PanelMap m_panels;
