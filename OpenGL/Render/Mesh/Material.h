@@ -93,6 +93,8 @@ private:
 
 public:
 
+	std::string Path = "";
+
 	MaterialType Type = MATERIAL_CUSTOM;
 
 	//
