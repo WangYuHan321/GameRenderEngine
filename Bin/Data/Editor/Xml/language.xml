@@ -15,4 +15,21 @@
 	<item id="14" language="Primitive" />
 	<item id="15" language="Cube" />
 	<item id="16" language="Sphere" />
+	<item id="17" language="Language" />
+	<item id="18" language="Chinese" />
+	<item id="19" language="English" />
+	<item id="20" language="Vivn" />
+	<item id="21" language="TaiWan" />
+	<item id="22" language="Material" />
+	<item id="23" language="Shader" />
+	<item id="24" language="Empty" />
+	<item id="25" language="Save" />
+	<item id="26" language="Reload" />
+	<item id="27" language="Preview" />
+	<item id="28" language="Reset" />
+	<item id="29" language="Material Setting" />
+	<item id="30" language="Shader Setting" />
+	<item id="31" language="Directional Light" />
+	<item id="32" language="Ambient Light" />
+	<item id="33" language="Main Camera" />
 </language>

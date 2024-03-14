@@ -15,4 +15,21 @@
 	<item id="14" language="图元" />
 	<item id="15" language="立方体" />
 	<item id="16" language="球" />
+	<item id="17" language="语言" />
+	<item id="18" language="中文" />
+	<item id="19" language="英文" />
+	<item id="20" language="越南" />
+	<item id="21" language="台湾" />
+	<item id="22" language="材质" />
+	<item id="23" language="着色器" />
+	<item id="24" language="空" />
+	<item id="25" language="保存" />
+	<item id="26" language="重加载" />
+	<item id="27" language="预览" />
+	<item id="28" language="重置" />
+	<item id="29" language="材质参数" />
+	<item id="30" language="着色器参数" />
+	<item id="31" language="方向光" />
+	<item id="32" language="环境光" />
+	<item id="33" language="主相机" />
 </language>
