@@ -9,7 +9,11 @@ Material::Material()
 
 Material::Material(CShader* shader)
 {
+#ifdef USE_EDITOR
     SetShader(shader);
+#else
+    m_Shader = shader;
+#endif
 }
 
 Material Material::Copy()
