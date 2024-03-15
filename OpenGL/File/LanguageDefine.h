@@ -44,5 +44,7 @@
 #define ROTATION_TEXT 35
 #define SCALE_TEXT 36
 
+#define CLEAR_TEXT 37
+
 
 
