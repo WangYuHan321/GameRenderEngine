@@ -40,4 +40,9 @@
 #define AMBIENTLIGHT_TEXT 32
 #define MainCAMERA_TEXT 33
 
+#define POSITION_TEXT 34
+#define ROTATION_TEXT 35
+#define SCALE_TEXT 36
+
+
 

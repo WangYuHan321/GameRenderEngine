@@ -1,5 +1,5 @@
 <root>
-    <Shader>Standard</Shader>
+    <Shader>Standard.glsl</Shader>
     <Settings>
         <DepthTest>true</DepthTest>
         <DepthWrite>true</DepthWrite>

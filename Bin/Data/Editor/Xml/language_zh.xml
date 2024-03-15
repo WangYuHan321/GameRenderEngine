@@ -32,4 +32,7 @@
 	<item id="31" language="方向光" />
 	<item id="32" language="环境光" />
 	<item id="33" language="主相机" />
+	<item id="34" language="位置" />
+	<item id="35" language="旋转" />
+	<item id="36" language="缩放" />
 </language>

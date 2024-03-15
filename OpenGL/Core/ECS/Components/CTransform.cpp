@@ -1,4 +1,6 @@
 #include "CTransform.h"
+#include "../../File/XmlManager.h"
+#include "../../Global/ServiceLocator.h"
 
 CTransform::CTransform(Actor& p_owner, Vector3 p_localPosition , Quaternion p_localRotation, Vector3 p_localScale):
 	AComponent(p_owner)
@@ -103,8 +105,8 @@ void CTransform::OnInspector(WidgetContainer& p_root)
 		SetLocalRotation(Quaternion(result));
 	};
 
-	GUIDrawer::DrawVec3(p_root, "Position", std::bind(&CTransform::GetLocalPosition, this), std::bind(&CTransform::SetLocalPosition, this, std::placeholders::_1), 0.05f);
-	GUIDrawer::DrawVec3(p_root, "Rotation", getRot, setRot, 0.05f);
-	GUIDrawer::DrawVec3(p_root, "Scale", std::bind(&CTransform::GetLocalScale, this), std::bind(&CTransform::SetLocalScale, this, std::placeholders::_1), 0.05f, 0.0001f);
+	GUIDrawer::DrawVec3(p_root, GLOBALSERVICE(XmlManager).GetLanguage(POSITION_TEXT), std::bind(&CTransform::GetLocalPosition, this), std::bind(&CTransform::SetLocalPosition, this, std::placeholders::_1), 0.05f);
+	GUIDrawer::DrawVec3(p_root, GLOBALSERVICE(XmlManager).GetLanguage(ROTATION_TEXT), getRot, setRot, 0.05f);
+	GUIDrawer::DrawVec3(p_root, GLOBALSERVICE(XmlManager).GetLanguage(SCALE_TEXT), std::bind(&CTransform::GetLocalScale, this), std::bind(&CTransform::SetLocalScale, this, std::placeholders::_1), 0.05f, 0.0001f);
 
 }

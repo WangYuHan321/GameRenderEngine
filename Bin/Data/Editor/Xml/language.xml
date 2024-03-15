@@ -32,4 +32,7 @@
 	<item id="31" language="Directional Light" />
 	<item id="32" language="Ambient Light" />
 	<item id="33" language="Main Camera" />
+	<item id="34" language="Position" />
+	<item id="35" language="Rotation" />
+	<item id="36" language="Scale" />
 </language>
