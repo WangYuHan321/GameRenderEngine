@@ -9,7 +9,7 @@ Material::Material()
 
 Material::Material(CShader* shader)
 {
-	m_Shader = shader;
+    SetShader(shader);
 }
 
 Material Material::Copy()
@@ -95,6 +95,116 @@ void Material::UnBind()
 void Material::SetShader(CShader* pShader)
 {
     m_Shader = pShader;
+
+    for (auto item : pShader->GetUniforms())
+    {
+        if (pShader->IsEngineUBOMember(item.Name))
+            continue;
+
+        switch (item.Type)
+        {
+            case SHADER_BOOL:
+            {
+                UniformValue value;
+                value.Type = SHADER_BOOL;
+                value.BOOL = (bool)m_Shader->GetInt(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_INT:
+            {
+                UniformValue value;
+                value.Type = SHADER_INT;
+                value.INT = m_Shader->GetInt(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_FLOAT:
+            {
+                UniformValue value;
+                value.Type = SHADER_FLOAT;
+                value.FLOAT = m_Shader->GetFloat(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_VEC2:
+            {
+                UniformValue value;
+                value.Type = SHADER_VEC2;
+                value.VEC2 = m_Shader->GetVector2(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_VEC3:
+            {
+                UniformValue value;
+                value.Type = SHADER_VEC3;
+                value.VEC3 = m_Shader->GetVector3(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_VEC4:
+            {
+                UniformValue value;
+                value.Type = SHADER_VEC4;
+                value.VEC4 = m_Shader->GetVector4(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_MAT2:
+            {
+                UniformValue value;
+                value.Type = SHADER_MAT2;
+                value.MAT2 = m_Shader->GetMatrix2(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_MAT3:
+            {
+                UniformValue value;
+                value.Type = SHADER_MAT3;
+                value.MAT3 = m_Shader->GetMatrix3(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_MAT4:
+            {
+                UniformValue value;
+                value.Type = SHADER_MAT4;
+                value.MAT4 = m_Shader->GetMatrix4(item.Name);
+                m_uniforms.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_SAMPLER2D:
+            {
+                UniformSampler value;
+                value.Type = SHADER_SAMPLER2D;
+                value.TEXTURE = nullptr;
+                m_uniformSampler.emplace(item.Name, value);
+                break;
+            }
+
+            case SHADER_SAMPLER3D:
+            {
+                UniformSampler value;
+                value.Type = SHADER_SAMPLER3D;
+                value.TEXTURE_CUBE = nullptr;
+                m_uniformSampler.emplace(item.Name, value);
+                break;
+            }
+
+        }
+    }
+
 }
 
 void Material::SetInt(std::string name, int value)

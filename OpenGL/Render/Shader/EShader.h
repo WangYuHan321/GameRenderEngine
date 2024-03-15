@@ -47,14 +47,28 @@ public:
     void SetMatrix(std::string location, glm::mat2 value);
     void SetMatrix(std::string location, glm::mat3 value);
     void SetMatrix(std::string location, glm::mat4 value);
+
+    int GetInt(std::string location);
+    float GetFloat(std::string location);
+    glm::vec2 GetVector2(std::string location);
+    glm::vec3 GetVector3(std::string location);
+    glm::vec4 GetVector4(std::string location);
+    glm::mat2 GetMatrix2(std::string location);
+    glm::mat3 GetMatrix3(std::string location);
+    glm::mat4 GetMatrix4(std::string location);
+
     void SetMatrixArray(std::string location, int size, glm::mat2* values);
     void SetMatrixArray(std::string location, int size, glm::mat3* values);
     void SetMatrixArray(std::string location, int size, glm::mat4* values);
     int GetUniformLocation(std::string name);
 
     SHADER_TYPE GetShaderType(std::string name);
-
     std::string GetShaderPath();
+
+    static bool IsEngineUBOMember(const std::string& p_uniformName);
+
+    std::vector<Uniform> GetUniforms() { return Uniforms; }
+    std::vector<VertexAttr> GetVertexAttr() { return VertexAttrs; }
 
 	uint32 GetShaderID();
 };

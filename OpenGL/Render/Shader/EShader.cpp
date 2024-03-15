@@ -574,6 +574,60 @@ void CShader::SetMatrix(std::string location, glm::mat4 value)
         glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
+int CShader::GetInt(std::string location)
+{
+	int value;
+	glGetUniformiv(m_ID, GetUniformLocation(location), &value);
+	return value;
+}
+
+float CShader::GetFloat(std::string location)
+{
+	float value;
+	glGetUniformfv(m_ID, GetUniformLocation(location), &value);
+	return value;
+}
+glm::vec2 CShader::GetVector2(std::string location)
+{
+	GLfloat values[2];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::vec2(values[0], values[1]);
+}
+glm::vec3 CShader::GetVector3(std::string location)
+{
+	GLfloat values[3];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::vec3(values[0], values[1], values[3]);
+}
+
+glm::vec4 CShader::GetVector4(std::string location)
+{
+	GLfloat values[4];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::vec4(values[0], values[1], values[3], values[4]);
+}
+
+glm::mat2 CShader::GetMatrix2(std::string location)
+{
+	GLfloat values[4];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::mat2((float&)values);
+}
+
+glm::mat3 CShader::GetMatrix3(std::string location)
+{
+	GLfloat values[9];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::mat3((float&)values);
+}
+
+glm::mat4 CShader::GetMatrix4(std::string location)
+{
+	GLfloat values[16];
+	glGetUniformfv(m_ID, GetUniformLocation(location), values);
+	return glm::mat4((float&)values);
+}
+
 int CShader::GetUniformLocation(std::string name)
 {
 	for (unsigned int i = 0; i < Uniforms.size(); ++i)
@@ -605,6 +659,11 @@ SHADER_TYPE CShader::GetShaderType(std::string name)
 	}
 
 	return shaderType;
+}
+
+bool CShader::IsEngineUBOMember(const std::string& p_uniformName)
+{
+	return p_uniformName.rfind("ubo_", 0) == 0;
 }
 
 std::string CShader::GetShaderPath()
