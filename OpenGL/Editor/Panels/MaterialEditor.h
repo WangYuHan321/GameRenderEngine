@@ -25,12 +25,16 @@ public:
 	void CreateMaterialSetting();
 	void CreateShaderSetting();
 
+	void OnMateiralDropped();
+	void OnShaderDropped();
+
 	void GenerateShaderSettingContent();
 	void GenerateMaterialSettingContent();
 private:
 
 	Material* m_target = nullptr;
 	CShader* m_shader = nullptr;
+	Text* m_shaderContent;
 
 	GroupCollapsable* m_shaderSetting;
 	GroupCollapsable* m_materialSetting;
@@ -40,7 +44,6 @@ private:
 
 	Event<> m_materialDroppedEvent;
 	Event<> m_shaderDroppedEvent;
-
 
 };
 
