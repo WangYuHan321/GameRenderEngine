@@ -33,5 +33,7 @@ void ComboBox::_Draw_Impl()
 				}
 			}
 		}
+
+		ImGui::EndCombo();
 	}
 }
