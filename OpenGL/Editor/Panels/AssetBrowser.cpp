@@ -4,6 +4,7 @@
 #include "../../File/Path/PathParser.h"
 #include "../../UI/Plugin/DDSource.h"
 #include "../../UI/Visual/Separator.h"
+#include "../../UI/Plugin/TexturePreview.h"
 #include "../../UI/Widgets/Text/TextClickable.h"
 #include "../../Editor/Core/EditorAction.h"
 
@@ -76,7 +77,7 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
 
     uint32 textureID = isDirectory ? EDITOR_CONTEXT(m_editorResource)->GetTexture("Icon_Folder")->ID : EDITOR_CONTEXT(m_editorResource)->GetTexture("Icon_" + PathParser::getInstance()->GetFileTypeToString(fileType))->ID;
 
-    auto& itemImg = itemGroup.CreateWidget<Image>( textureID, ImVec2(16, 16)).lineBreak = false;
+    auto& itemImg = itemGroup.CreateWidget<Image>( textureID, ImVec2(32, 32)).lineBreak = false;
 
     if (isDirectory)
     {
@@ -105,6 +106,12 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
         auto& clickableText = itemGroup.CreateWidget<TextClickable>(itemName);
 
         auto& ddSource = clickableText.AddPlugin<DDSource<std::pair<std::string, Group*>>>("File", itemName, std::make_pair(itemPath, &itemGroup));
+
+        if (fileType == EFileType::TEXTURE)
+        {
+            auto& preview = clickableText.AddPlugin<TexturePreview>();
+            preview.SetPath(itemName);
+        }
 
     }
 
