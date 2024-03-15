@@ -75,6 +75,7 @@
   <ItemGroup>
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
     <ClInclude Include="File\LanguageDefine.h" />
+    <ClInclude Include="Render\Material\MaterialEditorType.h" />
     <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
     <ClInclude Include="UI\Plugin\DDSource.h" />
     <ClInclude Include="Editor\Panels\ToolBar.h" />

@@ -522,6 +522,9 @@
     <ClInclude Include="File\LanguageDefine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Material\MaterialEditorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
