@@ -10,6 +10,8 @@
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Render/Mesh/Mesh.h"
 #include "../../Render/Mesh/Model.h"
+#include "../../Core/ECS/Components/CLight.h"
+#include "../../Math/Math.h"
 #include "../../Render/Resource/Loader/TextureLoader.h"
 #include <glm/gtx/string_cast.hpp>
 
@@ -90,6 +92,12 @@ void EditorRender::InitMaterials()
 	m_outlineMaterial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_outlineMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 	m_outlineMaterial.DepthTest = false;
+
+	m_lightMaterial.SetShader(m_context.m_editorResource->GetShader("Billboard"));
+	m_lightMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 0.5f, 0.5f));
+	m_lightMaterial.Cull = false;
+	m_lightMaterial.Blend = true;
+	m_lightMaterial.DepthTest = false;
 
 	m_stencilFillMaerial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_stencilFillMaerial.SetTexture("u_DiffuseMap", m_pTexture, 0);
@@ -220,6 +228,25 @@ void EditorRender::RenderSceneForActorPicking()
 			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(model, m_actorPickingMaterial, &modelMatrix);
 		}
 	}
+
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->Clear(false, true, false);
+
+	m_lightMaterial.DepthTest = true;
+	m_lightMaterial.SetFloat("u_Scale",  0.1f);
+	m_lightMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+
+	for (auto light : m_context.m_sceneMgr->GetActiveScene()->GetFastAccessComponents().lights)
+	{
+		auto& actor = light->owner;
+
+		if (actor.IsActive())
+		{
+			PreparePickingMaterial(actor, m_lightMaterial);
+			auto& model = *m_context.m_editorResource->GetModel("Vertical_Plane");
+			auto modelMatrix = Translate(actor.m_transform.GetWorldPosition());
+			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(model, m_lightMaterial, &modelMatrix);
+		}
+	}
 }
 
 void EditorRender::RenderModelToStencil(Matrix4& p_worldMatrix, Model& p_model)
@@ -270,6 +297,38 @@ void EditorRender::RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool
 
 	}
 
+}
+
+void EditorRender::RenderLights()
+{
+	m_lightMaterial.SetFloat("u_Scale",  0.1f);
+
+	for (auto light : m_context.m_sceneMgr.get()->GetActiveScene()->GetFastAccessComponents().lights)
+	{
+		auto& actor = light->owner;
+
+		if (actor.IsActive())
+		{
+			auto model = m_context.m_editorResource->GetModel("Vertical_Plane");
+			auto modelMatrix = Translate(actor.m_transform.GetWorldPosition());
+
+			Texture* texture = nullptr;
+
+			switch ((Light::Type)(int)light->GetData().type)
+			{
+			case Light::Type::Point: texture = m_context.m_editorResource->GetTexture("Icon_PointLight"); break;
+			case Light::Type::Directional: texture = m_context.m_editorResource->GetTexture("Icon_DirectionlLight"); break;
+			case Light::Type::Spot: texture = m_context.m_editorResource->GetTexture("Icon_SpotLight"); break;
+			case Light::Type::Ambient_Box: texture = m_context.m_editorResource->GetTexture("Icon_SkyLight"); break;
+			case Light::Type::Ambient_Sphere: texture = m_context.m_editorResource->GetTexture("Icon_SkyLight"); break;
+			}
+
+			const auto& lightColor = light->GetColor();
+			m_lightMaterial.SetTexture("u_DiffuseMap", texture, texture->ID);
+			m_lightMaterial.SetVector("u_Diffuse", Vector4(lightColor.r, lightColor.g, lightColor.b, 1.0f));
+			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*model, m_lightMaterial, &modelMatrix);
+		}
+	}
 }
 
 void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis) //ªÊ÷∆gizmo

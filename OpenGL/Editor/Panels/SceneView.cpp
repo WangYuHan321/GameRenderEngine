@@ -79,6 +79,7 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 		Vector3 c(0.176f, 0.176f, 0.176f);
 		m_editorRenderer.RenderGrid(m_camPos, c);
 		m_editorRenderer.RenderCameras();
+		m_editorRenderer.RenderLights();
 
 		m_editorRenderer.RenderScene(m_camPos, m_camera);
 
