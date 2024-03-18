@@ -6,11 +6,12 @@
 #include "../../Scene/SceneManager.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Core/ECS/Components/CCamera.h"
+#include "../../Core/ECS/Components/CLight.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
+#include "../../Render/ShapeDrawer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Render/Mesh/Mesh.h"
 #include "../../Render/Mesh/Model.h"
-#include "../../Core/ECS/Components/CLight.h"
 #include "../../Math/Math.h"
 #include "../../Render/Resource/Loader/TextureLoader.h"
 #include <glm/gtx/string_cast.hpp>
@@ -293,6 +294,9 @@ void EditorRender::RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool
 				RenderModelToStencil(model, *m_context.m_editorResource->GetModel("Camera"));
 			else
 				RenderModelOutline(model, *m_context.m_editorResource->GetModel("Camera"), outlineWidth);
+			
+			if(p_isSelected)
+				RenderCameraFrustum(*cameraComponent);
 		}
 
 	}
@@ -329,6 +333,80 @@ void EditorRender::RenderLights()
 			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*model, m_lightMaterial, &modelMatrix);
 		}
 	}
+}
+
+void EditorRender::RenderCameraFrustum(CCamera& p_camera)
+{
+	auto gameViewSize = { 16, 9 };
+	RenderCameraPerspectiveFrustum((std::pair<uint16_t, uint16_t>&)(gameViewSize), p_camera);
+}
+
+void EditorRender::RenderCameraPerspectiveFrustum(std::pair<uint16_t, uint16_t> p_size, CCamera& p_camera)
+{
+	const auto& owner = p_camera.owner;
+	auto& camera = p_camera.GetCamera();
+
+	const auto& cameraPos = owner.m_transform.GetWorldPosition();
+	const auto& cameraRotation = owner.m_transform.GetWorldRotation();
+	const auto& cameraForward = (Quaternion)cameraRotation * Vector3(0.0f, 0.0f, 1.0f);
+
+	camera.CalculateProjectMatrix(16, 9);
+	camera.CalculateViewMatrix(cameraPos, cameraRotation);
+	const auto proj = glm::transpose(camera.Projection);
+	const auto nearPanel = camera.Near;
+	const auto farPanel = camera.Far;
+
+	const auto nLeft = nearPanel * (proj[0][2] - 1.0f) / proj[0][0];
+	const auto nRight = nearPanel * (1.0f + proj[0][2]) / proj[0][0];
+	const auto nTop = nearPanel * (1.0f + proj[1][2]) / proj[1][1];
+	const auto nBottom = nearPanel * (proj[1][2] - 1.0f) / proj[1][1];
+
+	const auto fLeft = farPanel * (proj[0][2] - 1.0f) / proj[0][0];
+	const auto fRight = farPanel * (1.0f + proj[0][2]) / proj[0][0];
+	const auto fTop = farPanel * (1.0f + proj[1][2]) / proj[1][1];
+	const auto fBottom = farPanel * (proj[1][2] - 1.0f) / proj[1][1];
+
+	auto a = (Quaternion)cameraRotation * Vector3{ nLeft, nTop, 0 };
+	auto b = (Quaternion)cameraRotation * Vector3{ nRight, nTop, 0 };
+	auto c = (Quaternion)cameraRotation * Vector3{ nLeft, nBottom, 0 };
+	auto d = (Quaternion)cameraRotation * Vector3{ nRight, nBottom, 0 };
+	auto e = (Quaternion)cameraRotation * Vector3{ fLeft, fTop, 0 };
+	auto f = (Quaternion)cameraRotation * Vector3{ fRight, fTop, 0 };
+	auto g = (Quaternion)cameraRotation * Vector3{ fLeft, fBottom, 0 };
+	auto h = (Quaternion)cameraRotation * Vector3{ fRight, fBottom, 0 };
+
+	DrawFrustumLines(*m_context.m_shapeDrawer, cameraPos, cameraForward, nearPanel, farPanel, a, b, c, d, e, f, g, h);
+}
+
+void EditorRender::DrawFrustumLines(ShapeDrawer& p_drawer, const Vector3& pos, const Vector3& forward, float nearPanel, const float farPanel, const Vector3& a,
+	const Vector3& b, const Vector3& c, const Vector3& d, const Vector3& e, const Vector3& f, const Vector3& g, const Vector3& h)
+{
+	// Convenient lambda to draw a frustum line
+	auto draw = [&](const Vector3& p_start, const Vector3& p_end, const float planeDistance)
+	{
+		auto offset = pos + forward * planeDistance;
+		auto start = offset + p_start;
+		auto end = offset + p_end;
+		p_drawer.DrawLine(start, end, Color3(1.0f, 1.0f, 1.0f));
+	};
+
+	// Draw near plane
+	draw(a, b, nearPanel);
+	draw(b, d, nearPanel);
+	draw(d, c, nearPanel);
+	draw(c, a, nearPanel);
+
+	// Draw far plane
+	draw(e, f, farPanel);
+	draw(f, h, farPanel);
+	draw(h, g, farPanel);
+	draw(g, e, farPanel);
+
+	// Draw lines between near and far planes
+	draw(a + forward * nearPanel, e + forward * farPanel, 0);
+	draw(b + forward * nearPanel, f + forward * farPanel, 0);
+	draw(c + forward * nearPanel, g + forward * farPanel, 0);
+	draw(d + forward * nearPanel, h + forward * farPanel, 0);
 }
 
 void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis) //ªÊ÷∆gizmo
