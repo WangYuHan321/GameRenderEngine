@@ -24,6 +24,8 @@ void DrawCombox(WidgetContainer& p_root, const std::string& p_name, DepthFunc& p
 	item.choices[5] = "OpenGL_GEQUAL";
 	item.choices[6] = "OpenGL_ALWAYS";
 
+	item.currentChoice = (int)p_depthTest;
+
 	item.ValueChangedEvent += [&p_depthTest](int id)
 	{
 		switch (id)
@@ -60,6 +62,8 @@ void DrawCombox(WidgetContainer& p_root, const std::string& p_name, BlendParam& 
 	item.choices[13] = "OpenGL_ONE_MINUS_CONSTANT_ALPHA";
 	item.choices[14] = "OpenGL_SRC_ALPHA_SATURATE";
 
+	item.currentChoice = (int)p_blendParam;
+
 	item.ValueChangedEvent += [&p_blendParam](int id)
 	{
 		switch (id)
@@ -93,6 +97,8 @@ void DrawCombox(WidgetContainer& p_root, const std::string& p_name, BlendFunc& p
 	item.choices[3] = "OpenGL_MIN";
 	item.choices[4] = "OpenGL_MAX";
 
+	item.currentChoice = (int)p_blendFunc;
+
 	item.ValueChangedEvent += [&p_blendFunc](int id)
 	{
 		switch (id)
@@ -114,6 +120,8 @@ void DrawCombox(WidgetContainer& p_root, const std::string& p_name, CullFace& p_
 	item.choices[1] = "OpenGL_BACK";
 	item.choices[2] = "OpenGL_FRONT_AND_BACKT";
 
+	item.currentChoice = (int)p_cullFace;
+
 	item.ValueChangedEvent += [&p_cullFace](int id)
 	{
 		switch (id)
@@ -131,6 +139,8 @@ void DrawCombox(WidgetContainer& p_root, const std::string& p_name, FrontFace& p
 	auto& item = p_root.CreateWidget<ComboBox>(2);
 	item.choices[0] = "OpenGL_CW";
 	item.choices[1] = "OpenGL_CCW";
+
+	item.currentChoice = (int)p_frontFace;
 
 	item.ValueChangedEvent += [&p_frontFace](int id)
 	{
@@ -290,7 +300,7 @@ void MaterialEditor::GenerateShaderSettingContent()
 			switch (pValue->Type)
 			{
 			//case SHADER_TYPE::SHADER_SAMPLER1D: GUIDrawer::DrawS; break;
-			//case SHADER_TYPE::SHADER_SAMPLER2D: GUIDrawer::DrawTexture = 2; break;
+			case SHADER_TYPE::SHADER_SAMPLER2D: GUIDrawer::DrawTexture(*m_shaderSettingColumn, info.first, info.second.TEXTURE); break;
 			//case SHADER_TYPE::SHADER_SAMPLER3D: orderID = 1; break;
 			//case SHADER_TYPE::SHADER_SAMPLERCUBE: orderID = 0; break;
 			}
@@ -328,12 +338,12 @@ void MaterialEditor::GenerateMaterialSettingContent()
 
 	GUIDrawer::DrawBoolean(*m_materialSettingColumn, "Cull", m_target->Cull);
 	DrawCombox(*m_materialSettingColumn, "CullFace", (CullFace&)m_target->CullFace);
-	DrawCombox(*m_materialSettingColumn, "DepthFunc", (FrontFace&)(m_target->CullWindingOrder));
+	DrawCombox(*m_materialSettingColumn, "FrontFace", (FrontFace&)(m_target->CullWindingOrder));
 
 	GUIDrawer::DrawBoolean(*m_materialSettingColumn, "Blend", m_target->Blend);
-	DrawCombox(*m_materialSettingColumn, "CullFace (src)", (CullFace&)m_target->BlendSrc);
-	DrawCombox(*m_materialSettingColumn, "CullFace (Dst)", (CullFace&)m_target->BlendDst);
-	DrawCombox(*m_materialSettingColumn, "DepthFunc", (FrontFace&)(m_target->BlendEquation));
+	DrawCombox(*m_materialSettingColumn, "Blend(src)", (BlendParam&)m_target->BlendSrc);
+	DrawCombox(*m_materialSettingColumn, "Blend(Dst)", (BlendParam&)m_target->BlendDst);
+	DrawCombox(*m_materialSettingColumn, "BlendFunc", (BlendFunc&)(m_target->BlendEquation));
 
 	GUIDrawer::DrawBoolean(*m_materialSettingColumn, "ColorWrite", m_target->ColorWrite);
 	
