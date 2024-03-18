@@ -12,6 +12,17 @@ public:
     CCamera(Actor& p_actor);
     ~CCamera();
 
+    Camera& GetCamera();
+
+    float GetFov();
+    void SetFov(float fov);
+    float GetSize();
+    void SetSize(float pSize);
+    float GetNear();
+    void SetNear(float pNear);
+    Color4 GetClearColor();
+    void SetClearColor(Color4 p_clearColor);
+
     virtual std::string GetName();
 
     virtual void OnInspector(WidgetContainer& p_root);

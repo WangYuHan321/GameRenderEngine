@@ -4,7 +4,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../Util/common.h"
 
-Camera::Camera()
+Camera::Camera():
+FOV(45.0f),
+Size(5.0f),
+Near(0.1f),
+Far(100.f),
+ClearColor(0.f, 0.f, 0.f, 1.0f),
+Perspective(true)
 {
 
 }

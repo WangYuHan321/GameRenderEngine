@@ -30,7 +30,9 @@ public:
     float Aspect;//´¹Ö±
     float Near;
     float Far;
+    float Size;//Õı½»¾ØÕó
     bool  Perspective;
+    Color4 ClearColor;
 
     CameraFrustum Frustum;
 private:
