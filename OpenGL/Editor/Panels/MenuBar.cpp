@@ -7,7 +7,7 @@ MenuBar::MenuBar()
 {
 	CreateWindowMenu();
 	CreateActorsMenu();
-	//CreateSwitchLanguage();
+	CreateSwitchLanguage();
 }
 
 void MenuBar::CreateWindowMenu()
@@ -27,10 +27,10 @@ void MenuBar::CreateActorsMenu()
 
 void MenuBar::CreateSwitchLanguage()
 {
-	LANGUAGE curLang = EDITOR_CONTEXT(xmlMgr).GetLanguageType();
-	m_windowMenu = &CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_LANGUAGE));
-	m_windowMenu->CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_ZH_CN)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)curLang);//中文
-	m_windowMenu->CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_EN_US)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)curLang);
+	//LANGUAGE curLang = EDITOR_CONTEXT(xmlMgr).GetLanguageType();
+	auto& languageMenu = CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_LANGUAGE));
+	languageMenu.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_ZH_CN)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)false);//中文
+	languageMenu.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LANGUAGE_EN_US)).ClickedEvent += std::bind(&MenuBar::SwitchLanguage, this, (int)true);
 }
 
 void MenuBar::RegisterPanel(const std::string& p_name, PanelWindow& p_panel)
