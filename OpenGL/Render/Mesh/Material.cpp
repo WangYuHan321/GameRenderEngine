@@ -78,10 +78,10 @@ void Material::Bind()
         {
             switch (value.Type)
             {
-            case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER1D: { if (!value.TEXTURE) value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { if(value.TEXTURE) value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER3D: { if (value.TEXTURE)value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLERCUBE: { if (value.TEXTURE)value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             }
         }
 
