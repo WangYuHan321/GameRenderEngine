@@ -210,6 +210,23 @@ void ForwardRenderer::Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj
 	}
 }
 
+void ForwardRenderer::SetClearColor(float p_red, float p_green, float p_blue, float p_alpha)
+{
+	glClearColor(p_red, p_green, p_blue, p_alpha);
+}
+
+void ForwardRenderer::Clear(Camera& camera, bool p_colorBuffer, bool p_depthBuffer, bool p_stencilBuffer)
+{
+	GLfloat previousClearColor[4];
+	glGetFloatv(GL_COLOR_CLEAR_VALUE, previousClearColor);
+
+	Color4 cameraClearColor = camera.ClearColor;
+	SetClearColor(cameraClearColor.r, cameraClearColor.g, cameraClearColor.b, 1.0f);
+	Clear(p_colorBuffer, p_depthBuffer, p_stencilBuffer);
+
+	SetClearColor(previousClearColor[0], previousClearColor[1], previousClearColor[2], previousClearColor[3]);
+}
+
 void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stencilColor)
 {
 	glClear((p_colorBuffer ? GL_COLOR_BUFFER_BIT : 0) |

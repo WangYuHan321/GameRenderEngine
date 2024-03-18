@@ -62,6 +62,10 @@ public:
 
 	void Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj);
 
+	void SetClearColor(float p_red, float p_green, float p_blue, float p_alpha);
+
+	void Clear(Camera& camera, bool p_colorBuffer = true, bool p_depthBuffer = true, bool p_stencilBuffer = true);
+
 	void Clear(bool p_colorBuffer = true, bool p_deptBuffer = true, bool p_stencilColor = true);
 
 	void ApplyStateMask(uint8_t mask);
