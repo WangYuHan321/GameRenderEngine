@@ -39,6 +39,7 @@ void XmlManager::SwitchLanguage(LANGUAGE newLanguage)
 {
 	if (language != newLanguage)
 	{
+		language = newLanguage;
 		m_languageMap.clear();
 		LoadLanguageXml("language", "item");
 	}
