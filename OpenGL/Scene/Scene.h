@@ -45,6 +45,8 @@ public:
 
 	Actor* FindActorByID(int64_t p_id);
 
+	CCamera* FindMainCCamera();
+
 	const FastAccessComponents GetFastAccessComponents() const;
 
 	std::vector<Actor*> GetActors()const ;

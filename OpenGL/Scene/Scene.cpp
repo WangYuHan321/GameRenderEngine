@@ -168,6 +168,16 @@ Actor* Scene::FindActorByID(int64_t p_id)
 		return nullptr;
 }
 
+CCamera* Scene::FindMainCCamera()
+{
+	for (auto item : m_fastAccessComponents.cameras)
+	{
+		if (item->owner.IsActive())
+			return item;
+	}
+	return nullptr;
+}
+
 const Scene::FastAccessComponents Scene::GetFastAccessComponents() const
 {
 	return m_fastAccessComponents;
