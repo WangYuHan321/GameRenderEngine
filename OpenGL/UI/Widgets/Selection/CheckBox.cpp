@@ -10,7 +10,7 @@ void CheckBox::_Draw_Impl()
 
 	ImGui::Checkbox((label + m_widgetID).c_str(), &value);
 
-	if (value)
+	if (value != previousValue)
 	{
 		ValueChangedEvent.Invoke(value);
 		this->NotifyChange();
