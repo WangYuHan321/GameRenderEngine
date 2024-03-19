@@ -26,7 +26,7 @@ public:
     Event<>OpenEvent;
     Event<>CloseEvent;
 protected:
-    void _Draw_Impl() override;
+    void _Draw_Impl();
 
 public:
     
