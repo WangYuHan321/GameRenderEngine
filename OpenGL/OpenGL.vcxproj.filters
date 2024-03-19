@@ -1015,5 +1015,8 @@
     <None Include="Render\Shader\ShaderStorageBuffer.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Log\Logger.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -403,6 +403,7 @@
     <None Include="Core\ECS\Components\Behaviour.inl" />
     <None Include="Editor\Helper\GUIDrawer.inl" />
     <None Include="Event\Event.inl" />
+    <None Include="Log\Logger.inl" />
     <None Include="Render\Resource\AResourceManager.inl" />
     <None Include="Render\Shader\ShaderStorageBuffer.inl" />
     <None Include="Render\Shader\UniformBuffer.inl" />
