@@ -45,7 +45,7 @@ private:
 	bool m_isFirstRightPressed = true;
 	float m_mouseSensitivity = 0.12f;
 
-	float m_cameraMoveSpeed = 15.0f;
+	float m_cameraMoveSpeed = 100.0f;
 	//Êó±êÓÒ»÷¿ØÖÆ
 	
 	InputManager& m_inputMgr;
