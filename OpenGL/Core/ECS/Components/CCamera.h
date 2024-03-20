@@ -18,6 +18,8 @@ public:
     void SetFov(float fov);
     float GetSize();
     void SetSize(float pSize);
+    float GetFar();
+    void SetFar(float pFar);
     float GetNear();
     void SetNear(float pNear);
     Color4 GetClearColor();

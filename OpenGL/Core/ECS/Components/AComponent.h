@@ -7,6 +7,8 @@
 #include "../../Core/Helper/Serializer.h"
 #include "../../Editor/Helper/GUIDrawer.h"
 
+#include "../../Global/BaseFunction.h"
+
 class Actor;
 
 class AComponent : public IInspectorItem
