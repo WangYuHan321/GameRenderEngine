@@ -73,11 +73,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Global\BaseFunction.h" />
     <ClInclude Include="Editor\Panels\Console.h" />
     <ClInclude Include="Editor\Panels\AssetView.h" />
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
     <ClInclude Include="File\LanguageDefine.h" />
     <ClInclude Include="Render\Material\MaterialEditorType.h" />
+    <ClInclude Include="Thread\ThreadPool.h" />
     <ClInclude Include="UI\Plugin\TexturePreview.h" />
     <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
     <ClInclude Include="UI\Plugin\DDSource.h" />
@@ -246,9 +248,12 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Global\BaseFunction.cpp" />
     <ClCompile Include="Editor\Panels\Console.cpp" />
     <ClCompile Include="Editor\Panels\AssetView.cpp" />
     <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp" />
+    <ClCompile Include="Thread\ThreadPool.cpp" />
+    <ClCompile Include="Thread\Runable.h" />
     <ClCompile Include="UI\Plugin\TexturePreview.cpp" />
     <ClCompile Include="UI\Widgets\Text\TextClickable.cpp" />
     <ClCompile Include="UI\Plugin\DDSource.cpp" />
