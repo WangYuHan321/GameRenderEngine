@@ -37,4 +37,10 @@
 	<item id="36" language="缩放" />
 	<item id="37" language="清理" />
 	<item id="38" language="日志" />
+	<item id="39" language="视域" />
+	<item id="40" language="投影大小" />
+	<item id="41" language="近裁剪面" />
+	<item id="42" language="远裁剪面" />
+	<item id="43" language="清理颜色值" />
+	<item id="44" language="相机模式" />
 </language>

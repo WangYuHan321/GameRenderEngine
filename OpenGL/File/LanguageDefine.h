@@ -47,6 +47,17 @@
 
 #define CLEAR_TEXT 37
 
+#define FIELD_OF_VIEW_TEXT 39
+#define ORTHOGRAPHICS_SIZE 40
+
+#define NEAR_PANEL 41
+#define FAR_PANEL 42
+
+#define CLEAR_COLOR 43
+
+#define PROJECTION_MODE 44
+
+
 
 
 
