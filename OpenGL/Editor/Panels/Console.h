@@ -19,8 +19,8 @@ public:
 	std::pair<Color4, std::string> GetWidgetSettingsFromLogData(const LogData& p_logData);
 	void OnLogIntercepted(LogData p_logData);
 	void Clear();
-//protected:
-//	void _Draw_Impl() override;
+protected:
+	void _Draw_Impl() override;
 
 private:
 	Group* m_logGroup;

@@ -10,6 +10,7 @@
 #define MENU_SCENE_VIEW 8
 #define MENU_INSPECTOR 9
 #define MENU_TOOLBAR 10
+#define MENU_CONSOLE 38
 #define MENU_ASSET_BROWSER 11
 #define MENU_MATERIAL_EDITOR 12
 #define MENU_CREATE_EMPTY 13
@@ -45,6 +46,7 @@
 #define SCALE_TEXT 36
 
 #define CLEAR_TEXT 37
+
 
 
 

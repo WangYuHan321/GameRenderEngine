@@ -58,19 +58,19 @@ std::pair<Color4, std::string> Console::GetWidgetSettingsFromLogData(const LogDa
 	}
 }
 
-//void Console::_Draw_Impl()
-//{
-//	PanelWindow::_Draw_Impl();
-//	if (Logger::getInstance()->GetAllLogData().size() > 0)
-//	{
-//		std::vector<LogData> info = Logger::getInstance()->GetAllLogData();
-//		for (auto item : info)
-//		{
-//			OnLogIntercepted(item);
-//		}
-//
-//	}
-//}
+void Console::_Draw_Impl()
+{
+	PanelWindow::_Draw_Impl();
+	if (Logger::getInstance()->GetAllLogData().size() > m_logGroup->GetWidgets().size())
+	{
+		std::vector<LogData> info = Logger::getInstance()->GetAllLogData();
+		for (auto item : info)
+		{
+			OnLogIntercepted(item);
+		}
+
+	}
+}
 
 void Console::OnLogIntercepted(LogData p_logData)
 {

@@ -5,6 +5,7 @@
 #include "../../Editor/Panels/Hierarchy.h"
 #include "../../Editor/Panels/Inspector.h"
 #include "../../Editor/Panels/ToolBar.h"
+#include "../../Editor/Panels/Console.h"
 #include "../../Editor/Panels/AssetBrowser.h"
 #include "../../Editor/Panels/MaterialEditor.h"
 
@@ -34,6 +35,7 @@ void Editor::SetUpUI()
 	m_panelsMgr.CreatePanel<SceneView>(EDITOR_LANGUAGE(MENU_SCENE_VIEW), true, settings);
 	m_panelsMgr.CreatePanel<Inspector>(EDITOR_LANGUAGE(MENU_INSPECTOR), true, settings);
 	m_panelsMgr.CreatePanel<ToolBar>(EDITOR_LANGUAGE(MENU_TOOLBAR), false, settings);
+	m_panelsMgr.CreatePanel<Console>(EDITOR_LANGUAGE(MENU_CONSOLE), true, settings);
 	m_panelsMgr.CreatePanel<AssetBrowser>(EDITOR_LANGUAGE(MENU_ASSET_BROWSER), true, settings, ConfigManager::getInstance()->GetEnginePath(),
 		ConfigManager::getInstance()->GetProjectPath() + "\\Asset", ConfigManager::getInstance()->GetProjectPath() + "\\Script");
 	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), false, settings);
