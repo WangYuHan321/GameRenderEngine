@@ -583,7 +583,7 @@ int CShader::GetInt(std::string location)
 
 float CShader::GetFloat(std::string location)
 {
-	float value;
+	GLfloat value;
 	glGetUniformfv(m_ID, GetUniformLocation(location), &value);
 	return value;
 }
@@ -597,14 +597,14 @@ glm::vec3 CShader::GetVector3(std::string location)
 {
 	GLfloat values[3];
 	glGetUniformfv(m_ID, GetUniformLocation(location), values);
-	return glm::vec3(values[0], values[1], values[3]);
+	return glm::vec3(values[0], values[1], values[2]);
 }
 
 glm::vec4 CShader::GetVector4(std::string location)
 {
 	GLfloat values[4];
 	glGetUniformfv(m_ID, GetUniformLocation(location), values);
-	return glm::vec4(values[0], values[1], values[3], values[4]);
+	return glm::vec4(values[0], values[1], values[2], values[3]);
 }
 
 glm::mat2 CShader::GetMatrix2(std::string location)
