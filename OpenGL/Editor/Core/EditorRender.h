@@ -31,6 +31,7 @@ public:
 	void RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool p_isSelected);
 	void RenderLights();
 	void RenderCameraFrustum(CCamera& p_camera);
+	void RenderMaterialAsset(Material& p_material);
 	void RenderCameraPerspectiveFrustum(std::pair<uint16_t, uint16_t> p_size, CCamera& p_camera);
 	void RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis = -1);
 	void DrawFrustumLines(ShapeDrawer& p_drawer,const Vector3& pos,const Vector3& forward,float nearPanel,const float farPanel,const Vector3& a,

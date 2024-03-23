@@ -109,6 +109,10 @@ void EditorRender::InitMaterials()
 	m_actorPickingMaterial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
 	m_actorPickingMaterial.SetVector("u_Diffuse", Vector4(1.f, 1.f, 1.f, 1.0f));
 	m_actorPickingMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
+
+	m_emptyMaterial.SetShader(m_context.shaderMgr["Unlit.glsl"]);
+	m_emptyMaterial.SetVector("u_Diffuse", Vector4(1.f, 0.f, 1.f, 1.0f));
+	m_emptyMaterial.SetTexture("u_DiffuseMap", m_pTexture, 0);
 }
 
 void EditorRender::PreparePickingMaterial(Actor& p_actor, Material& p_material)
@@ -339,6 +343,12 @@ void EditorRender::RenderCameraFrustum(CCamera& p_camera)
 {
 	auto gameViewSize = { 16, 9 };
 	RenderCameraPerspectiveFrustum((std::pair<uint16_t, uint16_t>&)(gameViewSize), p_camera);
+}
+
+void EditorRender::RenderMaterialAsset(Material& p_material)
+{
+	Matrix4 model = Scale(glm::vec3(3.0f));
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), p_material, &model, &m_emptyMaterial);
 }
 
 void EditorRender::RenderCameraPerspectiveFrustum(std::pair<uint16_t, uint16_t> p_size, CCamera& p_camera)
