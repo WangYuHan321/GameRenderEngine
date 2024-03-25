@@ -14,6 +14,7 @@ class Image;
 class CShader;
 class Texture;
 class Material;
+class UniformSampler;
 class WidgetContainer;
 
 
@@ -28,6 +29,7 @@ public:
 	static float _MAX_FLOAT;
 
 	static void ProvideEmptyTexture(Texture& p_emptyTexture);
+	static Texture* GetEmptyTexture();
 
 	static void CreateTitle(WidgetContainer& p_root,const string& p_name);
 
@@ -44,7 +46,8 @@ public:
 	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha = false);
 	static Text& DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier);
 	static Text& DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier);
-	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture*& p_data, Event<>* p_updateNotifier = nullptr);
+	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_updateNotifier);
+	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, Event<>* p_updateNotifier = nullptr);
 
 	template <typename T>
 	static void DrawScalar(WidgetContainer& p_root, const std::string& p_name, std::function<T(void)> p_gatherer, std::function<void(T)> p_provider, float p_step = 1.f, T p_min = std::numeric_limits<T>::min(), T p_max = std::numeric_limits<T>::max());

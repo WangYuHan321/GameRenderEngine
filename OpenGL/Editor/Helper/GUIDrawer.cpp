@@ -32,6 +32,11 @@ void GUIDrawer::ProvideEmptyTexture(Texture& p_emptyTexture)
 	__EMPTY_TEXTURE = &p_emptyTexture;
 }
 
+Texture* GUIDrawer::GetEmptyTexture()
+{
+	return __EMPTY_TEXTURE;
+}
+
 void GUIDrawer::CreateTitle(WidgetContainer& p_root, const string& p_name)
 {
 	p_root.CreateWidget<TextColored>(p_name, titleColor);
@@ -167,7 +172,42 @@ Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, 
 	return textEdit;
 }
 
-Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture*& p_data, Event<>* p_updateNotifier)
+Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_updateNotifier)
+{
+	CreateTitle(p_root, p_name);
+
+	auto& item = p_root.CreateWidget<Group>();
+
+	auto& widget = item.CreateWidget<Image>(p_data ? p_data->ID : 0, ImVec2(75, 75));
+
+	widget.AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [&widget, p_name, &p_data, p_updateNotifier](auto p_dataReceive)
+	{
+		std::string fileName = PathParser::getInstance()->GetFileNameByPath(p_dataReceive.first);
+		if (auto resource = ServiceLocator::getInstance()->Get<TextureManager>()[fileName]; resource)
+		{
+			p_data = resource;
+			widget.textureID.ID = p_data->ID;
+			if (p_updateNotifier)
+				p_updateNotifier(p_name, p_data);
+		}
+	};
+
+	widget.lineBreak = false;
+
+	auto& resetBuuton = item.CreateWidget<Button>(GLOBALSERVICE(XmlManager).GetLanguage(CLEAR_TEXT));
+	resetBuuton.idleColor = Color4(0.5f, 0.0f, 0.0f, 1.0f);
+	resetBuuton.ClickedEvent += [&widget, &p_name, &p_data, p_updateNotifier]
+	{
+		p_data = nullptr;
+		widget.textureID.ID = 0;
+		if (p_updateNotifier)
+			p_updateNotifier(p_name, p_data);
+	};
+
+	return widget;
+}
+
+Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, Event<>* p_updateNotifier)
 {
 	CreateTitle(p_root, p_name);
 

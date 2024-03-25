@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "../../Editor/Helper/GUIDrawer.h"
 #include "../../Core/Helper/Serializer.h"
 
 Material::Material()
@@ -78,10 +79,10 @@ void Material::Bind()
         {
             switch (value.Type)
             {
-            case SHADER_TYPE::SHADER_SAMPLER1D: { if (!value.TEXTURE) value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER2D: { if(value.TEXTURE) value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER3D: { if (value.TEXTURE)value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLERCUBE: { if (value.TEXTURE)value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE = value.TEXTURE ? value.TEXTURE : GUIDrawer::GetEmptyTexture(); value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             }
         }
 
@@ -245,6 +246,11 @@ void Material::SetVector(std::string name, glm::vec4 value)
 {
     m_uniforms[name].Type = SHADER_VEC4;
     m_uniforms[name].VEC4 = value;
+}
+
+void Material::SetTextureValue(std::string name, Texture* value)
+{
+    m_uniformSampler[name].TEXTURE = value;
 }
 
 void Material::SetTexture(std::string name, Texture* value, unsigned int unit)
