@@ -5,6 +5,7 @@
 #include "../../UI/Widgets/Selection/ComboBox.h"
 #include "../../Editor/Helper/GUIDrawer.h"
 #include "../../Render/Shader/EShader.h"
+#include "../../Editor/Panels/AssetView.h"
 #include "../../Render/Resource/Loader/MaterialLoader.h"
 #include "../../UI/Layout/GroupCollapsable.h"
 #include "../../Editor/Core/EditorAction.h"
@@ -200,6 +201,7 @@ void MaterialEditor::CreateHeaderButtons()
 		if (m_target)
 		{
 			LOG_INFO("Preview to file");
+			Preview();
 			//MaterialLoader::getInstance()->
 		}
 	};
@@ -300,7 +302,7 @@ void MaterialEditor::GenerateShaderSettingContent()
 			switch (pValue->Type)
 			{
 			//case SHADER_TYPE::SHADER_SAMPLER1D: GUIDrawer::DrawS; break;
-			case SHADER_TYPE::SHADER_SAMPLER2D: GUIDrawer::DrawTexture(*m_shaderSettingColumn, info.first, info.second.TEXTURE); break;
+			case SHADER_TYPE::SHADER_SAMPLER2D: GUIDrawer::DrawTexture(*m_shaderSettingColumn, info.first, info.second.TEXTURE, std::bind(&Material::SetTextureValue, m_target, std::placeholders::_1, std::placeholders::_2)); break;
 			//case SHADER_TYPE::SHADER_SAMPLER3D: orderID = 1; break;
 			//case SHADER_TYPE::SHADER_SAMPLERCUBE: orderID = 0; break;
 			}
@@ -359,4 +361,16 @@ void MaterialEditor::GenerateMaterialSettingContent()
 		OnShaderDropped();
 	}
 }
+
+void MaterialEditor::Preview()
+{
+	auto& assetView = EDITOR_PANEL(AssetView, "Asset View");
+
+	if (m_target)
+		assetView.SetResource(m_target);
+
+	assetView.Open();
+}
+
+
 

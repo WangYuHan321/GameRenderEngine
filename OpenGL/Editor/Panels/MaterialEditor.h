@@ -30,6 +30,8 @@ public:
 
 	void GenerateShaderSettingContent();
 	void GenerateMaterialSettingContent();
+
+	void Preview();
 private:
 
 	Material* m_target = nullptr;
