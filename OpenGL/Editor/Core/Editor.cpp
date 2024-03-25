@@ -6,6 +6,7 @@
 #include "../../Editor/Panels/Inspector.h"
 #include "../../Editor/Panels/ToolBar.h"
 #include "../../Editor/Panels/Console.h"
+#include "../../Editor/Panels/AssetView.h"
 #include "../../Editor/Panels/AssetBrowser.h"
 #include "../../Editor/Panels/MaterialEditor.h"
 
@@ -36,6 +37,7 @@ void Editor::SetUpUI()
 	m_panelsMgr.CreatePanel<Inspector>(EDITOR_LANGUAGE(MENU_INSPECTOR), true, settings);
 	m_panelsMgr.CreatePanel<ToolBar>(EDITOR_LANGUAGE(MENU_TOOLBAR), false, settings);
 	m_panelsMgr.CreatePanel<Console>(EDITOR_LANGUAGE(MENU_CONSOLE), true, settings);
+	m_panelsMgr.CreatePanel<AssetView>(EDITOR_LANGUAGE(MENU_ASSETVIEW), false, settings);
 	m_panelsMgr.CreatePanel<AssetBrowser>(EDITOR_LANGUAGE(MENU_ASSET_BROWSER), true, settings, ConfigManager::getInstance()->GetEnginePath(),
 		ConfigManager::getInstance()->GetProjectPath() + "\\Asset", ConfigManager::getInstance()->GetProjectPath() + "\\Script");
 	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), false, settings);
@@ -75,9 +77,10 @@ void Editor::RenderViews(float p_deltaTime)
 {
 	auto& gameView = m_panelsMgr.GetPanelAs<GameView>("Game View");//EDITOR_LANGUAGE(MENU_GAME_VIEW)
 	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>("Scene View");//EDITOR_LANGUAGE(MENU_SCENE_VIEW)
+	auto& assetView = m_panelsMgr.GetPanelAs<SceneView>("Asset View");
 
 	{
-		
+		assetView.Update(p_deltaTime);
 		gameView.Update(p_deltaTime);
 		sceneView.Update(p_deltaTime);
 	}
@@ -90,6 +93,11 @@ void Editor::RenderViews(float p_deltaTime)
 	if (sceneView.IsOpened())
 	{
 		sceneView.Render();
+	}
+
+	if (assetView.IsOpened())
+	{
+		assetView.Render();
 	}
 
 }
