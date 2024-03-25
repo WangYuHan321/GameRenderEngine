@@ -3,6 +3,7 @@
 #include "../../Render/Resource/Loader/TextureLoader.h"
 #include "../../Render/Resource/Loader/ModelLoader.h"
 #include "../../Render/Resource/Loader/ShaderLoader.h"
+#include "../../Editor/Helper/GUIDrawer.h"
 #include "../../Render/Resource/RawShader.h"
 
 EditorResource::EditorResource(const std::string& p_editorAssetPath)
@@ -81,6 +82,9 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_textures["Icon_PointLight"] = TextureLoader::getInstance()->Create(icon_pointLight, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_SkyLight"] = TextureLoader::getInstance()->Create(icon_skyLight, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_SpotLight"] = TextureLoader::getInstance()->Create(icon_spotLight, GL_TEXTURE_2D, GL_RGBA);
+
+	m_textures["Empty_Texture"] = TextureLoader::getInstance()->CreateColor((10 << 24) | (10 << 16) | (10 << 8) | 255, GL_NEAREST, GL_NEAREST, false);
+	GUIDrawer::ProvideEmptyTexture(*m_textures["Empty_Texture"]);
 }
 
 EditorResource::~EditorResource()
