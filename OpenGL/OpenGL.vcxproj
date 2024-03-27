@@ -73,6 +73,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\CAudioSource.h" />
     <ClInclude Include="Global\BaseFunction.h" />
     <ClInclude Include="Editor\Panels\Console.h" />
     <ClInclude Include="Editor\Panels\AssetView.h" />
@@ -248,6 +249,7 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\CAudioSource.cpp" />
     <ClCompile Include="Global\BaseFunction.cpp" />
     <ClCompile Include="Editor\Panels\Console.cpp" />
     <ClCompile Include="Editor\Panels\AssetView.cpp" />
