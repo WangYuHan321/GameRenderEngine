@@ -1,6 +1,7 @@
 #include "Math.h"
 #include "../../Util/common.h"
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 #define TO_RADIANS(value) value * PI / 180.f
 #define TO_DEGREES(value) value * 180.f / PI
@@ -102,6 +103,17 @@ glm::vec3 EulerAngles(glm::quat p_target)
     const float yaw = atan2(siny_cosp, cosy_cosp);
 
     return TO_DEGREES(glm::vec3(roll, pitch, yaw)); // XYZ
+}
+
+std::tuple<glm::vec3, glm::quat, glm::vec3> DecomposeTransform(const glm::mat4& transform)
+{
+    glm::vec3 scale;
+    glm::quat rotation;
+    glm::vec3 translation;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    glm::decompose(transform, scale, rotation, translation, skew, perspective);
+    return { translation, rotation, scale };
 }
 
 glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha)

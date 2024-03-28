@@ -1,5 +1,7 @@
 #pragma once
 
+
+#include<tuple>
 #include<GLM/glm.hpp>
 #include<glm/matrix.hpp>
 
@@ -25,6 +27,8 @@ glm::quat Normalize(const glm::quat& quat);
 glm::quat Vector3ToQuat(glm::vec3 v);
 
 glm::vec3 EulerAngles(glm::quat p_target);
+
+std::tuple<glm::vec3, glm::quat, glm::vec3> DecomposeTransform(const glm::mat4& transform);
 
 glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha);
 
