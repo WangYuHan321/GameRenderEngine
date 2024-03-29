@@ -55,6 +55,16 @@ glm::quat Normalize(const glm::quat& _quat)
     return temp;
 }
 
+aiVector3D GlmVecToAiVec(const glm::vec3& vec)
+{
+    return aiVector3D(vec.x, vec.y, vec.z);
+}
+
+aiQuaternion GlmQuatToAiQuat(const glm::quat& pOrientation)
+{
+    return aiQuaternion(pOrientation.w, pOrientation.x, pOrientation.y, pOrientation.z);
+}
+
 glm::quat Vector3ToQuat(glm::vec3 v)
 {
     glm::quat temp(0.0f,0.0f, 0.0f, 0.0f);
@@ -119,6 +129,30 @@ std::tuple<glm::vec3, glm::quat, glm::vec3> DecomposeTransform(const glm::mat4& 
 glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha)
 {
     return (start + (end - start) * alpha);
+}
+
+glm::mat4 AiMatToGlmMat(const aiMatrix4x4& from)
+{
+    glm::mat4 to;
+    // the a,b,c,d in assimp is the row ; the 1,2,3,4 is the column
+    to[0][0] = from.a1;
+    to[1][0] = from.a2;
+    to[2][0] = from.a3;
+    to[3][0] = from.a4;
+    to[0][1] = from.b1;
+    to[1][1] = from.b2;
+    to[2][1] = from.b3;
+    to[3][1] = from.b4;
+    to[0][2] = from.c1;
+    to[1][2] = from.c2;
+    to[2][2] = from.c3;
+    to[3][2] = from.c4;
+    to[0][3] = from.d1;
+    to[1][3] = from.d2;
+    to[2][3] = from.d3;
+    to[3][3] = from.d4;
+
+    return to;
 }
 
 glm::vec3 ScreenToWorld(glm::vec2 screenPos, float val, glm::mat4 view, glm::mat4 proj)

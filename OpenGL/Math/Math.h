@@ -3,6 +3,7 @@
 
 #include<tuple>
 #include<GLM/glm.hpp>
+#include <assimp/scene.h>
 #include<glm/matrix.hpp>
 
 struct Ray;
@@ -24,6 +25,10 @@ glm::mat4 Scale(const glm::vec3& scale);
 
 glm::quat Normalize(const glm::quat& quat);
 
+aiVector3D GlmVecToAiVec(const glm::vec3& vec);
+
+aiQuaternion GlmQuatToAiQuat(const glm::quat& pOrientation);
+
 glm::quat Vector3ToQuat(glm::vec3 v);
 
 glm::vec3 EulerAngles(glm::quat p_target);
@@ -31,6 +36,8 @@ glm::vec3 EulerAngles(glm::quat p_target);
 std::tuple<glm::vec3, glm::quat, glm::vec3> DecomposeTransform(const glm::mat4& transform);
 
 glm::vec3 Lerp(glm::vec3 start, glm::vec3 end, float alpha);
+
+glm::mat4 AiMatToGlmMat(const aiMatrix4x4& from);
 
 glm::vec3 ScreenToWorld(glm::vec2 screenPos, float val, glm::mat4 view, glm::mat4 proj);//必须线归一化
 
