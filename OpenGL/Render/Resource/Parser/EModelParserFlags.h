@@ -1,5 +1,5 @@
+#pragma once
 #include "../../Util/common.h"
-
 
 enum class EModelParserFlags : uint32_t
 {

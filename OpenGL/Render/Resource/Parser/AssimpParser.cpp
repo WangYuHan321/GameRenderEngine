@@ -3,7 +3,9 @@
 #include <assimp/scene.h>
 #include <assimp/matrix4x4.h>
 #include <assimp/postprocess.h>
-
+#include <filesystem>
+#include "../../Animation/Animation.h"
+#include "../../Render/Animation/Bone.h"
 
 bool AssimpParser::LoadModel(const std::string& p_fileName, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials, EModelParserFlags p_parserFlags)
 {
@@ -20,6 +22,26 @@ bool AssimpParser::LoadModel(const std::string& p_fileName, std::vector<Mesh*>& 
 	ProcessNode(&identity, scene->mRootNode, scene, p_meshes);
 
 	return true;
+}
+
+bool AssimpParser::LoadAnim(const std::string& p_fileName, std::vector<Animation*>& p_anim, EModelParserFlags p_flags)
+{
+    Assimp::Importer import;
+    const aiScene* scene = import.ReadFile(p_fileName, static_cast<unsigned int>(p_flags));
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+        return false;
+
+    if (scene && scene->mRootNode)
+    {
+        for (unsigned int i = 0; i < scene->mNumAnimations; i++)
+        {
+            auto animation = scene->mAnimations[i];
+            Animation* pAnim = new Animation();
+            InitAnim(animation, scene, pAnim, p_fileName.c_str());
+            p_anim.push_back(pAnim);
+        }
+    }
 }
 
 void AssimpParser::ProcessMaterials(const aiScene* p_scene, std::vector<std::string>& p_materials)
@@ -119,4 +141,50 @@ Mesh* AssimpParser::ProcessMesh(void* p_transform, aiMesh* p_mesh, const aiScene
     mesh->Finalize(true);
 
     return mesh;
+}
+
+
+void AssimpParser::InitAnim(aiAnimation* aiAnimation, const struct aiScene* p_scene, Animation* anim, const char* fileName)
+{
+    using fs = std::filesystem::path;
+    anim->animType = AnimType::Assimp;
+    fs path = fs(fileName);
+    anim->path = fileName;
+    anim->name = path.filename().string();
+    anim->duration = aiAnimation->mDuration;
+    anim->fps = aiAnimation->mTicksPerSecond;
+    ProcessBone(aiAnimation, anim,  p_scene->mRootNode);
+    ProcessBindPose(anim, p_scene->mRootNode);
+}
+
+void AssimpParser::ProcessBone(const aiAnimation* animation, Animation* anim, const aiNode* root_node)
+{
+    int numSize = animation->mNumChannels;
+
+    for (int i = 0; i < numSize; i++)
+    {
+        auto channel = animation->mChannels[i];
+        std::string boneName = channel->mNodeName.C_Str();
+
+        const aiNode* node = root_node->FindNode(channel->mNodeName);
+        if (node)
+        {
+            anim->nameBoneMap[boneName] = new Bone(boneName, channel, glm::inverse(AiMatToGlmMat(node->mTransformation)));
+        }
+    }
+}
+
+void AssimpParser::ProcessBindPose(Animation* anim, const aiNode* node)
+{
+    if (node)
+    {
+        std::string name(node->mName.C_Str());
+        auto bindpose = AiMatToGlmMat(node->mTransformation);
+        auto children_size = node->mNumChildren;
+        anim->nameBindPoseMap[name] = bindpose;
+        for (unsigned int i = 0; i < children_size; ++i)
+        {
+            ProcessBindPose(anim, node->mChildren[i]);
+        }
+    }
 }
