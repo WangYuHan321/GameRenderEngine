@@ -73,6 +73,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Render\Animation\Animation.h" />
+    <ClInclude Include="Render\Animation\Bone.h" />
     <ClInclude Include="Core\ECS\Components\CAudioSource.h" />
     <ClInclude Include="Global\BaseFunction.h" />
     <ClInclude Include="Editor\Panels\Console.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="Core\ECS\Components\CAmbientSphereLight.h" />
     <ClInclude Include="File\LanguageDefine.h" />
     <ClInclude Include="Render\Material\MaterialEditorType.h" />
+    <ClInclude Include="Render\Resource\Parser\IAnimationParser.h" />
     <ClInclude Include="Thread\ThreadPool.h" />
     <ClInclude Include="UI\Plugin\TexturePreview.h" />
     <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
@@ -249,6 +252,8 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Render\Animation\Animation.cpp" />
+    <ClCompile Include="Render\Animation\Bone.cpp" />
     <ClCompile Include="Core\ECS\Components\CAudioSource.cpp" />
     <ClCompile Include="Global\BaseFunction.cpp" />
     <ClCompile Include="Editor\Panels\Console.cpp" />
