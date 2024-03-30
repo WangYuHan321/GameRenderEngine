@@ -552,6 +552,15 @@
     <ClInclude Include="Render\Resource\Parser\IAnimationParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Resource\Loader\AnimLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Animation\Animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panels\HierarchyNew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1023,6 +1032,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Animation\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Resource\Loader\AnimLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Animation\Animator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panels\HierarchyNew.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

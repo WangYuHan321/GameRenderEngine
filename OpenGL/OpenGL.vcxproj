@@ -73,6 +73,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\Panels\HierarchyNew.h" />
+    <ClInclude Include="Render\Animation\Animator.h" />
+    <ClInclude Include="Render\Resource\Loader\AnimLoader.h" />
     <ClInclude Include="Render\Animation\Animation.h" />
     <ClInclude Include="Render\Animation\Bone.h" />
     <ClInclude Include="Core\ECS\Components\CAudioSource.h" />
@@ -252,6 +255,9 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
+    <ClCompile Include="Render\Animation\Animator.cpp" />
+    <ClCompile Include="Render\Resource\Loader\AnimLoader.cpp" />
     <ClCompile Include="Render\Animation\Animation.cpp" />
     <ClCompile Include="Render\Animation\Bone.cpp" />
     <ClCompile Include="Core\ECS\Components\CAudioSource.cpp" />
