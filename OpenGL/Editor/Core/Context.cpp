@@ -49,6 +49,7 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	ServiceLocator::getInstance()->Provide<InputManager>(*m_inputMgr);
 	ServiceLocator::getInstance()->Provide<Window>(*m_window);
 	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);
+	ServiceLocator::getInstance()->Provide<EditorResource>(*m_editorResource);
 
 	m_engineUBO = std::make_unique<UniformBuffer>(
 		sizeof(Matrix4) +	//model
