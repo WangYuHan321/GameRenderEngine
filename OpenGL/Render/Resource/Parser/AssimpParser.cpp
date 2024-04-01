@@ -137,6 +137,7 @@ Mesh* AssimpParser::ProcessMesh(void* p_transform, aiMesh* p_mesh, const aiScene
     mesh->Indices = indices;
     mesh->Topology = TRIANGLES;
     mesh->MaterialIndex = p_materalIndex;
+    mesh->Name = p_mesh->mName.C_Str();
 
     mesh->Finalize(true);
 

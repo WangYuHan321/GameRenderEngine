@@ -22,6 +22,7 @@ public:
     unsigned int m_VBO;
     unsigned int m_EBO;
 public:
+    std::string Name = "";
     std::vector<glm::vec3> Positions;
     std::vector<glm::vec2> UV;
     std::vector<glm::vec3> Normals;
