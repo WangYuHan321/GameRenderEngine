@@ -66,6 +66,14 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	std::string icon_pointLight = iconsFolder + std::string("icon_pointLight.png");
 	std::string icon_skyLight = iconsFolder + std::string("icon_skyLight.png");
 	std::string icon_spotLight = iconsFolder + std::string("icon_spotLight.png");
+
+	std::string icon_clock = iconsFolder + std::string("icon_clock.png");
+	std::string icon_leftPlay = iconsFolder + std::string("icon_left.png");
+	std::string icon_play = iconsFolder + std::string("icon_play.png");
+	std::string icon_stop = iconsFolder + std::string("icon_stop.png");
+	std::string icon_pause = iconsFolder + std::string("icon_pause.png");
+	std::string icon_sequencer = iconsFolder + std::string("icon_sequencer.png");
+	std::string icon_sequencerLine = iconsFolder + std::string("icon_sequencer_line.png");
 	
 	m_textures["Icon_Folder"] = TextureLoader::getInstance()->Create(icon_folder, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_Folder_SELECTED"] = TextureLoader::getInstance()->Create(icon_folder_selected, GL_TEXTURE_2D, GL_RGBA);
@@ -82,6 +90,15 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_textures["Icon_PointLight"] = TextureLoader::getInstance()->Create(icon_pointLight, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_SkyLight"] = TextureLoader::getInstance()->Create(icon_skyLight, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_SpotLight"] = TextureLoader::getInstance()->Create(icon_spotLight, GL_TEXTURE_2D, GL_RGBA);
+
+	m_textures["Icon_Clock"] = TextureLoader::getInstance()->Create(icon_clock, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_LeftPlay"] = TextureLoader::getInstance()->Create(icon_leftPlay, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Play"] = TextureLoader::getInstance()->Create(icon_play, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Stop"] = TextureLoader::getInstance()->Create(icon_stop, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_Pause"] = TextureLoader::getInstance()->Create(icon_pause, GL_TEXTURE_2D, GL_RGBA);
+
+	m_textures["Icon_Sequencer"] = TextureLoader::getInstance()->Create(icon_sequencer, GL_TEXTURE_2D, GL_RGBA);
+	m_textures["Icon_SequencerLine"] = TextureLoader::getInstance()->Create(icon_sequencerLine, GL_TEXTURE_2D, GL_RGBA);
 
 	m_textures["Empty_Texture"] = TextureLoader::getInstance()->CreateColor((10 << 24) | (10 << 16) | (10 << 8) | 255, GL_NEAREST, GL_NEAREST, false);
 	GUIDrawer::ProvideEmptyTexture(*m_textures["Empty_Texture"]);
