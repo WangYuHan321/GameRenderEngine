@@ -74,6 +74,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
+    <ClInclude Include="Editor\Panels\ModelView.h" />
     <ClInclude Include="Render\Animation\Animator.h" />
     <ClInclude Include="Render\Resource\Loader\AnimLoader.h" />
     <ClInclude Include="Render\Animation\Animation.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Render\Material\MaterialEditorType.h" />
     <ClInclude Include="Render\Resource\Parser\IAnimationParser.h" />
     <ClInclude Include="Thread\ThreadPool.h" />
+    <ClInclude Include="Editor\Panels\TimeLine.h" />
     <ClInclude Include="UI\Plugin\TexturePreview.h" />
     <ClInclude Include="UI\Widgets\Text\TextClickable.h" />
     <ClInclude Include="UI\Plugin\DDSource.h" />
@@ -256,6 +258,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
+    <ClCompile Include="Editor\Panels\ModelView.cpp" />
     <ClCompile Include="Render\Animation\Animator.cpp" />
     <ClCompile Include="Render\Resource\Loader\AnimLoader.cpp" />
     <ClCompile Include="Render\Animation\Animation.cpp" />
@@ -267,6 +270,7 @@
     <ClCompile Include="Core\ECS\Components\CAmbientSphereLight.cpp" />
     <ClCompile Include="Thread\ThreadPool.cpp" />
     <ClCompile Include="Thread\Runable.h" />
+    <ClCompile Include="Editor\Panels\TimeLine.cpp" />
     <ClCompile Include="UI\Plugin\TexturePreview.cpp" />
     <ClCompile Include="UI\Widgets\Text\TextClickable.cpp" />
     <ClCompile Include="UI\Plugin\DDSource.cpp" />

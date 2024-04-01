@@ -561,6 +561,12 @@
     <ClInclude Include="Editor\Panels\HierarchyNew.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Editor\Panels\TimeLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Panels\ModelView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1041,6 +1047,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panels\TimeLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor\Panels\ModelView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
