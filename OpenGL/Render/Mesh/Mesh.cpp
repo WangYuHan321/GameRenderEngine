@@ -223,6 +223,85 @@ void Mesh::Finalize(bool interleaved)
     ComputeBoundingSphere();
 }
 
+void Mesh::NewFinalize(bool interleaved)
+{
+    if (!m_VAO)
+    {
+        glGenVertexArrays(1, &m_VAO);
+        glGenBuffers(1, &m_VBO);
+        glGenBuffers(1, &m_EBO);
+    }
+
+
+    std::vector<float> data;
+    for (int i = 0; i < Vertexs.size(); ++i)
+    {
+        data.push_back(Vertexs[i].Position.x);
+        data.push_back(Vertexs[i].Position.y);
+        data.push_back(Vertexs[i].Position.z);
+        data.push_back(Vertexs[i].UV.x);
+        data.push_back(Vertexs[i].UV.y);
+        data.push_back(Vertexs[i].Normal.x);
+        data.push_back(Vertexs[i].Normal.y);
+        data.push_back(Vertexs[i].Normal.z);
+        data.push_back(Vertexs[i].Tangent.x);
+        data.push_back(Vertexs[i].Tangent.y);
+        data.push_back(Vertexs[i].Tangent.z);
+        data.push_back(Vertexs[i].Bitangent.x);
+        data.push_back(Vertexs[i].Bitangent.y);
+        data.push_back(Vertexs[i].Bitangent.z);
+    }
+
+    glBindVertexArray(m_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+
+    if (Indices.size() > 0)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(unsigned int), &Indices[0], GL_STATIC_DRAW);
+    }
+
+
+    size_t stride = 3 * sizeof(float);
+    stride += 2 * sizeof(float);
+    stride += 3 * sizeof(float);
+    stride += 3 * sizeof(float);
+    stride += 3 * sizeof(float);
+
+    size_t offset = 0;
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+    offset += 3 * sizeof(float);
+    {
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+        offset += 2 * sizeof(float);
+    }
+
+    {
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+        offset += 3 * sizeof(float);
+    }
+
+    {
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+        offset += 3 * sizeof(float);
+    }
+
+    {
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+        offset += 3 * sizeof(float);
+    }
+ 
+    glBindVertexArray(0);
+
+    ComputeBoundingSphere();
+}
+
 void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution)
 {
     LOG_INFO("Generating 3D mesh from SDF");
