@@ -45,7 +45,7 @@ std::string CLight::GetName()
 
 void CLight::OnInspector(WidgetContainer& p_root)
 {
-	GUIDrawer::DrawColor(p_root, "Color", m_data.color);
+	GUIDrawer::DrawColor(p_root, "Color", reinterpret_cast<Color4&>(m_data.color));
 	GUIDrawer::DrawScalar<float>(p_root, "Intensity", m_data.intensity, 0.005f, GUIDrawer::_MIN_FLOAT, GUIDrawer::_MAX_FLOAT);
 }
 
