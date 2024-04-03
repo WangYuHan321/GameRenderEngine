@@ -46,7 +46,7 @@ public:
 	static void DrawColor(WidgetContainer& p_root, const std::string& p_name, Color4& p_color, bool p_hasAlpha = false);
 	static Text& DrawMaterial(WidgetContainer& p_root, const std::string& p_name, Material*& p_data, Event<>* p_updateNotifier);
 	static Text& DrawShader(WidgetContainer& p_root, const std::string& p_name, CShader*& p_data, Event<>* p_updateNotifier);
-	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_updateNotifier);
+	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_setTextureValue);
 	static Image& DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, Event<>* p_updateNotifier = nullptr);
 
 	template <typename T>

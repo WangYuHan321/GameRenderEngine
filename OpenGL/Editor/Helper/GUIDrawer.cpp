@@ -172,7 +172,7 @@ Text& GUIDrawer::DrawShader(WidgetContainer& p_root, const std::string& p_name, 
 	return textEdit;
 }
 
-Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_updateNotifier)
+Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name, Texture* p_data, std::function<void(std::string, Texture*)> p_setTextureValue)
 {
 	CreateTitle(p_root, p_name);
 
@@ -180,15 +180,15 @@ Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name
 
 	auto& widget = item.CreateWidget<Image>(p_data ? p_data->ID : 0, ImVec2(75, 75));
 
-	widget.AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [&widget, p_name, &p_data, p_updateNotifier](auto p_dataReceive)
+	widget.AddPlugin<DDTarget<std::pair<std::string, Group*>>>("File").DataReceivedEvent += [&widget, p_name, &p_data, p_setTextureValue](auto p_dataReceive)
 	{
 		std::string fileName = PathParser::getInstance()->GetFileNameByPath(p_dataReceive.first);
 		if (auto resource = ServiceLocator::getInstance()->Get<TextureManager>()[fileName]; resource)
 		{
 			p_data = resource;
 			widget.textureID.ID = p_data->ID;
-			if (p_updateNotifier)
-				p_updateNotifier(p_name, p_data);
+			if (p_setTextureValue)
+				p_setTextureValue(p_name, p_data);
 		}
 	};
 
@@ -196,12 +196,15 @@ Image& GUIDrawer::DrawTexture(WidgetContainer& p_root, const std::string& p_name
 
 	auto& resetBuuton = item.CreateWidget<Button>(GLOBALSERVICE(XmlManager).GetLanguage(CLEAR_TEXT));
 	resetBuuton.idleColor = Color4(0.5f, 0.0f, 0.0f, 1.0f);
-	resetBuuton.ClickedEvent += [&widget, &p_name, &p_data, p_updateNotifier]
+	resetBuuton.ClickedEvent += [&widget, p_name, &p_data, p_setTextureValue]
 	{
-		p_data = nullptr;
-		widget.textureID.ID = 0;
-		if (p_updateNotifier)
-			p_updateNotifier(p_name, p_data);
+		if (auto resource = ServiceLocator::getInstance()->Get<TextureManager>()[p_name]; resource)
+		{
+			p_data = nullptr;
+			widget.textureID.ID = 0;
+			if (p_setTextureValue)
+				p_setTextureValue(p_name, p_data);
+		}
 	};
 
 	return widget;
