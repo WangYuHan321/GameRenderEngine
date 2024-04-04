@@ -61,12 +61,14 @@ void SceneManager::LoadEmptyLightedScene()
 	LoadEmptyScene();
 
 	auto directionLight = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(DIRECTIONLIGHT_TEXT));
-	directionLight->AddComponent<CDirectionalLight>().SetIntensity(0.75f);
+	directionLight->AddComponent<CDirectionalLight>().SetIntensity(0.15f);
+	directionLight->GetComponent<CDirectionalLight>()->SetColor(Color3(0.03, 0.05, 0.03));
 	directionLight->m_transform.SetLocalPosition(Vector3(0.0f, 10.0f, 0.0f));
 	directionLight->m_transform.SetLocalRotation(Quaternion(Vector3(120.0f, -40.0f, 0.0f)));
 
 	auto ambientLight = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(AMBIENTLIGHT_TEXT));
 	ambientLight->AddComponent<CAmbientSphereLight>().SetRadius(10000.0f);
+	ambientLight->GetComponent<CAmbientSphereLight>()->SetColor(Color3(0.1, 0.1, 0.1));
 
 	auto camera = m_curScene->CreateActor(GLOBALSERVICE(XmlManager).GetLanguage(MainCAMERA_TEXT));
 	camera->AddComponent<CCamera>();
