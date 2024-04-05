@@ -4,9 +4,10 @@
 #include <assimp/matrix4x4.h>
 #include <assimp/postprocess.h>
 #include <filesystem>
-#include "../../Resource/Loader/TextureLoader.h"
 #include "../../Animation/Animation.h"
 #include "../../Render/Animation/Bone.h"
+#include "../../Resource/Loader/TextureLoader.h"
+#include "../../Resource/Loader/MaterialLoader.h"
 
 bool AssimpParser::LoadModel(const std::string& p_fileName, std::vector<Mesh*>& p_meshes, std::vector<std::string>& p_materials, EModelParserFlags p_parserFlags)
 {
@@ -112,28 +113,35 @@ void AssimpParser::ExtraMaterialTexture(const aiScene* p_Scene, aiMesh* p_Mesh, 
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_DIFFUSE, i, &str);
-        other.Textures[str.C_Str()] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.Textures["diffuse_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_SPECULAR, i, &str);
-        other.Textures[str.C_Str()] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.Textures["specular_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+    }
+
+    for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_NORMALS); i++)
+    {
+        aiString str;
+        pMaterial->GetTexture(aiTextureType_NORMALS, i, &str);
+        other.Textures["normal_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_AMBIENT); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_AMBIENT, i, &str);
-        other.Textures[str.C_Str()] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.Textures["ambient_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_HEIGHT, i, &str);
-        other.Textures[str.C_Str()] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.Textures["height_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 }
 
@@ -322,6 +330,7 @@ void AssimpParser::ProcessBone(const aiAnimation* animation, Animation* anim, co
         const aiNode* node = root_node->FindNode(channel->mNodeName);
         if (node)
         {
+            LOG_INFO(node->mParent->mName.C_Str());
             anim->nameBoneMap[boneName] = new Bone(boneName, channel, glm::inverse(AiMatToGlmMat(node->mTransformation)));
         }
     }
