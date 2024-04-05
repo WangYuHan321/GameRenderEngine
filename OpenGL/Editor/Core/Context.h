@@ -17,6 +17,7 @@
 #include "../../Scene/SceneManager.h"
 #include "../../File/XmlManager.h"
 #include "../../Render/Shader/UniformBuffer.h"
+#include "../../Render/Shadow/CascadeShadowMap.h"
 #include "../../Render/Shader/ShaderStorageBuffer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Window/Input/InputManager.h"
@@ -42,6 +43,7 @@ public:
 	std::unique_ptr<BaseRenderer> m_renderer;
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
+	std::unique_ptr<CascadeShadowMap> m_shadowMap;
 
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
 	std::unique_ptr<EditorResource> m_editorResource;

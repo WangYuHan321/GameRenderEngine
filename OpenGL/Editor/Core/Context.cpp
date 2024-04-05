@@ -38,6 +38,9 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_renderer = std::make_unique<ForwardRenderer>();
 	LOG("new  Render");
 
+	m_shadowMap = std::make_unique<CascadeShadowMap>();
+	LOG("new  ShadowMap");
+
 	m_shapeDrawer = std::make_unique<ShapeDrawer>(*m_renderer);
 	LOG("new  ShapeDrawer");
 
@@ -49,6 +52,7 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	ServiceLocator::getInstance()->Provide<InputManager>(*m_inputMgr);
 	ServiceLocator::getInstance()->Provide<Window>(*m_window);
 	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);
+	ServiceLocator::getInstance()->Provide<CascadeShadowMap>(*m_shadowMap);
 	ServiceLocator::getInstance()->Provide<EditorResource>(*m_editorResource);
 
 	m_engineUBO = std::make_unique<UniformBuffer>(
@@ -57,7 +61,8 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 		sizeof(Matrix4) +	//projection
 		sizeof(Vector3) +	// view pos
 		sizeof(float) +		//	time
-		sizeof(Matrix4),
+		sizeof(Matrix4),	//user matrix
+
 		0, 0,
 		GL_DYNAMIC_DRAW
 		);
