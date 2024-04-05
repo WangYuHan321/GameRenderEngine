@@ -10,5 +10,7 @@ public:
 	static std::pair<std::string, std::string> GetGrizmo();
 
 	static std::pair<std::string, std::string> GetBillboard();
+
+	static std::pair<std::string, std::string> GetShadow();
 };
 
