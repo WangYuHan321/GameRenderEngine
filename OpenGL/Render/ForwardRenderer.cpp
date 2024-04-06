@@ -1,23 +1,36 @@
 #include "ForwardRenderer.h"
 #include "RenderTarget.h"
-
+#include "../Scene/Scene.h"
 #include "../Camera/FlyCamera.h"
 #include "../Render/Mesh/Mesh.h"
-#include "../Render/Mesh/Material.h"
-#include "../Scene/Scene.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Render/Mesh/Model.h"
+#include "../Render/Mesh/Material.h"
+#include "../Global/ServiceLocator.h"
+#include "../../Render/Mesh/Material.h"
 #include "../Core/ECS/Components/CLight.h"
+#include "../../Render/Resource/RawShader.h"
+#include "../Render/Shadow/CascadeShadowMap.h"
 #include "../Core/ECS/Components/CModelRenderer.h"
+#include "../Core/ECS/Components/CDirectionalLight.h"
 #include "../Core/ECS/Components/CMaterialRenderer.h"
+#include "../../Render/Resource/Loader/ShaderLoader.h"
 
-ForwardRenderer::ForwardRenderer():
-	m_state(0)
+ForwardRenderer::ForwardRenderer()
 {
+	m_pShadowMaterial = new Material();
+	auto shadowSource = RawShader::GetShadow();
+	m_pShader = ShaderLoader::getInstance()->CreateFromSource("Shadow Shader", shadowSource.first, shadowSource.second);
+	m_pShadowMaterial->SetShader(m_pShader);
 }
 
 ForwardRenderer::~ForwardRenderer()
 {
+	if (m_pShadowMaterial)
+		delete m_pShadowMaterial;
+
+	if (m_pShader)
+		delete m_pShader;
 }
 
 void ForwardRenderer::DoRender()
@@ -82,6 +95,9 @@ void ForwardRenderer::RenderScene(Scene& p_scene,
 	TransparentDrawables transparentMeshes;
 
 	std::tie(opaqueMeshes, transparentMeshes) = FindAndSortDRawables(p_scene, p_cameraPosition, p_defaultMaterial);
+
+	for (const auto& [distance, drawable] : opaqueMeshes)
+		DrawDrawableShadow(p_scene, drawable, p_camera);
 
 	for (const auto& [distance, drawable] : opaqueMeshes)
 		DrawDrawable(drawable);
@@ -150,6 +166,32 @@ void ForwardRenderer::DrawDrawable(const Drawable& p_toDraw)
 	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), (Matrix4*)&std::get<0>(p_toDraw));
 }
 
+void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p_toDraw, const Camera& p_camera)
+{
+	for (auto dirLight : p_scene.GetFastAccessComponents().lights)
+	{
+		CDirectionalLight* pDirectionLight = (CDirectionalLight*)dirLight;
+		if (pDirectionLight)
+		{
+			if (std::get<2>(p_toDraw)->ShadowCast)
+			{
+				glDisable(GL_STENCIL_TEST);
+				GLOBALSERVICE(CascadeShadowMap).BeginFrame(*pDirectionLight, &p_camera);
+				for (unsigned int i = 0; i < 5; i++)
+				{
+					GLOBALSERVICE(CascadeShadowMap).BeginShadowRender(i);
+					m_userMatrixSender(GLOBALSERVICE(CascadeShadowMap).GetCurDepthMatrix4());
+					DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
+					GLOBALSERVICE(CascadeShadowMap).EndShadowRender();
+				}
+				GLOBALSERVICE(CascadeShadowMap).EndFrame(std::get<2>(p_toDraw));
+				glEnable(GL_STENCIL_TEST);
+			}
+		}
+	}
+
+}
+
 void ForwardRenderer::DrawModelWithSingleMaterial(Model& p_model, Material& p_material, Matrix4* p_modelMat, Material* p_defaultMaterial)
 {
 	if (p_modelMat)
@@ -171,11 +213,9 @@ void ForwardRenderer::DrawMesh(Mesh& p_mesh, Material& p_material, Matrix4* p_ma
 	{
 		if(p_mat4)
 			m_modelMatrixSender(*p_mat4);
+		
+		m_glCache.ApplyMaterial(p_material);
 
-		uint8_t stateMask = p_material.GenerateStateMask();
-		ApplyStateMask(stateMask);
-
-		/* Draw the mesh */
 		p_material.Bind();
 		Draw(p_mesh, EPrimitiveMode::TRIANGLES, p_material.GPUInstance);
 		p_material.UnBind();
@@ -233,34 +273,6 @@ void ForwardRenderer::Clear(bool p_colorBuffer, bool p_deptBuffer, bool p_stenci
 		(p_deptBuffer ? GL_DEPTH_BUFFER_BIT : 0) |
 		(p_stencilColor ? GL_STENCIL_BUFFER_BIT : 0)
 	);
-}
-
-void ForwardRenderer::ApplyStateMask(uint8_t p_mask)
-{
-	//if (m_state != p_mask)
-	//{
-
-		if ((p_mask & 0x01) != (m_state & 0x01))    m_glCache.SetDepthMask(p_mask & 0x01);
-		if ((p_mask & 0x02) != (m_state & 0x02))	m_glCache.SetColorMask(p_mask & 0x02);
-		if ((p_mask & 0x04) != (m_state & 0x04))	m_glCache.SetBlend( p_mask & 0x04);
-		if ((p_mask & 0x08) != (m_state & 0x08))	m_glCache.SetCull(p_mask & 0x08);
-		if ((p_mask & 0x10) != (m_state & 0x10))	m_glCache.SetDepthTest(p_mask & 0x10);
-
-		m_glCache.SetCullFace((p_mask & 0x20) ? GL_BACK : GL_FRONT);
-
-		m_state = p_mask;
-	//}
-}
-
-uint8_t ForwardRenderer::FetchGLState()
-{
-
-	return m_state;
-}
-
-void ForwardRenderer::SetState(uint8_t p_state)
-{
-	m_state = p_state;
 }
 
 void ForwardRenderer::RegisterModelMatrixSender(std::function<void(Matrix4)> p_modelMatrixSender)
