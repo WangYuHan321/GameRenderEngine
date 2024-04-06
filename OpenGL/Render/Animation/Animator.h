@@ -2,6 +2,8 @@
 
 #include "../../Util/common.h"
 
+unsigned int MAX_BONE_NUM = 128;
+
 class Animator
 {
 public:
