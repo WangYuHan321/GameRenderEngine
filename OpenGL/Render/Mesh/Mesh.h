@@ -4,13 +4,14 @@
 #include <vector>
 #include "../Shader/Texture.h"
 #include "../Bounding/BoundingSphere.h"
+#include "../../Render/Mesh/Material.h"
 
 #define MAX_BONE_INFLUENCE 4
 
-#define DIFFUSE_TEXTURE "texture_diffuse"
-#define SPECULAR_TEXTURE "texture_specular"
-#define NORMAL_TEXTURE "texture_normal"
-#define AMBIENT_TEXTURE "texture_ambient"
+//#define DIFFUSE_TEXTURE "texture_diffuse"
+//#define SPECULAR_TEXTURE "texture_specular"
+//#define NORMAL_TEXTURE "texture_normal"
+//#define AMBIENT_TEXTURE "texture_ambient"
 
 enum TOPOLOGY
 {
