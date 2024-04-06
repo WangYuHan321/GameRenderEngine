@@ -53,9 +53,8 @@ void SceneView::_Render_Impl()
 	auto& baseRenderer = *dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get());
 
 	PrepareCamera();
-	uint8_t glState = baseRenderer.FetchGLState();
 	HandleActorPicking();
-	RenderScene(glState);
+	RenderScene(0);
 	//ray
 	//HandleActorPicking_Ray();
 }
@@ -64,7 +63,6 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 {
 	auto& baseRenderer = *dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get());
 
-	uint8_t state = baseRenderer.FetchGLState();
 
 	m_editorRenderer.UpdateLights(*EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene());
 
@@ -102,7 +100,6 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 		if (m_highlightedActor.has_value())// Û±Í“∆∂ØµΩ
 		{
 			m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), true, false);
-			baseRenderer.ApplyStateMask(p_defaultRenderState);
 			m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), false, false);
 		}
 	}
@@ -114,26 +111,28 @@ void SceneView::RenderSceneForActorPicking()
 {
 	auto& baseRenderer = *dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get());
 
-	auto [winWidth, winHeight] = GetSafeSize();
+	ImVec2 size(GetSafeSize());
 
-	if (winWidth > 0 && winHeight > 0)
+	if (size.x > 0 && size.y > 0)
 	{
-		m_actorPickRenderTarget->Resize(winWidth, winHeight);
+		m_actorPickRenderTarget->Resize(size.x, size.y);
 		m_actorPickRenderTarget->Bind();
 
 		baseRenderer.SetStencilMask(0xFF);
 		glClearColor(1, 1, 1, 1);
 		baseRenderer.Clear();
 		baseRenderer.SetStencilMask(0x00);
+		dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->SetViewPort(0, 0, size.x, size.y);
+
 		m_editorRenderer.RenderSceneForActorPicking();
 
 
-		if (EDITOR_EXEC(IsAnyActorSelected()))
-		{
-			auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
-			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
-				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, true);
-		}
+		//if (EDITOR_EXEC(IsAnyActorSelected()))
+		//{
+		//	auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+		//	m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
+		//		(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, true);
+		//}
 
 		m_actorPickRenderTarget->Unbind();
 	}
@@ -156,7 +155,7 @@ void SceneView::HandleActorPicking()
 			auto [mouseX, mouseY] = inputManager.GetMousePosition();
 			mouseX -= m_position.x;
 			mouseY -= m_position.y;
-			mouseY = GetSafeSize().y - mouseY + 25;
+			mouseY = GetSafeSize().y - mouseY + 40;
 
 			m_actorPickRenderTarget->Bind();
 			uint8_t pixel[3];
