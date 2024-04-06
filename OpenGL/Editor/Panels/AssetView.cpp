@@ -33,16 +33,11 @@ void AssetView::_Render_Impl()
 	baseRenderer.Clear(m_camera);
 	baseRenderer.SetStencilMask(0x00);
 
-	uint8_t glState = baseRenderer.FetchGLState();
-	baseRenderer.ApplyStateMask(glState);
-
 	Vector3 c(0.176f, 0.176f, 0.176f);
 	m_editorRenderer.RenderGrid(m_camPos, c);
 
 	if (auto pval = std::get_if<Material*>(&m_resource); pval && *pval)
 		m_editorRenderer.RenderMaterialAsset(**pval);
-
-	baseRenderer.ApplyStateMask(glState);
 
 	m_renderTarget->Unbind();
 }
