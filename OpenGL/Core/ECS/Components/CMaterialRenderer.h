@@ -23,6 +23,8 @@ public:
 
 	const Matrix4& GetUserMatrix() const;
 
+	std::array<AWidget*, 3> CustomMaterialDrawer(WidgetContainer& p_root, const std::string& p_name, Material*& p_data);
+
 	MaterialList GetMaterialList() { return m_materials; }
 	
 	MaterialField GetMaterialFields() { return m_materialFields; }

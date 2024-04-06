@@ -6,6 +6,12 @@ CDirectionalLight::CDirectionalLight(Actor& p_owner):
 	m_data.type = static_cast<float>(Light::Type::Directional);
 }
 
+Vector3 CDirectionalLight::GetDirectional()
+{
+	Vector4 dirVec = m_data.GenerateMatrix()[1];
+	return Vector3( -dirVec.x, -dirVec.y, -dirVec.z);
+}
+
 std::string CDirectionalLight::GetName()
 {
 	return "DirectionalLight";
