@@ -100,7 +100,7 @@ EditorResource::EditorResource(const std::string& p_editorAssetPath)
 	m_textures["Icon_Sequencer"] = TextureLoader::getInstance()->Create(icon_sequencer, GL_TEXTURE_2D, GL_RGBA);
 	m_textures["Icon_SequencerLine"] = TextureLoader::getInstance()->Create(icon_sequencerLine, GL_TEXTURE_2D, GL_RGBA);
 
-	m_textures["Empty_Texture"] = TextureLoader::getInstance()->CreateColor((10 << 24) | (10 << 16) | (10 << 8) | 255, GL_NEAREST, GL_NEAREST, false);
+	m_textures["Empty_Texture"] = TextureLoader::getInstance()->CreateColor((255 << 24) | (255 << 16) | (255 << 8) | 255, GL_NEAREST, GL_NEAREST, false);
 	GUIDrawer::ProvideEmptyTexture(*m_textures["Empty_Texture"]);
 }
 
