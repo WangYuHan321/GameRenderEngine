@@ -66,6 +66,7 @@ public:
     std::string GetShaderPath();
 
     static bool IsEngineUBOMember(const std::string& p_uniformName);
+    static bool IsEngineShadowMember(const std::string& p_uniformName);
 
     std::vector<Uniform> GetUniforms() { return Uniforms; }
     std::vector<VertexAttr> GetVertexAttr() { return VertexAttrs; }

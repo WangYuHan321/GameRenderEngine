@@ -666,6 +666,11 @@ bool CShader::IsEngineUBOMember(const std::string& p_uniformName)
 	return p_uniformName.rfind("ubo_", 0) == 0;
 }
 
+bool CShader::IsEngineShadowMember(const std::string& p_uniformName)
+{
+	return p_uniformName.rfind("shadow_", 0) == 0;
+}
+
 std::string CShader::GetShaderPath()
 {
 	return m_shaderPath;
