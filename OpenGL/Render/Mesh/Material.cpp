@@ -19,7 +19,9 @@ Material::Material(CShader* shader)
 
 Material Material::Copy()
 {
-    Material copy(m_Shader);
+    Material copy;
+
+    copy.SetShader(this->m_Shader);
 
     copy.Type = this->Type;
 
@@ -80,7 +82,7 @@ void Material::Bind()
             switch (value.Type)
             {
             case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE = value.TEXTURE ? value.TEXTURE : GUIDrawer::GetEmptyTexture(); value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE = value.TEXTURE ? value.TEXTURE : GUIDrawer::GetEmptyTexture(); value.TEXTURE->Bind(textureSlot); m_Shader->ActiveShader(); m_Shader->SetInt(name, textureSlot++); break; }
             case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             }
@@ -103,7 +105,7 @@ void Material::SetShader(CShader* pShader)
 
     for (auto item : pShader->GetUniforms())
     {
-        if (pShader->IsEngineUBOMember(item.Name))
+        if (pShader->IsEngineUBOMember(item.Name) || pShader->IsEngineShadowMember(item.Name))
             continue;
 
         switch (item.Type)
