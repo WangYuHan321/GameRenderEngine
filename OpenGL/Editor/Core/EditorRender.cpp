@@ -8,6 +8,7 @@
 #include "../../Core/ECS/Components/CCamera.h"
 #include "../../Core/ECS/Components/CLight.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
+#include "../../Core/ECS/Components/CMaterialRenderer.h"
 #include "../../Render/ShapeDrawer.h"
 #include "../../Editor/Core/EditorResource.h"
 #include "../../Render/Mesh/Mesh.h"
@@ -32,7 +33,7 @@ EditorRender::EditorRender(Context& p_context):
 	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试 深度测试 模和深都成功
 
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetCapability(GL_STENCIL_TEST, true);
-	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilOperations(GL_KEEP, GL_REPLACE, GL_REPLACE);//模板测试失败 模板通过深度失败 模板和深度都通过
+	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilOperations(GL_KEEP, GL_KEEP, GL_REPLACE);//模板测试失败 模板通过深度失败 模板和深度都通过
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->SetStencilAlgorithm(GL_ALWAYS, 1, 0xff); //设置蒙板测试总是通过，参考值设为1，掩码值为x
 
 	InitMaterials();
@@ -128,6 +129,7 @@ void EditorRender::PreparePickingMaterial(Actor& p_actor, Material& p_material)
 Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 {
 	auto translation = Translate(actor.m_transform.GetWorldPosition());
+	auto scale = Scale(actor.m_transform.GetWorldScale());
 	Quaternion rotQuat = actor.m_transform.GetWorldRotation();
 	Matrix4 rotation = rotQuat.ToMatrix4();
 
@@ -149,7 +151,7 @@ Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 
 #endif
 
-	return  rotation * translation;
+	return  scale * rotation * translation;
 }
 
 void EditorRender::UpdateLights(Scene& p_scene)
@@ -305,6 +307,51 @@ void EditorRender::RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool
 
 	}
 
+}
+
+void EditorRender::RenderActor(Actor& p_actor)
+{
+	CModelRenderer* pRenderer = p_actor.GetComponent<CModelRenderer>();
+	CMaterialRenderer* pMaterial = p_actor.GetComponent<CMaterialRenderer>();
+	if (pRenderer || pMaterial)
+	{
+		Material pMat = m_context.materialMgr["Default.opmat"]->Copy();
+		for (auto item : pRenderer->GetModel()->GetMeshes())
+		{
+			auto modelMatrix = CalculateCameraModelMatrix(p_actor);
+			modelMatrix = Scale(Vector3(100.0f)) * modelMatrix;
+
+			pMat.SetVector("u_Diffuse", Vector4(item->materialProperty.Diffuse.r, item->materialProperty.Diffuse.g, item->materialProperty.Diffuse.b, 1.0f));
+			pMat.SetVector("u_Specular", Vector3(item->materialProperty.Specular.r, item->materialProperty.Specular.g, item->materialProperty.Specular.b));
+			pMat.SetFloat("u_Shininess", item->materialProperty.Shininess);
+
+			if (auto it = item->Textures.find("diffuse_0"); it != item->Textures.end())
+			{
+				pMat.SetTextureValue("u_DiffuseMap", item->Textures["diffuse_0"]);
+			}
+
+			if (auto it = item->Textures.find("specular_0"); it != item->Textures.end())
+			{
+				pMat.SetTextureValue("u_SpecularMap", item->Textures["specular_0"]);
+			}
+
+			if (auto it = item->Textures.find("normal_0"); it != item->Textures.end())
+			{
+				pMat.SetTextureValue("u_NormalMap", item->Textures["normal_0"]);
+			}
+
+			if (auto it = item->Textures.find("height_0"); it != item->Textures.end())
+			{
+				pMat.SetTextureValue("u_HeightMap", item->Textures["height_0"]);
+			}
+			
+			pMaterial->FillWithMaterial(pMat);
+
+			dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawMesh(*item, pMat, &modelMatrix);
+		}
+
+
+	}
 }
 
 void EditorRender::RenderLights()

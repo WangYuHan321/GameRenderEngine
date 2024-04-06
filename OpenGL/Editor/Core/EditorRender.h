@@ -29,6 +29,7 @@ public:
 	void RenderModelToStencil(Matrix4& p_worldMatrix, Model& p_model);
 	void RenderModelOutline(Matrix4& p_worldMatrix, Model& p_model, float p_width);
 	void RenderActorOutlinePass(Actor& p_actor, bool p_toStencil, bool p_isSelected);
+	void RenderActor(Actor& p_actor);
 	void RenderLights();
 	void RenderCameraFrustum(CCamera& p_camera);
 	void RenderMaterialAsset(Material& p_material);
