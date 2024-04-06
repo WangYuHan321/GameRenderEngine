@@ -77,7 +77,7 @@ void AView::PrepareCamera()
 
 ImVec2 AView::GetSafeSize()
 {
-	auto result = ImVec2(GetSize().x, GetSize().y - 25.f); // 25 == title bar height
+	auto result = ImVec2(GetSize().x, GetSize().y - 40.f); // 40 == title bar height
 	return result;
 }
 
