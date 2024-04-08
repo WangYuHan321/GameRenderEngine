@@ -12,7 +12,7 @@ public:
 		bool p_opened,
 		const PanelWindowSetting p_windowSetting);
 
-	void SelectedActor(Actor& p_actor);
+	void InitHierarcht(Actor& p_actor);
 private:
 	TreeNode* m_sceneRoot;
 	std::unordered_map<std::string, TreeNode*> m_widgetBoneLink;
