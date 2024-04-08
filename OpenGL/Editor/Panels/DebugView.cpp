@@ -18,19 +18,23 @@ DebugView::DebugView
 	m_img = &CreateWidget<Image>(0, size);
 }
 
+void DebugView::ShowShadowMap(int id)
+{
+	m_img->size = GetSafeSize();
+	m_img->textureID.ID = EDITOR_CONTEXT(m_shadowMap).get()->GetShadowMap(id);
+}
+
 void DebugView::Update(float p_deltaTime)
 {
 	AView::Update(p_deltaTime);
 
 	if (m_inputMgr.IsKeyReleased(EKey::KEY_F1))
 	{
-		m_img->size = GetSafeSize();
-		m_img->textureID.ID = EDITOR_CONTEXT(m_shadowMap).get()->GetShadowMap(0);
+		ShowShadowMap(0);
 	}
 	if (m_inputMgr.IsKeyReleased(EKey::KEY_F2))
 	{
-		m_img->size = GetSafeSize();
-		m_img->textureID.ID = EDITOR_CONTEXT(m_shadowMap).get()->GetShadowMap(1);
+		ShowShadowMap(1);
 	}
 }
 

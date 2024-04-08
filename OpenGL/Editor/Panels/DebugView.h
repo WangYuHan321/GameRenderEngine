@@ -20,6 +20,10 @@ public:
 	virtual void Update(float p_deltaTime) override;
 	virtual void _Render_Impl() override;
 
+private:
+
+	void ShowShadowMap(int id);
+
 protected:
 	InputManager& m_inputMgr;
 };
