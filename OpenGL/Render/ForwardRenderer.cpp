@@ -96,6 +96,7 @@ void ForwardRenderer::RenderScene(Scene& p_scene,
 
 	std::tie(opaqueMeshes, transparentMeshes) = FindAndSortDRawables(p_scene, p_cameraPosition, p_defaultMaterial);
 
+	GLOBALSERVICE(CascadeShadowMap).Clear();
 	for (const auto& [distance, drawable] : opaqueMeshes)
 		DrawDrawableShadow(p_scene, drawable, p_camera);
 
@@ -163,6 +164,8 @@ std::pair<ForwardRenderer::OpaqueDrawables, ForwardRenderer::TransparentDrawable
 void ForwardRenderer::DrawDrawable(const Drawable& p_toDraw)
 {
 	m_userMatrixSender(std::get<3>(p_toDraw));
+	if (std::get<2>(p_toDraw)->ShadowReceive)
+		GLOBALSERVICE(CascadeShadowMap).SetShadowMap(std::get<2>(p_toDraw));
 	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), (Matrix4*)&std::get<0>(p_toDraw));
 }
 
@@ -170,21 +173,20 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 {
 	for (auto dirLight : p_scene.GetFastAccessComponents().lights)
 	{
-		CDirectionalLight* pDirectionLight = (CDirectionalLight*)dirLight;
-		if (pDirectionLight)
+		if (dirLight->GetData().type == float(Light::Type::Directional))
 		{
+			GLOBALSERVICE(CascadeShadowMap).InitializeFrame(*static_cast<CDirectionalLight*>(dirLight), &p_camera);
 			if (std::get<2>(p_toDraw)->ShadowCast)
 			{
 				glDisable(GL_STENCIL_TEST);
-				GLOBALSERVICE(CascadeShadowMap).BeginFrame(*pDirectionLight, &p_camera);
-				for (unsigned int i = 0; i < 5; i++)
+				for (unsigned int i = 0; i < 2; i++)
 				{
 					GLOBALSERVICE(CascadeShadowMap).BeginShadowRender(i);
 					m_userMatrixSender(GLOBALSERVICE(CascadeShadowMap).GetCurDepthMatrix4());
 					DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
-					GLOBALSERVICE(CascadeShadowMap).EndShadowRender();
 				}
-				GLOBALSERVICE(CascadeShadowMap).EndFrame(std::get<2>(p_toDraw));
+				
+				GLOBALSERVICE(CascadeShadowMap).EndShadowRender();
 				glEnable(GL_STENCIL_TEST);
 			}
 		}

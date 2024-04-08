@@ -20,7 +20,7 @@ private:
 private:
 
 	int currentLevel;
-	ShadowMap m_pShadowMap[5];
+	ShadowMap m_pShadowMap[2];
 
 	Matrix4 biasMatrix;
 
@@ -30,13 +30,16 @@ public:
 	CascadeShadowMap();
 	~CascadeShadowMap();
 
-	void BeginFrame(CDirectionalLight p_dirLight, const Camera* p_cam);
+	void InitializeFrame(CDirectionalLight p_dirLight, const Camera* p_cam);
 	void BeginShadowRender(int level);
+	void SetShadowMap(Material* p_material);
 	void EndShadowRender();
-	void EndFrame(Material* p_material = nullptr);
 	Matrix4 GetCurDepthMatrix4();
+	void Clear();
 
 
 	void InitShadowMap(int level, float minX, float maxX, float miny, float maxY, float minz, float maxZ);
+
+	int GetShadowMap(int curLevel);
 };
 

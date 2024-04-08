@@ -2,16 +2,24 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../../Render/RenderTarget.h"
 #include "../../Camera/Camera.h"
+#include <glm/gtx/string_cast.hpp>
 #include "../../Render/Mesh/Material.h"
 #include "../../Core/ECS/Components/CDirectionalLight.h"
 
 CascadeShadowMap::CascadeShadowMap()
 {
+	biasMatrix = glm::mat4(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
 	InitShadowMap(0, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 70.0f);
 	InitShadowMap(1, -40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 120.0f);
-	InitShadowMap(2, -80.0f, 80.0f, -80.0f, 80.0f, 0.1f, 1360.0f);
-	InitShadowMap(3, -160.0f, 160.0f, -160.0f, 160.0f, 0.1f, 2720.0f);
-	InitShadowMap(4, -320.0f, 320.0f, -320.0f, 320.0f, 0.1f, 5440.0f);
+	//InitShadowMap(2, -80.0f, 80.0f, -80.0f, 80.0f, 0.1f, 1360.0f);
+	//InitShadowMap(3, -160.0f, 160.0f, -160.0f, 160.0f, 0.1f, 2720.0f);
+	//InitShadowMap(4, -320.0f, 320.0f, -320.0f, 320.0f, 0.1f, 5440.0f);
 }
 
 void CascadeShadowMap::InitShadowMap(int level, float minX, float maxX, float miny, float maxY, float minz, float maxZ)
@@ -28,49 +36,65 @@ void CascadeShadowMap::InitShadowMap(int level, float minX, float maxX, float mi
 	m_pShadowMap[level].shadowMap = rt;
 }
 
-void CascadeShadowMap::BeginShadowRender(int level)
+void CascadeShadowMap::Clear()
 {
-	currentLevel = level;
-	glBindFramebuffer(GL_FRAMEBUFFER, m_pShadowMap[currentLevel].shadowMap->ID);
-	glClear(GL_DEPTH_BUFFER_BIT);
-}
-
-void CascadeShadowMap::EndFrame(Material* p_material)
-{
-	if (p_material)
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFrameBuffer);
+	for (int i = 0; i < 2; i++)
 	{
-		for (unsigned int i = 0; i < 5; i++)
-		{
-			p_material->GetShader()->SetMatrix("shadow_lightDepthMat" + std::to_string(i), m_pShadowMap[i].depth);
-			p_material->SetTextureValue("shadow_LightDepthMap" + std::to_string(i), m_pShadowMap[i].shadowMap->GetDepthStencilTexture());
-		}
-		p_material->SetBoolean("shadow_shadowCast", p_material->ShadowCast);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_pShadowMap[i].shadowMap->ID);
+		glClear(GL_DEPTH_BUFFER_BIT);
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, previousFrameBuffer);
 }
 
+void CascadeShadowMap::BeginShadowRender(int level)
+{
+	currentLevel = level;
+	glBindFramebuffer(GL_FRAMEBUFFER, m_pShadowMap[currentLevel].shadowMap->ID);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void CascadeShadowMap::SetShadowMap(Material* p_material)
+{
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		p_material->SetTextureValue("shadow_LightDepthMap" + std::to_string(i), m_pShadowMap[i].shadowMap->GetDepthStencilTexture());
+	}
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		p_material->GetShader()->SetMatrix("shadow_lightDepthMat" + std::to_string(i), m_pShadowMap[i].depth);
+		//LOG_ERROR(glm::to_string(m_pShadowMap[i].depth));
+	}
+	p_material->SetBoolean("shadow_shadowCast", p_material->ShadowCast);
+}
+
 Matrix4 CascadeShadowMap::GetCurDepthMatrix4()
 {
+	//LOG_INFO(glm::to_string(m_pShadowMap[currentLevel].depth));
 	return m_pShadowMap[currentLevel].depth;
 }
 
-void CascadeShadowMap::EndShadowRender()
-{
-	m_pShadowMap[currentLevel].depth = biasMatrix * m_pShadowMap[currentLevel].depth;
-}
-
-void CascadeShadowMap::BeginFrame(CDirectionalLight p_dirLight,const Camera* p_cam)
+void CascadeShadowMap::InitializeFrame(CDirectionalLight p_dirLight, const Camera* p_cam)
 {
 	const glm::vec3& cameraPosition = p_cam->Position;
-	glm::vec3 target = glm::vec3(-cameraPosition.x, 0, -cameraPosition.z);
-	glm::mat4 depthViewMatrix = glm::lookAt(target + (p_dirLight.GetDirectional() * 50.0f), target, glm::vec3(0, 1, 0));
+	glm::vec3 target = glm::vec3(cameraPosition.x, 0, cameraPosition.z);
+	glm::mat4 depthViewMatrix = glm::lookAt(target + (p_dirLight.GetDirectional() + 20.0f), target, glm::vec3(0, 1, 0));
 
-	for (unsigned int i = 0; i < 5; i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
 		m_pShadowMap[i].depth = m_pShadowMap[i].proj * depthViewMatrix;
 	}
 
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFrameBuffer);
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		m_pShadowMap[i].depth = biasMatrix * m_pShadowMap[i].depth;
+	}
+}
+
+void CascadeShadowMap::EndShadowRender()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, previousFrameBuffer);
 }
 
 CascadeShadowMap::~CascadeShadowMap()
@@ -83,4 +107,11 @@ CascadeShadowMap::~CascadeShadowMap()
 			item.shadowMap = nullptr;
 		}
 	}
+}
+
+int CascadeShadowMap::GetShadowMap(int curLevel)
+{
+	if(curLevel < 2)
+		return m_pShadowMap[curLevel].shadowMap->GetDepthStencilTexture()->ID;
+	return 0;
 }
