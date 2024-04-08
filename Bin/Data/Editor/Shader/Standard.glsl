@@ -26,7 +26,13 @@ out VS_OUT
     mat3        TBN;
     flat vec3   TangentViewPos;
     vec3        TangentFragPos;
+
+    vec4 lightDepthPos0;
+    vec4 lightDepthPos1;
 } vs_out;
+
+mat4 shadow_lightDepthMat0;
+mat4 shadow_lightDepthMat1;
 
 void main()
 {
@@ -44,6 +50,9 @@ void main()
     vs_out.TexCoords        = geo_TexCoords;
     vs_out.TangentViewPos   = TBNi * ubo_ViewPos;
     vs_out.TangentFragPos   = TBNi * vs_out.FragPos;
+
+    vs_out.lightDepthPos0 =  shadow_lightDepthMat0 * vec4(vs_out.FragPos, 1.0);
+    vs_out.lightDepthPos1 =  shadow_lightDepthMat1 * vec4(vs_out.FragPos, 1.0);
 
     //gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
     gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
@@ -71,7 +80,17 @@ in VS_OUT
     mat3        TBN;
     flat vec3   TangentViewPos;
     vec3        TangentFragPos;
+
+    vec4 lightDepthPos0;
+    vec4 lightDepthPos1;
 } fs_in;
+
+uniform vec2 shadow_poissonDisk[4] = vec2[](
+  vec2( -0.94201624, -0.39906216 ),
+  vec2( 0.94558609, -0.76890725 ),
+  vec2( -0.094184101, -0.92938870 ),
+  vec2( 0.34495938, 0.29387760 )
+);
 
 /* Light information sent by the engine */
 layout(std430, binding = 0) buffer LightSSBO
@@ -92,6 +111,10 @@ uniform sampler2D   u_SpecularMap;
 uniform sampler2D   u_NormalMap;
 uniform sampler2D   u_HeightMap;
 uniform sampler2D   u_MaskMap;
+
+uniform sampler2D   shadow_LightDepthMap0;
+uniform sampler2D   shadow_LightDepthMap1;
+uniform int shadow_shadowCast = 0;
 
 /* Global variables */
 vec3 g_Normal;
@@ -200,6 +223,43 @@ vec3 CalcAmbientSphereLight(mat4 p_Light)
     return distance(lightPosition, fs_in.FragPos) <= radius ? g_DiffuseTexel.rgb * lightColor * intensity : vec3(0.0);
 }
 
+bool whithinRange(vec2 texCoord)
+{
+	return texCoord.x >= 0.0 && texCoord.x <= 1.0 && texCoord.y >= 0.0 && texCoord.y <= 1.0;
+}
+
+float getShadowVisibility(int i, vec3 rawNormal)
+{
+    vec3 lightDir = -ssbo_Lights[i][1].rgb;
+	float bias = clamp(0.005 * tan(acos(dot(rawNormal, lightDir))), 0.0, 0.01);
+	float visibility = 1.0;
+
+	// Check first the highest resolution (but smaller) map
+	if(whithinRange(fs_in.lightDepthPos0.xy))
+	{
+		float curDepth = fs_in.lightDepthPos0.z - bias;
+		
+		// Apply percentage close filter to get rid of the stair effect
+		for (int i = 0; i < 4; i++)
+		{
+			visibility -= 0.25 * ( texture(shadow_LightDepthMap0, fs_in.lightDepthPos0.xy + shadow_poissonDisk[i] / 700.0).x  <  curDepth? 1.0 : 0.0 );
+		}
+		
+	}
+	// If not there, try in the lower resolution (but bigger) map
+	else if(whithinRange(fs_in.lightDepthPos1.xy))
+	{
+		float curDepth = fs_in.lightDepthPos1.z - bias;
+		
+		for (int i = 0; i < 4; i++)
+		{
+			visibility -= 0.25 * ( texture(shadow_LightDepthMap1, fs_in.lightDepthPos1.xy + shadow_poissonDisk[i] / 700.0 ).x  <  curDepth? 1.0 : 0.0 );
+		}
+		
+	}
+	return visibility;
+}
+
 void main()
 {
     g_TexCoords = u_TextureOffset + vec2(mod(fs_in.TexCoords.x * u_TextureTiling.x, 1), mod(fs_in.TexCoords.y * u_TextureTiling.y, 1));
@@ -227,20 +287,22 @@ void main()
         }
 
         vec3 lightSum = vec3(0.0);
-
-        for (int i = 0; i < ssbo_Lights.length(); ++i)
+		float visible = 1.0f;
+        
+		for (int i = 0; i < ssbo_Lights.length(); ++i)
         {
+            visible = getShadowVisibility(i, fs_in.Normal);
             switch(int(ssbo_Lights[i][3][0]))
             {
                 case 0: lightSum += CalcPointLight(ssbo_Lights[i]);         break;
-                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]);   break;
+                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]) * visible;   break;
                 case 2: lightSum += CalcSpotLight(ssbo_Lights[i]);          break;
                 case 3: lightSum += CalcAmbientBoxLight(ssbo_Lights[i]);    break;
                 case 4: lightSum += CalcAmbientSphereLight(ssbo_Lights[i]); break;
             }
         }
-
-        FRAGMENT_COLOR = vec4(lightSum , g_DiffuseTexel.a);
+        vec3 mapped = lightSum / (lightSum + vec3(1.0));		
+        FRAGMENT_COLOR = vec4(mapped , g_DiffuseTexel.a);
     }
     else
     {
