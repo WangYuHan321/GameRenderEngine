@@ -105,7 +105,7 @@ void Material::SetShader(CShader* pShader)
 
     for (auto item : pShader->GetUniforms())
     {
-        if (pShader->IsEngineUBOMember(item.Name) || pShader->IsEngineShadowMember(item.Name))
+        if (pShader->IsEngineUBOMember(item.Name))
             continue;
 
         switch (item.Type)
