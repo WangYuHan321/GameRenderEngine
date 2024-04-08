@@ -319,7 +319,7 @@ void EditorRender::RenderActor(Actor& p_actor)
 		for (auto item : pRenderer->GetModel()->GetMeshes())
 		{
 			auto modelMatrix = CalculateCameraModelMatrix(p_actor);
-			modelMatrix = Scale(Vector3(100.0f)) * modelMatrix;
+			modelMatrix = Scale(Vector3(0.05f)) * modelMatrix;
 
 			pMat.SetVector("u_Diffuse", Vector4(item->materialProperty.Diffuse.r, item->materialProperty.Diffuse.g, item->materialProperty.Diffuse.b, 1.0f));
 			pMat.SetVector("u_Specular", Vector3(item->materialProperty.Specular.r, item->materialProperty.Specular.g, item->materialProperty.Specular.b));
@@ -396,6 +396,39 @@ void EditorRender::RenderMaterialAsset(Material& p_material)
 {
 	Matrix4 model = Scale(glm::vec3(3.0f));
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), p_material, &model, &m_emptyMaterial);
+}
+
+void EditorRender::RenderCameraOrthographicFrustum(std::pair<uint16_t, uint16_t>& p_size, CCamera& p_camera)
+{
+	auto& owner = p_camera.owner;
+	auto& camera = p_camera.GetCamera();
+	const auto ratio = p_size.first / static_cast<float>(p_size.second);
+
+	const auto& cameraPos = owner.m_transform.GetWorldPosition();
+	const auto& cameraRotation = owner.m_transform.GetWorldRotation();
+	const auto& cameraForward = (Quaternion)cameraRotation * Vector3(0.0f, 0.0f, 1.0f);
+
+	const auto _near = camera.Near;
+	const auto _far = camera.Far;
+	const auto _size = p_camera.GetSize();
+
+	const auto right = ratio * _size;
+	const auto left = -right;
+	const auto top = _size;
+	const auto bottom = -top;
+
+	const auto a = (Quaternion)cameraRotation * Vector3{ left, top, 0 };
+	const auto b = (Quaternion)cameraRotation * Vector3{ right, top, 0 };
+	const auto c = (Quaternion)cameraRotation * Vector3{ left, bottom, 0 };
+	const auto d = (Quaternion)cameraRotation * Vector3{ right, bottom, 0 };
+
+	DrawFrustumLines(*m_context.m_shapeDrawer, cameraPos, cameraForward, _near, _far, a, b, c, d, a, b, c, d);
+}
+
+void EditorRender::DebugRenderOrthographicFrustum(const Vector3& pos, const Vector3& forward, float nearPanel, const float farPanel, const Vector3& a,
+	const Vector3& b, const Vector3& c, const Vector3& d, const Vector3& e, const Vector3& f, const Vector3& g, const Vector3& h)
+{
+	DrawFrustumLines(*m_context.m_shapeDrawer, pos, forward, nearPanel, farPanel, a, b, c, d, a, b, c, d);
 }
 
 void EditorRender::RenderCameraPerspectiveFrustum(std::pair<uint16_t, uint16_t> p_size, CCamera& p_camera)
