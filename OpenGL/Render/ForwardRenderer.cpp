@@ -183,7 +183,9 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 				{
 					GLOBALSERVICE(CascadeShadowMap).BeginShadowRender(i);
 					m_userMatrixSender(GLOBALSERVICE(CascadeShadowMap).GetCurDepthMatrix4());
-					DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
+					
+					if(std::get<2>(p_toDraw)->ShadowCast)
+						DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
 				}
 				
 				GLOBALSERVICE(CascadeShadowMap).EndShadowRender();
