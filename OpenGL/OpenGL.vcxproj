@@ -73,6 +73,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Editor\Panels\DebugView.h" />
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
     <ClInclude Include="Editor\Panels\ModelView.h" />
     <ClInclude Include="Render\Animation\Animator.h" />
@@ -257,6 +258,7 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Editor\Panels\DebugView.cpp" />
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
     <ClCompile Include="Editor\Panels\ModelView.cpp" />
     <ClCompile Include="Render\Animation\Animator.cpp" />

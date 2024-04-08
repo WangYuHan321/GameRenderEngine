@@ -1,6 +1,7 @@
 #include "HierarchyNew.h"
 
 #include <algorithm>
+#include "../../Render/Mesh/Mesh.h"
 #include "../../Core/ECS/Actor.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../UI/Plugin/ContextualMenu.h"
@@ -59,10 +60,14 @@ HierarchyNew::HierarchyNew(const std::string& p_title,
 	};
 }
 
-void HierarchyNew::SelectedActor(Actor& p_actor)
+void HierarchyNew::InitHierarcht(Actor& p_actor)
 {
 	if (p_actor.GetComponent<CModelRenderer>()->GetModel() != nullptr)
 	{
+		for (auto item : p_actor.GetComponent<CModelRenderer>()->GetModel()->GetMeshes())
+		{
+			m_sceneRoot->CreateWidget<TreeNode>(item->Name, true);
+		}
 
 	}
 }
