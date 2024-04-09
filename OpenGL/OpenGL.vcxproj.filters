@@ -570,6 +570,9 @@
     <ClInclude Include="Editor\Panels\DebugView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\Shadow\ShadowMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1059,6 +1062,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Editor\Panels\DebugView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Shadow\ShadowMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
