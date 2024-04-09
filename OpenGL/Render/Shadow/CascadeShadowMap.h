@@ -7,6 +7,22 @@ class Material;
 class RenderTarget;
 class CDirectionalLight;
 
+typedef struct DebugOrthographics
+{
+	Vector3 pos;
+	Vector3 forward;
+	float nearPanel;
+	float farPanel;
+	Vector3 a;
+	Vector3 b;
+	Vector3 c;
+	Vector3 d;
+	Vector3 e;
+	Vector3 f;
+	Vector3 g;
+	Vector3 h;
+} DebugOrthographics;
+
 class CascadeShadowMap
 {
 private:
@@ -16,15 +32,16 @@ private:
 		Matrix4 depth;
 		RenderTarget* shadowMap;
 	} ShadowMap;
-
 private:
 
 	int currentLevel;
 	ShadowMap m_pShadowMap[2];
+	DebugOrthographics m_pDebugOrtho[2];
 
 	Matrix4 biasMatrix;
 
 public:
+
 	int previousFrameBuffer;
 
 	CascadeShadowMap();
@@ -39,7 +56,7 @@ public:
 
 
 	void InitShadowMap(int level, float minX, float maxX, float miny, float maxY, float minz, float maxZ);
-
 	int GetShadowMap(int curLevel);
+	DebugOrthographics GetOrthographicFrustum(int curLevel = 0);
 };
 

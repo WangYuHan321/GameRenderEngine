@@ -4,6 +4,7 @@
 #include "../../Camera/Camera.h"
 #include <glm/gtx/string_cast.hpp>
 #include "../../Render/Mesh/Material.h"
+#include "../../Core/ECS/Actor.h"
 #include "../../Core/ECS/Components/CDirectionalLight.h"
 
 CascadeShadowMap::CascadeShadowMap()
@@ -15,8 +16,8 @@ CascadeShadowMap::CascadeShadowMap()
 		0.5, 0.5, 0.5, 1.0
 	);
 
-	InitShadowMap(0, -5.0f, 5.0f, -5.0f, 5.0f, 0.1f, 70.0f);
-	InitShadowMap(1, -40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 120.0f);
+	InitShadowMap(0, -5.0f, 5.0f, -5.0, 5.0f, 0.1f, 40.0f);
+	InitShadowMap(1, -400.0f, 400.0f, -400.0f, 400.0f, 0.1f, 120.0f);
 	//InitShadowMap(2, -80.0f, 80.0f, -80.0f, 80.0f, 0.1f, 1360.0f);
 	//InitShadowMap(3, -160.0f, 160.0f, -160.0f, 160.0f, 0.1f, 2720.0f);
 	//InitShadowMap(4, -320.0f, 320.0f, -320.0f, 320.0f, 0.1f, 5440.0f);
@@ -25,7 +26,7 @@ CascadeShadowMap::CascadeShadowMap()
 void CascadeShadowMap::InitShadowMap(int level, float minX, float maxX, float miny, float maxY, float minz, float maxZ)
 {
 	m_pShadowMap[level].proj = glm::ortho<float>(minX, maxX, miny, maxY, minz, maxZ);
-	RenderTarget* rt = new RenderTarget(1024, 1024, GL_UNSIGNED_BYTE, 0, true);
+	RenderTarget* rt = new RenderTarget(2048, 2048, GL_UNSIGNED_BYTE, 0, true);
 	rt->GetDepthStencilTexture()->Bind();
 	rt->GetDepthStencilTexture()->SetFilterMin(GL_NEAREST);
 	rt->GetDepthStencilTexture()->SetFilterMax(GL_NEAREST);
@@ -66,7 +67,7 @@ void CascadeShadowMap::SetShadowMap(Material* p_material)
 		p_material->GetShader()->SetMatrix("shadow_lightDepthMat" + std::to_string(i), m_pShadowMap[i].depth);
 		//LOG_ERROR(glm::to_string(m_pShadowMap[i].depth));
 	}
-	p_material->SetBoolean("shadow_shadowCast", p_material->ShadowCast);
+	p_material->SetBoolean("shadow_shadowReceive", p_material->ShadowReceive);
 }
 
 Matrix4 CascadeShadowMap::GetCurDepthMatrix4()
@@ -78,8 +79,30 @@ Matrix4 CascadeShadowMap::GetCurDepthMatrix4()
 void CascadeShadowMap::InitializeFrame(CDirectionalLight p_dirLight, const Camera* p_cam)
 {
 	const glm::vec3& cameraPosition = p_cam->Position;
-	glm::vec3 target = glm::vec3(cameraPosition.x, 0, cameraPosition.z);
-	glm::mat4 depthViewMatrix = glm::lookAt(target + (p_dirLight.GetDirectional() + 20.0f), target, glm::vec3(0, 1, 0));
+	glm::vec3 target = glm::vec3(cameraPosition.x, p_dirLight.owner.m_transform.GetWorldPosition().y, cameraPosition.z);
+	glm::mat4 depthViewMatrix = glm::lookAt(target - p_dirLight.GetDirectional(), target, p_cam->Up);
+
+	int test[2] = { 5.0f, 400.0f };
+
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		const auto _near = p_cam->Near;
+		const auto _far = p_cam->Far;
+		const auto _size = test[i];
+
+		const auto right = 1.0 * _size;
+		const auto left = -right;
+		const auto top = _size;
+		const auto bottom = -top;
+
+		FTransform cam(target + p_dirLight.GetDirectional(), target, p_cam->Up);
+
+		const auto a = (Quaternion)cam.GetWorldRotation() * Vector3{ left, top, 0 };
+		const auto b = (Quaternion)cam.GetWorldRotation() * Vector3{ right, top, 0 };
+		const auto c = (Quaternion)cam.GetWorldRotation() * Vector3{ left, bottom, 0 };
+		const auto d = (Quaternion)cam.GetWorldRotation() * Vector3{ right, bottom, 0 };
+		m_pDebugOrtho[i] = { cam.GetWorldPosition(), (Quaternion)cam.GetWorldRotation() * Vector3(0.0f, 0.0f, 1.0f), _near, _far, a, b, c, d, a, b, c, d };
+	}
 
 	for (unsigned int i = 0; i < 2; i++)
 	{
@@ -114,4 +137,9 @@ int CascadeShadowMap::GetShadowMap(int curLevel)
 	if(curLevel < 2)
 		return m_pShadowMap[curLevel].shadowMap->GetDepthStencilTexture()->ID;
 	return 0;
+}
+
+DebugOrthographics CascadeShadowMap::GetOrthographicFrustum(int curLevel)
+{
+	return m_pDebugOrtho[curLevel];
 }
