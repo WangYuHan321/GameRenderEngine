@@ -7,10 +7,10 @@
 #include "../../Render/Mesh/Model.h"
 #include "../Render/Mesh/Material.h"
 #include "../Global/ServiceLocator.h"
+#include "../Render/Shadow/ShadowMap.h"
 #include "../../Render/Mesh/Material.h"
 #include "../Core/ECS/Components/CLight.h"
 #include "../../Render/Resource/RawShader.h"
-#include "../Render/Shadow/CascadeShadowMap.h"
 #include "../Core/ECS/Components/CModelRenderer.h"
 #include "../Core/ECS/Components/CDirectionalLight.h"
 #include "../Core/ECS/Components/CMaterialRenderer.h"
@@ -96,9 +96,12 @@ void ForwardRenderer::RenderScene(Scene& p_scene,
 
 	std::tie(opaqueMeshes, transparentMeshes) = FindAndSortDRawables(p_scene, p_cameraPosition, p_defaultMaterial);
 
-	GLOBALSERVICE(CascadeShadowMap).Clear();
-	for (const auto& [distance, drawable] : opaqueMeshes)
-		DrawDrawableShadow(p_scene, drawable, p_camera);
+#ifdef CascadeShadowMap
+	//GLOBALSERVICE(CascadeShadowMap).Clear();
+#endif
+	//GLOBALSERVICE(ShadowMap).Clear();
+	//for (const auto& [distance, drawable] : opaqueMeshes)
+	//	DrawDrawableShadow(p_scene, drawable, p_camera);
 
 	for (const auto& [distance, drawable] : opaqueMeshes)
 		DrawDrawable(drawable);
@@ -164,8 +167,14 @@ std::pair<ForwardRenderer::OpaqueDrawables, ForwardRenderer::TransparentDrawable
 void ForwardRenderer::DrawDrawable(const Drawable& p_toDraw)
 {
 	m_userMatrixSender(std::get<3>(p_toDraw));
+#ifdef CascadeShadowMap
 	if (std::get<2>(p_toDraw)->ShadowReceive)
 		GLOBALSERVICE(CascadeShadowMap).SetShadowMap(std::get<2>(p_toDraw));
+#endif
+	//Material tempMat = std::get<2>(p_toDraw)->Copy();
+	if (std::get<2>(p_toDraw)->ShadowReceive)
+		GLOBALSERVICE(ShadowMap).SetShadowMap(std::get<2>(p_toDraw));
+
 	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), (Matrix4*)&std::get<0>(p_toDraw));
 }
 
@@ -175,6 +184,7 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 	{
 		if (dirLight->GetData().type == float(Light::Type::Directional))
 		{
+#ifdef CascadeShadowMap
 			GLOBALSERVICE(CascadeShadowMap).InitializeFrame(*static_cast<CDirectionalLight*>(dirLight), &p_camera);
 			if (std::get<2>(p_toDraw)->ShadowCast)
 			{
@@ -183,12 +193,27 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 				{
 					GLOBALSERVICE(CascadeShadowMap).BeginShadowRender(i);
 					m_userMatrixSender(GLOBALSERVICE(CascadeShadowMap).GetCurDepthMatrix4());
-					
-					if(std::get<2>(p_toDraw)->ShadowCast)
+
+					if (std::get<2>(p_toDraw)->ShadowCast)
 						DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
 				}
-				
+
 				GLOBALSERVICE(CascadeShadowMap).EndShadowRender();
+				glEnable(GL_STENCIL_TEST);
+			}
+#endif
+			GLOBALSERVICE(ShadowMap).InitializeFrame(*static_cast<CDirectionalLight*>(dirLight), &p_camera);
+			if (std::get<2>(p_toDraw)->ShadowCast)
+			{
+				glDisable(GL_STENCIL_TEST);
+
+				GLOBALSERVICE(ShadowMap).BeginShadow();
+				m_userMatrixSender(GLOBALSERVICE(ShadowMap).GetCurDepthMatrix4());
+					
+				if(std::get<2>(p_toDraw)->ShadowCast)
+					DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
+				
+				GLOBALSERVICE(ShadowMap).EndShadow();
 				glEnable(GL_STENCIL_TEST);
 			}
 		}
