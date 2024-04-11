@@ -179,8 +179,13 @@ void ModelView::RenderScene()
 
 	if (m_highlightedActor.has_value())// Û±Í“∆∂ØµΩ
 	{
+		int highlightedAxis = -1;
 		m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), true, false);
 		m_editorRenderer.RenderActorOutlinePass(m_highlightedActor.value().get(), false, false);
+
+		highlightedAxis = static_cast<int>(m_highlightedGizmoDirection.value());
+
+		auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
 	}
 
 	m_renderTarget->Unbind();

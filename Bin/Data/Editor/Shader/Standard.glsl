@@ -28,11 +28,9 @@ out VS_OUT
     vec3        TangentFragPos;
 
     vec4 lightDepthPos0;
-    vec4 lightDepthPos1;
 } vs_out;
 
 mat4 shadow_lightDepthMat0;
-mat4 shadow_lightDepthMat1;
 
 void main()
 {
@@ -52,10 +50,9 @@ void main()
     vs_out.TangentFragPos   = TBNi * vs_out.FragPos;
 
     vs_out.lightDepthPos0 =  shadow_lightDepthMat0 * vec4(vs_out.FragPos, 1.0);
-    vs_out.lightDepthPos1 =  shadow_lightDepthMat1 * vec4(vs_out.FragPos, 1.0);
 
-    //gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
-    gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
+
+    gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }
 
 #shader fragment
@@ -82,7 +79,7 @@ in VS_OUT
     vec3        TangentFragPos;
 
     vec4 lightDepthPos0;
-    vec4 lightDepthPos1;
+    //vec4 lightDepthPos1;
 } fs_in;
 
 uniform vec2 shadow_poissonDisk[4] = vec2[](
@@ -113,7 +110,6 @@ uniform sampler2D   u_HeightMap;
 uniform sampler2D   u_MaskMap;
 
 uniform sampler2D   shadow_LightDepthMap0;
-uniform sampler2D   shadow_LightDepthMap1;
 uniform int shadow_shadowCast = 0;
 
 /* Global variables */
@@ -231,31 +227,14 @@ bool whithinRange(vec2 texCoord)
 float getShadowVisibility(int i, vec3 rawNormal)
 {
     vec3 lightDir = -ssbo_Lights[i][1].rgb;
-	float bias = clamp(0.005 * tan(acos(dot(rawNormal, lightDir))), 0.0, 0.01);
 	float visibility = 1.0;
 
 	// Check first the highest resolution (but smaller) map
 	if(whithinRange(fs_in.lightDepthPos0.xy))
 	{
-		float curDepth = fs_in.lightDepthPos0.z - bias;
-		
-		// Apply percentage close filter to get rid of the stair effect
-		for (int i = 0; i < 4; i++)
-		{
-			visibility -= 0.25 * ( texture(shadow_LightDepthMap0, fs_in.lightDepthPos0.xy + shadow_poissonDisk[i] / 700.0).x  <  curDepth? 1.0 : 0.0 );
-		}
-		
-	}
-	// If not there, try in the lower resolution (but bigger) map
-	else if(whithinRange(fs_in.lightDepthPos1.xy))
-	{
-		float curDepth = fs_in.lightDepthPos1.z - bias;
-		
-		for (int i = 0; i < 4; i++)
-		{
-			visibility -= 0.25 * ( texture(shadow_LightDepthMap1, fs_in.lightDepthPos1.xy + shadow_poissonDisk[i] / 700.0 ).x  <  curDepth? 1.0 : 0.0 );
-		}
-		
+		float curDepth = fs_in.lightDepthPos0.z;
+		if(texture(shadow_LightDepthMap0, fs_in.lightDepthPos0.xy).x > curDepth)
+			visibility = 0.0f;
 	}
 	return visibility;
 }
@@ -295,7 +274,7 @@ void main()
             switch(int(ssbo_Lights[i][3][0]))
             {
                 case 0: lightSum += CalcPointLight(ssbo_Lights[i]);         break;
-                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]) * visible;   break;
+                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]);   break;
                 case 2: lightSum += CalcSpotLight(ssbo_Lights[i]);          break;
                 case 3: lightSum += CalcAmbientBoxLight(ssbo_Lights[i]);    break;
                 case 4: lightSum += CalcAmbientSphereLight(ssbo_Lights[i]); break;

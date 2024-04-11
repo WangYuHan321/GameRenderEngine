@@ -7,6 +7,7 @@
 #include "../../UI/Visual/Image.h"
 #include "../../UI/Plugin/DDTarget.h"
 #include "../../File/Path/PathParser.h"
+#include "../../Render/Shadow/ShadowMap.h"
 
 //#define EDITOR_USE_RAY //鼠标移动是否开启射线击中物体
 //
@@ -80,6 +81,9 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 		m_editorRenderer.RenderLights();
 
 		m_editorRenderer.RenderScene(m_camPos, m_camera);
+		//DebugOrthographics debug = GLOBALSERVICE(ShadowMap).GetOrthographicFrustum(0);
+		//m_editorRenderer.DebugRenderOrthographicFrustum(debug.pos, debug.forward, debug.nearPanel,debug.farPanel,
+		//	debug.a, debug.b, debug.c, debug.d);
 
 		if (EDITOR_EXEC(IsAnyActorSelected()))
 		{
@@ -93,8 +97,15 @@ void SceneView::RenderScene(uint8_t p_defaultRenderState)
 
 			baseRenderer.Clear(false, true, false);
 
+			int highlightedAxis = -1;
+
+			if (m_highlightedGizmoDirection.has_value())
+			{
+				highlightedAxis = static_cast<int>(m_highlightedGizmoDirection.value());
+			}
+
 			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
-				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, false);
+				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, false, highlightedAxis);
 		}
 
 		if (m_highlightedActor.has_value())//鼠标移动到

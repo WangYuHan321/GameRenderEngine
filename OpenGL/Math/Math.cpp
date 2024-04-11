@@ -25,12 +25,13 @@ float Deg2Rad(float degrees)
     return degrees / 180.0f * PI;
 }
 
+// modify OpenGL GLM 
 glm::mat4 Translate(const glm::vec3& translation)
 {
-    glm::mat4 result(1, 0, 0, translation.x,
-                     0, 1, 0, translation.y,
-                     0, 0, 1, translation.z,
-                     0,0,0, 1);
+    glm::mat4 result(1, 0, 0, 0,
+                     0, 1, 0, 0,
+                     0, 0, 1, 0,
+                     translation.x, translation.y, translation.z, 1);
     return result;
 }
 

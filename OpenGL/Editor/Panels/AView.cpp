@@ -87,33 +87,7 @@ void AView::FillEngineUBO()
 
 	size_t offset = sizeof(Matrix4);
 
-	Matrix4 mat1 = glm::transpose(m_camera.View);
-	Matrix4 mat2 = glm::transpose(m_camera.Projection);
-
-#if 0
-
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			printf("[%f]", mat1[i][j]);
-		}
-		printf("\n");
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			printf("[%f]", mat2[i][j]);
-		}
-		printf("\n");
-	}
-	printf("----------------------------------------------------------\n");
-
-#endif
-
-	engineUBO.SetSubData(glm::transpose(m_camera.View), sizeof(Matrix4));//这里可以用std::ref
-	engineUBO.SetSubData(glm::transpose(m_camera.Projection), 2 * sizeof(Matrix4));
+	engineUBO.SetSubData(m_camera.View, sizeof(Matrix4));//这里可以用std::ref
+	engineUBO.SetSubData(m_camera.Projection, 2 * sizeof(Matrix4));
 	engineUBO.SetSubData(m_camPos, 3 * sizeof(Matrix4));
 }

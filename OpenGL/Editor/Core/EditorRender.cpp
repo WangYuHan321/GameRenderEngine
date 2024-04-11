@@ -40,12 +40,12 @@ EditorRender::EditorRender(Context& p_context):
 
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->RegisterModelMatrixSender([this](Matrix4 mat4)
 		{
-			m_context.m_engineUBO->SetSubData(glm::transpose(mat4), 0); // model
+			m_context.m_engineUBO->SetSubData(mat4, 0); // model
 		});
 
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->RegisterUserMatrixSender([this](Matrix4 mat4)
 		{
-			m_context.m_engineUBO->SetSubData(glm::transpose(mat4), 
+			m_context.m_engineUBO->SetSubData(mat4, 
 				sizeof(Matrix4) +
 				sizeof(Matrix4) +
 				sizeof(Matrix4) +
@@ -133,25 +133,7 @@ Matrix4 EditorRender::CalculateCameraModelMatrix(Actor& actor)
 	Quaternion rotQuat = actor.m_transform.GetWorldRotation();
 	Matrix4 rotation = rotQuat.ToMatrix4();
 
-#if 0
-	printf(" --------------------------------------------------------- \n");
-	Matrix4 mattt = translation;
-
-	printf(" %s \n", glm::to_string(mattt).c_str());
-
-	mattt = rotation;
-
-	printf(" %s \n", glm::to_string(mattt).c_str());
-
-	mattt = rotation * translation;
-
-	printf(" %s \n", glm::to_string(mattt).c_str());
-
-	printf(" --------------------------------------------------------- \n");
-
-#endif
-
-	return  scale * rotation * translation;
+	return  translation * rotation * scale;
 }
 
 void EditorRender::UpdateLights(Scene& p_scene)
@@ -194,7 +176,7 @@ void EditorRender::RenderGrid(Vector3& p_viewPos, Vector3& p_color)
 {
 	constexpr float gridSize = 5000.0f;
 
-	Matrix4 model = Scale({ gridSize * 2.0f, 1.f, gridSize * 2.0f }) * Translate({ p_viewPos.x, 0.0f, p_viewPos.z });
+	Matrix4 model = Translate({ p_viewPos.x, 0.0f, p_viewPos.z }) * Scale({ gridSize * 2.0f, 1.f, gridSize * 2.0f });
 	m_gridMaterial.SetVector("u_Color", p_color);
 	
 	dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Plane"), m_gridMaterial, &model);
@@ -426,7 +408,7 @@ void EditorRender::RenderCameraOrthographicFrustum(std::pair<uint16_t, uint16_t>
 }
 
 void EditorRender::DebugRenderOrthographicFrustum(const Vector3& pos, const Vector3& forward, float nearPanel, const float farPanel, const Vector3& a,
-	const Vector3& b, const Vector3& c, const Vector3& d, const Vector3& e, const Vector3& f, const Vector3& g, const Vector3& h)
+	const Vector3& b, const Vector3& c, const Vector3& d)
 {
 	DrawFrustumLines(*m_context.m_shapeDrawer, pos, forward, nearPanel, farPanel, a, b, c, d, a, b, c, d);
 }
@@ -501,14 +483,16 @@ void EditorRender::DrawFrustumLines(ShapeDrawer& p_drawer, const Vector3& pos, c
 
 void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperation p_operation, bool p_pickable, int p_highlightedAxis) //ªÊ÷∆gizmo
 {
+	// OpenGL T * R * S
+	//DirectX S * R * T
 
-	Matrix4 model = p_quat.Normalize().ToMatrix4() * Translate(p_pos);
+	Matrix4 model = Translate(p_pos) * p_quat.ToMatrix4();
 
 	Model* arrowModel = nullptr;
 
 	if (!p_pickable)
 	{
-		Matrix4 sphereModel = Scale(Vector3(0.1f, 0.1f, 0.1f)) * model;
+		Matrix4 sphereModel = model * Scale(Vector3(0.1f, 0.1f, 0.1f));
 
 		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), m_gizmoBallMaterial, &sphereModel);
 		m_gizmoArrowMaterial.SetInt("u_HighlightedAxis", p_highlightedAxis);

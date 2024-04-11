@@ -27,8 +27,7 @@ void main()
     vs_out.Normal       = normalize(mat3(transpose(inverse(ubo_Model))) * geo_Normal);
     vs_out.TexCoords    = geo_TexCoords;
 
-	//这里使用GLM 矩阵存储行列式必须mvp
-    gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
+    gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }
 
 #shader fragment

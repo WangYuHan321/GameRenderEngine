@@ -28,10 +28,10 @@ out VS_OUT
 
 void main()
 {
-	vs_out.FragPos = vec3(ubo_Model *  vec4(geo_Pos, 1.0));
+	vs_out.FragPos = vec3(ubo_Model * vec4(geo_Pos, 1.0));
 	vs_out.TexCoords = vs_out.FragPos.xz;
 
-	gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
+	gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }
 
 )";
@@ -162,7 +162,7 @@ void main()
 	else if (gl_InstanceID == 2)
 		instanceModel = instanceModel * rotationMatrix(vec3(1, 0, 0), radians(90)); //Y
 
-	float distanceToCamera = distance(ubo_ViewPos, vec3(instanceModel[0][3], instanceModel[1][3], instanceModel[2][3]));
+	float distanceToCamera = distance(ubo_ViewPos, vec3(instanceModel[3][0], instanceModel[3][1], instanceModel[3][2]));
 
 	vec3 pos = geo_Pos;
 
@@ -195,17 +195,17 @@ void main()
 			float green = float(gl_InstanceID == 2); // Y
 			float blue	= float(gl_InstanceID == 0); // Z
 
-			//if (!u_IsPickable && ((gl_InstanceID == 1 && u_HighlightedAxis == 0) || (gl_InstanceID == 2 && u_HighlightedAxis == 1) || (gl_InstanceID == 0 && u_HighlightedAxis == 2)))
-			//{
-			//	vs_out.Color = vec3(1.0f, 1.0f, 0.0f);
-			//}	
-			//else
-			//{
+			if (!u_IsPickable && ((gl_InstanceID == 1 && u_HighlightedAxis == 0) || (gl_InstanceID == 2 && u_HighlightedAxis == 1) || (gl_InstanceID == 0 && u_HighlightedAxis == 2)))
+			{
+				vs_out.Color = vec3(1.0f, 1.0f, 0.0f);
+			}	
+			else
+			{
 				vs_out.Color = vec3(red, green, blue);
-			//}
+			}
 		}
 	}
-	    gl_Position = vec4(fragPos, 1.0) * ubo_View * ubo_Projection;
+	    gl_Position = ubo_Projection * ubo_View * vec4(fragPos, 1.0);
 }
 		)";
 
@@ -263,7 +263,7 @@ void main()
     mat4 model = ubo_Model;
 	float distanceToCamera = distance(ubo_ViewPos, model[3].xyz);
 
-    gl_Position = ubo_Model * vec4(geo_Pos * distanceToCamera * u_Scale, 1.0) * ubo_View * ubo_Projection;
+    gl_Position = ubo_Projection * ubo_View * ubo_Model * vec4(geo_Pos * distanceToCamera * u_Scale, 1.0);
 })";
 
 	source.second = R"(
@@ -312,7 +312,7 @@ layout (std140) uniform EngineUBO
 void main()
 {
     vec3 Position = vec3(ubo_Model * vec4(geo_Pos, 1.0));
-    gl_Position = vec4(Position, 1.0) * ubo_UserMatrix;
+    gl_Position = ubo_UserMatrix * vec4(Position, 1.0);
 })";
 
 	source.second = R"(
