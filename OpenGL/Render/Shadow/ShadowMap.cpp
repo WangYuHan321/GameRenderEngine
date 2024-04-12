@@ -28,6 +28,7 @@ ShadowMap::~ShadowMap()
 void ShadowMap::Clear()
 {
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFrameBuffer);
+	glGetIntegerv(GL_VIEWPORT, previousViewport);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_renderTarget->ID);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, previousFrameBuffer);
@@ -68,12 +69,14 @@ void ShadowMap::BeginShadow()
 {
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &previousFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_renderTarget->ID);
+
 	glViewport(0, 0, m_renderTarget->Width, m_renderTarget->Height);
 }
 
 void ShadowMap::EndShadow()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, previousFrameBuffer);
+	glViewport(previousViewport[0], previousViewport[1], previousViewport[2], previousViewport[3]);
 }
 
 Matrix4 ShadowMap::GetCurDepthMatrix4()

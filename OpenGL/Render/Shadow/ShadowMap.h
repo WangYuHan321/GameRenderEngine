@@ -27,6 +27,7 @@ public:
 	DebugOrthographics GetOrthographicFrustum(int curLevel = 0);
 
 	int previousFrameBuffer;
+	int previousViewport[4];
 
 private:
 
