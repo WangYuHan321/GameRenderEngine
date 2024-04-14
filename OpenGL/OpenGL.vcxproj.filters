@@ -573,6 +573,15 @@
     <ClInclude Include="Render\Shadow\ShadowMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="File\FileMonitor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File\ResourceChangeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File\LuaFileChangeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1065,6 +1074,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Shadow\ShadowMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\FileMonitor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\ResourceChangeHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\LuaFileChangeHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
