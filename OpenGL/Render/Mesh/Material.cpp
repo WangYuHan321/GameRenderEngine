@@ -232,22 +232,40 @@ void Material::SetBoolean(std::string name, bool value)
     m_uniforms[name].BOOL = value;
 }
 
-void Material::SetVector(std::string name, glm::vec2 value)
+void Material::SetVector(std::string name, Vector2 value)
 {
     m_uniforms[name].Type = SHADER_VEC2;
     m_uniforms[name].VEC2 = value;
 }
 
-void Material::SetVector(std::string name, glm::vec3 value)
+void Material::SetVector(std::string name, Vector3 value)
 {
     m_uniforms[name].Type = SHADER_VEC3;
     m_uniforms[name].VEC3 = value;
 }
 
-void Material::SetVector(std::string name, glm::vec4 value)
+void Material::SetVector(std::string name, Vector4 value)
 {
     m_uniforms[name].Type = SHADER_VEC4;
     m_uniforms[name].VEC4 = value;
+}
+
+void Material::SetMatrix(std::string name, Matrix2 value)
+{
+    m_uniforms[name].Type = SHADER_MAT2;
+    m_uniforms[name].MAT2 = value;
+}
+
+void Material::SetMatrix(std::string name, Matrix3 value)
+{
+    m_uniforms[name].Type = SHADER_MAT3;
+    m_uniforms[name].MAT3 = value;
+}
+
+void Material::SetMatrix(std::string name, Matrix4 value)
+{
+    m_uniforms[name].Type = SHADER_MAT4;
+    m_uniforms[name].MAT4 = value;
 }
 
 void Material::SetTextureValue(std::string name, Texture* value)

@@ -66,10 +66,18 @@ public:
 	void SetInt(std::string name, int value);
 	void SetFloat(std::string name, float value);
 	void SetBoolean(std::string name, bool value);
-	void SetVector(std::string name, glm::vec2 value);
-	void SetVector(std::string name, glm::vec3 value);
-	void SetVector(std::string name, glm::vec4 value);
+	void SetVector(std::string name, Vector2 value);
+	void SetVector(std::string name, Vector3 value);
+	void SetVector(std::string name, Vector4 value);
+	void SetMatrix(std::string name, Matrix2 value);
+	void SetMatrix(std::string name, Matrix3 value);
+	void SetMatrix(std::string name, Matrix4 value);
 	void SetTextureValue(std::string name, Texture* value);
+	
+	
+	
+	
+	
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
 	void SetTextureCube(std::string name, TextureCube* value, unsigned int unit);
 	
