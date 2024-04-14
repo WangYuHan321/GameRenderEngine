@@ -12,6 +12,12 @@ Vector3 CDirectionalLight::GetDirectional()
 	return Vector3( dirVec.x, dirVec.y, dirVec.z);
 }
 
+Vector3 CDirectionalLight::GetPosition()
+{
+	Vector4 pos = m_data.GenerateMatrix()[0];
+	return Vector3(pos.x, pos.y, pos.z);
+}
+ 
 std::string CDirectionalLight::GetName()
 {
 	return "DirectionalLight";

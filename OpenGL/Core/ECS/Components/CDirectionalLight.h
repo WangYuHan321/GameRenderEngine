@@ -10,6 +10,8 @@ public:
 
 	Vector3 GetDirectional();
 
+	Vector3 GetPosition();
+
 	virtual std::string GetName() override;
 
 	virtual void OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
