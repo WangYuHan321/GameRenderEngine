@@ -99,9 +99,9 @@ void ForwardRenderer::RenderScene(Scene& p_scene,
 #ifdef CascadeShadowMap
 	//GLOBALSERVICE(CascadeShadowMap).Clear();
 #endif
-	//GLOBALSERVICE(ShadowMap).Clear();
-	//for (const auto& [distance, drawable] : opaqueMeshes)
-	//	DrawDrawableShadow(p_scene, drawable, p_camera);
+	GLOBALSERVICE(ShadowMap).Clear();
+	for (const auto& [distance, drawable] : opaqueMeshes)
+		DrawDrawableShadow(p_scene, drawable, p_camera);
 
 	for (const auto& [distance, drawable] : opaqueMeshes)
 		DrawDrawable(drawable);
@@ -171,11 +171,11 @@ void ForwardRenderer::DrawDrawable(const Drawable& p_toDraw)
 	if (std::get<2>(p_toDraw)->ShadowReceive)
 		GLOBALSERVICE(CascadeShadowMap).SetShadowMap(std::get<2>(p_toDraw));
 #endif
-	//Material tempMat = std::get<2>(p_toDraw)->Copy();
+	Material tempMat = std::get<2>(p_toDraw)->Copy();
 	if (std::get<2>(p_toDraw)->ShadowReceive)
-		GLOBALSERVICE(ShadowMap).SetShadowMap(std::get<2>(p_toDraw));
+		GLOBALSERVICE(ShadowMap).SetShadowMap(&tempMat);
 
-	DrawMesh(*std::get<1>(p_toDraw), *std::get<2>(p_toDraw), (Matrix4*)&std::get<0>(p_toDraw));
+	DrawMesh(*std::get<1>(p_toDraw), tempMat, (Matrix4*)&std::get<0>(p_toDraw));
 }
 
 void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p_toDraw, const Camera& p_camera)
@@ -205,8 +205,6 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 			GLOBALSERVICE(ShadowMap).InitializeFrame(*static_cast<CDirectionalLight*>(dirLight), &p_camera);
 			if (std::get<2>(p_toDraw)->ShadowCast)
 			{
-				glDisable(GL_STENCIL_TEST);
-
 				GLOBALSERVICE(ShadowMap).BeginShadow();
 				m_userMatrixSender(GLOBALSERVICE(ShadowMap).GetCurDepthMatrix4());
 					
@@ -214,7 +212,6 @@ void ForwardRenderer::DrawDrawableShadow(const Scene& p_scene, const Drawable& p
 					DrawMesh(*std::get<1>(p_toDraw), *m_pShadowMaterial, (Matrix4*)&std::get<0>(p_toDraw));
 				
 				GLOBALSERVICE(ShadowMap).EndShadow();
-				glEnable(GL_STENCIL_TEST);
 			}
 		}
 	}
