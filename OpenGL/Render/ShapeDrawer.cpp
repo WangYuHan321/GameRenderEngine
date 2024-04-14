@@ -130,20 +130,6 @@ void ShapeDrawer::SetViewProjection(Matrix4 p_mat4)
 	m_gridShader->SetMatrix("viewProjection", p_mat4);
 	m_gridShader->InActiveShader();
 
-#if 0
-
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			printf("[%f]", p_mat4[i][j]);
-		}
-		printf("\n");
-	}
-	printf("\n");
-
-#endif
-
 }
 
 void ShapeDrawer::DrawLine(Vector3 p_start, Vector3 p_end, Color3 p_color, float p_lineWidth)
