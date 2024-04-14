@@ -61,8 +61,8 @@ void ShadowMap::InitializeFrame(CDirectionalLight dirLight, const Camera* p_cam)
 void ShadowMap::SetShadowMap(Material* p_material)
 {
 	p_material->SetTextureValue("shadow_LightDepthMap0", m_renderTarget->GetDepthStencilTexture());
-	p_material->GetShader()->SetMatrix("shadow_lightDepthMat0", m_lightMatrix);
-	p_material->SetBoolean("shadow_shadowReceive", p_material->ShadowReceive);
+	p_material->SetMatrix("shadow_lightDepthMat0", m_lightMatrix);
+	p_material->SetBoolean("shadow_shadowReceive", /*p_material->ShadowReceive*/false);
 }
 
 void ShadowMap::BeginShadow()
