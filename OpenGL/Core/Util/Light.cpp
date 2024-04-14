@@ -22,9 +22,9 @@ Matrix4 Light::GenerateMatrix() const
 	result[1][1] = forward.y;
 	result[1][2] = forward.z;
 
-	result[2][0] = color.r * 255.f;
-	result[2][1] = color.g * 255.f;
-	result[2][2] = color.b * 255.f;
+	result[2][0] = color.r;
+	result[2][1] = color.g;
+	result[2][2] = color.b;
 	//result[2][3] = 0 * 255.f;
 
 	result[3][0] = type;
