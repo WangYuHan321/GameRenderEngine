@@ -582,6 +582,15 @@
     <ClInclude Include="File\LuaFileChangeHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Render\DeferredRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\Deferred\Program\Program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File\ShaderFileChangeHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1083,6 +1092,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="File\LuaFileChangeHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\DeferredRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\Deferred\Program\Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File\ShaderFileChangeHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

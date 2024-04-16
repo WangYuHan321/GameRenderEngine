@@ -5,12 +5,15 @@
 #include <codecvt>
 #include "ResourceChangeHandler.h"
 #include "LuaFileChangeHandler.h"
+#include "ShaderFileChangeHandler.h"
 
 FileMonitor::FileMonitor()
 {
 	m_pArg = new FileChangeArgs();
-	LuaFileChangeHandler* pHandler = new LuaFileChangeHandler();
-	ResgisterHandler(pHandler);
+	LuaFileChangeHandler* pHandler1 = new LuaFileChangeHandler();
+	ShaderFileChangeHandler* pHandler2 = new ShaderFileChangeHandler();
+	ResgisterHandler(pHandler1);
+	ResgisterHandler(pHandler2);
 }
 
 FileMonitor::~FileMonitor()

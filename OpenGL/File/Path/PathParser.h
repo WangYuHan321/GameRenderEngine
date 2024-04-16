@@ -18,9 +18,6 @@ enum class EFileType
 
 class PathParser : public CSingleton<PathParser>
 {
-
-
-
 public:
 
     std::string GetFileNameByPath(std::string path);

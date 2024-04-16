@@ -11,7 +11,7 @@ bool LuaFileChangeHandler::OnFileChanged(const FileChangeArgs & arg)
 {
 	if (CheckFileType(arg.filePath))
 	{
-		LOG_INFO("path %s", arg.filePath);
+		LOG_INFO(arg.filePath);
 		return true;
 	}
 	return false;
