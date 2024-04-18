@@ -128,3 +128,15 @@ void Texture::SetWrapMode(GLenum gEnum)
 	glTexParameteri(Target, GL_TEXTURE_WRAP_S, gEnum);
 	glTexParameteri(Target, GL_TEXTURE_WRAP_T, gEnum);
 }
+
+void Texture::ReSizeSubImage(int x, int y, int width, int height, unsigned int client_format, unsigned int data_type, unsigned char* data)
+{
+	if (width <= 0 || height <= 0) {
+		return;
+	}
+	
+	Bind();
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); 
+		glTexSubImage2D(GL_TEXTURE_2D, 0, x, y, width, height, client_format, data_type, data);
+	UnBind();
+}

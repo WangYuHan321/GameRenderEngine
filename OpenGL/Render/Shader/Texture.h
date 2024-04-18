@@ -44,5 +44,7 @@ public:
 	void SetFilterMin(GLenum gEnum);
 	void SetFilterMax(GLenum gEnum);
 	void SetWrapMode(GLenum gEnum);
+
+	void ReSizeSubImage(int x, int y, int width, int height, unsigned int client_format, unsigned int data_type, unsigned char* data);
 };
 
