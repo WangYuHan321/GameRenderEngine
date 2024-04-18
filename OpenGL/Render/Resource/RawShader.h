@@ -12,5 +12,7 @@ public:
 	static std::pair<std::string, std::string> GetBillboard();
 
 	static std::pair<std::string, std::string> GetShadow();
+
+	static std::pair<std::string, std::string> GetFont();
 };
 

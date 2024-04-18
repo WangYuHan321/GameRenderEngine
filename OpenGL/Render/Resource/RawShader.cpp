@@ -344,3 +344,71 @@ void main()
 
 	return source;
 }
+
+std::pair<std::string, std::string> RawShader::GetFont()
+{
+	std::pair<std::string, std::string> source;
+
+	source.first = R"(
+#version 430 core
+
+layout (location = 0) in vec3 geo_Pos;
+layout (location = 1) in vec2 geo_TexCoords;
+
+out VS_OUT
+{
+    vec2 TexCoords;
+} vs_out;
+
+/* Global information sent by the engine */
+layout (std140) uniform EngineUBO
+{
+    mat4    ubo_Model;
+    mat4    ubo_View;
+    mat4    ubo_Projection;
+    vec3    ubo_ViewPos;
+    float   ubo_Time;
+};
+
+void main()
+{
+	vs_out.TexCoords = geo_TexCoords;
+    vec3 Position = vec3(ubo_Model * vec4(geo_Pos, 1.0));
+    gl_Position = ubo_Projection * ubo_View * vec4(Position, 1.0);
+})";
+
+	source.second = R"(
+#version 430 core
+
+layout (std140) uniform EngineUBO
+{
+    mat4    ubo_Model;
+    mat4    ubo_View;
+    mat4    ubo_Projection;
+    vec3    ubo_ViewPos;
+    float   ubo_Time;
+};
+
+uniform sampler2D font_texture;
+
+in VS_OUT
+{
+	vec2 TexCoords;
+} fs_in;
+
+/* Light information sent by the engine */
+layout(std430, binding = 0) buffer LightSSBO
+{
+    mat4 ssbo_Lights[];
+};
+
+out vec4 FRAG_COLOR;
+
+void main()
+{
+	vec4 pixelColor = texture(font_texture, fs_in.TexCoords);
+    FRAG_COLOR = pixelColor;
+})";
+
+	return source;
+}
