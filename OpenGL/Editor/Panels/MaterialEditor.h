@@ -31,6 +31,8 @@ public:
 	void GenerateShaderSettingContent();
 	void GenerateMaterialSettingContent();
 
+	void SetTarget(Material* m_target);
+
 	void Preview();
 private:
 

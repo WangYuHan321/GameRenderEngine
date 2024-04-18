@@ -362,6 +362,13 @@ void MaterialEditor::GenerateMaterialSettingContent()
 	}
 }
 
+void MaterialEditor::SetTarget(Material* target)
+{
+	m_target = target;
+
+	GenerateMaterialSettingContent();
+}
+
 void MaterialEditor::Preview()
 {
 	auto& assetView = EDITOR_PANEL(AssetView, "Asset View");
