@@ -19,6 +19,7 @@ EditorAction::EditorAction(Context& p_context, EditorRender& p_editorRender, Pan
 		//std::string titleExtra = " - " + (p_newPath.empty() ? "Untitled Scene" : GetResourcePath(p_newPath));
 		Log("CurrentSceneSourcePathChangedEvent");
 	};
+
 }
 
 Context& EditorAction::GetContext()
@@ -77,6 +78,11 @@ Actor& EditorAction::CreateEmptyActor(bool p_focusOnCreation, Actor* p_parent, s
 	LOG_INFO("Actor created");
 
 	return *instance;
+}
+
+void EditorAction::CreateFontActor()
+{
+	GLOBALSERVICE(FontManager).CreateFontActor();
 }
 
 bool EditorAction::IsAnyActorSelected() const

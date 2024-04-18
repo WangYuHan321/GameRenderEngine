@@ -40,6 +40,8 @@ public:
 
 	Actor& CreateEmptyActor(bool p_focusOnCreation = true, Actor* p_parent = nullptr, std::string p_name = "");
 
+	void CreateFontActor();
+
 	bool IsAnyActorSelected() const;
 
 	Actor& GetSelectedActor() const;
