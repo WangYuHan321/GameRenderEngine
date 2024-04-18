@@ -33,6 +33,8 @@ public:
 
 	void SetActive(bool act);
 
+	bool HasParent() const;
+
 	Actor* GetParent() const;
 
 	void SetParent(Actor& p_parent);
@@ -75,7 +77,7 @@ public:
 	static Event<Actor&> CreateEvent;
 	static Event<Actor&> DestroyedEvent;
 	static Event<Actor&, Actor&> AttachEvent;// attach this£¬ other actor 
-	static Event<Actor&> DettachEvent;// dettach this 
+	static Event<Actor&, Actor&> DettachEvent;// dettach this 
 private:
 	//È¥³ýcopy¹¹Ôì
 	Actor(const Actor& p_actor) = delete;

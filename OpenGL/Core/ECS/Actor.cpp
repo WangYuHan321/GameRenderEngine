@@ -3,13 +3,14 @@
  Event<Actor&> Actor::CreateEvent;
  Event<Actor&> Actor::DestroyedEvent;
  Event<Actor&, Actor&> Actor::AttachEvent;// attach this£¬ other actor 
- Event<Actor&> Actor::DettachEvent;// dettach this 
+ Event<Actor&, Actor&> Actor::DettachEvent;// dettach this 
 
 Actor::Actor(int64_t p_actionID, const std::string& p_name, const std::string& p_tag, bool& p_playing):
 	m_actorID(p_actionID),
 	m_name(p_name),
 	m_tag(p_tag),
 	m_playing(p_playing),
+	m_children({}),
 	m_transform(AddComponent<CTransform>())
 {
 	CreateEvent.Invoke(*this);
@@ -70,6 +71,11 @@ void Actor::SetActive(bool act)
 	m_active = act;
 }
 
+bool Actor::HasParent() const
+{
+	return m_parent != nullptr;
+}
+
 Actor* Actor::GetParent() const
 {
 	return m_parent;
@@ -81,13 +87,17 @@ void Actor::SetParent(Actor& p_parent)
 
 	m_parent = &p_parent;
 	m_parentID = p_parent.m_actorID;
+	m_parent->m_children.push_back(this);
+
+
 	m_transform.SetParent(p_parent.m_transform);
 
+	AttachEvent.Invoke(*this, p_parent);
 }
 
 void Actor::DetachFromParent()
 {
-	DettachEvent.Invoke(*this);
+	DettachEvent.Invoke(*this, *m_parent);
 
 	if (m_parent)
 	{

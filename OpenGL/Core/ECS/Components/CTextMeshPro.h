@@ -12,6 +12,12 @@ public:
 
     std::string GetContent();
 
+    void SetContent(std::string);
+
+    std::string GetTTFFile();
+
+    int GetFontSize();
+
     virtual std::string GetName();
 
     virtual void OnInspector(WidgetContainer& p_root);
@@ -23,4 +29,7 @@ public:
 
 private:
     std::string m_inputText;
+    std::string m_ttfConfig;
+    int m_fontSize;
+
 };

@@ -45,7 +45,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;$(FreeType);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -63,21 +63,27 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;freetype.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;$(FreeType)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(THIRD_LUA)\bin" "$(THIRD_LUA)\..\..\..\Bin"</Command>
+      <Command>copy "$(THIRD_LUA)\bin" "$(THIRD_LUA)\..\..\..\Bin"
+copy "$(GLEW)\bin" "$(GLEW)\..\..\..\Bin"
+copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\ECS\Components\CTextMeshPro.h" />
     <ClInclude Include="Editor\Panels\DebugView.h" />
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
     <ClInclude Include="Editor\Panels\ModelView.h" />
     <ClInclude Include="File\FileMonitor.h" />
     <ClInclude Include="File\LuaFileChangeHandler.h" />
+    <ClInclude Include="Render\Font\Font.h" />
+    <ClInclude Include="Render\Font\FontManager.h" />
     <ClInclude Include="Render\Deferred\Program\Program.h" />
     <ClInclude Include="Render\Animation\Animator.h" />
     <ClInclude Include="Render\DeferredRenderer.h" />
@@ -95,6 +101,57 @@
     <ClInclude Include="Render\Shadow\ShadowMap.h" />
     <ClInclude Include="File\ResourceChangeHandler.h" />
     <ClInclude Include="File\ShaderFileChangeHandler.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftconfig.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftheader.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftmodule.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftoption.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftstdlib.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\freetype.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ft2build.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftadvanc.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftautoh.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftbbox.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftbdf.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftbitmap.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftbzip2.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftcache.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftcffdrv.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftchapters.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftcid.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\fterrdef.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\fterrors.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftfntfmt.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftgasp.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftglyph.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftgxval.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftgzip.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftimage.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftincrem.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftlcdfil.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftlist.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftlzw.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftmac.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftmm.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftmodapi.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftmoderr.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftotval.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftoutln.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftpfr.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftrender.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftsizes.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftsnames.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftstroke.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftsynth.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftsystem.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\fttrigon.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftttdrv.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\fttypes.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ftwinfnt.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\t1tables.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ttnameid.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\tttables.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\tttags.h" />
+    <ClInclude Include="ThirdLib\freetype\freetype\ttunpat.h" />
     <ClInclude Include="Thread\ThreadPool.h" />
     <ClInclude Include="Editor\Panels\TimeLine.h" />
     <ClInclude Include="UI\Plugin\TexturePreview.h" />
@@ -265,11 +322,14 @@
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ECS\Components\CTextMeshPro.cpp" />
     <ClCompile Include="Editor\Panels\DebugView.cpp" />
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
     <ClCompile Include="Editor\Panels\ModelView.cpp" />
     <ClCompile Include="File\FileMonitor.cpp" />
     <ClCompile Include="File\LuaFileChangeHandler.cpp" />
+    <ClCompile Include="Render\Font\Font.cpp" />
+    <ClCompile Include="Render\Font\FontManager.cpp" />
     <ClCompile Include="Render\Deferred\Program\Program.cpp" />
     <ClCompile Include="Render\Animation\Animator.cpp" />
     <ClCompile Include="Render\DeferredRenderer.cpp" />
