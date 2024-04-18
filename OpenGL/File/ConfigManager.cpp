@@ -32,6 +32,13 @@ std::string ConfigManager::GetEditorPath() const
 	return path;
 }
 
+std::string ConfigManager::GetFontPath() const
+{
+	std::string exePath = GetEnginePath();
+	std::string path = exePath + "/Font";
+	return path;
+}
+
 std::string ConfigManager::GetXmlPath() const
 {
 	return GetEditorPath() + "/Xml";
