@@ -14,6 +14,7 @@
 #include "../../UI/Widgets/Selection/CheckBox.h"
 #include "../../UI/Widgets/Selection/ComboBox.h"
 #include "../../File/Path/PathParser.h"
+#include "../../UI/Widgets/InputField/InputText.h"
 #include "../../Global/ServiceLocator.h"
 #include"../../Render/Resource/MaterialManager.h"
 #include"../../Render/Resource/ShaderManager.h"
@@ -285,7 +286,12 @@ void GUIDrawer::DrawQuat(WidgetContainer& p_root, const std::string& p_name, std
 
  void GUIDrawer::DrawString(WidgetContainer& p_root, const std::string& p_name, std::function<std::string(void)> p_gatherer, std::function<void(std::string)> p_provider)
  {
+	 CreateTitle(p_root, p_name);
+	 auto& widget = p_root.CreateWidget<InputText>();
 
+	 auto& dispatcher = widget.AddPlugin<DataDispatcher<std::string>>();
+	 dispatcher.RegisterGatherer(p_gatherer);
+	 dispatcher.RegisterProvider(p_provider);
  }
 
  void GUIDrawer::DrawColor(WidgetContainer& p_root, const std::string& p_name, std::function<Color3(void)> p_gatherer, std::function<void(Color3)> p_provider, bool p_hasAlpha)
