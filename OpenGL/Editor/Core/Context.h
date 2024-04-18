@@ -16,6 +16,7 @@
 #include "../../Render/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
 #include "../../File/XmlManager.h"
+#include "../../Render/Font/FontManager.h"
 #include "../../Render/Shader/UniformBuffer.h"
 #include "../../Render/Shadow/ShadowMap.h"
 #include "../../Render/Shader/ShaderStorageBuffer.h"
@@ -55,6 +56,7 @@ public:
 	ShaderManager shaderMgr;
 	TextureManager textureMgr;
 	MaterialManager materialMgr;
+	FontManager fontMgr;
 	XmlManager xmlMgr;
 	
 private:

@@ -45,6 +45,7 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	LOG("new  ShapeDrawer");
 
 	ServiceLocator::getInstance()->Provide<ModelManager>(modelMgr);
+	ServiceLocator::getInstance()->Provide<FontManager>(fontMgr);
 	ServiceLocator::getInstance()->Provide<TextureManager>(textureMgr);
 	ServiceLocator::getInstance()->Provide<ShaderManager>(shaderMgr);
 	ServiceLocator::getInstance()->Provide<MaterialManager>(materialMgr);
@@ -54,6 +55,8 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);
 	ServiceLocator::getInstance()->Provide<ShadowMap>(*m_shadowMap);
 	ServiceLocator::getInstance()->Provide<EditorResource>(*m_editorResource);
+
+	fontMgr.Initialize();
 
 	m_engineUBO = std::make_unique<UniformBuffer>(
 		sizeof(Matrix4) +	//model
