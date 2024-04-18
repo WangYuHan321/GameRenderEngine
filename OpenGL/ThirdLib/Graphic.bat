@@ -1,5 +1,6 @@
 @echo off
 SETX /M ASSIMP "%~dp0\Assimp" 
+SETX /M FreeType "%~dp0\freetype" 
 SETX /M GLM "%~dp0\glm" 
 SETX /M GLFW "%~dp0\glfw" 
 SETX /M GLEW "%~dp0\glew" 
