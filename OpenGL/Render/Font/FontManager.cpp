@@ -31,6 +31,8 @@ void FontManager::Initialize()
 	auto fontShader = RawShader::GetFont();
 	m_fontShader = ShaderLoader::getInstance()->CreateFromSource("Font Shader", fontShader.first, fontShader.second);
 	m_fontMaterial.SetShader(m_fontShader);
+	m_fontMaterial.Blend = true;
+	m_fontMaterial.Cull = false;
 }
 
 void FontManager::ModifyFontStr(Actor& p_actor)
