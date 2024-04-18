@@ -68,7 +68,20 @@ Texture* TextureLoader::CreateColor(uint32_t p_data, GLenum p_firstFilter, GLenu
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(p_firstFilter));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(p_secondFilter));
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    return pTexture;
+}
+
+Texture* TextureLoader::Create(uint32 width, uint32 height, GLenum internalFormat, GLenum format, GLenum type, void* data)
+{
+    Texture* pTexture = new Texture();
+    glGenTextures(1, &pTexture->ID);
+    glBindTexture(GL_TEXTURE_2D, pTexture->ID);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
+
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(GL_NEAREST));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(GL_NEAREST));
 
     return pTexture;
 }
