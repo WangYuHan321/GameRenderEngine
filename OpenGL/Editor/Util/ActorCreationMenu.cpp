@@ -23,6 +23,7 @@ std::function<void()> ActorWithModelComponentCreationHandler(Actor* p_parent, co
 void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)
 {
 	p_menuList.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CREATE_EMPTY)).ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
+    p_menuList.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CREATE_FONT)).ClickedEvent += Combine(EDITOR_BIND(CreateFontActor), p_onItemClicked);
 
 	auto& primitives = p_menuList.CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_PRIMITIVE));
 
