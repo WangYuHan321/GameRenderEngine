@@ -143,6 +143,11 @@ std::vector<Actor*>& Actor::GetChildren()
 	return m_children;
 }
 
+bool Actor::HasChildren()
+{
+	return m_children.size() > 0;
+}
+
 std::vector<std::shared_ptr<AComponent>> Actor::GetComponents()
 {
 	return m_components;

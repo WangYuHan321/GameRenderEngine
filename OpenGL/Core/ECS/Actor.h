@@ -53,6 +53,8 @@ public:
 
 	std::vector<Actor*>& GetChildren();
 
+	bool HasChildren();
+
 	std::vector<std::shared_ptr<AComponent>> GetComponents();
 
 	int64_t GetID()const ;
