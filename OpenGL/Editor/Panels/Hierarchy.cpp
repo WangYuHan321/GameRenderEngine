@@ -86,23 +86,39 @@ Hierarchy::Hierarchy(const std::string& p_title,
 	m_sceneRoot = &CreateWidget<TreeNode>("Root", true);
 	m_sceneRoot->Open();
 
-	Event<std::pair<Actor*, TreeNode*>>s;
-
-	m_sceneRoot->AddPlugin< DDTarget<std::pair<Actor*, TreeNode*>> >("Actor").DataReceivedEvent += [this](std::pair<Actor*, TreeNode*> p_element)
-	{
-	};
-
-	m_sceneRoot->AddPlugin<HierarchyContextualMenu>(nullptr, *m_sceneRoot);
-
 	Actor::CreateEvent += std::bind(&Hierarchy::AddActorByInstance, this, std::placeholders::_1);
-	Actor::DestroyedEvent += std::bind(&Hierarchy::DestroyActor, this, std::placeholders::_1);
-	Actor::AttachEvent += std::bind(&Hierarchy::AttachActor, this, std::placeholders::_1, std::placeholders::_2);
-	Actor::DettachEvent += std::bind(&Hierarchy::DetachActor, this, std::placeholders::_1, std::placeholders::_2);
+	
+	//Actor::DestroyedEvent += std::bind(&Hierarchy::DestroyActor, this, std::placeholders::_1);
+	/*Actor::AttachEvent += std::bind(&Hierarchy::AttachActor, this, std::placeholders::_1, std::placeholders::_2);*/
+	//Actor::DettachEvent += std::bind(&Hierarchy::DetachActor, this, std::placeholders::_1, std::placeholders::_2);
+
+
+	m_sceneRoot->AddPlugin<DDTarget<Actor*>>("Scene_Actor").DataReceivedEvent += [this](Actor* p_otherActor)
+	{
+		if (p_otherActor->HasParent())
+		{
+			bool isLeaf = m_widgetActorLink[p_otherActor]->leaf;
+			m_widgetActorLink[p_otherActor->GetParent()]->RemoveWidget(*m_widgetActorLink[p_otherActor]);
+			p_otherActor->DetachFromParent();
+			auto& item = m_sceneRoot->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
+
+			AddContextualMenu(item, *p_otherActor);
+			AddDDTargetFunction(item, *p_otherActor);
+			AddDDSourceFunction(item, p_otherActor->GetName(), *p_otherActor);
+
+			item.leaf = isLeaf;
+		}
+	};
 }
 
 void Hierarchy::AddContextualMenu(TreeNode& treeNode, Actor& p_actor)
 {
 	treeNode.AddPlugin<HierarchyContextualMenu>(&p_actor, treeNode);
+}
+
+void Hierarchy::AddClickFunction(TreeNode& treeNode, Actor& p_actor)
+{
+	treeNode.ClickedEvent += EDITOR_BIND(SelectActor, std::ref(p_actor));
 }
 
 void Hierarchy::AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor)
@@ -119,6 +135,7 @@ void Hierarchy::AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor)
 			m_widgetActorLink[&p_actor]->leaf = false;
 			m_widgetActorLink[p_otherActor] = &m_widgetActorLink[&p_actor]->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
 
+			AddClickFunction(*m_widgetActorLink[p_otherActor], *p_otherActor);
 			AddContextualMenu(*m_widgetActorLink[p_otherActor], *p_otherActor);
 			AddDDTargetFunction(*m_widgetActorLink[p_otherActor], *p_otherActor);
 			AddDDSourceFunction(*m_widgetActorLink[p_otherActor], p_otherActor->GetName(), *p_otherActor);
@@ -189,14 +206,16 @@ void Hierarchy::DestroyActor(Actor& p_actor)
 	}
 }
 
-void Hierarchy::AttachActor(Actor& p_actor, Actor& p_other)//actor to parent
+void Hierarchy::AttachActor(Actor& p_actor, Actor& p_parent)//actor to parent
 {
+	//AddDDTargetFunction error
+
 	bool isLeaf = m_widgetActorLink[&p_actor]->leaf;
 	m_sceneRoot->RemoveWidget(*m_widgetActorLink[&p_actor]);
-	std::unordered_map<Actor*, TreeNode*>::iterator it = m_widgetActorLink.find(&p_other);
+	std::unordered_map<Actor*, TreeNode*>::iterator it = m_widgetActorLink.find(&p_parent);
 	if (it != m_widgetActorLink.end()) {
-		m_widgetActorLink[&p_other]->leaf = false;
-		m_widgetActorLink[&p_actor] = &m_widgetActorLink[&p_other]->CreateWidget<TreeNode>(p_actor.GetName(), true);
+		m_widgetActorLink[&p_parent]->leaf = false;
+		m_widgetActorLink[&p_actor] = &m_widgetActorLink[&p_parent]->CreateWidget<TreeNode>(p_actor.GetName(), true);
 
 		AddContextualMenu(*m_widgetActorLink[&p_actor], p_actor);
 		AddDDTargetFunction(*m_widgetActorLink[&p_actor], p_actor);
@@ -209,9 +228,13 @@ void Hierarchy::AttachActor(Actor& p_actor, Actor& p_other)//actor to parent
 
 void Hierarchy::DetachActor(Actor& p_actor, Actor& p_parent)
 {
+	if (&p_parent == nullptr)
+		m_sceneRoot->RemoveWidget(*m_widgetActorLink[&p_actor]);
+
 	std::unordered_map<Actor*, TreeNode*>::iterator it = m_widgetActorLink.find(&p_parent);
 	if (it != m_widgetActorLink.end()) {
 		m_widgetActorLink[&p_parent]->RemoveWidget(*m_widgetActorLink[&p_actor]);
+		m_widgetActorLink[&p_parent]->leaf = p_parent.HasChildren();
 		m_widgetActorLink[&p_actor] = &m_sceneRoot->CreateWidget<TreeNode>(p_actor.GetName());
 		
 		AddContextualMenu(*m_widgetActorLink[&p_actor], p_actor);

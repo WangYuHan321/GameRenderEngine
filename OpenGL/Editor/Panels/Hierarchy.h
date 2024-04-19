@@ -19,6 +19,7 @@ public:
 	void DetachActor(Actor& p_actor, Actor& p_parent);
 
 private:
+	void AddClickFunction(TreeNode& treeNode, Actor& p_actor);
 	void AddContextualMenu(TreeNode& treeNode, Actor& p_actor);
 	void AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor);
 	void AddDDSourceFunction(TreeNode& treeNode, std::string& name, Actor& p_actor);
