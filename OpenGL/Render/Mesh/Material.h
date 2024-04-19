@@ -148,6 +148,9 @@ public:
 	void SetVector(std::string name, glm::vec2 value);
 	void SetVector(std::string name, glm::vec3 value);
 	void SetVector(std::string name, glm::vec4 value);
+	void SetMatrix(std::string name, Matrix2 value);
+	void SetMatrix(std::string name, Matrix3 value);
+	void SetMatrix(std::string name, Matrix4 value);
 	void SetTextureValue(std::string name, Texture* value);
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
 	void SetTextureCube(std::string name, TextureCube* value, unsigned int unit);
