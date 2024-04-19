@@ -33,6 +33,7 @@ typedef int int32;
 typedef unsigned __int64 uint64;
 typedef __int64 int64;  
 typedef std::string string;
+typedef unsigned long long ullong;
 
 using Vector3 = glm::vec3;
 using Vector2 = glm::vec2;
@@ -80,48 +81,12 @@ struct Quaternion {
 
 	Quaternion(Matrix3 p_rotationMatrix)
 	{
-		float trace = p_rotationMatrix[0][0] + p_rotationMatrix[1][1] + p_rotationMatrix[2][2];
-		if (trace > 0.0f)
-		{
-			// I changed M_EPSILON to 0
-			float s = 0.5f / sqrt(trace + 1.0f);
-			m_quat.w = 0.25f / s;
-			m_quat.x = (p_rotationMatrix[2][1] - p_rotationMatrix[1][2]) * s;
-			m_quat.y = (p_rotationMatrix[0][2] - p_rotationMatrix[2][0]) * s;
-			m_quat.z = (p_rotationMatrix[1][0] - p_rotationMatrix[0][1]) * s;
-		}
-		else
-		{
-			if (p_rotationMatrix[0][0] > p_rotationMatrix[1][1] && p_rotationMatrix[0][0] > p_rotationMatrix[2][2])
-			{
-				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[0][0] - p_rotationMatrix[1][1] - p_rotationMatrix[2][2]);
-				m_quat.w = (p_rotationMatrix[2][1] - p_rotationMatrix[1][2]) / s;
-				m_quat.x = 0.25f * s;
-				m_quat.y = (p_rotationMatrix[0][1] + p_rotationMatrix[1][0]) / s;
-				m_quat.z = (p_rotationMatrix[0][2] + p_rotationMatrix[2][0]) / s;
-			}
-			else if (p_rotationMatrix[1][1] > p_rotationMatrix[2][2])
-			{
-				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[1][1] - p_rotationMatrix[0][0] - p_rotationMatrix[2][2]);
-				m_quat.w = (p_rotationMatrix[0][2] - p_rotationMatrix[2][0]) / s;
-				m_quat.x = (p_rotationMatrix[0][1] + p_rotationMatrix[1][0]) / s;
-				m_quat.y = 0.25f * s;
-				m_quat.z = (p_rotationMatrix[1][2] + p_rotationMatrix[2][1]) / s;
-			}
-			else
-			{
-				float s = 2.0f * sqrt(1.0f + p_rotationMatrix[2][2] - p_rotationMatrix[0][0] - p_rotationMatrix[1][1]);
-				m_quat.w = (p_rotationMatrix[1][0] - p_rotationMatrix[0][1]) / s;
-				m_quat.x = (p_rotationMatrix[0][2] + p_rotationMatrix[2][0]) / s;
-				m_quat.y = (p_rotationMatrix[1][2] + p_rotationMatrix[2][1]) / s;
-				m_quat.z = 0.25f * s;
-			}
-		}
+		m_quat = glm::toQuat(p_rotationMatrix);
 	}
 
 	Quaternion(Matrix4 mat4)
 	{
-		m_quat = glm::quat(mat4);
+		m_quat = glm::toQuat(mat4);
 	}
 
 	Quaternion(float x, float y, float z, float w) 
@@ -157,17 +122,7 @@ struct Quaternion {
 
 	Matrix4 ToMatrix4()
 	{
-
-		float y2 = m_quat.y * m_quat.y;	float wz = m_quat.w * m_quat.z;	float x2 = m_quat.x * m_quat.x;
-		float z2 = m_quat.z * m_quat.z;	float xz = m_quat.x * m_quat.z;	float yz = m_quat.y * m_quat.z;
-		float xy = m_quat.x * m_quat.y;	float wy = m_quat.w * m_quat.y;	float wx = m_quat.w * m_quat.x;
-
-		Matrix4 converted;
-		converted[0][0] = 1.0f - (2 * y2) - (2 * z2);		converted[0][1] = (2 * xy) - (2 * wz);				converted[0][2] = (2 * xz) + (2 * wy);			 converted[0][3] = 0;
-		converted[1][0] = (2 * xy) + (2 * wz);				converted[1][1] = 1.0f - (2 * x2) - (2 * z2);		converted[1][2] = (2 * yz) - (2 * wx);			 converted[1][3] = 0;
-		converted[2][0] = (2 * xz) - (2 * wy);				converted[2][1] = (2 * yz) + (2 * wx);			    converted[2][2] = 1.0f - (2 * x2) - (2 * y2);    converted[2][3] = 0;
-		converted[3][0] = 0;								converted[3][1] = 0;								converted[3][2] = 0;							 converted[3][3] = 1;
-		return converted;
+		return glm::toMat4(m_quat);
 	}
 
 };
@@ -226,54 +181,10 @@ struct FTransform
 
 	void GenerateMatrices(Vector3 p_position, Quaternion p_rotation, Vector3 p_scale)
 	{
-#if 0
-		Matrix4 mat1 = Translate(p_position);
+		//OpenGL T * R * S  i'm using OpenGL
+		//DirectX  S * R * T
 
-		Quaternion q = p_rotation.Normalize();
-
-		Matrix4 mat2 = q.ToMatrix4();
-		Matrix4 mat3 = Scale(p_scale);
-		Matrix4 mat4 = Matrix4(0.0f);
-
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				printf("[%f]", mat1[i][j]);
-			}
-			printf("\n");
-		}
-
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				printf("[%f]", mat2[i][j]);
-			}
-			printf("\n");
-		}
-
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				printf("[%f]", mat3[i][j]);
-			}
-			printf("\n\n");
-		}
-
-		mat4 = Translate(p_position) * p_rotation.Normalize().ToMatrix4() * Scale(p_scale);
-
-		for (int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				printf("[%f]", mat4[i][j]);
-			}
-			printf("\n");
-		}
-#endif
-		m_localMatrix = Scale(p_scale) * p_rotation.Normalize().ToMatrix4() * Translate(p_position);
+		m_localMatrix = Translate(p_position) * p_rotation.ToMatrix4() * Scale(p_scale);
 
 		m_localPosition = p_position;
 		m_localRot = p_rotation;
@@ -284,7 +195,7 @@ struct FTransform
 
 	void UpdateWorldMatrix()
 	{
-		m_worldMatrix = HasParent() ?  m_localMatrix * m_parent->m_worldMatrix : m_localMatrix;
+		m_worldMatrix = HasParent() ? m_parent->m_worldMatrix * m_localMatrix : m_localMatrix;
 		PreDecomposeWorldMatrix();
 
 		Notifier.NotifyChildren(TransformNotifer::ENotification::TRANSFORM_CHANGED);
@@ -292,42 +203,17 @@ struct FTransform
 
 	void PreDecomposeWorldMatrix()
 	{
-		m_worldPosition.x = m_worldMatrix[0][3];
-		m_worldPosition.y = m_worldMatrix[1][3];
-		m_worldPosition.z = m_worldMatrix[2][3];
+		//Directx and OpenGL GLM in different
 
-		Vector3 columns[3] =
-		{
-			{ m_worldMatrix[0][0], m_worldMatrix[1][0], m_worldMatrix[2][0]},
-			{ m_worldMatrix[0][1], m_worldMatrix[1][1], m_worldMatrix[2][1]},
-			{ m_worldMatrix[0][2], m_worldMatrix[1][2], m_worldMatrix[2][2]},
-		};
+		auto [t, r, s] = DecomposeTransform(m_worldMatrix);
 
-		m_worldScale.x = glm::length(columns[0]);
-		m_worldScale.y = glm::length(columns[1]);
-		m_worldScale.z = glm::length(columns[2]);
+		m_worldPosition = t;
 
-		if (m_worldScale.x)
-		{
-			columns[0] /= m_worldScale.x;
-		}
-		if (m_worldScale.y)
-		{
-			columns[1] /= m_worldScale.y;
-		}
-		if (m_worldScale.z)
-		{
-			columns[2] /= m_worldScale.z;
-		}
 
-		Matrix3 rotationMatrix
-		(
-			columns[0].x, columns[1].x, columns[2].x,
-			columns[0].y, columns[1].y, columns[2].y,
-			columns[0].z, columns[1].z, columns[2].z
-		);
+		m_worldScale = s;
 
-		m_worldRot = Quaternion(rotationMatrix);
+
+		m_worldRot = r;
 	}
 
 	void NotificationHandler(TransformNotifer::ENotification p_notification)
@@ -559,7 +445,6 @@ struct Color4
 	}
 };
 
-
 inline int valCount = 0;
 
 inline void* operator new(std::size_t size) {
@@ -577,6 +462,6 @@ inline void operator delete(void* ptr) noexcept {
 }
 
 inline void checkForMemoryLeaks() {
-	LOG_INFO("%d", valCount);
+	LOG_ERROR(std::to_string( valCount ));
 }
 
