@@ -3,7 +3,7 @@
 Event<Behaviour*> Behaviour::CreateEvent;
 Event<Behaviour*> Behaviour::DestroyedEvent;
 
-Behaviour::Behaviour(Actor& p_owner, const std::string& p_name):
+Behaviour::Behaviour(Actor& p_owner, std::string& p_name):
 	AComponent(p_owner),
 	name(p_name)
 {
