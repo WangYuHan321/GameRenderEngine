@@ -7,6 +7,7 @@
 #include "../../Core/ECS/Actor.h"
 
 class Mesh;
+class Model;
 class CShader;
 
 class FontManager
@@ -16,6 +17,7 @@ public:
 	~FontManager();
 
 	void Initialize();
+	Model* GenerateModelByFontData(std::vector<Font::Character*> characterInfo);
 
 	void CreateFontActor();
 	void ModifyFontStr(Actor& p_actor);
