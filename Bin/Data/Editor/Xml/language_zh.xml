@@ -48,4 +48,10 @@
 	<item id="47" language="时间线" />
 	<item id="48" language="调试视图" />	
 	<item id="49" language="创建字体" />
+	<item id="50" language="创建圆柱" />
+	<item id="51" language="创建面片" />
+	<item id="52" language="创建锥体" />
+	<item id="53" language="创建垂直面片" />
+	<item id="54" language="创建环面" />
+	
 </language>

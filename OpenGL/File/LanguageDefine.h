@@ -62,6 +62,12 @@
 
 #define PROJECTION_MODE 44
 
+#define MENU_CYLINDER 50
+#define MENU_PLANE 51
+#define MENU_CONE 52
+#define MENU_VERTICALPLANE 53
+#define MENU_TORUS 54
+
 
 
 
