@@ -34,8 +34,15 @@ std::string ConfigManager::GetEditorPath() const
 
 std::string ConfigManager::GetFontPath() const
 {
-	std::string exePath = GetEnginePath();
-	std::string path = exePath + "/Font";
+	std::string enginePath = GetEnginePath();
+	std::string path = enginePath + "/Font";
+	return path;
+}
+
+std::string ConfigManager::GetScriptPath() const
+{
+	std::string enginePath = GetEnginePath();
+	std::string path = enginePath + "/Script";
 	return path;
 }
 
