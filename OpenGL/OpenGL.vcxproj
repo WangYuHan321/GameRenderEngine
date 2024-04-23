@@ -82,6 +82,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="Editor\Panels\ModelView.h" />
     <ClInclude Include="File\FileMonitor.h" />
     <ClInclude Include="File\LuaFileChangeHandler.h" />
+    <ClInclude Include="Core\Scripting\LuaActorBinder.h" />
     <ClInclude Include="Render\Font\Font.h" />
     <ClInclude Include="Render\Font\FontManager.h" />
     <ClInclude Include="Render\Deferred\Program\Program.h" />
@@ -329,6 +330,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClCompile Include="Editor\Panels\ModelView.cpp" />
     <ClCompile Include="File\FileMonitor.cpp" />
     <ClCompile Include="File\LuaFileChangeHandler.cpp" />
+    <ClCompile Include="Core\Scripting\LuaActorBinder.cpp" />
     <ClCompile Include="Render\Font\Font.cpp" />
     <ClCompile Include="Render\Font\FontManager.cpp" />
     <ClCompile Include="Render\Deferred\Program\Program.cpp" />
