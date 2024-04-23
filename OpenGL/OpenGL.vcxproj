@@ -101,6 +101,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="Render\Shadow\ShadowMap.h" />
     <ClInclude Include="File\ResourceChangeHandler.h" />
     <ClInclude Include="File\ShaderFileChangeHandler.h" />
+    <ClInclude Include="Core\Scripting\ScriptInterpreter.h" />
     <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftconfig.h" />
     <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftheader.h" />
     <ClInclude Include="ThirdLib\freetype\freetype\custom_config\ftmodule.h" />
@@ -344,6 +345,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClCompile Include="Render\Shadow\ShadowMap.cpp" />
     <ClCompile Include="File\ResourceChangeHandler.cpp" />
     <ClCompile Include="File\ShaderFileChangeHandler.cpp" />
+    <ClCompile Include="Core\Scripting\ScriptInterpreter.cpp" />
     <ClCompile Include="Thread\ThreadPool.cpp" />
     <ClCompile Include="Thread\Runable.h" />
     <ClCompile Include="Editor\Panels\TimeLine.cpp" />
