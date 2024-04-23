@@ -26,6 +26,7 @@
 #include "../../Render/Resource/ShaderManager.h"
 #include "../../Render/Resource/TextureManager.h"
 #include "../../Render/Resource/MaterialManager.h"
+#include "../../Core/Scripting/ScriptInterpreter.h"
 
 class Context
 {
@@ -45,6 +46,7 @@ public:
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
 	std::unique_ptr<ShadowMap> m_shadowMap;
+	std::unique_ptr<ScriptInterpreter> m_scriptInterpreter;
 
 	std::unique_ptr<DumpFileManager> m_dumpFileMgr;
 	std::unique_ptr<EditorResource> m_editorResource;

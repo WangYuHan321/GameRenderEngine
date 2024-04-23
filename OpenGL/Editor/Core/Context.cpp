@@ -41,6 +41,9 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_shadowMap = std::make_unique<ShadowMap>();
 	LOG("new  ShadowMap");
 
+	m_scriptInterpreter = std::make_unique<ScriptInterpreter>(ConfigManager::getInstance()->GetScriptPath());
+	LOG("new  ScriptInterpreter");
+
 	m_shapeDrawer = std::make_unique<ShapeDrawer>(*m_renderer);
 	LOG("new  ShapeDrawer");
 
