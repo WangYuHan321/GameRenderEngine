@@ -4,9 +4,51 @@
 #include "../../File/Path/PathParser.h"
 #include "../../UI/Plugin/DDSource.h"
 #include "../../UI/Visual/Separator.h"
+#include "../../UI/Widgets/InputField/InputText.h"
 #include "../../UI/Plugin/TexturePreview.h"
+#include "../../UI/Plugin/ContextualMenu.h"
 #include "../../UI/Widgets/Text/TextClickable.h"
 #include "../../Editor/Core/EditorAction.h"
+
+class ScriptBrowserContextualMenu : public ContextualMenu
+{
+public:
+    void CreateScript(const std::string& p_name, const std::string& p_path)
+    {
+        std::string fileContent = "local " + p_name + "=\n{\n}\n\nfunction " + p_name +
+            ":OnStart()\nend\n\nfunction " + p_name + ":OnUpdate(deltaTime)\nend\n\nreturn " + p_name;
+
+        std::ofstream outFile(p_path);
+        outFile << fileContent << std::endl;
+
+        Close();
+    }
+
+    ScriptBrowserContextualMenu(Group& p_treeNode, std::string dirPath) :
+        m_treeNode(p_treeNode)
+    {
+        auto& newScriptMenu = CreateWidget<MenuList>("New Script...");
+        auto& newName = newScriptMenu.CreateWidget<InputText>("");
+        newScriptMenu.ClickedEvent += [this, &newName]
+        {
+            newName.content = "";
+        };
+
+        newName.EnterPressedEvent += [this, dirPath](std::string p_newName)
+        {
+            std::string newPath = dirPath + p_newName + ".lua";
+
+            if (!std::filesystem::exists(newPath))
+            {
+                CreateScript(p_newName, newPath);
+            }
+        };
+
+    }
+
+private:
+    Group& m_treeNode;
+};
 
 AssetBrowser::AssetBrowser(const std::string& p_title,
     bool p_opened,
@@ -82,7 +124,10 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
     if (isDirectory)
     {
         auto& treeNode = itemGroup.CreateWidget<TreeNode>(itemName);//ÓÒ±ß×ÖÌå
-        
+     
+        if (itemName == "Script")
+            treeNode.AddPlugin<ScriptBrowserContextualMenu>(itemGroup, itemPath);
+
         if (p_autoOpen)
             treeNode.Open();
 
