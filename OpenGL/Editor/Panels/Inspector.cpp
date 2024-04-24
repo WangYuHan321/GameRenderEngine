@@ -3,10 +3,17 @@
 #include "../../Core/ECS/Actor.h"
 #include "../Core/EditorAction.h"
 #include "../../UI/Layout/Group.h"
+#include "../../UI/Widgets/Text/Text.h"
 #include "../../UI/Layout/Columns.h"
+#include "../../UI/Plugin/DDSource.h"
+#include "../../UI/Plugin/DDTarget.h"
 #include "../../UI/Widgets/Button/Button.h"
+#include "../../UI/Widgets/InputField/InputText.h"
 #include "../../UI/Layout/GroupCollapsable.h"
 #include "../../UI/Widgets/Selection/ComboBox.h"
+
+#include "../../File/ConfigManager.h"
+#include "../../File/Path/PathParser.h"
 
 #include "../../Core/ECS/Components/AComponent.h"
 #include "../../Core/ECS/Components/Behaviour.h"
@@ -55,8 +62,9 @@ Inspector::Inspector
 		componentSelectorWidget.choices.emplace(10, "Material Renderer");
 		componentSelectorWidget.choices.emplace(11, "Audio Source");
 		componentSelectorWidget.choices.emplace(12, "Audio Listener");
+		//componentSelectorWidget.choices.emplace(13, "Behaviourment");
 
-		auto& addComponentButton = m_inspectorHeader->CreateWidget<Button>("Add Component", ImVec2(100.f, 0));
+		auto& addComponentButton = m_inspectorHeader->CreateWidget<Button>("Add Component", ImVec2(30.f, 0));
 		addComponentButton.idleColor = Color4(0.7f, 0.5f, 0.f, 1.0f);
 		addComponentButton.textColor = Color4(1.0f, 1.0f, 1.0f, 1.0f);
 		addComponentButton.ClickedEvent += [&componentSelectorWidget, this]
@@ -76,12 +84,34 @@ Inspector::Inspector
 			case 10: GetCurrentActor()->AddComponent<CMaterialRenderer>();	break;
 				//case 11: GetCurrentActor()->AddComponent<CAudioSource>();		break;
 				//case 12: GetCurrentActor()->AddComponent<CAudioListener>();		break;
+			//case 13: GetCurrentActor()->AddComponent<Behaviour>( std::string("Actor.lua") ); break;
 			}
 
 			componentSelectorWidget.ValueChangedEvent.Invoke(componentSelectorWidget.currentChoice);
 		};
 
 	}
+
+
+	auto& inputText = headerColumers.CreateWidget<InputText>("");
+	inputText.lineBreak = false;
+
+	inputText.AddPlugin<DDTarget<std::string>>("File").DataReceivedEvent += [this, &inputText](std::string p_receivedData)
+	{
+		if (PathParser::getInstance()->GetFileType(p_receivedData) == EFileType::SCRIPT)
+		{
+			if (this->GetCurrentActor()->GetComponent<Behaviour>() != nullptr)
+				this->GetCurrentActor()->RemoveComponent(*this->GetCurrentActor()->GetComponent<Behaviour>());
+
+			this->GetCurrentActor()->AddComponent<Behaviour>(p_receivedData);
+			inputText.content = this->GetCurrentActor()->GetComponent<Behaviour>()->GetScriptName();
+		}
+
+	};
+
+	headerColumers.CreateWidget<Text>("Script");
+
+
 
 }
 
