@@ -759,6 +759,9 @@
     <ClInclude Include="Core\Scripting\LuaActorBinder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Util\SystemCall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1284,6 +1287,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Scripting\LuaActorBinder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Util\SystemCall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
