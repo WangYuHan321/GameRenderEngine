@@ -23,27 +23,27 @@ Actor::~Actor()
 
 void Actor::OnAwake()
 {
-
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnAwake(); });
 }
 
 void Actor::OnStart()
 {
-
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnStart(); });
 }
 
 void Actor::OnEnable()
 {
-
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnEnable(); });
 }
 
 void Actor::OnDisable()
 {
-
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnDisable(); });
 }
 
 void Actor::OnDestroy()
 {
-
+	std::for_each(m_components.begin(), m_components.end(), [](auto element) { element->OnDestroy(); });
 }
 
 void Actor::OnUpdate(float p_deltaTime)
