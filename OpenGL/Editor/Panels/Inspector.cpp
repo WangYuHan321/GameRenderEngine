@@ -103,7 +103,7 @@ Inspector::Inspector
 			if (this->GetCurrentActor()->GetComponent<Behaviour>() != nullptr)
 				this->GetCurrentActor()->RemoveComponent(*this->GetCurrentActor()->GetComponent<Behaviour>());
 
-			this->GetCurrentActor()->AddComponent<Behaviour>(p_receivedData);
+			this->GetCurrentActor()->AddComponent<Behaviour>(PathParser::getInstance()->GetFileNameByPath(p_receivedData));
 			inputText.content = this->GetCurrentActor()->GetComponent<Behaviour>()->GetScriptName();
 		}
 
