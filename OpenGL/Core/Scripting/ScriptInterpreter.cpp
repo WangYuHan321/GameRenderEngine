@@ -1,4 +1,6 @@
 #include "ScriptInterpreter.h"
+#include "LuaBinder.h"
+#include "../../../File/ConfigManager.h"
 #include "../ECS/Components/Behaviour.h"
 
 ScriptInterpreter::ScriptInterpreter(const std::string& p_scriptRootFolder):
@@ -20,7 +22,24 @@ void ScriptInterpreter::CreateLuaContextAndBindGlobals()
 	if (!m_luaState)
 	{
 		m_luaState = std::make_unique<sol::state>();
-		m_luaState->open_libraries(sol::lib::base, sol::lib::math);
+		m_luaState->open_libraries(
+			sol::lib::base, 
+			sol::lib::package,
+			sol::lib::coroutine,
+			sol::lib::string,
+			sol::lib::os,
+			sol::lib::math,
+			sol::lib::table,
+			sol::lib::debug, 
+			sol::lib::bit32,
+			sol::lib::io,
+			sol::lib::utf8);
+
+		(*m_luaState)["package"]["path"] = ConfigManager::getInstance()->GetFontPath() + "/Util";
+
+
+
+		LuaBinder::CallBinders(*m_luaState);
 		m_isOk = true;
 
 		std::for_each(m_behaviours.begin(), m_behaviours.end(), [this](Behaviour* behaviour)
