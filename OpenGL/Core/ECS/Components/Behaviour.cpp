@@ -5,7 +5,7 @@ Event<Behaviour*> Behaviour::DestroyedEvent;
 
 Behaviour::Behaviour(Actor& p_owner, std::string& p_name):
 	AComponent(p_owner),
-	name(p_name)
+	m_scriptName(p_name)
 {
 	CreateEvent.Invoke(this);
 }
@@ -42,7 +42,7 @@ void Behaviour::OnDestroy()
 
 bool Behaviour::RegisterToLuaContext(sol::state& p_luaState, const std::string& p_scriptFolder)
 {
-	auto result = p_luaState.safe_script_file(p_scriptFolder + name + ".lua", &sol::script_pass_on_error);
+	auto result = p_luaState.safe_script_file(p_scriptFolder + "/" + m_scriptName, &sol::script_pass_on_error);
 
 	if (!result.valid())
 	{
@@ -60,7 +60,7 @@ bool Behaviour::RegisterToLuaContext(sol::state& p_luaState, const std::string& 
 		}
 		else
 		{
-			LOG_ERROR("'" + name + ".lua' missing return expression");
+			LOG_ERROR("'" + m_scriptName + "' missing return expression");
 			return false;
 		}
 	}
@@ -87,4 +87,9 @@ void Behaviour::OnInspector(WidgetContainer& p_root)
 std::string Behaviour::GetName()
 {
 	return "Behaviour";
+}
+
+std::string Behaviour::GetScriptName() const
+{
+	return m_scriptName;
 }

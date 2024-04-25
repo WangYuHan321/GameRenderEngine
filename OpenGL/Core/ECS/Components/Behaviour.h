@@ -37,12 +37,14 @@ public:
 
 	virtual std::string GetName() override;
 
+	std::string GetScriptName() const;
+
 public:
 
 	static Event<Behaviour*> CreateEvent;
 	static Event<Behaviour*> DestroyedEvent;
 
-	std::string name;
+	std::string m_scriptName;
 
 private:
 	sol::table m_object = sol::nil;
