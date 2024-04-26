@@ -4,6 +4,7 @@
 #include "../../File/Path/PathParser.h"
 #include "../../UI/Plugin/DDSource.h"
 #include "../../UI/Visual/Separator.h"
+#include "../../Core/Util/SystemCall.h"
 #include "../../UI/Widgets/InputField/InputText.h"
 #include "../../UI/Plugin/TexturePreview.h"
 #include "../../UI/Plugin/ContextualMenu.h"
@@ -15,9 +16,18 @@ class ScriptBrowserContextualMenu : public ContextualMenu
 public:
     void CreateScript(const std::string& p_name, const std::string& p_path)
     {
-        std::string fileContent = "local " + p_name + "=\n{\n}\n\nfunction " + p_name +
-            ":OnStart()\nend\n\nfunction " + p_name + ":OnUpdate(deltaTime)\nend\n\nreturn " + p_name;
-
+        std::string fileContent = "local " + p_name + " =\n{\n}\n\nfunction " + p_name +
+        ":OnStart()\nend\n\nfunction " + p_name + ":OnUpdate(deltaTime)\nend\n\nfunction " +
+        p_name + ":OnAwake()\nend\n\nfunction " + p_name + ":OnStart()\nend\n\nfunction " + 
+        p_name + ":OnEnable()\nend\n\nfunction " + p_name + ":OnDisable()\nend\n\nfunction " +
+        p_name + ":OnEnd()\nend\n\nfunction " + p_name + ":OnDestroy()\nend\n\nfunction " +
+        p_name + ":OnUpdate(deltaTime)\nend\n\nfunction " + p_name + ":OnFixedUpdate(deltaTime)\nend\n\nfunction " +
+        p_name + ":OnLateUpdate(deltaTime)\nend\n\nfunction " + p_name + ":OnCollisionStart(otherObject)\nend\n\nfunction " +
+        p_name + ":OnCollisionEnter(otherObject)\nend\n\nfunction " + p_name + ":OnCollisionStay(otherObject)\nend\n\nfunction " +
+        p_name + ":OnCollisionStop(otherObject)\nend\n\nfunction " + p_name + ":OnCollisionExit(otherObject)\nend\n\nfunction " +
+        p_name + ":OnTriggerStart(otherObject)\nend\n\nfunction " + p_name + ":OnTriggerEnter(otherObject)\nend\n\nfunction " +
+        p_name + ":OnTriggerStop(otherObject)\nend\n\nfunction " + p_name + ":OnTriggerExit(otherObject)\nend\n\n" +
+        "return " + p_name;
         std::ofstream outFile(p_path);
         outFile << fileContent << std::endl;
 
@@ -27,6 +37,13 @@ public:
     ScriptBrowserContextualMenu(Group& p_treeNode, std::string dirPath) :
         m_treeNode(p_treeNode)
     {
+        auto& showInExplore = CreateWidget<MenuItem>("Show InExplore");
+        showInExplore.ClickedEvent += [dirPath]()
+        {
+            SystemCall::ShowInExplorer(dirPath);
+        };
+
+
         auto& newScriptMenu = CreateWidget<MenuList>("New Script...");
         auto& newName = newScriptMenu.CreateWidget<InputText>("");
         newScriptMenu.ClickedEvent += [this, &newName]
@@ -49,6 +66,11 @@ public:
 private:
     Group& m_treeNode;
 };
+
+//class TextureBrowserContextualMenu : public ContextualMenu
+//{
+//
+//}
 
 AssetBrowser::AssetBrowser(const std::string& p_title,
     bool p_opened,
