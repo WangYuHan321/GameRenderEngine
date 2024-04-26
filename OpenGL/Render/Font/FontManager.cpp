@@ -46,11 +46,15 @@ Model* FontManager::GenerateModelByFontData(std::vector<Font::Character*> charac
 
 	for (int i= 0; i< characterInfo.size(); i++)
 	{
-		offset_x += 2;
-		vertexPos.push_back({ -1.0f + offset_x, 2.0f, 1.0f });
-		vertexPos.push_back({ 1.0f + offset_x, 2.0f, 1.0f });
-		vertexPos.push_back({ 1.0f + offset_x,  4.0f, 1.0f });
-		vertexPos.push_back({ -1.0f + offset_x,  4.0f, 1.0f });
+		//vertexPos.push_back({ -1.0f + offset_x, 2.0f, 1.0f });
+		//vertexPos.push_back({ 1.0f + offset_x, 2.0f, 1.0f });
+		//vertexPos.push_back({ 1.0f + offset_x,  4.0f, 1.0f });
+		//vertexPos.push_back({ -1.0f + offset_x,  4.0f, 1.0f });
+
+		vertexPos.push_back({ 0.0f + offset_x, 0.0f, 0.0f });
+		vertexPos.push_back({ 1.0f + offset_x, 0.0f, 0.0f });
+		vertexPos.push_back({ 1.0f + offset_x,  1.0f, 0.0f });
+		vertexPos.push_back({ 0.0f + offset_x,  1.0f, 0.0f });
 
 		vertexUV.push_back({ characterInfo[i]->left_top_x_, characterInfo[i]->right_bottom_y_ });
 		vertexUV.push_back({ characterInfo[i]->right_bottom_x_, characterInfo[i]->right_bottom_y_ });
@@ -63,7 +67,10 @@ Model* FontManager::GenerateModelByFontData(std::vector<Font::Character*> charac
 		indexVector.push_back(0 + i * 4);
 		indexVector.push_back(2 + i * 4);
 		indexVector.push_back(3 + i * 4);
+
+		offset_x += 1;
 	}
+
 	Mesh* pMesh = new Mesh(vertexPos, vertexUV, indexVector);
 	Model* pModel = new Model();
 
@@ -95,6 +102,8 @@ void FontManager::ModifyFontStr(Actor& p_actor)
 
 		auto* modelRenderer = p_actor.GetComponent<CModelRenderer>();
 		auto* materialRenderer = p_actor.GetComponent<CMaterialRenderer>();
+
+		delete modelRenderer->GetModel(); //delte model deconstruct mesh
 
 		modelRenderer->SetModel(GenerateModelByFontData(character_vec));
 		materialRenderer->FillWithMaterial(m_fontMaterial);
