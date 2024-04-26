@@ -3,13 +3,14 @@
 #include "../../Core/ECS/Actor.h"
 #include "../Core/EditorAction.h"
 #include "../../UI/Layout/Group.h"
-#include "../../UI/Widgets/Text/Text.h"
+#include "../../UI/Widgets/Text/TextColored.h"
 #include "../../UI/Layout/Columns.h"
 #include "../../UI/Plugin/DDSource.h"
 #include "../../UI/Plugin/DDTarget.h"
 #include "../../UI/Widgets/Button/Button.h"
 #include "../../UI/Widgets/InputField/InputText.h"
 #include "../../UI/Layout/GroupCollapsable.h"
+#include "../../UI/Visual/Separator.h"
 #include "../../UI/Widgets/Selection/ComboBox.h"
 
 #include "../../File/ConfigManager.h"
@@ -45,6 +46,28 @@ Inspector::Inspector
 	auto activeGather = [this] { return m_currentActor ? m_currentActor->IsActive() : false; };
 	auto activeProvider = [this](bool p_active) { if(m_currentActor) m_currentActor->SetActive(p_active);  };
 	GUIDrawer::DrawBoolean(headerColumers, "Active", activeGather, activeProvider);
+
+	{
+		auto& inputText = headerColumers.CreateWidget<InputText>("");
+		inputText.lineBreak = false;
+
+		inputText.AddPlugin<DDTarget<std::string>>("File").DataReceivedEvent += [this, &inputText](std::string p_receivedData)
+		{
+			if (PathParser::getInstance()->GetFileType(p_receivedData) == EFileType::SCRIPT)
+			{
+				if (this->GetCurrentActor()->GetComponent<Behaviour>() != nullptr)
+					this->GetCurrentActor()->RemoveComponent(*this->GetCurrentActor()->GetComponent<Behaviour>());
+
+				this->GetCurrentActor()->AddComponent<Behaviour>(PathParser::getInstance()->GetFileNameByPath(p_receivedData));
+				inputText.content = this->GetCurrentActor()->GetComponent<Behaviour>()->GetScriptName();
+			}
+
+		};
+
+		headerColumers.CreateWidget<TextColored>("Script", Color4(1.0, 0.5, 0.5,1.0));
+		headerColumers.CreateWidget<Separator>();
+	}
+
 
 	{
 		auto& componentSelectorWidget = m_inspectorHeader->CreateWidget<ComboBox>(0);
@@ -91,27 +114,6 @@ Inspector::Inspector
 		};
 
 	}
-
-
-	auto& inputText = headerColumers.CreateWidget<InputText>("");
-	inputText.lineBreak = false;
-
-	inputText.AddPlugin<DDTarget<std::string>>("File").DataReceivedEvent += [this, &inputText](std::string p_receivedData)
-	{
-		if (PathParser::getInstance()->GetFileType(p_receivedData) == EFileType::SCRIPT)
-		{
-			if (this->GetCurrentActor()->GetComponent<Behaviour>() != nullptr)
-				this->GetCurrentActor()->RemoveComponent(*this->GetCurrentActor()->GetComponent<Behaviour>());
-
-			this->GetCurrentActor()->AddComponent<Behaviour>(PathParser::getInstance()->GetFileNameByPath(p_receivedData));
-			inputText.content = this->GetCurrentActor()->GetComponent<Behaviour>()->GetScriptName();
-		}
-
-	};
-
-	headerColumers.CreateWidget<Text>("Script");
-
-
 
 }
 
