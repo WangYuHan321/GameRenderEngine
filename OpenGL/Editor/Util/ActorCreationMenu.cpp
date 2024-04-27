@@ -29,4 +29,9 @@ void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p
 
     primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CUBE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cube", p_onItemClicked);
     primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_SPHERE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Sphere", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CYLINDER)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cylinder", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_PLANE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Plane", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CONE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cone", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_VERTICALPLANE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Vertical_Plane", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_TORUS)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Torus", p_onItemClicked);
 }
