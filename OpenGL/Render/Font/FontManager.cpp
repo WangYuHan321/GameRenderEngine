@@ -86,11 +86,6 @@ Model* FontManager::GenerateModelByFontData(std::vector<Font::Character*> charac
 
 void FontManager::ModifyFontStr(Actor& p_actor)
 {
-	for (auto item : p_actor.GetChildren())
-	{
-		item->SetActive(false);
-	}
-
 	if (auto textComp = p_actor.GetComponent<CTextMeshPro>(); textComp)
 	{
 		if (textComp->GetTTFFile() == "")
