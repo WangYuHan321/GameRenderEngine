@@ -39,7 +39,7 @@ public:
 
 	//
 	bool Blend = false;
-	GLenum BlendSrc = GL_ONE; //1
+	GLenum BlendSrc = GL_SRC_ALPHA; //1
 	GLenum BlendDst = GL_ONE_MINUS_SRC_ALPHA;//771
 	GLenum BlendEquation = GL_FUNC_ADD;//32774
 
