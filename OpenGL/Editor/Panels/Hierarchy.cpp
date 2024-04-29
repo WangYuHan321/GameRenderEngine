@@ -98,8 +98,10 @@ Hierarchy::Hierarchy(const std::string& p_title,
 		if (p_otherActor->HasParent())
 		{
 			bool isLeaf = m_widgetActorLink[p_otherActor]->leaf;
-			m_widgetActorLink[p_otherActor->GetParent()]->RemoveWidget(*m_widgetActorLink[p_otherActor]);
+			Actor* oldActor = p_otherActor->GetParent();
+			m_widgetActorLink[oldActor]->RemoveWidget(*m_widgetActorLink[p_otherActor]);
 			p_otherActor->DetachFromParent();
+			m_widgetActorLink[oldActor]->leaf = !oldActor->HasChildren();
 			auto& item = m_sceneRoot->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
 			m_widgetActorLink[p_otherActor] = &item;
 
@@ -149,7 +151,7 @@ void Hierarchy::AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor)
 		LOG_INFO(p_otherActor->GetName());
 		
 		Actor* oldActor = nullptr;
-		if (!p_otherActor->HasChildren())
+		if (!p_otherActor->HasChildren() || p_otherActor->GetParent() == nullptr)
 			m_sceneRoot->RemoveWidget(*m_widgetActorLink[p_otherActor]);
 		else
 		{
