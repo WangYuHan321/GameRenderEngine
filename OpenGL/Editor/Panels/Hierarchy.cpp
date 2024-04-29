@@ -89,7 +89,7 @@ Hierarchy::Hierarchy(const std::string& p_title,
 	Actor::CreateEvent += std::bind(&Hierarchy::AddActorByInstance, this, std::placeholders::_1);
 	
 	//Actor::DestroyedEvent += std::bind(&Hierarchy::DestroyActor, this, std::placeholders::_1);
-	/*Actor::AttachEvent += std::bind(&Hierarchy::AttachActor, this, std::placeholders::_1, std::placeholders::_2);*/
+	//Actor::AttachEvent += std::bind(&Hierarchy::AttachActor, this, std::placeholders::_1, std::placeholders::_2);
 	//Actor::DettachEvent += std::bind(&Hierarchy::DetachActor, this, std::placeholders::_1, std::placeholders::_2);
 
 
@@ -101,12 +101,33 @@ Hierarchy::Hierarchy(const std::string& p_title,
 			m_widgetActorLink[p_otherActor->GetParent()]->RemoveWidget(*m_widgetActorLink[p_otherActor]);
 			p_otherActor->DetachFromParent();
 			auto& item = m_sceneRoot->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
+			m_widgetActorLink[p_otherActor] = &item;
 
+			AddClickFunction(item, *p_otherActor);
 			AddContextualMenu(item, *p_otherActor);
 			AddDDTargetFunction(item, *p_otherActor);
 			AddDDSourceFunction(item, p_otherActor->GetName(), *p_otherActor);
 
 			item.leaf = isLeaf;
+
+			if (p_otherActor->HasChildren())
+			{
+				auto* pActorItem = p_otherActor;
+				for (int i = 0; i < p_otherActor->GetChildren().size(); i++)
+				{
+					pActorItem = p_otherActor->GetChildren()[i];
+					bool isLeaf = m_widgetActorLink[pActorItem]->leaf;
+					m_widgetActorLink[pActorItem] = &m_widgetActorLink[p_otherActor]->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
+
+					AddClickFunction(*m_widgetActorLink[pActorItem], *pActorItem);
+					AddContextualMenu(*m_widgetActorLink[pActorItem], *pActorItem);
+					AddDDTargetFunction(*m_widgetActorLink[pActorItem], *pActorItem);
+					AddDDSourceFunction(*m_widgetActorLink[pActorItem], pActorItem->GetName(), *pActorItem);
+
+					m_widgetActorLink[pActorItem]->leaf = isLeaf;
+				}while (pActorItem->HasChildren());
+
+			}
 		}
 	};
 }
@@ -126,14 +147,26 @@ void Hierarchy::AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor)
 	treeNode.AddPlugin<DDTarget<Actor*>>("Scene_Actor").DataReceivedEvent += [&treeNode, &p_actor, this](Actor* p_otherActor)
 	{
 		LOG_INFO(p_otherActor->GetName());
+		
+		Actor* oldActor = nullptr;
+		if (!p_otherActor->HasChildren())
+			m_sceneRoot->RemoveWidget(*m_widgetActorLink[p_otherActor]);
+		else
+		{
+			m_widgetActorLink[p_otherActor->GetParent()]->RemoveWidget(*m_widgetActorLink[p_otherActor]);
+			oldActor = p_otherActor->GetParent();
+		}
+
 		p_otherActor->SetParent(p_actor);
 
+		if(oldActor != nullptr)
+			m_widgetActorLink[oldActor]->leaf = !oldActor->HasChildren();
+
 		bool isLeaf = m_widgetActorLink[p_otherActor]->leaf;
-		m_sceneRoot->RemoveWidget(*m_widgetActorLink[p_otherActor]);
 		std::unordered_map<Actor*, TreeNode*>::iterator it = m_widgetActorLink.find(p_otherActor);
 		if (it != m_widgetActorLink.end()) {
-			m_widgetActorLink[&p_actor]->leaf = false;
 			m_widgetActorLink[p_otherActor] = &m_widgetActorLink[&p_actor]->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
+			m_widgetActorLink[&p_actor]->leaf = !p_actor.HasChildren();
 
 			AddClickFunction(*m_widgetActorLink[p_otherActor], *p_otherActor);
 			AddContextualMenu(*m_widgetActorLink[p_otherActor], *p_otherActor);
@@ -142,6 +175,26 @@ void Hierarchy::AddDDTargetFunction(TreeNode& treeNode, Actor& p_actor)
 
 			m_widgetActorLink[p_otherActor]->leaf = isLeaf;
 		}
+
+		if (p_otherActor->HasChildren())
+		{
+			auto* pActorItem = p_otherActor;
+			for (int i = 0; i < p_otherActor->GetChildren().size(); i++)
+			{
+				pActorItem = p_otherActor->GetChildren()[i];
+				bool isLeaf = m_widgetActorLink[pActorItem]->leaf;
+				m_widgetActorLink[pActorItem] = &m_widgetActorLink[p_otherActor]->CreateWidget<TreeNode>(p_otherActor->GetName(), true);
+
+				AddClickFunction(*m_widgetActorLink[pActorItem], *pActorItem);
+				AddContextualMenu(*m_widgetActorLink[pActorItem], *pActorItem);
+				AddDDTargetFunction(*m_widgetActorLink[pActorItem], *pActorItem);
+				AddDDSourceFunction(*m_widgetActorLink[pActorItem], pActorItem->GetName(), *pActorItem);
+
+				m_widgetActorLink[pActorItem]->leaf = isLeaf;
+			}while (pActorItem->HasChildren());
+
+		}
+
 	};
 }
 
