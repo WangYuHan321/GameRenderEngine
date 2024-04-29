@@ -95,6 +95,17 @@ Actor& EditorAction::GetSelectedActor() const
 	return *EDITOR_PANEL(Inspector, "Inspector").GetCurrentActor();//EDITOR_LANGUAGE(MENU_INSPECTOR))
 }
 
+EEditorMode EditorAction::GetCurrentEditorMode() const
+{
+	return m_editorMode;
+}
+
+void EditorAction::SetEditorMode(EEditorMode p_newEditorMode)
+{
+	m_editorMode = p_newEditorMode;
+	EditorModeChangedEvent.Invoke(m_editorMode);
+}
+
 void EditorAction::StartPlay()
 {
 	m_context.m_sceneMgr->GetActiveScene()->Play();

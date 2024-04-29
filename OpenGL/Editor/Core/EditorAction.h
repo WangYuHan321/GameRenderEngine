@@ -46,6 +46,10 @@ public:
 
 	Actor& GetSelectedActor() const;
 
+	EEditorMode GetCurrentEditorMode() const;
+
+	void SetEditorMode(EEditorMode p_newEditorMode);
+
 	void StartPlay();
 
 public:
@@ -59,7 +63,7 @@ private:
 	PanelsManager& m_panelMgr;
 	EditorRender& m_renderer;
 
-
+	EEditorMode m_editorMode = EEditorMode::EDIT;
 };
 
 
