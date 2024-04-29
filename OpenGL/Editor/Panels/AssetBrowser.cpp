@@ -67,6 +67,42 @@ private:
     Group& m_treeNode;
 };
 
+class AssetBrowserContextualMenu : public ContextualMenu
+{
+public:
+    AssetBrowserContextualMenu(Group& p_treeNode, std::string dirPath) :
+        m_treeNode(p_treeNode)
+    {
+        auto& showInExplore = CreateWidget<MenuItem>("Show InExplore");
+        showInExplore.ClickedEvent += [dirPath]()
+        {
+            SystemCall::ShowInExplorer(dirPath);
+        };
+
+    }
+
+private:
+    Group& m_treeNode;
+};
+
+class EngineBrowserContextualMenu : public ContextualMenu
+{
+public:
+    EngineBrowserContextualMenu(Group& p_treeNode, std::string dirPath) :
+        m_treeNode(p_treeNode)
+    {
+        auto& showInExplore = CreateWidget<MenuItem>("Show InExplore");
+        showInExplore.ClickedEvent += [dirPath]()
+        {
+            SystemCall::ShowInExplorer(dirPath);
+        };
+
+    }
+
+private:
+    Group& m_treeNode;
+};
+
 //class TextureBrowserContextualMenu : public ContextualMenu
 //{
 //
@@ -149,6 +185,12 @@ void AssetBrowser::ConsiderItem(TreeNode* p_root, const std::filesystem::directo
      
         if (itemName == "Script")
             treeNode.AddPlugin<ScriptBrowserContextualMenu>(itemGroup, itemPath);
+        
+        if(itemName == "Asset")
+            treeNode.AddPlugin<AssetBrowserContextualMenu>(itemGroup, itemPath);
+
+        if (itemName == "Engine")
+            treeNode.AddPlugin<EngineBrowserContextualMenu>(itemGroup, itemPath);
 
         if (p_autoOpen)
             treeNode.Open();
