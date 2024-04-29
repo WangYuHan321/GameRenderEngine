@@ -12,6 +12,23 @@ Material MaterialLoader::LoadMaterial(CShader* p_shader)
 	return Material(p_shader);
 }
 
+void MaterialLoader::Save(Material& p_material, std::string p_path)
+{
+	tinyxml2::TinyXMLDocument doc;
+	doc.LoadFile(p_path.c_str());
+
+	if (!doc.Error())
+	{
+		doc.Clear();
+		tinyxml2::XMLNode* pNode = doc.NewElement("root");
+		doc.InsertFirstChild(pNode);
+		p_material.OnSerialize(doc, pNode);
+	}
+	if (doc.SaveFile(p_path.c_str()) == tinyxml2::XML_SUCCESS)
+		LOG_INFO("[MATERIAL] \"" + p_path + "\": Saved");
+	else
+		LOG_ERROR("[MATERIAL] \"" + p_path + "\": Failed to save");
+}
 
 
 Material* MaterialLoader::Create(const std::string& p_path)
