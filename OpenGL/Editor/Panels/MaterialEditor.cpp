@@ -179,7 +179,8 @@ void MaterialEditor::CreateHeaderButtons()
 		if (m_target)
 		{
 			LOG_INFO("save to file");
-			//MaterialLoader::getInstance()->
+
+			MaterialLoader::getInstance()->Save(*m_target, m_target->Path);
 		}
 	};
 
@@ -378,6 +379,7 @@ void MaterialEditor::Preview()
 
 	assetView.Open();
 }
+
 
 
 
