@@ -4,6 +4,7 @@
 #include "../../Render/Resource/ModelManager.h"
 #include "../../Render/Resource/ShaderManager.h"
 #include "../../Render/Resource/TextureManager.h"
+#include "../../File/Path/PathParser.h"
 
 void Serializer::SerializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, bool p_value)
 {
@@ -181,7 +182,7 @@ void Serializer::SerializeTextureCube(tinyxml2::TinyXMLDocument& p_doc, tinyxml2
 
 void Serializer::SerializeShader(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, CShader* p_value)
 {
-	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? p_value->GetShaderPath() : "Empty Shader");
+	SerializeString(p_doc, p_node, p_name.c_str(), p_value ? PathParser::getInstance()->GetFileNameByPath(p_value->GetShaderPath()) : "Empty Shader");
 }
 
 void Serializer::DeserializeBoolean(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node, const std::string& p_name, bool& p_value)
