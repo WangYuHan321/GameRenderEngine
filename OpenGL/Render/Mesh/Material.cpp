@@ -342,6 +342,7 @@ void Material::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* 
     Serializer::SerializeShader(p_doc, p_node, "Shader", m_Shader);
 
     tinyxml2::XMLNode* settingsNode = p_doc.NewElement("Settings");
+    p_node->InsertEndChild(settingsNode);
 
     Serializer::SerializeBoolean(p_doc, settingsNode, "DepthTest", DepthTest);
     Serializer::SerializeBoolean(p_doc, settingsNode, "DepthWrite", DepthWrite);
@@ -366,8 +367,6 @@ void Material::OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* 
     tinyxml2::XMLNode* uniformsNode = p_doc.NewElement("uniforms");
 
     p_node->InsertEndChild(uniformsNode);
-
-
 
     for (auto& [name, value] : m_uniformSampler)
     {
