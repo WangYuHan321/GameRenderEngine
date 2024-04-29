@@ -53,4 +53,8 @@
 	<item id="52" language="Create Cone" />
 	<item id="53" language="Create Vertical Plane" />
 	<item id="54" language="Create Torus" />
+	<item id="55" language="File" />
+	<item id="56" language="Save Scene" />
+	<item id="57" language="Load Scene" />
+	<item id="58" language="Exit" />
 </language>

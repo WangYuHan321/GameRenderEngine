@@ -53,5 +53,8 @@
 	<item id="52" language="创建锥体" />
 	<item id="53" language="创建垂直面片" />
 	<item id="54" language="创建环面" />
-	
+	<item id="55" language="文件" />
+	<item id="56" language="保存场景" />
+	<item id="57" language="加载场景" />
+	<item id="58" language="退出" />
 </language>
