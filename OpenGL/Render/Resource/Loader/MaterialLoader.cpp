@@ -1,5 +1,6 @@
 #include "MaterialLoader.h"
 #include "ShaderLoader.h"
+#include "../../../Util/common.h"
 #include "../../Core/API/ISerializable.h"
 
 Material MaterialLoader::LoadMaterial(std::string name, CShader* p_shader)
@@ -22,7 +23,9 @@ void MaterialLoader::Save(Material& p_material, std::string p_path)
 		doc.Clear();
 		tinyxml2::XMLNode* pNode = doc.NewElement("root");
 		doc.InsertFirstChild(pNode);
+#ifdef USE_EDITOR
 		p_material.OnSerialize(doc, pNode);
+#endif
 	}
 	if (doc.SaveFile(p_path.c_str()) == tinyxml2::XML_SUCCESS)
 		LOG_INFO("[MATERIAL] \"" + p_path + "\": Saved");
