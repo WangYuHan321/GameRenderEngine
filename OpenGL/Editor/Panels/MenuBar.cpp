@@ -2,12 +2,26 @@
 #include "../Util/ActorCreationMenu.h"
 #include "../../../UI/Visual/Separator.h"
 #include "../../Editor/Core/EditorAction.h"
+#include "../../Core/Util/SystemCall.h"
+#include "../../Editor/Core/EditorAction.h"
 
 MenuBar::MenuBar()
 {
+	CreateFileMenu();
 	CreateWindowMenu();
 	CreateActorsMenu();
 	CreateSwitchLanguage();
+}
+
+void MenuBar::CreateFileMenu()
+{
+	auto& fileMenu = CreateWidget<MenuList>(EDITOR_LANGUAGE(MENU_FILE));
+
+	fileMenu.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_SAVE_SCENE)).ClickedEvent += std::bind(&MenuBar::SaveScene, this);
+	fileMenu.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_LOAD_SCENE)).ClickedEvent += std::bind(&MenuBar::LoadScene, this);
+	fileMenu.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_EXIT)).ClickedEvent += [] { EDITOR_CONTEXT(m_window)->SetShouldClose(true); };
+
+	fileMenu.CreateWidget<Separator>();//增加下划线 间隔
 }
 
 void MenuBar::CreateWindowMenu()
@@ -39,6 +53,16 @@ void MenuBar::RegisterPanel(const std::string& p_name, PanelWindow& p_panel)
 	menuItem.ValueChangedEvent += std::bind(&PanelWindow::SetOpened, &p_panel, std::placeholders::_1);
 
 	m_panels.emplace(p_name, std::make_pair(std::ref(p_panel), std::ref(menuItem)));
+}
+
+void MenuBar::SaveScene()
+{
+	SystemCall::ShowSaveFileDialog("test");
+}
+
+void MenuBar::LoadScene()
+{
+	SystemCall::ShowOpenFileDialog("test");
 }
 
 void MenuBar::OpenEveryWindows(bool p_state)
