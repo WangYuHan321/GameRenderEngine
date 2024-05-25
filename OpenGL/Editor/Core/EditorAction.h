@@ -52,6 +52,8 @@ public:
 
 	void StartPlay();
 
+	void Exit();
+
 public:
 	Event<Actor&> ActorSelectedEvent;
 	Event<Actor&> ActorUnSelectedEvent;

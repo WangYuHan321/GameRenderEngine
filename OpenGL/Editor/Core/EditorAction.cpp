@@ -110,3 +110,8 @@ void EditorAction::StartPlay()
 {
 	m_context.m_sceneMgr->GetActiveScene()->Play();
 }
+
+void EditorAction::Exit()
+{
+	m_context.m_window.get()->SetShouldClose(true);
+}
