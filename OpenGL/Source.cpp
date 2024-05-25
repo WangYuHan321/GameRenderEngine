@@ -18,6 +18,9 @@
 
 #else
 	#include "Editor/Core/Application.h"
+	#include "File/ConfigManager.h"
+	#include "Thread/ThreadPool.h"
+	#include "File/FileMonitor.h"
 #endif
 
 #ifdef USE_NO_EDITOR
@@ -282,11 +285,16 @@ int main()
 #endif
 
 	Application app("", "");
+	
+	FileMonitor* ptest = new FileMonitor();
+	ptest->SetDirectory(ConfigManager::getInstance()->GetEnginePath());
+	ThreadPool::getInstance()->AddTask( std::unique_ptr<IRunable>(ptest) );
 
 	while (app.IsRunning())
 	{
 		app.Run();
 	}
+	checkForMemoryLeaks();
 }
 
 #endif
