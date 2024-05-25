@@ -2,9 +2,9 @@
 
 class RenderTarget;
 
-#include "BaseRenderer.h"
-#include "GLCache.h"
-#include "Setting/EPrimitiveMode.h"
+#include "../BaseRenderer.h"
+#include "../GLCache.h"
+#include "../Setting/EPrimitiveMode.h"
 
 class Scene;
 class Mesh;

@@ -399,7 +399,7 @@
     <ClInclude Include="Render\BaseRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\ForwardRenderer.h">
+    <ClInclude Include="Render\Forward\ForwardRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\Shader\UniformBuffer.h">
@@ -582,7 +582,7 @@
     <ClInclude Include="File\LuaFileChangeHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Render\DeferredRenderer.h">
+    <ClInclude Include="Render\Deferred\DeferredRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\Deferred\Program\Program.h">
@@ -760,6 +760,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Util\SystemCall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\RenderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1088,7 +1091,7 @@
     <ClCompile Include="Render\BaseRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\ForwardRenderer.cpp">
+    <ClCompile Include="Render\Forward\ForwardRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Shader\UniformBuffer.cpp">
@@ -1265,7 +1268,7 @@
     <ClCompile Include="File\LuaFileChangeHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Render\DeferredRenderer.cpp">
+    <ClCompile Include="Render\Deferred\DeferredRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\Deferred\Program\Program.cpp">
@@ -1290,6 +1293,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Util\SystemCall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\RenderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

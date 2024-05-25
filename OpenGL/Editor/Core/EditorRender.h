@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Render/Mesh/Material.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../Editor/Core/GizmoBehaviour.h"
 
 class Context;

@@ -1,5 +1,5 @@
 #include "SceneView.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../../Render/RenderTarget.h"
 #include "../../Editor/Core/EditorAction.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
@@ -138,12 +138,12 @@ void SceneView::RenderSceneForActorPicking()
 		m_editorRenderer.RenderSceneForActorPicking();
 
 
-		//if (EDITOR_EXEC(IsAnyActorSelected()))
-		//{
-		//	auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
-		//	m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
-		//		(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, true);
-		//}
+		if (EDITOR_EXEC(IsAnyActorSelected()))
+		{
+			auto& selectedActor = EDITOR_EXEC(GetSelectedActor());
+			m_editorRenderer.RenderGizmo((Vector3&)selectedActor.m_transform.GetWorldPosition(),
+				(Quaternion&)selectedActor.m_transform.GetWorldRotation(), m_currentOperation, true);
+		}
 
 		m_actorPickRenderTarget->Unbind();
 	}
@@ -209,7 +209,7 @@ void SceneView::HandleActorPicking_Ray()
 			auto [mouseX, mouseY] = inputMgr.GetMousePosition();
 			mouseX -= m_position.x;
 			mouseY -= m_position.y;
-			mouseY = GetSafeSize().y - mouseY + 25;
+			mouseY = GetSafeSize().y - mouseY + 40;
 
 			Vector2 ndcCoord;
 			ndcCoord.x = ((2.0f * mouseX) / GetSafeSize().x) - 1.0f;

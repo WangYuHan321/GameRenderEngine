@@ -1,7 +1,7 @@
 #include "ShapeDrawer.h"
 
 #include "../../Render/Mesh/Mesh.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../Render/Resource/Loader/ShaderLoader.h"
 
 ShapeDrawer::ShapeDrawer(BaseRenderer& p_renderer):

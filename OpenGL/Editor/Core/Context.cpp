@@ -1,6 +1,6 @@
 #include "Context.h"
 #include "../../File/ConfigManager.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../Global/ServiceLocator.h"
 #include <memory>
 

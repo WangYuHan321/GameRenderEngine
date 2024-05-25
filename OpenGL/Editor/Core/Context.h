@@ -13,7 +13,7 @@
 #include "../../Scene/Scene.h"
 #include "../../Render/ShapeDrawer.h"
 #include "../../Render/BaseRenderer.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../Scene/SceneManager.h"
 #include "../../File/XmlManager.h"
 #include "../../Render/Font/FontManager.h"

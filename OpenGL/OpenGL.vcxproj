@@ -83,11 +83,12 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="File\FileMonitor.h" />
     <ClInclude Include="File\LuaFileChangeHandler.h" />
     <ClInclude Include="Core\Scripting\LuaActorBinder.h" />
+    <ClInclude Include="Render\RenderManager.h" />
     <ClInclude Include="Render\Font\Font.h" />
     <ClInclude Include="Render\Font\FontManager.h" />
     <ClInclude Include="Render\Deferred\Program\Program.h" />
     <ClInclude Include="Render\Animation\Animator.h" />
-    <ClInclude Include="Render\DeferredRenderer.h" />
+    <ClInclude Include="Render\Deferred\DeferredRenderer.h" />
     <ClInclude Include="Render\Resource\Loader\AnimLoader.h" />
     <ClInclude Include="Render\Animation\Animation.h" />
     <ClInclude Include="Render\Animation\Bone.h" />
@@ -196,7 +197,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="Editor\Panels\MenuBar.h" />
     <ClInclude Include="Core\Scripting\LuaBinder.h" />
     <ClInclude Include="Core\Util\Light.h" />
-    <ClInclude Include="Render\ForwardRenderer.h" />
+    <ClInclude Include="Render\Forward\ForwardRenderer.h" />
     <ClInclude Include="Render\BaseRenderer.h" />
     <ClInclude Include="Render\Resource\TextureManager.h" />
     <ClInclude Include="Core\Helper\Serializer.h" />
@@ -332,11 +333,12 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClCompile Include="File\FileMonitor.cpp" />
     <ClCompile Include="File\LuaFileChangeHandler.cpp" />
     <ClCompile Include="Core\Scripting\LuaActorBinder.cpp" />
+    <ClCompile Include="Render\RenderManager.cpp" />
     <ClCompile Include="Render\Font\Font.cpp" />
     <ClCompile Include="Render\Font\FontManager.cpp" />
     <ClCompile Include="Render\Deferred\Program\Program.cpp" />
     <ClCompile Include="Render\Animation\Animator.cpp" />
-    <ClCompile Include="Render\DeferredRenderer.cpp" />
+    <ClCompile Include="Render\Deferred\DeferredRenderer.cpp" />
     <ClCompile Include="Render\Resource\Loader\AnimLoader.cpp" />
     <ClCompile Include="Render\Animation\Animation.cpp" />
     <ClCompile Include="Render\Animation\Bone.cpp" />
@@ -393,7 +395,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClCompile Include="Editor\Panels\MenuBar.cpp" />
     <ClCompile Include="Core\Scripting\LuaBinder.cpp" />
     <ClCompile Include="Core\Util\Light.cpp" />
-    <ClCompile Include="Render\ForwardRenderer.cpp" />
+    <ClCompile Include="Render\Forward\ForwardRenderer.cpp" />
     <ClCompile Include="Render\BaseRenderer.cpp" />
     <ClCompile Include="Render\Resource\TextureManager.cpp" />
     <ClCompile Include="Core\Helper\Serializer.cpp" />
