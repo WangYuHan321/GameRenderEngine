@@ -1,5 +1,5 @@
 #include "AssetView.h"
-#include "../../Render/ForwardRenderer.h"
+#include "../../Render/Forward/ForwardRenderer.h"
 #include "../../../Render/RenderTarget.h"
 #include "../../Editor/Core/EditorAction.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
