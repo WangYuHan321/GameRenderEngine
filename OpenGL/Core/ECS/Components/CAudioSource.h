@@ -2,7 +2,7 @@
 
 #include "../Actor.h"
 
-class CAudioSource : AComponent
+class CAudioSource : public AComponent
 {
 
 };
