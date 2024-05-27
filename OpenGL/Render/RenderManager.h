@@ -1,7 +1,7 @@
 #pragma once
 
 class ForwardRenderer;
-class DeferredRender;
+class DeferredRenderer;
 class BaseRenderer;
 
 enum RenderType
@@ -24,8 +24,9 @@ private:
 	void SwitchToRendererByCurType();
 
 	RenderType m_renderType;
+	BaseRenderer* m_acitiveRenderer;
 
-	/*ForwardRenderer* m_forwardRenderer;
-	DeferredRenderer* m_deferredRenderer;*/
+	ForwardRenderer* m_forwardRenderer;
+	DeferredRenderer* m_deferredRenderer;
 };
 
