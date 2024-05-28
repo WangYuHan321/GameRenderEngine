@@ -82,7 +82,7 @@ void Material::Bind()
             switch (value.Type)
             {
             case SHADER_TYPE::SHADER_SAMPLER1D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
-            case SHADER_TYPE::SHADER_SAMPLER2D: { value.TEXTURE = value.TEXTURE ? value.TEXTURE : GUIDrawer::GetEmptyTexture(); value.TEXTURE->Bind(textureSlot); m_Shader->ActiveShader(); m_Shader->SetInt(name, textureSlot++); break; }
+            case SHADER_TYPE::SHADER_SAMPLER2D: { Texture* pValue = value.TEXTURE; pValue = pValue ? pValue : GUIDrawer::GetEmptyTexture(); pValue->Bind(textureSlot); m_Shader->ActiveShader(); m_Shader->SetInt(name, textureSlot++); break; }// 这里使pValue是使用默认的纹理
             case SHADER_TYPE::SHADER_SAMPLER3D: { value.TEXTURE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             case SHADER_TYPE::SHADER_SAMPLERCUBE: { value.TEXTURE_CUBE->Bind(textureSlot); m_Shader->SetInt(name, textureSlot++); break; }
             }
