@@ -262,6 +262,9 @@ void MaterialEditor::GenerateShaderSettingContent()
 {
 	m_shaderSettingColumn->RemoveAllWidgets();
 
+	if (m_target->GetShader() != m_shader)
+		m_target->SetShader(m_shader);
+
 	std::multimap<int, std::pair<std::string, UniformValue>> sortedUniformData1;
 	std::multimap<int, std::pair<std::string, UniformSampler>> sortedUniformData2;
 
