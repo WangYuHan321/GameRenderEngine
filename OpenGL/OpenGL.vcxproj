@@ -76,6 +76,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\AudioListener.h" />
     <ClInclude Include="Core\ECS\Components\CTextMeshPro.h" />
     <ClInclude Include="Editor\Panels\DebugView.h" />
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
@@ -326,6 +327,7 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\AudioListener.cpp" />
     <ClCompile Include="Core\ECS\Components\CTextMeshPro.cpp" />
     <ClCompile Include="Editor\Panels\DebugView.cpp" />
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />

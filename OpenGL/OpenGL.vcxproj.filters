@@ -765,6 +765,9 @@
     <ClInclude Include="Render\RenderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Audio\AudioListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1296,6 +1299,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\RenderManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
