@@ -45,7 +45,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;$(FreeType);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;$(FreeType);$(IRRKLANG)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -63,8 +63,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;freetype.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;$(FreeType)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;freetype.lib;irrKlang.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;$(FreeType)\lib;$(IRRKLANG)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
@@ -76,7 +76,9 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Audio\AudioListener.h" />
+    <ClInclude Include="Audio\Core\AudioEngine.h" />
+    <ClInclude Include="Audio\Entity\AudioListener.h" />
+    <ClInclude Include="Audio\Resource\Sound.h" />
     <ClInclude Include="Core\ECS\Components\CTextMeshPro.h" />
     <ClInclude Include="Editor\Panels\DebugView.h" />
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
@@ -327,7 +329,9 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Audio\AudioListener.cpp" />
+    <ClCompile Include="Audio\Core\AudioEngine.cpp" />
+    <ClCompile Include="Audio\Entity\AudioListener.cpp" />
+    <ClCompile Include="Audio\Resource\Sound.cpp" />
     <ClCompile Include="Core\ECS\Components\CTextMeshPro.cpp" />
     <ClCompile Include="Editor\Panels\DebugView.cpp" />
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
