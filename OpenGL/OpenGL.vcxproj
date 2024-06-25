@@ -76,6 +76,8 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\Entity\AudioSource.h" />
+    <ClInclude Include="Audio\Core\AudioPlayer.h" />
     <ClInclude Include="Audio\Core\AudioEngine.h" />
     <ClInclude Include="Audio\Entity\AudioListener.h" />
     <ClInclude Include="Audio\Resource\Sound.h" />
@@ -329,6 +331,8 @@ copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
     <ClInclude Include="File\XmlManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\Entity\AudioSource.cpp" />
+    <ClCompile Include="Audio\Core\AudioPlayer.cpp" />
     <ClCompile Include="Audio\Core\AudioEngine.cpp" />
     <ClCompile Include="Audio\Entity\AudioListener.cpp" />
     <ClCompile Include="Audio\Resource\Sound.cpp" />

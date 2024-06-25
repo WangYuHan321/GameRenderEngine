@@ -765,9 +765,6 @@
     <ClInclude Include="Render\RenderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\AudioListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\Core\AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -775,6 +772,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Audio\Resource\Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Core\AudioPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Entity\AudioSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1310,9 +1313,6 @@
     <ClCompile Include="Render\RenderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Audio\AudioListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\Core\AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1320,6 +1320,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Audio\Resource\Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Core\AudioPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Entity\AudioSource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
