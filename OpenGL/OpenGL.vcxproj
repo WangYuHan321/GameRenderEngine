@@ -72,7 +72,7 @@
       <Command>copy "$(THIRD_LUA)\bin" "$(THIRD_LUA)\..\..\..\Bin"
 copy "$(GLEW)\bin" "$(GLEW)\..\..\..\Bin"
 copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
-</Command>
+copy "$(IRRKLANG)\bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
