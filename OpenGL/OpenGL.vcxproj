@@ -81,7 +81,9 @@ copy "$(IRRKLANG)\bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     <ClInclude Include="Audio\Core\AudioEngine.h" />
     <ClInclude Include="Audio\Entity\AudioListener.h" />
     <ClInclude Include="Audio\Resource\Sound.h" />
+    <ClInclude Include="Core\ECS\Components\CArmature.h" />
     <ClInclude Include="Core\ECS\Components\CTextMeshPro.h" />
+    <ClInclude Include="Core\ECS\Components\CPose.h" />
     <ClInclude Include="Editor\Panels\DebugView.h" />
     <ClInclude Include="Editor\Panels\HierarchyNew.h" />
     <ClInclude Include="Editor\Panels\ModelView.h" />
@@ -336,7 +338,9 @@ copy "$(IRRKLANG)\bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     <ClCompile Include="Audio\Core\AudioEngine.cpp" />
     <ClCompile Include="Audio\Entity\AudioListener.cpp" />
     <ClCompile Include="Audio\Resource\Sound.cpp" />
+    <ClCompile Include="Core\ECS\Components\CArmature.cpp" />
     <ClCompile Include="Core\ECS\Components\CTextMeshPro.cpp" />
+    <ClCompile Include="Core\ECS\Components\CPose.cpp" />
     <ClCompile Include="Editor\Panels\DebugView.cpp" />
     <ClCompile Include="Editor\Panels\HierarchyNew.cpp" />
     <ClCompile Include="Editor\Panels\ModelView.cpp" />

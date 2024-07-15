@@ -780,6 +780,12 @@
     <ClInclude Include="Audio\Entity\AudioSource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ECS\Components\CArmature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\ECS\Components\CPose.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1326,6 +1332,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Audio\Entity\AudioSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Components\CArmature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ECS\Components\CPose.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
