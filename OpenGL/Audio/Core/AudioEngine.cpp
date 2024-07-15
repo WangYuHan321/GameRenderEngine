@@ -5,6 +5,7 @@
 
 AudioEngine::AudioEngine(const std::string& p_workingDirectory)
 {
+	m_irrklangEngine = irrklang::createIrrKlangDevice();
 }
 
 AudioEngine::~AudioEngine()
