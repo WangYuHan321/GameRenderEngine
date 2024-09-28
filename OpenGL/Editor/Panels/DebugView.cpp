@@ -4,6 +4,7 @@
 #include "../../Core/ECS/Components/CCamera.h"
 #include"../../Render/RenderTarget.h"
 #include "../../UI/Visual/Image.h"
+#include "../../Render/Font/FontManager.h"
 
 DebugView::DebugView
 (
@@ -24,6 +25,17 @@ void DebugView::ShowShadowMap(int id)
 	m_img->textureID.ID = EDITOR_CONTEXT(m_shadowMap).get()->GetShadowMap(id);
 }
 
+void DebugView::ShowFont(int id)
+{
+	m_img->size = GetSafeSize();
+	//ÄáÂêÎÒÔÚ²âÊÔ
+	//m_img->textureID.ID = EDITOR_CONTEXT(fontMgr).GetFontBmp('ÊÔ')->ID;
+	//m_img->textureID.ID = EDITOR_CONTEXT(fontMgr).GetFontBmp('Äá')->ID;
+	//m_img->textureID.ID = EDITOR_CONTEXT(fontMgr).GetFontBmp('Âê')->ID;
+	//m_img->textureID.ID = EDITOR_CONTEXT(fontMgr).GetFontBmp('ÔÚ')->ID;
+	//m_img->textureID.ID = EDITOR_CONTEXT(fontMgr).GetFontBmp('²â')->ID;
+}
+
 void DebugView::Update(float p_deltaTime)
 {
 	AView::Update(p_deltaTime);
@@ -36,6 +48,12 @@ void DebugView::Update(float p_deltaTime)
 	{
 		ShowShadowMap(1);
 	}
+
+	if (m_inputMgr.IsKeyReleased(EKey::KEY_3))
+	{
+		ShowFont(1);
+	}
+
 }
 
 void DebugView::_Render_Impl()

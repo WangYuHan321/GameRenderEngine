@@ -35,7 +35,7 @@ void GameView::Update(float p_deltaTime)
 		}
 		else
 		{
-			m_camera.ClearColor = Color4(0.f, 0.f, 0.f, 1.f);
+			m_camera.ClearColor = Color4(125.f, 80.f, 60.f, 1.f);
 		}
 	}
 
@@ -49,7 +49,9 @@ void GameView::_Render_Impl()
 
 	m_renderTarget->Bind();
 
+	dynamic_cast<ForwardRenderer*>(baseRenderer)->SetStencilMask(0xFF);
 	dynamic_cast<ForwardRenderer*>(baseRenderer)->Clear(m_camera);
+	dynamic_cast<ForwardRenderer*>(baseRenderer)->SetStencilMask(0x00);
 	m_editorRenderer.UpdateLights(*currentScene);
 	m_editorRenderer.RenderScene(m_camPos, m_camera);
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../Util/common.h"
+#include "Animation.h"
+#include "../../Core/ECS/Components/CTransform.h"
 
 unsigned int MAX_BONE_NUM = 128;
 
@@ -9,7 +11,7 @@ class Animator
 public:
 	Animator();
 
-
+	void CalculateBoneTransform(Actor& actor, Animation& animation, Matrix4& parentTransform);
 	void Update(float dt);
 
 private:

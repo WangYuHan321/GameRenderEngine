@@ -13,9 +13,13 @@
 #include "../../Scene/Scene.h"
 #include "../../Render/ShapeDrawer.h"
 #include "../../Render/BaseRenderer.h"
+#include "../../Render/RenderManager.h"
 #include "../../Render/Forward/ForwardRenderer.h"
+#include "../../Render/Deferred/DeferredRenderer.h"
 #include "../../Scene/SceneManager.h"
 #include "../../File/XmlManager.h"
+#include "../../Audio/Core/AudioPlayer.h"
+#include "../../Audio/Core/AudioEngine.h"
 #include "../../Render/Font/FontManager.h"
 #include "../../Render/Shader/UniformBuffer.h"
 #include "../../Render/Shadow/ShadowMap.h"
@@ -41,8 +45,11 @@ public:
 	std::unique_ptr<Driver> m_dirve;
 	std::unique_ptr<Device> m_device;
 	std::unique_ptr<UIManager> m_uiMgr;
+	std::unique_ptr<AudioEngine> m_audioEngine;
+	std::unique_ptr<AudioPlayer> m_audioPlayer;
 	std::unique_ptr<ShapeDrawer> m_shapeDrawer;
 	std::unique_ptr<BaseRenderer> m_renderer;
+	std::unique_ptr<RenderManager> m_rendererMgr;
 	std::unique_ptr<SceneManager> m_sceneMgr;
 	std::unique_ptr<InputManager> m_inputMgr;
 	std::unique_ptr<ShadowMap> m_shadowMap;

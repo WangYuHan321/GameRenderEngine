@@ -4,7 +4,7 @@
 
 Texture* TextureManager::CreateResource(const std::string& p_path)
 {
-	string realPath = ConfigManager::getInstance()->GetEditorPath() + "\\Texture\\" + p_path;
+	string realPath = ConfigManager::getInstance()->GetEditorPath() + "\\Asset\\Texture\\" + p_path;
 	Texture* pTexture = TextureLoader::getInstance()->LoadTexture(realPath, GL_TEXTURE_2D, GL_RGBA);
 	return pTexture;
 }

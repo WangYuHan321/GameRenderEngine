@@ -9,6 +9,10 @@
 #include "../../Editor/Panels/AssetView.h"
 #include "../../Editor/Panels/AssetBrowser.h"
 #include "../../Editor/Panels/MaterialEditor.h"
+#include "../../Editor/Panels/TimeLine.h"
+#include "../../Editor/Panels/ModelView.h"
+#include "../../Editor/Panels/DebugView.h"
+#include "../../Editor/Panels/Profiler.h"
 
 Editor::Editor(Context& p_context):
 	m_context(p_context),
@@ -31,16 +35,19 @@ void Editor::SetUpUI()
 	settings.dockable = true;
 	
 	m_panelsMgr.CreatePanel<MenuBar>("Menu Bar");
+	m_panelsMgr.CreatePanel<TimeLine>(EDITOR_LANGUAGE(MENU_TIMELINE), false, settings);
+	m_panelsMgr.CreatePanel<ModelView>(EDITOR_LANGUAGE(MENU_MODELEDITOR), false, settings);
 	m_panelsMgr.CreatePanel<Hierarchy>(EDITOR_LANGUAGE(MENU_HIERARCHY), true, settings);
 	m_panelsMgr.CreatePanel<GameView>(EDITOR_LANGUAGE(MENU_GAME_VIEW), false, settings);
 	m_panelsMgr.CreatePanel<SceneView>(EDITOR_LANGUAGE(MENU_SCENE_VIEW), true, settings);
 	m_panelsMgr.CreatePanel<Inspector>(EDITOR_LANGUAGE(MENU_INSPECTOR), true, settings);
-	m_panelsMgr.CreatePanel<ToolBar>(EDITOR_LANGUAGE(MENU_TOOLBAR), false, settings);
+	m_panelsMgr.CreatePanel<ToolBar>(EDITOR_LANGUAGE(MENU_TOOLBAR), true, settings);
 	m_panelsMgr.CreatePanel<Console>(EDITOR_LANGUAGE(MENU_CONSOLE), true, settings);
+	m_panelsMgr.CreatePanel<DebugView>(EDITOR_LANGUAGE(MENU_DEBUGVIEW), false, settings);
 	m_panelsMgr.CreatePanel<AssetView>(EDITOR_LANGUAGE(MENU_ASSETVIEW), false, settings);
 	m_panelsMgr.CreatePanel<AssetBrowser>(EDITOR_LANGUAGE(MENU_ASSET_BROWSER), true, settings, ConfigManager::getInstance()->GetEnginePath(),
 		ConfigManager::getInstance()->GetProjectPath() + "\\Asset", ConfigManager::getInstance()->GetProjectPath() + "\\Script");
-	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), false, settings);
+	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), true, settings);
 
 	m_canvas.MakeDockspace(true);
 	m_context.m_uiMgr->SetCanvas(m_canvas);
@@ -77,12 +84,16 @@ void Editor::RenderViews(float p_deltaTime)
 {
 	auto& gameView = m_panelsMgr.GetPanelAs<GameView>("Game View");//EDITOR_LANGUAGE(MENU_GAME_VIEW)
 	auto& sceneView = m_panelsMgr.GetPanelAs<SceneView>("Scene View");//EDITOR_LANGUAGE(MENU_SCENE_VIEW)
-	auto& assetView = m_panelsMgr.GetPanelAs<SceneView>("Asset View");
+	auto& assetView = m_panelsMgr.GetPanelAs<AssetView>("Asset View");
+	auto& modelView = m_panelsMgr.GetPanelAs<ModelView>("Model View");
+	auto& debugView = m_panelsMgr.GetPanelAs<DebugView>("Debug View");
 
 	{
 		assetView.Update(p_deltaTime);
 		gameView.Update(p_deltaTime);
 		sceneView.Update(p_deltaTime);
+		modelView.Update(p_deltaTime);
+		debugView.Update(p_deltaTime);
 	}
 
 	if (gameView.IsOpened())
@@ -100,6 +111,10 @@ void Editor::RenderViews(float p_deltaTime)
 		assetView.Render();
 	}
 
+	if (modelView.IsOpened())
+	{
+		modelView.Render();
+	}
 }
 
 void Editor::RenderEditorUI(float p_deltaTime)
@@ -112,3 +127,4 @@ Editor::~Editor()
 {
 
 }
+

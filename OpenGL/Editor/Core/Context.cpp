@@ -22,6 +22,12 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	m_uiMgr->OnInit(m_window->GetWindow());
 	LOG_INFO("UI inited success!!!\n");
 
+	m_audioEngine = std::make_unique<AudioEngine>(p_projectPath);
+	LOG_INFO("Audio Engine success!!!\n");
+
+	m_audioPlayer = std::make_unique<AudioPlayer>(*m_audioEngine);
+	LOG_INFO("Audio Player success!!!\n");
+
 	m_inputMgr = std::make_unique<InputManager>(*m_window);
 	LOG_INFO("Input inited success!!!\n");
 
@@ -56,6 +62,8 @@ Context::Context(const string& p_projectPath, const string& p_projectName):
 	ServiceLocator::getInstance()->Provide<InputManager>(*m_inputMgr);
 	ServiceLocator::getInstance()->Provide<Window>(*m_window);
 	ServiceLocator::getInstance()->Provide<SceneManager>(*m_sceneMgr);
+	ServiceLocator::getInstance()->Provide<AudioEngine>(*m_audioEngine);
+	ServiceLocator::getInstance()->Provide<AudioPlayer>(*m_audioPlayer);
 	ServiceLocator::getInstance()->Provide<ShadowMap>(*m_shadowMap);
 	ServiceLocator::getInstance()->Provide<EditorResource>(*m_editorResource);
 

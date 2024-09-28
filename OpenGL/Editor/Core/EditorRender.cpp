@@ -486,16 +486,15 @@ void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperati
 	// OpenGL T * R * S
 	//DirectX S * R * T
 
-	Matrix4 model = Translate(p_pos) * p_quat.ToMatrix4();
+	Matrix4 model = p_quat.ToMatrix4() * Translate(p_pos);
 
 	Model* arrowModel = nullptr;
 
 	if (!p_pickable)
 	{
 		Matrix4 sphereModel = model * Scale(Vector3(0.1f, 0.1f, 0.1f));
-
-		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), m_gizmoBallMaterial, &sphereModel);
 		m_gizmoArrowMaterial.SetInt("u_HighlightedAxis", p_highlightedAxis);
+		dynamic_cast<ForwardRenderer*>(m_context.m_renderer.get())->DrawModelWithSingleMaterial(*m_context.m_editorResource->GetModel("Sphere"), m_gizmoBallMaterial, &sphereModel);
 
 		switch (p_operation)
 		{

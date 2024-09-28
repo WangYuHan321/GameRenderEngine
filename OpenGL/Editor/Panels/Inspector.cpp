@@ -22,6 +22,7 @@
 #include "../../Core/ECS/Components/CDirectionalLight.h"
 #include "../../Core/ECS/Components/CMaterialRenderer.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
+#include "../../Core/ECS/Components/CAudioSource.h"
 
 Inspector::Inspector
 (
@@ -105,7 +106,7 @@ Inspector::Inspector
 				//case 8: GetCurrentActor()->AddComponent<CAmbientBoxLight>();		break;
 				//case 9: GetCurrentActor()->AddComponent<CAmbientSphereLight>();	break;
 			case 10: GetCurrentActor()->AddComponent<CMaterialRenderer>();	break;
-				//case 11: GetCurrentActor()->AddComponent<CAudioSource>();		break;
+			case 11: GetCurrentActor()->AddComponent<CAudioSource>();		break;
 				//case 12: GetCurrentActor()->AddComponent<CAudioListener>();		break;
 			//case 13: GetCurrentActor()->AddComponent<Behaviour>( std::string("Actor.lua") ); break;
 			}

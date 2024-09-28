@@ -23,6 +23,7 @@ public:
 private:
 
 	void ShowShadowMap(int id);
+	void ShowFont(int id);
 
 protected:
 	InputManager& m_inputMgr;

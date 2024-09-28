@@ -14,11 +14,17 @@ public:
     MenuBar();
     void RegisterPanel(const std::string& p_name, PanelWindow& p_panel);
 
+    void CreateFileMenu();
+
     void CreateWindowMenu();
 
     void CreateActorsMenu();
 
     void CreateSwitchLanguage();
+
+    void SaveScene();
+
+    void LoadScene();
 
     void OpenEveryWindows(bool p_state);
 

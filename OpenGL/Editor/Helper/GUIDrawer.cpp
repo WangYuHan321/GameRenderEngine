@@ -277,7 +277,20 @@ void GUIDrawer::DrawVec3(WidgetContainer& p_root, const std::string& p_name, std
 
 void GUIDrawer::DrawVec4(WidgetContainer& p_root, const std::string& p_name, std::function<Vector4(void)> p_gatherer, std::function<void(Vector4)> p_provider, float p_step , float p_min, float p_max )
 {
+	CreateTitle(p_root, p_name);
+	auto& widget = p_root.CreateWidget<DragMultipleScalars<float, 4>>(GetDataType<float>(), p_min, p_max, 0.f, p_step, "", GetFormat<float>());
+	auto& dispatcher = widget.AddPlugin<DataDispatcher<std::array<float, 4>>>();
 
+	dispatcher.RegisterGatherer([p_gatherer]()
+		{
+			Vector4 value = p_gatherer();
+			return reinterpret_cast<const std::array<float, 4>&>(value);
+		});
+
+	dispatcher.RegisterProvider([p_provider](std::array<float, 4> p_value)
+		{
+			p_provider(reinterpret_cast<Vector4&>(p_value));
+		});
 }
 void GUIDrawer::DrawQuat(WidgetContainer& p_root, const std::string& p_name, std::function<Quaternion(void)> p_gatherer, std::function<void(Quaternion)> p_provider, float p_step, float p_min, float p_max)
 {

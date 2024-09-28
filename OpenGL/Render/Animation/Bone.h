@@ -27,6 +27,21 @@ struct KeyScale
 	float time;
 };
 
+struct BoneInfo
+{
+	int id;
+	glm::mat4 offset;
+
+	const glm::mat4& get_offset() const
+	{
+		return offset;
+	}
+	const int& get_id() const
+	{
+		return id;
+	}
+};
+
 class Bone
 {
 

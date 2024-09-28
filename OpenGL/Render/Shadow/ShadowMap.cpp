@@ -40,29 +40,29 @@ void ShadowMap::InitializeFrame(CDirectionalLight dirLight, const Camera* p_cam)
 
 	const auto _near = 0.1f;
 	const auto _far = 20.0f;
-	glm::mat4 lightProject = glm::ortho(-20.0f, 20.0f, 20.0f, -20.0f, _near, _far);
-	glm::mat4 lightView = glm::lookAt(-dirLight.GetDirectional() * 10.0f, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+	glm::mat4 lightProject = glm::perspective(p_cam->FOV, 1.0f, p_cam->Near, p_cam->Far);
+	glm::mat4 lightView = glm::lookAt(dirLight.GetPosition(), glm::vec3(0), glm::vec3(0.0, 1.0, 0.0));
 	m_lightMatrix = lightProject * lightView;
 
-	auto [t, r, s] = DecomposeTransform(m_lightMatrix);
+	//auto [t, r, s] = DecomposeTransform(m_lightMatrix);
 
-	const auto right = 1.0 * _size;
-	const auto left = -right;
-	const auto top = _size;
-	const auto bottom = -top;
+	//const auto right = 1.0 * _size;
+	//const auto left = -right;
+	//const auto top = _size;
+	//const auto bottom = -top;
 
-	const auto a = r * Vector3 { left, top, 0 };
-	const auto b = r * Vector3 { right, top, 0 };
-	const auto c = r * Vector3 { left, bottom, 0 };
-	const auto d = r * Vector3 { right, bottom, 0 };
-	m_debugOrtho = { -dirLight.GetDirectional() * 10.0f, glm::normalize((glm::vec3(0.0) - (-dirLight.GetDirectional() * 10.0f))), _near, _far, a, b, c, d };
+	//const auto a = r * Vector3 { left, top, 0 };
+	//const auto b = r * Vector3 { right, top, 0 };
+	//const auto c = r * Vector3 { left, bottom, 0 };
+	//const auto d = r * Vector3 { right, bottom, 0 };
+	//m_debugOrtho = { dirLight.GetPosition(), dirLight.GetDirectional(),  _near, _far, a, b, c, d };
 }
 
 void ShadowMap::SetShadowMap(Material* p_material)
 {
 	p_material->SetTextureValue("shadow_LightDepthMap0", m_renderTarget->GetDepthStencilTexture());
 	p_material->SetMatrix("shadow_lightDepthMat0", m_lightMatrix);
-	p_material->SetBoolean("shadow_shadowReceive", /*p_material->ShadowReceive*/false);
+	p_material->SetBoolean("shadow_shadowReceive", p_material->ShadowReceive);
 }
 
 void ShadowMap::BeginShadow()

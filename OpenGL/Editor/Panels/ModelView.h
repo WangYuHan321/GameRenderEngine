@@ -32,7 +32,6 @@ private:
 	RenderTarget* m_actorPickRenderTarget;
 	EGizmoOperation m_currentOperation = EGizmoOperation::TRANSLATE;
 
-	GroupCollapsable* m_groupCollapsable;
 	TreeNode* m_sceneRoot;
 	std::unordered_map<std::string, TreeNode*> m_widgetBoneLink;
 

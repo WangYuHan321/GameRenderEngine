@@ -7,7 +7,15 @@ Animator::Animator() :
 		finalBoneMatrix.push_back(Matrix4(1.0f));
 }
 
+void Animator::CalculateBoneTransform(Actor& actor, Animation& animation, Matrix4& parentTransform)
+{
+
+}
+
 void Animator::Update(float dt)
 {
+
+
+
 
 }
