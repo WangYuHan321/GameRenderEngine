@@ -20,7 +20,11 @@
 #define WINDOWS_PLATFORM
 #endif
 
-#define USE_NO_EDITOR //使用不是编辑器下面
+#ifdef RENDER_API
+#define VULKAN_API
+#endif
+
+#define USE_NO_EDITOR
 
 //#define USE_EDITOR //使用不是编辑器下面
 

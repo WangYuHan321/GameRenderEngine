@@ -1,3 +1,5 @@
+#ifdef VULKAN_API
+
 #include "RHIVulkan.h"
 #include "../../File/Path/PathParser.h"
 
@@ -881,5 +883,5 @@ void RHIVulkan::Cleanup() {
     glfwTerminate();
 }
 
-
+#endif
 

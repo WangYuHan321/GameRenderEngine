@@ -1,5 +1,5 @@
 #pragma once
-
+#ifdef VULKAN_API
 #include "vulkan/vulkan.h"
 #include "../Util/common.h"
 #include <optional>
@@ -115,4 +115,6 @@ private:
 	void DrawFrame();
 	void Cleanup();
 };
+
+#endif
 

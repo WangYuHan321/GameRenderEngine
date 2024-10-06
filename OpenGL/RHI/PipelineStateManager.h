@@ -10,5 +10,10 @@ class PipelineStateManager
 private:
 	std::map<std::string, PipelineState> mPipelineState;
 
+protected:
+	virtual bool InitializePipelineState(PipelineState** ppPipelineState) {
+		return true;
+	}
+	virtual void DestroyPipelineState(PipelineState& pipelineState) {}
 };
 
