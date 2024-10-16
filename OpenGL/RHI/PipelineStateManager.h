@@ -7,7 +7,7 @@ class PipelineStateManager
 	virtual bool UnregisterPipelineState(PipelineState& pipeline);
 
 	PipelineState& GetPipeLineStateByName(std::string& name) { return mPipelineState[name]; }
-private:
+protected:
 	std::map<std::string, PipelineState> mPipelineState;
 
 protected:

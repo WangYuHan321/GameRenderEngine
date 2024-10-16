@@ -8,5 +8,7 @@ bool PipelineStateManager::RegisterPipelineState(PipelineState& pipeline)
 
 bool PipelineStateManager::UnregisterPipelineState(PipelineState& pipeline)
 {
-	return mPipelineState.erase(pipeline.pipelineStateName);
+	mPipelineState.erase(pipeline.pipelineStateName);
+	DestroyPipelineState(pipeline);
+	return true;
 }

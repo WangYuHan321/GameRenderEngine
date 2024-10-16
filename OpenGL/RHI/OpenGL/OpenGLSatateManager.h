@@ -2,8 +2,12 @@
 
 #include "../PipelineStateManager.h"
 
-class OpenGLSatateManager : PipelineStateManager
+class OpenGLPipelineStateManager : PipelineStateManager
 {
+public:
+	OpenGLPipelineStateManager() = default;
 
+protected:
+	virtual bool InitializePipelineState(PipelineState** ppPipelineState) final;
+	virtual void DestroyPipelineState(PipelineState& pipelineState) final;
 };
-

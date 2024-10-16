@@ -42,6 +42,7 @@ enum class A2V_TYPES {
 
 struct PipelineState
 {
+    virtual ~PipelineState() = default;
     std::string pipelineStateName;
     PIPELINE_TYPE pipelineType{ PIPELINE_TYPE::GRAPHIC };
 
