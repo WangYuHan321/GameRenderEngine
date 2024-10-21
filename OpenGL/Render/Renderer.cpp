@@ -380,13 +380,13 @@ void Renderer::RenderCustomCommand(RenderCommand* command, Camera* customCamera,
 void Renderer::RenderMesh(Mesh * mesh)
 {
 	glBindVertexArray(mesh->m_VAO);
-	if (mesh->Indices.size() > 0)
+	if (mesh->m_vecIndices.size() > 0)
 	{
-		glDrawElements(mesh->Topology == TRIANGLE_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mesh->Indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(mesh->GetTopology() == TRIANGLE_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, mesh->m_vecIndices.size(), GL_UNSIGNED_INT, 0);
 	}
 	else
 	{
-		glDrawArrays(mesh->Topology == TRIANGLE_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, 0, mesh->Positions.size());
+		glDrawArrays(mesh->GetTopology() == TRIANGLE_STRIP ? GL_TRIANGLE_STRIP : GL_TRIANGLES, 0, mesh->m_vecPos.size());
 	}
 
 }
@@ -449,15 +449,18 @@ void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, Textu
 		camera->SetPerspective(Deg2Rad(90.0f), width / height, 0.1f, 100.0f);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, textureCube->ID, mip);
-
+	}
+	for (uint32 i = 0; i < 6; ++i)
+	{
+		Camera* camera = &faceCameras[i];
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (uint32 i = 0; i < renderCommands.size(); ++i)
 		{
 			assert(renderCommands[i].Material->Type == MATERIAL_CUSTOM);
-			RenderCustomCommand(&renderCommands[i], camera); 
+			RenderCustomCommand(&renderCommands[i], camera);
 		}
-
 	}
+
 }
 
 void Renderer::RenderPushedCommands(Camera& cam)

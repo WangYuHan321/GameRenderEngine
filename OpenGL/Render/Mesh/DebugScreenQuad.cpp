@@ -9,7 +9,7 @@ DebugScreenQuad::DebugScreenQuad(float cellXSize, float cellYSize):
 void DebugScreenQuad::FinalizeMesh(int index)
 {
 
-    Positions =
+    m_vecPos =
     {
         { -1.0f + index * cellXSizeValue,  -cellYSizeValue, 0.0f, },
         { -1.0f + index * cellXSizeValue, -1.0f, 0.0f, },
@@ -17,14 +17,14 @@ void DebugScreenQuad::FinalizeMesh(int index)
         {  -1.0f + index * cellXSizeValue + cellXSizeValue, -1.0f, 0.0f, },
     };
 
-    UV = {
+    m_vecUV = {
         { 0.0f, 1.0f, },
         { 0.0f, 0.0f, },
         { 1.0f, 1.0f, },
         { 1.0f, 0.0f, },
     };
 
-    Topology = TRIANGLE_STRIP;
+    m_topology = TRIANGLE_STRIP;
 
     Finalize();
 }

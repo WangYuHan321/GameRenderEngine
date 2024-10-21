@@ -12,56 +12,71 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &m_VBO);
 }
 
-Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<Vector3> vecPos, std::vector<unsigned int> vecIndices)
 {
-    Positions = positions;
-    Indices = indices;
+    m_vecPos = vecPos;
+    m_vecIndices = vecIndices;
 }
 
-Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<Vector3> vecPos, std::vector<Vector2> vecUV, std::vector<unsigned int> vecIndices)
 {
-    Positions = positions;
-    UV = uv;
-    Indices = indices;
+    m_vecPos = vecPos;
+    m_vecUV = vecUV;
+    m_vecIndices = vecIndices;
 }
 
-Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<glm::vec3> normals, std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<Vector3> vecPos, std::vector<Vector2> vecUV, std::vector<Vector3> vecNormal, std::vector<unsigned int> vecIndices)
 {
-    Positions = positions;
-    UV = uv;
-    Normals = normals;
-    Indices = indices;
+    m_vecPos = vecPos;
+    m_vecUV = vecUV;
+    m_vecNormal = vecNormal;
+    m_vecIndices = vecIndices;
 }
 
-Mesh::Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<glm::vec3> normals, std::vector<glm::vec3> tangents, std::vector<glm::vec3> bitangents, std::vector<unsigned int> indices)
+Mesh::Mesh(std::vector<Vector3> vecPos, std::vector<Vector2> vecUV, std::vector<Vector3> vecNormal, std::vector<Vector3> vecTangent, std::vector<Vector3> vecBittangent, std::vector<unsigned int> vecIndices)
 {
-    Positions = positions;
-    UV = uv;
-    Normals = normals;
-    Tangents = tangents;
-    Bitangents = bitangents;
-    Indices = indices;
+    m_vecPos = vecPos;
+    m_vecUV = vecUV;
+    m_vecNormal = vecNormal;
+    m_vecTangent = vecTangent;
+    m_vecBitangent = vecBittangent;
+    m_vecIndices = vecIndices;
 }
 
-void Mesh::SetPositions(std::vector<glm::vec3> positions)
+void Mesh::SetPositions(std::vector<Vector3> m_vecPos)
 {
-    Positions = positions;
+    m_vecPos = m_vecPos;
 }
 
-void Mesh::SetUVs(std::vector<glm::vec2> uv)
+void Mesh::SetUVs(std::vector<Vector2> m_vecUV)
 {
-    UV = uv;
+    m_vecUV = m_vecUV;
 }
 
-void Mesh::SetNormals(std::vector<glm::vec3> normals)
+void Mesh::SetNormals(std::vector<Vector3> m_vecNormal)
 {
-    Normals = normals;
+    m_vecNormal = m_vecNormal;
 }
 
-void Mesh::SetTangents(std::vector<glm::vec3> tangents, std::vector<glm::vec3> bitangents)
+void Mesh::SetTangents(std::vector<Vector3> vecTangent, std::vector<Vector3> vecBitTangent)
 {
-    Tangents = tangents;
-    Bitangents = bitangents;
+    m_vecTangent = vecTangent;
+    m_vecBitangent = vecBitTangent;
+}
+
+void Mesh::SetName(string name)
+{
+    m_strName = name;
+}
+
+void Mesh::SetTopology(TOPOLOGY topology)
+{
+    m_topology = topology;
+}
+
+void Mesh::SetMaterialIndex(uint32 materialIndex)
+{
+    m_materialIndex = materialIndex;
 }
 
 void Mesh::Finalize(bool interleaved)
@@ -77,66 +92,66 @@ void Mesh::Finalize(bool interleaved)
     std::vector<float> data;
     if (interleaved)
     {
-        for (int i = 0; i < Positions.size(); ++i)
+        for (int i = 0; i < m_vecPos.size(); ++i)
         {
-            data.push_back(Positions[i].x);
-            data.push_back(Positions[i].y);
-            data.push_back(Positions[i].z);
-            if (UV.size() > 0)
+            data.push_back(m_vecPos[i].x);
+            data.push_back(m_vecPos[i].y);
+            data.push_back(m_vecPos[i].z);
+            if (m_vecUV.size() > 0)
             {
-                data.push_back(UV[i].x);
-                data.push_back(UV[i].y);
+                data.push_back(m_vecUV[i].x);
+                data.push_back(m_vecUV[i].y);
             }
-            if (Normals.size() > 0)
+            if (m_vecNormal.size() > 0)
             {
-                data.push_back(Normals[i].x);
-                data.push_back(Normals[i].y);
-                data.push_back(Normals[i].z);
+                data.push_back(m_vecNormal[i].x);
+                data.push_back(m_vecNormal[i].y);
+                data.push_back(m_vecNormal[i].z);
             }
-            if (Tangents.size() > 0)
+            if (m_vecTangent.size() > 0)
             {
-                data.push_back(Tangents[i].x);
-                data.push_back(Tangents[i].y);
-                data.push_back(Tangents[i].z);
+                data.push_back(m_vecTangent[i].x);
+                data.push_back(m_vecTangent[i].y);
+                data.push_back(m_vecTangent[i].z);
             }
-            if (Bitangents.size() > 0)
+            if (m_vecBitangent.size() > 0)
             {
-                data.push_back(Bitangents[i].x);
-                data.push_back(Bitangents[i].y);
-                data.push_back(Bitangents[i].z);
+                data.push_back(m_vecBitangent[i].x);
+                data.push_back(m_vecBitangent[i].y);
+                data.push_back(m_vecBitangent[i].z);
             }
         }
     }
     else
     {
-        for (int i = 0; i < Positions.size(); ++i)
+        for (int i = 0; i < m_vecPos.size(); ++i)
         {
-            data.push_back(Positions[i].x);
-            data.push_back(Positions[i].y);
-            data.push_back(Positions[i].z);
+            data.push_back(m_vecPos[i].x);
+            data.push_back(m_vecPos[i].y);
+            data.push_back(m_vecPos[i].z);
         }
-        for (int i = 0; i < UV.size(); ++i)
+        for (int i = 0; i < m_vecUV.size(); ++i)
         {
-            data.push_back(UV[i].x);
-            data.push_back(UV[i].y);
+            data.push_back(m_vecUV[i].x);
+            data.push_back(m_vecUV[i].y);
         }
-        for (int i = 0; i < Normals.size(); ++i)
+        for (int i = 0; i < m_vecNormal.size(); ++i)
         {
-            data.push_back(Normals[i].x);
-            data.push_back(Normals[i].y);
-            data.push_back(Normals[i].z);
+            data.push_back(m_vecNormal[i].x);
+            data.push_back(m_vecNormal[i].y);
+            data.push_back(m_vecNormal[i].z);
         }
-        for (int i = 0; i < Tangents.size(); ++i)
+        for (int i = 0; i < m_vecTangent.size(); ++i)
         {
-            data.push_back(Tangents[i].x);
-            data.push_back(Tangents[i].y);
-            data.push_back(Tangents[i].z);
+            data.push_back(m_vecTangent[i].x);
+            data.push_back(m_vecTangent[i].y);
+            data.push_back(m_vecTangent[i].z);
         }
-        for (int i = 0; i < Bitangents.size(); ++i)
+        for (int i = 0; i < m_vecBitangent.size(); ++i)
         {
-            data.push_back(Bitangents[i].x);
-            data.push_back(Bitangents[i].y);
-            data.push_back(Bitangents[i].z);
+            data.push_back(m_vecBitangent[i].x);
+            data.push_back(m_vecBitangent[i].y);
+            data.push_back(m_vecBitangent[i].z);
         }
     }
 
@@ -144,43 +159,43 @@ void Mesh::Finalize(bool interleaved)
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
 
-    if (Indices.size() > 0)
+    if (m_vecIndices.size() > 0)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(unsigned int), &Indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_vecIndices.size() * sizeof(unsigned int), &m_vecIndices[0], GL_STATIC_DRAW);
     }
     if (interleaved)
     {
 
         size_t stride = 3 * sizeof(float);
-        if (UV.size() > 0)         stride += 2 * sizeof(float);
-        if (Normals.size() > 0)    stride += 3 * sizeof(float);
-        if (Tangents.size() > 0)   stride += 3 * sizeof(float);
-        if (Bitangents.size() > 0) stride += 3 * sizeof(float);
+        if (m_vecUV.size() > 0)         stride += 2 * sizeof(float);
+        if (m_vecNormal.size() > 0)    stride += 3 * sizeof(float);
+        if (m_vecTangent.size() > 0)   stride += 3 * sizeof(float);
+        if (m_vecBitangent.size() > 0) stride += 3 * sizeof(float);
 
         size_t offset = 0;
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
         offset += 3 * sizeof(float);
-        if (UV.size() > 0)
+        if (m_vecUV.size() > 0)
         {
             glEnableVertexAttribArray(1);
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
             offset += 2 * sizeof(float);
         }
-        if (Normals.size() > 0)
+        if (m_vecNormal.size() > 0)
         {
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
             offset += 3 * sizeof(float);
         }
-        if (Tangents.size() > 0)
+        if (m_vecTangent.size() > 0)
         {
             glEnableVertexAttribArray(3);
             glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
             offset += 3 * sizeof(float);
         }
-        if (Bitangents.size() > 0)
+        if (m_vecBitangent.size() > 0)
         {
             glEnableVertexAttribArray(4);
             glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
@@ -192,30 +207,30 @@ void Mesh::Finalize(bool interleaved)
         size_t offset = 0;
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
-        offset += Positions.size() * sizeof(float);
-        if (UV.size() > 0)
+        offset += m_vecPos.size() * sizeof(float);
+        if (m_vecUV.size() > 0)
         {
             glEnableVertexAttribArray(1);
             glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
-            offset += UV.size() * sizeof(float);
+            offset += m_vecUV.size() * sizeof(float);
         }
-        if (Normals.size() > 0)
+        if (m_vecNormal.size() > 0)
         {
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
-            offset += Normals.size() * sizeof(float);
+            offset += m_vecNormal.size() * sizeof(float);
         }
-        if (Tangents.size() > 0)
+        if (m_vecTangent.size() > 0)
         {
             glEnableVertexAttribArray(3);
             glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
-            offset += Tangents.size() * sizeof(float);
+            offset += m_vecTangent.size() * sizeof(float);
         }
-        if (Bitangents.size() > 0)
+        if (m_vecBitangent.size() > 0)
         {
             glEnableVertexAttribArray(4);
             glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)offset);
-            offset += Bitangents.size() * sizeof(float);
+            offset += m_vecBitangent.size() * sizeof(float);
         }
     }
     glBindVertexArray(0);
@@ -234,32 +249,32 @@ void Mesh::NewFinalize(bool interleaved)
 
 
     std::vector<float> data;
-    for (int i = 0; i < Vertexs.size(); ++i)
+    for (int i = 0; i < m_vecVertex.size(); ++i)
     {
-        data.push_back(Vertexs[i].Position.x);
-        data.push_back(Vertexs[i].Position.y);
-        data.push_back(Vertexs[i].Position.z);
-        data.push_back(Vertexs[i].UV.x);
-        data.push_back(Vertexs[i].UV.y);
-        data.push_back(Vertexs[i].Normal.x);
-        data.push_back(Vertexs[i].Normal.y);
-        data.push_back(Vertexs[i].Normal.z);
-        data.push_back(Vertexs[i].Tangent.x);
-        data.push_back(Vertexs[i].Tangent.y);
-        data.push_back(Vertexs[i].Tangent.z);
-        data.push_back(Vertexs[i].Bitangent.x);
-        data.push_back(Vertexs[i].Bitangent.y);
-        data.push_back(Vertexs[i].Bitangent.z);
+        data.push_back(m_vecVertex[i].Position.x);
+        data.push_back(m_vecVertex[i].Position.y);
+        data.push_back(m_vecVertex[i].Position.z);
+        data.push_back(m_vecVertex[i].UV.x);
+        data.push_back(m_vecVertex[i].UV.y);
+        data.push_back(m_vecVertex[i].Normal.x);
+        data.push_back(m_vecVertex[i].Normal.y);
+        data.push_back(m_vecVertex[i].Normal.z);
+        data.push_back(m_vecVertex[i].Tangent.x);
+        data.push_back(m_vecVertex[i].Tangent.y);
+        data.push_back(m_vecVertex[i].Tangent.z);
+        data.push_back(m_vecVertex[i].Bitangent.x);
+        data.push_back(m_vecVertex[i].Bitangent.y);
+        data.push_back(m_vecVertex[i].Bitangent.z);
     }
 
     glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
 
-    if (Indices.size() > 0)
+    if (m_vecIndices.size() > 0)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size() * sizeof(unsigned int), &Indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_vecIndices.size() * sizeof(unsigned int), &m_vecIndices[0], GL_STATIC_DRAW);
     }
 
 
@@ -302,7 +317,7 @@ void Mesh::NewFinalize(bool interleaved)
     ComputeBoundingSphere();
 }
 
-void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution)
+void Mesh::FromSDF(std::function<float(Vector3)>& sdf, float maxDistance, uint16_t gridResolution)
 {
     LOG_INFO("Generating 3D mesh from SDF");
 
@@ -607,18 +622,18 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
     {
         union
         {
-            glm::vec4 Corners[8]; // <xyz: position, w: isosurface distance>
+            Vector4 Corners[8]; // <xyz: position, w: isosurface distance>
             struct
             {
                 // notation: L = Left, R = Right, B = Bottom, T = Top, F = Front, B = Back (XYZ in right-handed system)
-                glm::vec4 LBB;
-                glm::vec4 RBB;
-                glm::vec4 RBF;
-                glm::vec4 LBF;
-                glm::vec4 LTB;
-                glm::vec4 RTB;
-                glm::vec4 RTF;
-                glm::vec4 LTF;
+                Vector4 LBB;
+                Vector4 RBB;
+                Vector4 RBF;
+                Vector4 LBF;
+                Vector4 LTB;
+                Vector4 RTB;
+                Vector4 RTF;
+                Vector4 LTF;
             };
         };
         MCube() { }
@@ -638,17 +653,17 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
     };
 
     // cube-march aware lerp
-    static auto mLerp = [](const glm::vec4& p1, const glm::vec4& p2) -> glm::vec3
+    static auto mLerp = [](const Vector4& p1, const Vector4& p2) -> Vector3
     {
         const float epsilon = 0.0001f;
         if (std::abs(0.0f - p1.w) < epsilon)
-            return glm::vec3(p1.x, p1.y, p1.z);
+            return Vector3(p1.x, p1.y, p1.z);
         if (std::abs(0.0f - p2.w) < epsilon)
-            return glm::vec3(p2.x, p2.y, p2.z);;
+            return Vector3(p2.x, p2.y, p2.z);;
         if (std::abs(p1.w - p2.w) < epsilon)
-            return glm::vec3(p1.x, p1.y, p1.z);;
+            return Vector3(p1.x, p1.y, p1.z);;
         float t = (0.0f - p1.w) / (p2.w - p1.w);
-        glm::vec3 result({
+        Vector3 result({
             p1.x + t * (p2.x - p1.x),
             p1.y + t * (p2.y - p1.y),
             p1.z + t * (p2.z - p1.z)
@@ -665,51 +680,51 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
     for (uint16_t z = 0; z < gridSize; ++z) {
         for (uint16_t y = 0; y < gridSize; ++y) {
             for (uint16_t x = 0; x < gridSize; ++x) {
-                // calculate voxel's 3D positions and evaluate SDF at each of its corners
+                // calculate voxel's 3D m_vecPos and evaluate SDF at each of its corners
                 float halfCube = cubeScale * 0.5f;
-                glm::vec3 center({
+                Vector3 center({
                     -scale + x * cubeScale + halfCube,
                     -scale + y * cubeScale + halfCube,
                     -scale + z * cubeScale + halfCube
                     });
 
                 MCube voxel;
-                glm::vec3 offset;
+                Vector3 offset;
                 // left-bottom-back
-                offset = glm::vec3(-halfCube, -halfCube, -halfCube);
-                voxel.LBB = glm::vec4(center + offset, 0.0f);
-                voxel.LBB.w = sdf(glm::vec3(voxel.LBB.x, voxel.LBB.y, voxel.LBB.z));
+                offset = Vector3(-halfCube, -halfCube, -halfCube);
+                voxel.LBB = Vector4(center + offset, 0.0f);
+                voxel.LBB.w = sdf(Vector3(voxel.LBB.x, voxel.LBB.y, voxel.LBB.z));
                 // right-bottom-back
-                offset = glm::vec3(halfCube, -halfCube, -halfCube);
-                voxel.RBB = glm::vec4(center + offset, 0.0f);
-                voxel.RBB.w = sdf(glm::vec3(voxel.RBB.x, voxel.RBB.y, voxel.RBB.z));
+                offset = Vector3(halfCube, -halfCube, -halfCube);
+                voxel.RBB = Vector4(center + offset, 0.0f);
+                voxel.RBB.w = sdf(Vector3(voxel.RBB.x, voxel.RBB.y, voxel.RBB.z));
                 // right-bottom-front
-                offset = glm::vec3(halfCube, -halfCube, halfCube);
-                voxel.RBF = glm::vec4(center + offset, 0.0f);
-                voxel.RBF.w = sdf(glm::vec3(voxel.RBF.x, voxel.RBF.y, voxel.RBF.z));
+                offset = Vector3(halfCube, -halfCube, halfCube);
+                voxel.RBF = Vector4(center + offset, 0.0f);
+                voxel.RBF.w = sdf(Vector3(voxel.RBF.x, voxel.RBF.y, voxel.RBF.z));
                 // left-bottom-front
-                offset = glm::vec3(-halfCube, -halfCube, halfCube);
-                voxel.LBF = glm::vec4(center + offset, 0.0f);
-                voxel.LBF.w = sdf(glm::vec3(voxel.LBF.x, voxel.LBF.y, voxel.LBF.z));
+                offset = Vector3(-halfCube, -halfCube, halfCube);
+                voxel.LBF = Vector4(center + offset, 0.0f);
+                voxel.LBF.w = sdf(Vector3(voxel.LBF.x, voxel.LBF.y, voxel.LBF.z));
                 // left-top-back
-                offset = glm::vec3(-halfCube, halfCube, -halfCube);
-                voxel.LTB = glm::vec4(center + offset, 0.0f);
-                voxel.LTB.w = sdf(glm::vec3(voxel.LTB.x, voxel.LTB.y, voxel.LTB.z));
+                offset = Vector3(-halfCube, halfCube, -halfCube);
+                voxel.LTB = Vector4(center + offset, 0.0f);
+                voxel.LTB.w = sdf(Vector3(voxel.LTB.x, voxel.LTB.y, voxel.LTB.z));
                 // right-top-back
-                offset = glm::vec3(halfCube, halfCube, -halfCube);
-                voxel.RTB = glm::vec4(center + offset, 0.0f);
-                voxel.RTB.w = sdf(glm::vec3(voxel.RTB.x, voxel.RTB.y, voxel.RTB.z));
+                offset = Vector3(halfCube, halfCube, -halfCube);
+                voxel.RTB = Vector4(center + offset, 0.0f);
+                voxel.RTB.w = sdf(Vector3(voxel.RTB.x, voxel.RTB.y, voxel.RTB.z));
                 // right-top-front
-                offset = glm::vec3(halfCube, halfCube, halfCube);
-                voxel.RTF = glm::vec4(center + offset, 0.0f);
-                voxel.RTF.w = sdf(glm::vec3(voxel.RTF.x, voxel.RTF.y, voxel.RTF.z));
+                offset = Vector3(halfCube, halfCube, halfCube);
+                voxel.RTF = Vector4(center + offset, 0.0f);
+                voxel.RTF.w = sdf(Vector3(voxel.RTF.x, voxel.RTF.y, voxel.RTF.z));
                 // left-top-front
-                offset = glm::vec3(-halfCube, halfCube, halfCube);
-                voxel.LTF = glm::vec4(center + offset, 0.0f);
-                voxel.LTF.w = sdf(glm::vec3(voxel.LTF.x, voxel.LTF.y, voxel.LTF.z));
+                offset = Vector3(-halfCube, halfCube, halfCube);
+                voxel.LTF = Vector4(center + offset, 0.0f);
+                voxel.LTF.w = sdf(Vector3(voxel.LTF.x, voxel.LTF.y, voxel.LTF.z));
 
                 // given all calculated data, generate this voxel's vertices
-                std::vector<glm::vec3> vertList(12);
+                std::vector<Vector3> vertList(12);
 
                 int index = voxel.GetEdgeIndex();
                 // edge table indexing from: http://paulbourke.net/geometry/polygonise/
@@ -730,29 +745,29 @@ void Mesh::FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint
                 // generate triangle vertices
                 for (uint16_t i = 0; triTable[index][i] != -1; i += 3)
                 {
-                    glm::vec3 pos1 = vertList[triTable[index][i + 0]];
-                    glm::vec3 pos2 = vertList[triTable[index][i + 1]];
-                    glm::vec3 pos3 = vertList[triTable[index][i + 2]];
-                    Positions.push_back(pos1);
-                    Positions.push_back(pos2);
-                    Positions.push_back(pos3);
+                    Vector3 pos1 = vertList[triTable[index][i + 0]];
+                    Vector3 pos2 = vertList[triTable[index][i + 1]];
+                    Vector3 pos3 = vertList[triTable[index][i + 2]];
+                    m_vecPos.push_back(pos1);
+                    m_vecPos.push_back(pos2);
+                    m_vecPos.push_back(pos3);
 
-                    // calculate per-face normals from position data
-                    glm::vec3 normal = glm::cross(glm::normalize(pos2 - pos1), glm::normalize(pos3 - pos1));
-                    Normals.push_back(normal);
-                    Normals.push_back(normal);
-                    Normals.push_back(normal);
+                    // calculate per-face m_vecNormal from position data
+                    Vector3 normal = glm::cross(glm::normalize(pos2 - pos1), glm::normalize(pos3 - pos1));
+                    m_vecNormal.push_back(normal);
+                    m_vecNormal.push_back(normal);
+                    m_vecNormal.push_back(normal);
 
-                    // dirty local-space UV mapping approximation (to give some detail to objects)
-                    UV.push_back(glm::vec2(vertList[triTable[index][i + 0]].x, vertList[triTable[index][i + 0]].y));
-                    UV.push_back(glm::vec2(vertList[triTable[index][i + 1]].y, vertList[triTable[index][i + 1]].z));
-                    UV.push_back(glm::vec2(vertList[triTable[index][i + 2]].x, vertList[triTable[index][i + 2]].y) * 0.5f + glm::vec2(vertList[triTable[index][i + 2]].y, vertList[triTable[index][i + 2]].z) * 0.5f);
+                    // dirty local-space m_vecUV mapping approximation (to give some detail to objects)
+                    m_vecUV.push_back(Vector2(vertList[triTable[index][i + 0]].x, vertList[triTable[index][i + 0]].y));
+                    m_vecUV.push_back(Vector2(vertList[triTable[index][i + 1]].y, vertList[triTable[index][i + 1]].z));
+                    m_vecUV.push_back(Vector2(vertList[triTable[index][i + 2]].x, vertList[triTable[index][i + 2]].y) * 0.5f + Vector2(vertList[triTable[index][i + 2]].y, vertList[triTable[index][i + 2]].z) * 0.5f);
                 }
             }
         }
     }
 
-    Topology = TRIANGLES;
+    m_topology = TRIANGLES;
     Finalize();
 
     LOG_INFO("SDF mesh generation complete!");
@@ -770,10 +785,10 @@ void Mesh::UnBind()
 
 void Mesh::ComputeBoundingSphere()
 {
-    m_boundingSphere.position = glm::vec3(0.0f);
+    m_boundingSphere.position = Vector3(0.0f);
     m_boundingSphere.radius = 0.0f;
 
-    if (!Positions.empty())
+    if (!m_vecPos.empty())
     {
         float minX = std::numeric_limits<float>::max();
         float minY = std::numeric_limits<float>::max();
@@ -783,7 +798,7 @@ void Mesh::ComputeBoundingSphere()
         float maxY = std::numeric_limits<float>::min();
         float maxZ = std::numeric_limits<float>::min();
 
-        for (const auto& vertex : Positions)
+        for (const auto& vertex : m_vecPos)
         {
             minX = std::min(minX, vertex.x);
             minY = std::min(minY, vertex.y);
@@ -794,11 +809,11 @@ void Mesh::ComputeBoundingSphere()
             maxZ = std::max(maxZ, vertex.z);
         }
 
-        m_boundingSphere.position = glm::vec3{ minX + maxX, minY + maxY, minZ + maxZ } / 2.0f;
+        m_boundingSphere.position = Vector3{ minX + maxX, minY + maxY, minZ + maxZ } / 2.0f;
 
-        for (const auto& vertex : Positions)
+        for (const auto& vertex : m_vecPos)
         {
-            const auto& position = reinterpret_cast<const glm::vec3&>(vertex);
+            const auto& position = reinterpret_cast<const Vector3&>(vertex);
             m_boundingSphere.radius = std::max(m_boundingSphere.radius, glm::distance(m_boundingSphere.position, position));
         }
     }
@@ -807,65 +822,65 @@ void Mesh::ComputeBoundingSphere()
 // --------------------------------------------------------------------------------------------
 void Mesh::calculateNormals(bool smooth)
 {
-    // TODO(Joey): manually calculate the normals of each vertex
+    // TODO(Joey): manually calculate the m_vecNormal of each vertex
 }
 // --------------------------------------------------------------------------------------------
 void Mesh::calculateTangents()
 {
     // TODO(Joey): walk overall the vertices and calculate the tangent space vectors manually
     // TODO: based on topology, handle some of the winding orders differently.
-    //tangents.resize(positions.size());
-    //bitangents.resize(positions.size());
-    //for (unsigned int i = 0; i < indices.size() - 2; ++i)
+    //m_vecTangent.resize(m_vecPos.size());
+    //bim_vecTangent.resize(m_vecPos.size());
+    //for (unsigned int i = 0; i < m_vecIndices.size() - 2; ++i)
     //{
-    //    unsigned int index1 = indices[i + 0];
-    //    unsigned int index2 = indices[i + 1];
-    //    unsigned int index3 = indices[i + 2];
+    //    unsigned int index1 = m_vecIndices[i + 0];
+    //    unsigned int index2 = m_vecIndices[i + 1];
+    //    unsigned int index3 = m_vecIndices[i + 2];
     //    // TODO: do we take different winding order into account for triangle strip?
-    //    glm::vec3 pos1 = positions[index1];
-    //    glm::vec3 pos2 = positions[index2];
-    //    glm::vec3 pos3 = positions[index3];
+    //    Vector3 pos1 = m_vecPos[index1];
+    //    Vector3 pos2 = m_vecPos[index2];
+    //    Vector3 pos3 = m_vecPos[index3];
 
-    //    glm::vec2 uv1 = uv[index1];
-    //    glm::vec2 uv2 = uv[index2];
-    //    glm::vec2 uv3 = uv[index3];
+    //    Vector2 m_vecUV1 = m_vecUV[index1];
+    //    Vector2 m_vecUV2 = m_vecUV[index2];
+    //    Vector2 m_vecUV3 = m_vecUV[index3];
 
     //    // due to winding order getting changed each next triangle (as we render as triangle strip) we 
     //    // change the order of the cross product to account for winding order switch
-    //    glm::vec3 edge1 = pos2 - pos1;
-    //    glm::vec3 edge2 = pos3 - pos1;
-    //    glm::vec2 deltaUV1 = uv2 - uv1;
-    //    glm::vec2 deltaUV2 = uv3 - uv1;
+    //    Vector3 edge1 = pos2 - pos1;
+    //    Vector3 edge2 = pos3 - pos1;
+    //    Vector2 deltam_vecUV1 = m_vecUV2 - m_vecUV1;
+    //    Vector2 deltam_vecUV2 = m_vecUV3 - m_vecUV1;
 
-    //    GLfloat f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+    //    GLfloat f = 1.0f / (deltam_vecUV1.x * deltam_vecUV2.y - deltam_vecUV2.x * deltam_vecUV1.y);
 
-    //    glm::vec3 tangent, bitangent;
-    //    tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
-    //    tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
-    //    tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+    //    Vector3 tangent, bitangent;
+    //    tangent.x = f * (deltam_vecUV2.y * edge1.x - deltam_vecUV1.y * edge2.x);
+    //    tangent.y = f * (deltam_vecUV2.y * edge1.y - deltam_vecUV1.y * edge2.y);
+    //    tangent.z = f * (deltam_vecUV2.y * edge1.z - deltam_vecUV1.y * edge2.z);
     //    /*    if (i % 2 == 0)
     //    {*/
-    //    bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
-    //    bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
-    //    bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+    //    bitangent.x = f * (-deltam_vecUV2.x * edge1.x + deltam_vecUV1.x * edge2.x);
+    //    bitangent.y = f * (-deltam_vecUV2.x * edge1.y + deltam_vecUV1.x * edge2.y);
+    //    bitangent.z = f * (-deltam_vecUV2.x * edge1.z + deltam_vecUV1.x * edge2.z);
     //    //} 
     //    /*    else
     //    {
-    //    bitangent.x = f * (-deltaUV2.x * edge2.x + deltaUV1.x * edge1.x);
-    //    bitangent.y = f * (-deltaUV2.x * edge2.y + deltaUV1.x * edge1.y);
-    //    bitangent.z = f * (-deltaUV2.x * edge2.z + deltaUV1.x * edge1.z);
+    //    bitangent.x = f * (-deltam_vecUV2.x * edge2.x + deltam_vecUV1.x * edge1.x);
+    //    bitangent.y = f * (-deltam_vecUV2.x * edge2.y + deltam_vecUV1.x * edge1.y);
+    //    bitangent.z = f * (-deltam_vecUV2.x * edge2.z + deltam_vecUV1.x * edge1.z);
     //    }*/
-    //    tangents[index1] += tangent;
-    //    tangents[index2] += tangent;
-    //    tangents[index3] += tangent;
-    //    bitangents[index1] += bitangent;
-    //    bitangents[index2] += bitangent;
-    //    bitangents[index3] += bitangent;
+    //    m_vecTangent[index1] += tangent;
+    //    m_vecTangent[index2] += tangent;
+    //    m_vecTangent[index3] += tangent;
+    //    bim_vecTangent[index1] += bitangent;
+    //    bim_vecTangent[index2] += bitangent;
+    //    bim_vecTangent[index3] += bitangent;
     //}
-    //// normalize all tangents/bi-tangents
-    //for (int i = 0; i < tangents.size(); ++i)
+    //// normalize all m_vecTangent/bi-m_vecTangent
+    //for (int i = 0; i < m_vecTangent.size(); ++i)
     //{
-    //    tangents[i] = glm::normalize(tangents[i]);
-    //    bitangents[i] = glm::normalize(bitangents[i]);
+    //    m_vecTangent[i] = glm::normalize(m_vecTangent[i]);
+    //    bim_vecTangent[i] = glm::normalize(bim_vecTangent[i]);
     //}
 }

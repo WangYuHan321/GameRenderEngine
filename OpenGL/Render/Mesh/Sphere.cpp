@@ -13,9 +13,9 @@ Sphere::Sphere(unsigned int xSegments, unsigned int ySegments)
             float yPos = std::cos(ySegment * PI);
             float zPos = std::sin(xSegment * TAU) * std::sin(ySegment * PI);
 
-            Positions.push_back(glm::vec3(xPos, yPos, zPos));
-            UV.push_back(glm::vec2(xSegment, ySegment));
-            Normals.push_back(glm::vec3(xPos, yPos, zPos));
+            m_vecPos.push_back(glm::vec3(xPos, yPos, zPos));
+            m_vecUV.push_back(glm::vec2(xSegment, ySegment));
+            m_vecNormal.push_back(glm::vec3(xPos, yPos, zPos));
         }
     }
 
@@ -24,16 +24,16 @@ Sphere::Sphere(unsigned int xSegments, unsigned int ySegments)
     {
         for (int x = 0; x < xSegments; ++x)
         {
-            Indices.push_back((y + 1) * (xSegments + 1) + x);
-            Indices.push_back(y * (xSegments + 1) + x);
-            Indices.push_back(y * (xSegments + 1) + x + 1);
+            m_vecIndices.push_back((y + 1) * (xSegments + 1) + x);
+            m_vecIndices.push_back(y * (xSegments + 1) + x);
+            m_vecIndices.push_back(y * (xSegments + 1) + x + 1);
 
-            Indices.push_back((y + 1) * (xSegments + 1) + x);
-            Indices.push_back(y * (xSegments + 1) + x + 1);
-            Indices.push_back((y + 1) * (xSegments + 1) + x + 1);
+            m_vecIndices.push_back((y + 1) * (xSegments + 1) + x);
+            m_vecIndices.push_back(y * (xSegments + 1) + x + 1);
+            m_vecIndices.push_back((y + 1) * (xSegments + 1) + x + 1);
         }
     }
 
-    Topology = TRIANGLES;
+    m_topology = TRIANGLES;
     Finalize();
 }

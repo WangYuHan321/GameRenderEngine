@@ -51,40 +51,45 @@ public:
     unsigned int m_VBO;
     unsigned int m_EBO;
 public:
-    std::string Name = "";
+    std::string m_strName = "";
     
-    std::vector<glm::vec3> Positions;
-    std::vector<glm::vec2> UV;
-    std::vector<glm::vec3> Normals;
-    std::vector<glm::vec3> Tangents;
-    std::vector<glm::vec3> Bitangents;
+    std::vector<Vector3> m_vecPos;
+    std::vector<Vector2> m_vecUV;
+    std::vector<Vector3> m_vecNormal;
+    std::vector<Vector3> m_vecTangent;
+    std::vector<Vector3> m_vecBitangent;
     
-    std::vector<Vertex> Vertexs;
-    MaterialProperties materialProperty;
+    std::vector<Vertex> m_vecVertex;
+    MaterialProperties m_materialProperty;
 
-    uint32 MaterialIndex;
+    uint32 m_materialIndex;
     BoundingSphere m_boundingSphere;
 
-    TOPOLOGY Topology = TOPOLOGY::TRIANGLES;
-    std::vector<unsigned int> Indices;
-    std::map<string, Texture*> Textures;
+    TOPOLOGY m_topology = TOPOLOGY::TRIANGLES;
+    std::vector<uint32> m_vecIndices;
+    std::map<string, Texture*> m_vecTextures;
 
     Mesh();
     ~Mesh();
-    Mesh(std::vector<glm::vec3> positions, std::vector<unsigned int> indices);
-    Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<unsigned int> indices);
-    Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<glm::vec3> normals, std::vector<unsigned int> indices);
-    Mesh(std::vector<glm::vec3> positions, std::vector<glm::vec2> uv, std::vector<glm::vec3> normals, std::vector<glm::vec3> tangents, std::vector<glm::vec3> bitangents, std::vector<unsigned int> indices);
+    Mesh(std::vector<Vector3> positions, std::vector<uint32> indices);
+    Mesh(std::vector<Vector3> positions, std::vector<Vector2> uv, std::vector<uint32> indices);
+    Mesh(std::vector<Vector3> positions, std::vector<Vector2> uv, std::vector<Vector3> normals, std::vector<uint32> indices);
+    Mesh(std::vector<Vector3> positions, std::vector<Vector2> uv, std::vector<Vector3> normals, std::vector<Vector3> tangents, std::vector<Vector3> bitangents, std::vector<uint32> indices);
 
-    void SetPositions(std::vector<glm::vec3> positions);
-    void SetUVs(std::vector<glm::vec2> uv);
-    void SetNormals(std::vector<glm::vec3> normals);
-    void SetTangents(std::vector<glm::vec3> tangents, std::vector<glm::vec3> bitangents); // NOTE(Joey): you can only set both tangents and bitangents at the same time to prevent mismatches
+    void SetPositions(std::vector<Vector3> positions);
+    void SetUVs(std::vector<Vector2> uv);
+    void SetNormals(std::vector<Vector3> normals);
+    void SetTangents(std::vector<Vector3> tangents, std::vector<Vector3> bitangents); // NOTE(Joey): you can only set both tangents and bitangents at the same time to prevent mismatches
+
+    void SetName(string name);
+    void SetTopology(TOPOLOGY topology);
+    void SetMaterialIndex(uint32 materialIndex);
+    TOPOLOGY GetTopology() { return m_topology; }
 
     void Finalize(bool interleaved = true);
     void NewFinalize(bool interleaved = true);
 
-    void FromSDF(std::function<float(glm::vec3)>& sdf, float maxDistance, uint16_t gridResolution);
+    void FromSDF(std::function<float(Vector3)>& sdf, float maxDistance, uint16_t gridResolution);
 
     void Bind();
     void UnBind();

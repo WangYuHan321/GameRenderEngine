@@ -107,41 +107,41 @@ void AssimpParser::ExtraMaterialTexture(const aiScene* p_Scene, aiMesh* p_Mesh, 
     pMaterial->Get(AI_MATKEY_SHININESS, shininess);
     mat_properties.Shininess = shininess;
 
-    other.materialProperty = mat_properties;
+    other.m_materialProperty = mat_properties;
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_DIFFUSE); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_DIFFUSE, i, &str);
-        other.Textures["diffuse_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.m_vecTextures["diffuse_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_SPECULAR); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_SPECULAR, i, &str);
-        other.Textures["specular_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.m_vecTextures["specular_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_NORMALS); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_NORMALS, i, &str);
-        other.Textures["normal_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.m_vecTextures["normal_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_AMBIENT); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_AMBIENT, i, &str);
-        other.Textures["ambient_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.m_vecTextures["ambient_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 
     for (int i = 0; i < pMaterial->GetTextureCount(aiTextureType_HEIGHT); i++)
     {
         aiString str;
         pMaterial->GetTexture(aiTextureType_HEIGHT, i, &str);
-        other.Textures["height_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
+        other.m_vecTextures["height_" + std::to_string(i)] = TextureLoader::getInstance()->LoadTexture(curLoadDir + "/" + str.C_Str(), GL_TEXTURE_2D, GL_RGBA);
     }
 }
 
@@ -220,12 +220,15 @@ Mesh* AssimpParser::ProcessNewMesh(void* p_transform, aiMesh* p_mesh, const aiSc
             indices[f * 3 + i] = p_mesh->mFaces[f].mIndices[i];
         }
     }
+
+
+
     Mesh* mesh = new Mesh;
-    mesh->Vertexs = vertexs;
-    mesh->Indices = indices;
-    mesh->Topology = TRIANGLES;
-    mesh->MaterialIndex = p_materalIndex;
-    mesh->Name = p_mesh->mName.C_Str();
+    mesh->m_vecVertex = vertexs;
+    mesh->m_vecIndices = indices;
+    mesh->m_topology = TRIANGLES;
+    mesh->m_materialIndex = p_materalIndex;
+    mesh->m_strName = p_mesh->mName.C_Str();
 
     ExtraMaterialTexture(aScene, p_mesh, *mesh);
 
@@ -286,16 +289,11 @@ Mesh* AssimpParser::ProcessMesh(void* p_transform, aiMesh* p_mesh, const aiScene
         }
     }
 
-    Mesh* mesh = new Mesh;
-    mesh->Positions = positions;
-    mesh->UV = uv;
-    mesh->Normals = normals;
-    mesh->Tangents = tangents;
-    mesh->Bitangents = bitangents;
-    mesh->Indices = indices;
-    mesh->Topology = TRIANGLES;
-    mesh->MaterialIndex = p_materalIndex;
-    mesh->Name = p_mesh->mName.C_Str();
+    Mesh* mesh = new Mesh(positions, uv, normals, tangents, bitangents, indices);
+
+    mesh->SetName(p_mesh->mName.C_Str());
+    mesh->SetMaterialIndex(p_materalIndex);
+    mesh->SetTopology(TRIANGLES);
 
     ExtraMaterialTexture(p_scene, p_mesh, *mesh);
 

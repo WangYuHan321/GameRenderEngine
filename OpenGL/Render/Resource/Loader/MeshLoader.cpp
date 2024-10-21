@@ -133,13 +133,13 @@ Mesh* MeshLoader::parseMesh(aiMesh* aMesh, const aiScene* aScene, glm::vec3& out
     }
 
     Mesh* mesh = new Mesh;
-    mesh->Positions = positions;
-    mesh->UV = uv;
-    mesh->Normals = normals;
-    mesh->Tangents = tangents;
-    mesh->Bitangents = bitangents;
-    mesh->Indices = indices;
-    mesh->Topology = TRIANGLES;
+    mesh->m_vecPos = positions;
+    mesh->m_vecUV = uv;
+    mesh->m_vecNormal = normals;
+    mesh->m_vecTangent = tangents;
+    mesh->m_vecBitangent = bitangents;
+    mesh->m_vecIndices = indices;
+    mesh->m_topology = TRIANGLES;
     mesh->Finalize(true);
 
     out_Min.x = pMin.x;

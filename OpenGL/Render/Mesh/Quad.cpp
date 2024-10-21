@@ -2,40 +2,40 @@
 
 Quad::Quad()
 {
-    Positions =
+    m_vecPos =
     {
         { -1.0f,  1.0f, 0.0f, },
         { -1.0f, -1.0f, 0.0f, },
         {  1.0f,  1.0f, 0.0f, },
         {  1.0f, -1.0f, 0.0f, },
     };
-    UV = {
+    m_vecUV = {
     { 0.0f, 1.0f, },
     { 0.0f, 0.0f, },
     { 1.0f, 1.0f, },
     { 1.0f, 0.0f, },
          };
-    Topology = TRIANGLE_STRIP;
+    m_topology = TRIANGLE_STRIP;
 
     Finalize();
 }
 
 Quad::Quad(float width, float height)
 {
-    Positions =
+    m_vecPos =
     {
             { -width,  height, 0.0f, },
             { -width, -height, 0.0f, },
             {  width,  height, 0.0f, },
             {  width, -height, 0.0f, },
     };
-    UV = {
+    m_vecUV = {
         { 0.0f, 1.0f, },
         { 0.0f, 0.0f, },
         { 1.0f, 1.0f, },
         { 1.0f, 0.0f, },
     };
-    Topology = TRIANGLE_STRIP;
+    m_topology = TRIANGLE_STRIP;
 
     Finalize();
 }
