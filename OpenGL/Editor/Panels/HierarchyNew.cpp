@@ -66,7 +66,7 @@ void HierarchyNew::InitHierarcht(Actor& p_actor)
 	{
 		for (auto item : p_actor.GetComponent<CModelRenderer>()->GetModel()->GetMeshes())
 		{
-			m_sceneRoot->CreateWidget<TreeNode>(item->Name, true);
+			m_sceneRoot->CreateWidget<TreeNode>(item->m_strName, true);
 		}
 
 	}

@@ -303,28 +303,28 @@ void EditorRender::RenderActor(Actor& p_actor)
 			auto modelMatrix = CalculateCameraModelMatrix(p_actor);
 			modelMatrix = Scale(Vector3(0.05f)) * modelMatrix;
 
-			pMat.SetVector("u_Diffuse", Vector4(item->materialProperty.Diffuse.r, item->materialProperty.Diffuse.g, item->materialProperty.Diffuse.b, 1.0f));
-			pMat.SetVector("u_Specular", Vector3(item->materialProperty.Specular.r, item->materialProperty.Specular.g, item->materialProperty.Specular.b));
-			pMat.SetFloat("u_Shininess", item->materialProperty.Shininess);
+			pMat.SetVector("u_Diffuse", Vector4(item->m_materialProperty.Diffuse.r, item->m_materialProperty.Diffuse.g, item->m_materialProperty.Diffuse.b, 1.0f));
+			pMat.SetVector("u_Specular", Vector3(item->m_materialProperty.Specular.r, item->m_materialProperty.Specular.g, item->m_materialProperty.Specular.b));
+			pMat.SetFloat("u_Shininess", item->m_materialProperty.Shininess);
 
-			if (auto it = item->Textures.find("diffuse_0"); it != item->Textures.end())
+			if (auto it = item->m_vecTextures.find("diffuse_0"); it != item->m_vecTextures.end())
 			{
-				pMat.SetTextureValue("u_DiffuseMap", item->Textures["diffuse_0"]);
+				pMat.SetTextureValue("u_DiffuseMap", item->m_vecTextures["diffuse_0"]);
 			}
 
-			if (auto it = item->Textures.find("specular_0"); it != item->Textures.end())
+			if (auto it = item->m_vecTextures.find("specular_0"); it != item->m_vecTextures.end())
 			{
-				pMat.SetTextureValue("u_SpecularMap", item->Textures["specular_0"]);
+				pMat.SetTextureValue("u_SpecularMap", item->m_vecTextures["specular_0"]);
 			}
 
-			if (auto it = item->Textures.find("normal_0"); it != item->Textures.end())
+			if (auto it = item->m_vecTextures.find("normal_0"); it != item->m_vecTextures.end())
 			{
-				pMat.SetTextureValue("u_NormalMap", item->Textures["normal_0"]);
+				pMat.SetTextureValue("u_NormalMap", item->m_vecTextures["normal_0"]);
 			}
 
-			if (auto it = item->Textures.find("height_0"); it != item->Textures.end())
+			if (auto it = item->m_vecTextures.find("height_0"); it != item->m_vecTextures.end())
 			{
-				pMat.SetTextureValue("u_HeightMap", item->Textures["height_0"]);
+				pMat.SetTextureValue("u_HeightMap", item->m_vecTextures["height_0"]);
 			}
 			
 			pMaterial->FillWithMaterial(pMat);
@@ -486,7 +486,7 @@ void EditorRender::RenderGizmo(Vector3& p_pos, Quaternion& p_quat, EGizmoOperati
 	// OpenGL T * R * S
 	//DirectX S * R * T
 
-	Matrix4 model = p_quat.ToMatrix4() * Translate(p_pos);
+	Matrix4 model = Translate(p_pos) * p_quat.ToMatrix4();
 
 	Model* arrowModel = nullptr;
 

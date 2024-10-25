@@ -134,9 +134,9 @@ std::pair<ForwardRenderer::OpaqueDrawables, ForwardRenderer::TransparentDrawable
 					for (auto mesh : model->m_meshes)
 					{
 						Material* materialPtr = nullptr;
-						if (mesh->MaterialIndex < MAX_MATERIAL_COUNT)
+						if (mesh->m_materialIndex < MAX_MATERIAL_COUNT)
 						{
-							materialPtr = materialList.at(mesh->MaterialIndex);
+							materialPtr = materialList.at(mesh->m_materialIndex);
 							if (!materialPtr || !materialPtr->GetShader())
 							{
 								//如果没有就用默认的shader
@@ -253,23 +253,23 @@ void ForwardRenderer::Draw(Mesh& p_mesh, EPrimitiveMode model, uint32 drawNumObj
 	{
 		++m_frameInfo.batchCount;
 		m_frameInfo.instanceCount += drawNumObj;
-		m_frameInfo.polyCount += (p_mesh.Indices.size() / 3) * drawNumObj;
+		m_frameInfo.polyCount += (p_mesh.m_vecIndices.size() / 3) * drawNumObj;
 
 		p_mesh.Bind();
 
-		if (p_mesh.Indices.size() > 0)
+		if (p_mesh.m_vecIndices.size() > 0)
 		{
 			if (drawNumObj == 1)
-				glDrawElements(static_cast<GLenum>(model), p_mesh.Indices.size(), GL_UNSIGNED_INT, nullptr);
+				glDrawElements(static_cast<GLenum>(model), p_mesh.m_vecIndices.size(), GL_UNSIGNED_INT, nullptr);
 			else
-				glDrawElementsInstanced(static_cast<GLenum>(model), p_mesh.Indices.size(), GL_UNSIGNED_INT, nullptr, drawNumObj);
+				glDrawElementsInstanced(static_cast<GLenum>(model), p_mesh.m_vecIndices.size(), GL_UNSIGNED_INT, nullptr, drawNumObj);
 		}
 		else
 		{
 			if (drawNumObj == 1)
-				glDrawArrays(static_cast<GLenum>(model), 0, p_mesh.Positions.size());
+				glDrawArrays(static_cast<GLenum>(model), 0, p_mesh.m_vecPos.size());
 			else
-				glDrawArraysInstanced(static_cast<GLenum>(model), 0, p_mesh.Positions.size(), drawNumObj);
+				glDrawArraysInstanced(static_cast<GLenum>(model), 0, p_mesh.m_vecPos.size(), drawNumObj);
 		}
 		p_mesh.UnBind();
 	}

@@ -75,7 +75,7 @@ Model* FontManager::GenerateModelByFontData(std::vector<Font::Character*> charac
 	Model* pModel = new Model();
 
 	pMesh->Finalize();
-	pMesh->MaterialIndex = 0;
+	pMesh->m_materialIndex = 0;
 
 	std::vector<Mesh*> meshes;
 	meshes.emplace_back(pMesh);
