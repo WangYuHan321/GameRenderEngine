@@ -54,10 +54,6 @@ void GizmoBehaviour::ApplyTranslation(const Matrix4& p_viewMatrix, const Matrix4
 
 	Vector3 testt = GetRealDirection() * translationCoefficient;
 
-	Log("org mouse = %f %f \n", m_originMouse.x, m_originMouse.y);
-	Log("mouse = %f %f \n", m_currentMouse.x, m_currentMouse.y);
-	Log("xx = %f\n", m_distanceToActor);
-
 	m_target->m_transform.SetLocalPosition(originPosition + GetRealDirection(true) * translationCoefficient);
 }
 
