@@ -55,13 +55,11 @@ void GizmoBehaviour::SetCurrentMouse(Vector2 mouPos)
 {
 	if (m_firstMouse)
 	{
-		printf("first ");
 		m_currentMouse = m_originMouse = mouPos;
 		m_firstMouse = false;
 	}
 	else
 	{
-		printf("seconde ");
 		m_currentMouse = mouPos;
 	}
 }
