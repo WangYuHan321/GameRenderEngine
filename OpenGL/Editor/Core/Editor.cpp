@@ -47,7 +47,7 @@ void Editor::SetUpUI()
 	m_panelsMgr.CreatePanel<AssetView>(EDITOR_LANGUAGE(MENU_ASSETVIEW), false, settings);
 	m_panelsMgr.CreatePanel<AssetBrowser>(EDITOR_LANGUAGE(MENU_ASSET_BROWSER), true, settings, ConfigManager::getInstance()->GetEnginePath(),
 		ConfigManager::getInstance()->GetProjectPath() + "\\Asset", ConfigManager::getInstance()->GetProjectPath() + "\\Script");
-	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), true, settings);
+	m_panelsMgr.CreatePanel<MaterialEditor>(EDITOR_LANGUAGE(MENU_MATERIAL_EDITOR), false, settings);
 
 	m_canvas.MakeDockspace(true);
 	m_context.m_uiMgr->SetCanvas(m_canvas);

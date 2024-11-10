@@ -40,8 +40,9 @@ void ShadowMap::InitializeFrame(CDirectionalLight dirLight, const Camera* p_cam)
 
 	const auto _near = 0.1f;
 	const auto _far = 20.0f;
-	glm::mat4 lightProject = glm::perspective(p_cam->FOV, 1.0f, p_cam->Near, p_cam->Far);
-	glm::mat4 lightView = glm::lookAt(dirLight.GetPosition(), glm::vec3(0), glm::vec3(0.0, 1.0, 0.0));
+	glm::mat4 lightProject = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 120.0f);
+	glm::vec3 target = glm::vec3(-dirLight.GetPosition().x, 0, -dirLight.GetPosition().z);
+	glm::mat4 lightView = glm::lookAt(target - (dirLight.GetDirectional() * 50.0f), target,  glm::vec3(0,1,0) );
 	m_lightMatrix = lightProject * lightView;
 
 	//auto [t, r, s] = DecomposeTransform(m_lightMatrix);

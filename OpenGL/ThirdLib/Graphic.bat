@@ -8,4 +8,5 @@ SETX /M STB_IMAGE "%~dp0\stb_image"
 SETX /M THIRD_LUA "%~dp0\lua" 
 SETX /M IRRKLANG "%~dp0\irrklang"
 SETX /M VULKAN "%~dp0\vulkan"
+SETX /M GFSDK "%~dp0\gfsdk"
 pause

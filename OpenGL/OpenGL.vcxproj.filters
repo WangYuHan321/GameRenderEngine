@@ -801,6 +801,18 @@
     <ClInclude Include="RHI\RHIVulkan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdLib\gfsdk\GFSDK_FaceWorks.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\RenderRHI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\GraphicsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RHI\OpenGL\OpenGLGraphicsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
@@ -1368,6 +1380,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RHI\RHIVulkan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\RenderRHI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\GraphicsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RHI\OpenGL\OpenGLGraphicsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

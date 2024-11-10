@@ -173,7 +173,7 @@ void main()
 		int blueComponent = 0;
 		
 		if(gl_InstanceID == 1)
-			blueComponent = 255;
+			blueComponent = 252;
 	
 		if(gl_InstanceID == 2)
 			blueComponent = 253;	

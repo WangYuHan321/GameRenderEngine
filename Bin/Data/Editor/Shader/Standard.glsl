@@ -30,7 +30,7 @@ out VS_OUT
     vec4 lightDepthPos0;
 } vs_out;
 
-mat4 shadow_lightDepthMat0;
+uniform mat4 shadow_lightDepthMat0;
 
 void main()
 {
@@ -234,7 +234,7 @@ float getShadowVisibility(int i, vec3 rawNormal)
 	{
 		float curDepth = fs_in.lightDepthPos0.z;
 		if(texture(shadow_LightDepthMap0, fs_in.lightDepthPos0.xy).x > curDepth)
-			visibility = 0.0f;
+			visibility = 0.5f;
 	}
 	return visibility;
 }
@@ -280,7 +280,7 @@ void main()
                 case 4: lightSum += CalcAmbientSphereLight(ssbo_Lights[i]); break;
             }
         }
-        vec3 mapped = lightSum / (lightSum + vec3(1.0));		
+        vec3 mapped = lightSum / (lightSum + vec3(1.0)) * visible;	
         FRAGMENT_COLOR = vec4(mapped , g_DiffuseTexel.a);
     }
     else

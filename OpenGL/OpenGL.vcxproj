@@ -45,7 +45,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;$(FreeType);$(IRRKLANG)\include;$(VULKAN);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLEW)\include;$(GLM);$(STB_IMAGE)\include;$(ASSIMP)\include;$(GLFW)\include;$(THIRD_LUA)\include;$(FreeType);$(IRRKLANG)\include;$(VULKAN);$(GFSDK);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -63,8 +63,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;freetype.lib;irrKlang.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;$(FreeType)\lib;$(IRRKLANG)\lib;$(VK_SDK_PATH)\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glfw3-vc140.lib;assimp-vc142-mt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;glew32.lib;liblua53.lib;freetype.lib;irrKlang.lib;GFSDK_FaceWorks.win64.lib;%(AdditionalLibraryDirectories);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ASSIMP)\lib;$(GLFW)\lib\x64;$(GLEW)\lib\x64;$(THIRD_LUA)\lib;$(FreeType)\lib;$(IRRKLANG)\lib;$(VK_SDK_PATH)\Lib;$(GFSDK)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
@@ -73,7 +73,8 @@
 copy "$(GLEW)\bin" "$(GLEW)\..\..\..\Bin"
 copy "$(FreeType)\bin" "$(FreeType)\..\..\..\Bin"
 copy "$(IRRKLANG)\bin" "$(IRRKLANG)\..\..\..\Bin"
-copy "$(VK_SDK_PATH)\Bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
+copy "$(VK_SDK_PATH)\Bin" "$(IRRKLANG)\..\..\..\Bin"
+copy "$(GFSDK)\Bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -91,6 +92,9 @@ copy "$(VK_SDK_PATH)\Bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     <ClInclude Include="File\FileMonitor.h" />
     <ClInclude Include="File\LuaFileChangeHandler.h" />
     <ClInclude Include="Core\Scripting\LuaActorBinder.h" />
+    <ClInclude Include="RHI\OpenGL\OpenGLGraphicsManager.h" />
+    <ClInclude Include="RHI\GraphicsManager.h" />
+    <ClInclude Include="RHI\RenderRHI.h" />
     <ClInclude Include="RHI\OpenGL\OpenGLSatateManager.h" />
     <ClInclude Include="RHI\OpenGL\OpenGLPipelineState.h" />
     <ClInclude Include="RHI\PipelineStateManager.h" />
@@ -169,6 +173,7 @@ copy "$(VK_SDK_PATH)\Bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     <ClInclude Include="ThirdLib\freetype\freetype\tttables.h" />
     <ClInclude Include="ThirdLib\freetype\freetype\tttags.h" />
     <ClInclude Include="ThirdLib\freetype\freetype\ttunpat.h" />
+    <ClInclude Include="ThirdLib\gfsdk\GFSDK_FaceWorks.h" />
     <ClInclude Include="Thread\ThreadPool.h" />
     <ClInclude Include="Editor\Panels\TimeLine.h" />
     <ClInclude Include="UI\Plugin\TexturePreview.h" />
@@ -353,6 +358,9 @@ copy "$(VK_SDK_PATH)\Bin" "$(IRRKLANG)\..\..\..\Bin"</Command>
     <ClCompile Include="File\FileMonitor.cpp" />
     <ClCompile Include="File\LuaFileChangeHandler.cpp" />
     <ClCompile Include="Core\Scripting\LuaActorBinder.cpp" />
+    <ClCompile Include="RHI\OpenGL\OpenGLGraphicsManager.cpp" />
+    <ClCompile Include="RHI\GraphicsManager.cpp" />
+    <ClCompile Include="RHI\RenderRHI.cpp" />
     <ClCompile Include="RHI\OpenGL\OpenGLSatateManager.cpp" />
     <ClCompile Include="RHI\OpenGL\OpenGLPipelineState.cpp" />
     <ClCompile Include="RHI\PipelineStateManager.cpp" />

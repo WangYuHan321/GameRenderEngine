@@ -61,21 +61,22 @@ struct Quaternion {
 
 	Quaternion(Vector3 p_euler)
 	{
-		float yaw = TO_RADIANS(p_euler.z) * 0.5f;
-		float pitch = TO_RADIANS(p_euler.y) * 0.5f;
-		float roll = TO_RADIANS(p_euler.x) * 0.5f;
+		m_quat = glm::quat( Vector3(glm::radians(p_euler.x), glm::radians(p_euler.y), glm::radians(p_euler.z)) );
+		//float yaw = TO_RADIANS(p_euler.z) * 0.5f;
+		//float pitch = TO_RADIANS(p_euler.y) * 0.5f;
+		//float roll = TO_RADIANS(p_euler.x) * 0.5f;
 
-		float cy = cos(yaw);
-		float sy = sin(yaw);
-		float cp = cos(pitch);
-		float sp = sin(pitch);
-		float cr = cos(roll);
-		float sr = sin(roll);
+		//float cy = cos(yaw);
+		//float sy = sin(yaw);
+		//float cp = cos(pitch);
+		//float sp = sin(pitch);
+		//float cr = cos(roll);
+		//float sr = sin(roll);
 
-		m_quat.x = sr * cp * cy - cr * sp * sy;
-		m_quat.y = cr * sp * cy + sr * cp * sy;
-		m_quat.z = cr * cp * sy - sr * sp * cy;
-		m_quat.w = cr * cp * cy + sr * sp * sy;
+		//m_quat.x = sr * cp * cy - cr * sp * sy;
+		//m_quat.y = cr * sp * cy + sr * cp * sy;
+		//m_quat.z = cr * cp * sy - sr * sp * cy;
+		//m_quat.w = cr * cp * cy + sr * sp * sy;
 	}
 	
 	Quaternion(glm::quat _quat)
@@ -252,6 +253,21 @@ struct FTransform
 		return m_localRot;
 	}
 
+	Vector3 GetLocalForward()
+	{
+		return m_localRot * Vector3(0, 0, 1);
+	}
+
+	Vector3 GetLocalUp()
+	{
+		return m_localRot * Vector3(0, 1, 0);
+	}
+
+	Vector3 GetLocalRight()
+	{
+		return m_localRot * Vector3(1, 0, 0);
+	}
+
 	const Vector3& GetWorldPosition() const
 	{
 		return m_worldPosition;
@@ -265,6 +281,21 @@ struct FTransform
 	const Quaternion& GetWorldRotation() const
 	{
 		return m_worldRot;
+	}
+
+	Vector3 GetWorldForward()
+	{
+		return m_worldRot * Vector3(0, 0, 1);
+	}
+
+	Vector3 GetWorldUp() 
+	{
+		return m_worldRot * Vector3(0, 1, 0);
+	}
+
+	Vector3 GetWorldRight() 
+	{
+		return m_worldRot * Vector3(1, 0, 0);
 	}
 
 	const Matrix4& GetLocalMatrix() const

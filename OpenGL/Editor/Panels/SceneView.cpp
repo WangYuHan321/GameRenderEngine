@@ -159,6 +159,11 @@ void SceneView::HandleActorPicking()
 		m_highlightedActor = {};
 		m_highlightedGizmoDirection = {};
 
+		if (EDITOR_CONTEXT(m_inputMgr)->IsMouseButtonReleased(EMouseButton::MOUSE_BUTTON_LEFT))
+		{
+			m_gizmoOperations.StopPicking();
+		}
+
 		if (!m_cameraController.IsRightMousePressed())
 		{
 			auto& inputManager = *EDITOR_CONTEXT(m_inputMgr);
@@ -176,23 +181,50 @@ void SceneView::HandleActorPicking()
 			uint32_t actorID = (0 << 24) | (pixel[2] << 16) | (pixel[1] << 8) | (pixel[0] << 0);
 			auto actorUnderMouse = EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene()->FindActorByID(actorID);
 
-			if(actorUnderMouse != nullptr)
-				m_highlightedActor = std::ref(*actorUnderMouse);
-		
-			/* Click */
-			if (EDITOR_CONTEXT(m_inputMgr)->IsMouseButtonPressed(EMouseButton::MOUSE_BUTTON_LEFT))
+			auto direction = m_gizmoOperations.IsPicking() ? m_gizmoOperations.GetDirection() :
+				EDITOR_EXEC(IsAnyActorSelected()) && pixel[0] == 255 && pixel[1] == 255 && pixel[2] >= 252 && pixel[2] <= 254 ? 
+				static_cast<GizmoBehaviour::EDirection>(pixel[2] - 252) : std::optional<GizmoBehaviour::EDirection>{};
+
+			if (direction.has_value())
 			{
-				if (actorUnderMouse)
+				m_highlightedGizmoDirection = direction;
+			}
+
+			if (actorUnderMouse != nullptr)
+				m_highlightedActor = std::ref(*actorUnderMouse);
+
+			/* Click */
+			if (EDITOR_CONTEXT(m_inputMgr)->IsMouseButtonPressed(EMouseButton::MOUSE_BUTTON_LEFT) && !m_cameraController.IsRightMousePressed())
+			{
+				if (direction.has_value())
 				{
-					EDITOR_EXEC(SelectActor(*actorUnderMouse));
+					m_gizmoOperations.StartPicking(EDITOR_EXEC(GetSelectedActor()), m_camPos, m_currentOperation, direction.value());
 				}
 				else
 				{
-					EDITOR_EXEC(UnselectActor());
+					if (actorUnderMouse)
+					{
+						EDITOR_EXEC(SelectActor(*actorUnderMouse));
+					}
+					else
+					{
+						EDITOR_EXEC(UnselectActor());
+					}
 				}
-
 			}
 		}
+	}
+	if (m_gizmoOperations.IsPicking())
+	{
+		auto mousePosition = EDITOR_CONTEXT(m_inputMgr)->GetMousePosition();
+
+		auto [winWidth, winHeight] = GetSafeSize();
+
+		Vector2 mousePos = Vector2(mousePosition.first, mousePosition.second);
+		Vector2 winSize = Vector2(winWidth, winHeight);
+
+		m_gizmoOperations.SetCurrentMouse(mousePos);
+		m_gizmoOperations.ApplyOperation(m_camera.View, m_camera.Projection, winSize);
 	}
 }
 
