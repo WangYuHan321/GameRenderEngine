@@ -162,33 +162,32 @@ void SceneView::HandleActorPicking()
 		if (EDITOR_CONTEXT(m_inputMgr)->IsMouseButtonReleased(EMouseButton::MOUSE_BUTTON_LEFT))
 		{
 			m_gizmoOperations.StopPicking();
+			m_isFirstRight = true;
 		}
+
+		auto& inputManager = *EDITOR_CONTEXT(m_inputMgr);
+
+		auto [mouseX, mouseY] = inputManager.GetMousePosition();
+		mouseX -= m_position.x;
+		mouseY -= m_position.y;
+		mouseY = GetSafeSize().y - mouseY + 40;
+
+		m_actorPickRenderTarget->Bind();
+		uint8_t pixel[3];
+		dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->ReadPixels(static_cast<int>(mouseX), static_cast<int>(mouseY), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
+		m_actorPickRenderTarget->Unbind();
+
+		uint32_t actorID = (0 << 24) | (pixel[2] << 16) | (pixel[1] << 8) | (pixel[0] << 0);
+		auto actorUnderMouse = EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene()->FindActorByID(actorID);
+
+		auto direction = m_gizmoOperations.IsPicking() ? m_gizmoOperations.GetDirection() :
+			EDITOR_EXEC(IsAnyActorSelected()) && pixel[0] == 255 && pixel[1] == 255 && pixel[2] >= 252 && pixel[2] <= 254 ?
+			static_cast<GizmoBehaviour::EDirection>(pixel[2] - 252) : std::optional<GizmoBehaviour::EDirection>{};
 
 		if (!m_cameraController.IsRightMousePressed())
 		{
-			auto& inputManager = *EDITOR_CONTEXT(m_inputMgr);
-
-			auto [mouseX, mouseY] = inputManager.GetMousePosition();
-			mouseX -= m_position.x;
-			mouseY -= m_position.y;
-			mouseY = GetSafeSize().y - mouseY + 40;
-
-			m_actorPickRenderTarget->Bind();
-			uint8_t pixel[3];
-			dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->ReadPixels(static_cast<int>(mouseX), static_cast<int>(mouseY), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
-			m_actorPickRenderTarget->Unbind();
-
-			uint32_t actorID = (0 << 24) | (pixel[2] << 16) | (pixel[1] << 8) | (pixel[0] << 0);
-			auto actorUnderMouse = EDITOR_CONTEXT(m_sceneMgr)->GetActiveScene()->FindActorByID(actorID);
-
-			auto direction = m_gizmoOperations.IsPicking() ? m_gizmoOperations.GetDirection() :
-				EDITOR_EXEC(IsAnyActorSelected()) && pixel[0] == 255 && pixel[1] == 255 && pixel[2] >= 252 && pixel[2] <= 254 ? 
-				static_cast<GizmoBehaviour::EDirection>(pixel[2] - 252) : std::optional<GizmoBehaviour::EDirection>{};
-
 			if (direction.has_value())
-			{
 				m_highlightedGizmoDirection = direction;
-			}
 
 			if (actorUnderMouse != nullptr)
 				m_highlightedActor = std::ref(*actorUnderMouse);
@@ -198,7 +197,24 @@ void SceneView::HandleActorPicking()
 			{
 				if (direction.has_value())
 				{
-					m_gizmoOperations.StartPicking(EDITOR_EXEC(GetSelectedActor()), m_camPos, m_currentOperation, direction.value());
+					if(m_isFirstRight)
+						m_gizmoOperations.StartPicking(EDITOR_EXEC(GetSelectedActor()), m_camPos, m_currentOperation, direction.value());
+					else
+					{
+						if (m_gizmoOperations.IsPicking())
+						{
+							auto mousePosition = EDITOR_CONTEXT(m_inputMgr)->GetMousePosition();
+
+							auto [winWidth, winHeight] = GetSafeSize();
+
+							Vector2 mousePos = Vector2(mousePosition.first, mousePosition.second);
+							Vector2 winSize = Vector2(winWidth, winHeight);
+
+							m_gizmoOperations.SetCurrentMouse(mousePos);
+							m_gizmoOperations.ApplyOperation(m_camera.View, m_camera.Projection, winSize);
+						}
+					}
+					m_isFirstRight = false;
 				}
 				else
 				{
@@ -214,18 +230,7 @@ void SceneView::HandleActorPicking()
 			}
 		}
 	}
-	if (m_gizmoOperations.IsPicking())
-	{
-		auto mousePosition = EDITOR_CONTEXT(m_inputMgr)->GetMousePosition();
 
-		auto [winWidth, winHeight] = GetSafeSize();
-
-		Vector2 mousePos = Vector2(mousePosition.first, mousePosition.second);
-		Vector2 winSize = Vector2(winWidth, winHeight);
-
-		m_gizmoOperations.SetCurrentMouse(mousePos);
-		m_gizmoOperations.ApplyOperation(m_camera.View, m_camera.Projection, winSize);
-	}
 }
 
 

@@ -25,9 +25,11 @@ public:
 
 	bool IsPicking() const;
 
+	Vector2 GetScreenDirection(const Matrix4& p_viewMatrix, const Matrix4& p_projectionMatrix, const Vector2& p_viewSize);
+
 	void ApplyTranslation(const Matrix4& p_viewMatrix, const Matrix4& p_projectionMatrix, const Vector2& p_viewSize);
 
-	Vector3 GetRealDirection(bool p_relative) ;
+	Vector3 GetRealDirection(bool p_relative = true);
 
 	void StartPicking(Actor& p_target, Vector3& p_cameraPos, EGizmoOperation p_operation, EDirection direction);
 

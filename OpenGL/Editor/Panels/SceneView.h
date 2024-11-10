@@ -33,6 +33,7 @@ private:
 	EGizmoOperation m_currentOperation = EGizmoOperation::TRANSLATE;
 
 	GizmoBehaviour m_gizmoOperations;
+	bool m_isFirstRight = true;
 	std::optional<std::reference_wrapper<Actor>> m_highlightedActor;
 	std::optional<GizmoBehaviour::EDirection> m_highlightedGizmoDirection;
 };
