@@ -232,13 +232,15 @@ float getShadowVisibility(int i, vec3 rawNormal)
 	// Check first the highest resolution (but smaller) map
     vec3 ndcXYZ = fs_in.lightDepthPos0.xyz / fs_in.lightDepthPos0.w;
     vec2 uvCoord = ndcXYZ.xy;
-    uvCoord = uvCoord + vec2(1, 1) - vec2(0.5, 0.5);
+	uvCoord.x = (uvCoord.x + 1) * 0.5;
+    uvCoord.y = (uvCoord.y + 1) * 0.5;
+	ndcXYZ.z = (ndcXYZ.z + 1) * 0.5;
 
 	if(whithinRange(uvCoord))
 	{
-		float curDepth = fs_in.lightDepthPos0.z;
+		float curDepth = ndcXYZ.z;
 		if(texture(shadow_LightDepthMap0, uvCoord).x < curDepth)
-			visibility = 0.5f;
+			visibility = texture(shadow_LightDepthMap0, uvCoord).x;
 	}
 	return visibility;
 }
