@@ -40,23 +40,10 @@ void ShadowMap::InitializeFrame(CDirectionalLight dirLight, const Camera* p_cam)
 
 	const auto _near = 0.1f;
 	const auto _far = 20.0f;
-	glm::mat4 lightProject = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 120.0f);
+	glm::mat4 lightProject = glm::ortho(-250.0f, 250.0f, -250.0f, 250.0f, 0.1f, 500.0f);
 	glm::vec3 target = glm::vec3(-dirLight.GetPosition().x, 0, -dirLight.GetPosition().z);
-	glm::mat4 lightView = glm::lookAt(target - (dirLight.GetDirectional() * 50.0f), target,  glm::vec3(0,1,0) );
+	glm::mat4 lightView = glm::lookAt(target - (dirLight.GetDirectional() * 100.0f), target,  glm::vec3(0,1,0) );
 	m_lightMatrix = lightProject * lightView;
-
-	//auto [t, r, s] = DecomposeTransform(m_lightMatrix);
-
-	//const auto right = 1.0 * _size;
-	//const auto left = -right;
-	//const auto top = _size;
-	//const auto bottom = -top;
-
-	//const auto a = r * Vector3 { left, top, 0 };
-	//const auto b = r * Vector3 { right, top, 0 };
-	//const auto c = r * Vector3 { left, bottom, 0 };
-	//const auto d = r * Vector3 { right, bottom, 0 };
-	//m_debugOrtho = { dirLight.GetPosition(), dirLight.GetDirectional(),  _near, _far, a, b, c, d };
 }
 
 void ShadowMap::SetShadowMap(Material* p_material)

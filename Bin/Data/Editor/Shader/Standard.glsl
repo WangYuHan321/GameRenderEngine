@@ -227,7 +227,9 @@ bool whithinRange(vec2 texCoord)
 float getShadowVisibility(int i, vec3 rawNormal)
 {
     vec3 lightDir = -ssbo_Lights[i][1].rgb;
-	float visibility = 1.0;
+    float visible = 1.0;
+	float shadow = 1.0;
+    float bias = 0.01;
 
 	// Check first the highest resolution (but smaller) map
     vec3 ndcXYZ = fs_in.lightDepthPos0.xyz / fs_in.lightDepthPos0.w;
@@ -238,11 +240,20 @@ float getShadowVisibility(int i, vec3 rawNormal)
 
 	if(whithinRange(uvCoord))
 	{
-		float curDepth = ndcXYZ.z;
-		if(texture(shadow_LightDepthMap0, uvCoord).x < curDepth)
-			visibility = texture(shadow_LightDepthMap0, uvCoord).x;
+        float curDepth = ndcXYZ.z;
+        vec2 texelSize = 1.0 / textureSize(shadow_LightDepthMap0, 0);
+        for(int x = -1; x <= 1; ++x)
+        {
+            for(int y = -1; y <= 1; ++y)
+            {
+                float pcfDepth = texture(shadow_LightDepthMap0, uvCoord).r; 
+                shadow += curDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+            }    
+        }
+        shadow /= 9.0;
+        visible = 1.0 - shadow;
 	}
-	return visibility;
+	return visible;
 }
 
 void main()
@@ -279,14 +290,14 @@ void main()
             visible = getShadowVisibility(i, fs_in.Normal);
             switch(int(ssbo_Lights[i][3][0]))
             {
-                case 0: lightSum += CalcPointLight(ssbo_Lights[i]);         break;
-                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]);   break;
-                case 2: lightSum += CalcSpotLight(ssbo_Lights[i]);          break;
+                case 0: lightSum += CalcPointLight(ssbo_Lights[i]) * visible;         break;
+                case 1: lightSum += CalcDirectionalLight(ssbo_Lights[i]) * visible;   break;
+                case 2: lightSum += CalcSpotLight(ssbo_Lights[i]) * visible;          break;
                 case 3: lightSum += CalcAmbientBoxLight(ssbo_Lights[i]);    break;
                 case 4: lightSum += CalcAmbientSphereLight(ssbo_Lights[i]); break;
             }
         }
-        vec3 mapped = lightSum / (lightSum + vec3(1.0)) * visible;	
+        vec3 mapped = lightSum / (lightSum + vec3(1.0));	
         FRAGMENT_COLOR = vec4(mapped , g_DiffuseTexel.a);
     }
     else
