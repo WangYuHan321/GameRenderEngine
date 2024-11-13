@@ -13,7 +13,6 @@ void Animation::GetAnimation(aiAnimation* ai_anim, const aiNode* ai_root_node, f
 	uint32 size = nameBoneMap.size();
 	std::vector<aiNodeAnim*> channels;
 
-	float duration = 0.0f;
 	for (auto& name_bone : nameBoneMap)
 	{
 		const aiNode* node = ai_root_node->FindNode(name_bone.first.c_str());
@@ -26,5 +25,26 @@ void Animation::GetAnimation(aiAnimation* ai_anim, const aiNode* ai_root_node, f
 			duration = std::max(duration, time_end);
 		}
 	}
+	tickTime = ai_anim->mTicksPerSecond;
 
+	duration = ai_anim->mDuration;
+}
+
+float Animation::GetTickDeltaTime()const
+{
+	return tickTime;
+}
+
+float Animation::GetDuration()const
+{
+	return duration;
+}
+
+Bone* Animation::GetBoneByName(std::string name)
+{
+	if (nameBoneMap.find(name) != nameBoneMap.end())
+	{
+		return nameBoneMap[name];
+	}
+	return nullptr;
 }

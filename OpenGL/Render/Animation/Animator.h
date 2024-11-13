@@ -22,6 +22,8 @@ private:
 	float factor{ 1.0f };
 	float fps{ 24.0f };
 	float direction{ 1.0f };
+	Animation* m_animation;
+
 	std::vector<Matrix4> finalBoneMatrix;
 
 };
