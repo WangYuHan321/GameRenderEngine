@@ -9,9 +9,9 @@ unsigned int MAX_BONE_NUM = 128;
 class Animator
 {
 public:
-	Animator();
+	Animator(Actor& p_actor);
 
-	void CalculateBoneTransform(Actor& actor, Animation& animation, Matrix4& parentTransform);
+	//void CalculateBoneTransform(Actor& actor, Animation& animation, Matrix4& parentTransform);
 	void Update(float dt);
 
 private:
@@ -23,6 +23,8 @@ private:
 	float fps{ 24.0f };
 	float direction{ 1.0f };
 	Animation* m_animation;
+
+	Actor* m_actor;
 
 	std::vector<Matrix4> finalBoneMatrix;
 

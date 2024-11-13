@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/matrix4x4.h>
 #include <assimp/postprocess.h>
+#include <Assimp/assimp_glm_helpers.h>
 #include <filesystem>
 #include "../../Animation/Animation.h"
 #include "../../Render/Animation/Bone.h"
@@ -25,6 +26,27 @@ bool AssimpParser::LoadModel(const std::string& p_fileName, std::vector<Mesh*>& 
 	ProcessNode(&identity, scene->mRootNode, scene, p_meshes);
 
 	return true;
+}
+
+bool AssimpParser::LoadModelEx(const std::string& p_fileName, Model& p_model, EModelParserFlags p_flags)
+{
+    std::vector<Mesh*>& p_meshes = p_model.m_meshes;
+    std::vector<std::string>& p_materials = p_model.m_materialNames;
+
+    Assimp::Importer import;
+    SetCurDirectory(p_fileName);
+    const aiScene* scene = import.ReadFile(p_fileName, static_cast<unsigned int>(p_flags));
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+        return false;
+
+    ProcessMaterials(scene, p_materials);
+
+    aiMatrix4x4 identity;
+
+    ProcessNodeEx(&identity, scene->mRootNode, scene, p_model);
+
+    return true;
 }
 
 bool AssimpParser::LoadAnim(const std::string& p_fileName, std::vector<Animation*>& p_anim, EModelParserFlags p_flags)
@@ -145,6 +167,56 @@ void AssimpParser::ExtraMaterialTexture(const aiScene* p_Scene, aiMesh* p_Mesh, 
     }
 }
 
+void SetVertexBoneData(Vertex& vertex, int boneID, float weight)
+{
+    for (int i = 0; i < MAX_BONE_INFLUENCE; ++i)
+    {
+        if (vertex.BoneIDs[i] < 0)
+        {
+            vertex.Weights[i] = weight;
+            vertex.BoneIDs[i] = boneID;
+            break;
+        }
+    }
+}
+
+void AssimpParser::ExtraMeshBoneInfo(std::vector<Vertex>& vertices, aiMesh* p_Mesh, Model& p_model)
+{
+    auto& boneInfoMap = p_model.m_BoneInfoMap;
+    int& boneCount = p_model.m_BoneCounter;
+
+    for (int boneIndex = 0; boneIndex < p_Mesh->mNumBones; ++boneIndex)
+    {
+        int boneID = -1;
+        std::string boneName = p_Mesh->mBones[boneIndex]->mName.C_Str();
+        if (p_model.m_BoneInfoMap.find(boneName) == p_model.m_BoneInfoMap.end())
+        {
+            BoneInfo newBoneInfo;
+            newBoneInfo.id = boneCount;
+            newBoneInfo.offset = AssimpGLMHelpers::ConvertMatrixToGLMFormat(p_Mesh->mBones[boneIndex]->mOffsetMatrix);
+            boneInfoMap[boneName] = newBoneInfo;
+            boneID = boneCount;
+            boneCount++;
+        }
+        else
+        {
+            boneID = boneInfoMap[boneName].id;
+        }
+        assert(boneID != -1);
+        auto weights = p_Mesh->mBones[boneIndex]->mWeights;
+        int numWeights = p_Mesh->mBones[boneIndex]->mNumWeights;
+
+        for (int weightIndex = 0; weightIndex < numWeights; ++weightIndex)
+        {
+            int vertexId = weights[weightIndex].mVertexId;
+            float weight = weights[weightIndex].mWeight;
+            assert(vertexId <= vertices.size());
+            SetVertexBoneData(vertices[vertexId], boneID, weight);
+            //printf("bone name= %s bone ID = %d weight = %f \n", boneName.c_str(), boneID, weight);
+        }
+    }
+}
+
 void AssimpParser::ProcessNode(void* p_transform, aiNode* p_node, const aiScene* p_scene, std::vector<Mesh*>& p_meshes)
 {
 	aiMatrix4x4 nodeTransformation = *reinterpret_cast<aiMatrix4x4*>(p_transform) * p_node->mTransformation;
@@ -161,6 +233,26 @@ void AssimpParser::ProcessNode(void* p_transform, aiNode* p_node, const aiScene*
 	{
 		ProcessNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
 	}
+}
+
+void AssimpParser::ProcessNodeEx(void* p_transform, struct aiNode* p_node, const struct aiScene* p_scene, Model& p_model)
+{
+    std::vector<Mesh*>& p_meshes = p_model.m_meshes;
+
+    aiMatrix4x4 nodeTransformation = *reinterpret_cast<aiMatrix4x4*>(p_transform) * p_node->mTransformation;
+
+    // Process all the node's meshes (if any)
+    for (uint32_t i = 0; i < p_node->mNumMeshes; ++i)
+    {
+        aiMesh* mesh = p_scene->mMeshes[p_node->mMeshes[i]];
+        p_meshes.push_back(ProcessMeshEx(&nodeTransformation, p_model, mesh, p_scene, mesh->mMaterialIndex)); // The model will handle mesh destruction
+    }
+
+    // Then do the same for each of its children
+    for (uint32_t i = 0; i < p_node->mNumChildren; ++i)
+    {
+        ProcessNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
+    }
 }
 
 void AssimpParser::ProcessNewNode(void* p_transform, aiNode* p_node, const aiScene* p_scene, std::vector<Mesh*>& p_meshes)
@@ -296,6 +388,72 @@ Mesh* AssimpParser::ProcessMesh(void* p_transform, aiMesh* p_mesh, const aiScene
     mesh->SetTopology(TRIANGLES);
 
     ExtraMaterialTexture(p_scene, p_mesh, *mesh);
+
+    mesh->Finalize(true);
+
+    return mesh;
+}
+
+Mesh* AssimpParser::ProcessMeshEx(void* p_transform, Model& p_model, aiMesh* p_mesh, const aiScene* p_scene, uint32 p_materalIndex)
+{
+    aiMatrix4x4 meshTransformation = *reinterpret_cast<aiMatrix4x4*>(p_transform);
+
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec2> uv;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec3> tangents;
+    std::vector<glm::vec3> bitangents;
+    std::vector<unsigned int> indices;
+
+    positions.resize(p_mesh->mNumVertices);
+    normals.resize(p_mesh->mNumVertices);
+    if (p_mesh->mNumUVComponents[0] > 0)
+    {
+        uv.resize(p_mesh->mNumVertices);
+        tangents.resize(p_mesh->mNumVertices);
+        bitangents.resize(p_mesh->mNumVertices);
+    }
+
+    indices.resize(p_mesh->mNumFaces * 3);
+
+
+    for (unsigned int i = 0; i < p_mesh->mNumVertices; ++i)
+    {
+        aiVector3D _position = meshTransformation * p_mesh->mVertices[i];
+        aiVector3D _normal = meshTransformation * (p_mesh->mNormals ? p_mesh->mNormals[i] : aiVector3D(0.0f, 0.0f, 0.0f));
+        aiVector3D _texCoords = p_mesh->mTextureCoords[0] ? p_mesh->mTextureCoords[0][i] : aiVector3D(0.0f, 0.0f, 0.0f);
+        aiVector3D _tangent = p_mesh->mTangents ? meshTransformation * p_mesh->mTangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+        aiVector3D _bitangent = p_mesh->mBitangents ? meshTransformation * p_mesh->mBitangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
+
+        positions[i] = glm::vec3(_position.x, _position.y, _position.z);
+        normals[i] = glm::vec3(_normal.x, _normal.y, _normal.z);
+        if (p_mesh->mTextureCoords[0])
+        {
+            uv[i] = glm::vec2(_texCoords.x, _texCoords.y);
+
+        }
+        if (p_mesh->mTangents)
+        {
+            tangents[i] = glm::vec3(_tangent.x, _tangent.y, _tangent.z);
+            bitangents[i] = glm::vec3(_bitangent.x, _bitangent.y, _bitangent.z);
+        }
+    }
+    for (unsigned int f = 0; f < p_mesh->mNumFaces; ++f)
+    {
+        for (unsigned int i = 0; i < 3; ++i)
+        {
+            indices[f * 3 + i] = p_mesh->mFaces[f].mIndices[i];
+        }
+    }
+
+    Mesh* mesh = new Mesh(positions, uv, normals, tangents, bitangents, indices);
+
+    mesh->SetName(p_mesh->mName.C_Str());
+    mesh->SetMaterialIndex(p_materalIndex);
+    mesh->SetTopology(TRIANGLES);
+
+    ExtraMaterialTexture(p_scene, p_mesh, *mesh);
+    ExtraMeshBoneInfo(mesh->m_vecVertex, p_mesh, p_model);
 
     mesh->Finalize(true);
 

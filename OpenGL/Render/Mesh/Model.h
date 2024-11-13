@@ -48,6 +48,7 @@ private:
 #include <functional>
 #include <GLM/glm.hpp>
 #include <vector>
+#include "../Animation/Bone.h"
 #include "../Bounding/BoundingSphere.h"
 
 class Mesh;
@@ -68,6 +69,9 @@ public:
 	Model();
 	Model(std::vector<Mesh*>& p_mesh, std::vector<std::string>& p_material);
 	~Model();
+
+	std::map<string, BoneInfo> m_BoneInfoMap;
+	int m_BoneCounter = 0;
 
 	std::vector<Mesh*>& GetMeshes();
 	const BoundingSphere& GetBoundingSphere() const;
