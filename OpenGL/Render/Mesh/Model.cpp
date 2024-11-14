@@ -93,6 +93,16 @@ const BoundingSphere& Model::GetBoundingSphere() const
     return m_boundingSphere;
 }
 
+std::unordered_map<string, BoneInfo>& Model::GetBoneInfoMap()
+{
+    return m_BoneInfoMap;
+}
+
+uint32& Model::GetBoneCount()
+{
+    return m_BoneCounter;
+}
+
 void Model::ComputeBoundingSphere()
 {
     if (m_meshes.size() == 1)

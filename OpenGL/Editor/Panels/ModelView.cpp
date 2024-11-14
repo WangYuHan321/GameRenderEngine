@@ -10,10 +10,13 @@
 #include "../../UI/Plugin/DDTarget.h"
 #include "../../File/Path/PathParser.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
+#include "../../Core/ECS/Components/CMaterialRenderer.h"
 #include "../../Render/Resource/Loader/ModelLoader.h"
 #include "../../UI/Layout/TreeNode.h"
 #include "../../UI/Widgets/InputField/InputText.h"
 #include "../../UI/Layout/GroupCollapsable.h"
+#include "../../Render/Resource/Loader/AnimLoader.h"
+#include "../../Render/Animation/Animator.h"
 
 std::vector<TreeNode*> _founds;
 
@@ -39,11 +42,18 @@ ModelView::ModelView
 
 	InitHierarchy();
 
+#if 0
 	m_camera.SetPerspective(Deg2Rad(60.0f), 0.5, 0.1f, 5000.0f);
 	m_actorPickRenderTarget = new RenderTarget(1, 1, GL_HALF_FLOAT, 1, true);
 
-	m_curActor = &GLOBALSERVICE(EditorAction).CreateActorWithModel("../../Engine/Asset/meshes/sponza/sponza.obj", false);
+	m_curActor = &GLOBALSERVICE(EditorAction).CreateActorWithModel("../../Engine/Asset/meshes/vampire/dancing_vampire.dae", false);
+	m_curActor->GetComponent< CMaterialRenderer>()->FillWithMaterial(*GLOBALSERVICE(MaterialManager)["DefaultAnim.opmat"]);
 
+	m_testAnim = AnimLoader::getInstance()->Create("C:/Users/admin/Desktop/GameRenderEngine/Bin/Data/Engine/Asset/meshes/vampire/dancing_vampire.dae", (EModelParserFlags)80);
+	m_anim = new Animator(*m_curActor);
+	m_anim->ReSetAnimation(*m_testAnim[0]);
+
+#endif
 }
 
 ModelView::~ModelView()
@@ -138,6 +148,18 @@ void ModelView::HandleActorPicking()
 void ModelView::Update(float deltaTime)
 {
 	AViewControllable::Update(deltaTime);
+
+#if 0
+	m_anim->Update(deltaTime);
+
+	Material* pMat =  m_curActor->GetComponent<CMaterialRenderer>()->GetMaterialList()[0];
+	for (int i = 0; i < 128; i++)
+	{
+		pMat->SetMatrix("finalBonesMatrices[" + std::to_string(i) + "]", m_anim->GetFinalBoneMatrix()[i]);
+	}
+
+#endif
+
 	//if (m_img->size.x > 0 && m_img->size.y > 0)
 	//{
 	//	m_img->size = ImVec2(m_img->size.x - 80.0f, m_img->size.y - 80.0f);

@@ -1,4 +1,7 @@
 #pragma once
+
+#include "PipelineState.h"
+
 class GraphicsManager
 {
 public:
@@ -6,7 +9,7 @@ public:
 	virtual ~GraphicsManager() {};
 
 
-	virtual void SetPipeline() = 0;
+	virtual void SetPipelineState(PipelineState& pipelineState) = 0;
 
 };
 

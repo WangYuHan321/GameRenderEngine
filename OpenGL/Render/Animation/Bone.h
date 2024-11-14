@@ -29,14 +29,14 @@ struct KeyScale
 
 struct BoneInfo
 {
-	int id;
+	uint32 id;
 	glm::mat4 offset;
 
-	const glm::mat4& get_offset() const
+	const glm::mat4& Offset() const
 	{
 		return offset;
 	}
-	const int& get_id() const
+	const uint32& ID() const
 	{
 		return id;
 	}

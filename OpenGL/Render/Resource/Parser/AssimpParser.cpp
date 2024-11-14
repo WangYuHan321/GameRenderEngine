@@ -65,6 +65,7 @@ bool AssimpParser::LoadAnim(const std::string& p_fileName, std::vector<Animation
             auto animation = scene->mAnimations[i];
             Animation* pAnim = new Animation();
             pAnim->path = p_fileName;
+            pAnim->m_nodeRoot = scene->mRootNode;
             InitAnim(animation, scene, pAnim);
 
             p_anim.push_back(pAnim);
@@ -182,14 +183,14 @@ void SetVertexBoneData(Vertex& vertex, int boneID, float weight)
 
 void AssimpParser::ExtraMeshBoneInfo(std::vector<Vertex>& vertices, aiMesh* p_Mesh, Model& p_model)
 {
-    auto& boneInfoMap = p_model.m_BoneInfoMap;
-    int& boneCount = p_model.m_BoneCounter;
+    auto& boneInfoMap = p_model.GetBoneInfoMap();;
+    uint32& boneCount = p_model.GetBoneCount();
 
     for (int boneIndex = 0; boneIndex < p_Mesh->mNumBones; ++boneIndex)
     {
         int boneID = -1;
         std::string boneName = p_Mesh->mBones[boneIndex]->mName.C_Str();
-        if (p_model.m_BoneInfoMap.find(boneName) == p_model.m_BoneInfoMap.end())
+        if (p_model.GetBoneInfoMap().find(boneName) == p_model.GetBoneInfoMap().end())
         {
             BoneInfo newBoneInfo;
             newBoneInfo.id = boneCount;
@@ -212,7 +213,7 @@ void AssimpParser::ExtraMeshBoneInfo(std::vector<Vertex>& vertices, aiMesh* p_Me
             float weight = weights[weightIndex].mWeight;
             assert(vertexId <= vertices.size());
             SetVertexBoneData(vertices[vertexId], boneID, weight);
-            //printf("bone name= %s bone ID = %d weight = %f \n", boneName.c_str(), boneID, weight);
+            //Log("bone name= %s bone ID = %d weight = %f \n", boneName.c_str(), boneID, weight);
         }
     }
 }
@@ -251,7 +252,7 @@ void AssimpParser::ProcessNodeEx(void* p_transform, struct aiNode* p_node, const
     // Then do the same for each of its children
     for (uint32_t i = 0; i < p_node->mNumChildren; ++i)
     {
-        ProcessNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
+        ProcessNodeEx(p_transform, p_node->mChildren[i], p_scene, p_model);
     }
 }
 
@@ -269,7 +270,7 @@ void AssimpParser::ProcessNewNode(void* p_transform, aiNode* p_node, const aiSce
     // Then do the same for each of its children
     for (uint32_t i = 0; i < p_node->mNumChildren; ++i)
     {
-        ProcessNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
+        ProcessNewNode(&nodeTransformation, p_node->mChildren[i], p_scene, p_meshes);
     }
 }
 
@@ -398,22 +399,10 @@ Mesh* AssimpParser::ProcessMeshEx(void* p_transform, Model& p_model, aiMesh* p_m
 {
     aiMatrix4x4 meshTransformation = *reinterpret_cast<aiMatrix4x4*>(p_transform);
 
-    std::vector<glm::vec3> positions;
-    std::vector<glm::vec2> uv;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec3> tangents;
-    std::vector<glm::vec3> bitangents;
+    std::vector<Vertex> vertexs;
     std::vector<unsigned int> indices;
 
-    positions.resize(p_mesh->mNumVertices);
-    normals.resize(p_mesh->mNumVertices);
-    if (p_mesh->mNumUVComponents[0] > 0)
-    {
-        uv.resize(p_mesh->mNumVertices);
-        tangents.resize(p_mesh->mNumVertices);
-        bitangents.resize(p_mesh->mNumVertices);
-    }
-
+    vertexs.resize(p_mesh->mNumVertices);
     indices.resize(p_mesh->mNumFaces * 3);
 
 
@@ -425,17 +414,17 @@ Mesh* AssimpParser::ProcessMeshEx(void* p_transform, Model& p_model, aiMesh* p_m
         aiVector3D _tangent = p_mesh->mTangents ? meshTransformation * p_mesh->mTangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
         aiVector3D _bitangent = p_mesh->mBitangents ? meshTransformation * p_mesh->mBitangents[i] : aiVector3D(0.0f, 0.0f, 0.0f);
 
-        positions[i] = glm::vec3(_position.x, _position.y, _position.z);
-        normals[i] = glm::vec3(_normal.x, _normal.y, _normal.z);
+        vertexs[i].Position = glm::vec3(_position.x, _position.y, _position.z);
+        vertexs[i].Normal = glm::vec3(_normal.x, _normal.y, _normal.z);
         if (p_mesh->mTextureCoords[0])
         {
-            uv[i] = glm::vec2(_texCoords.x, _texCoords.y);
+            vertexs[i].UV = glm::vec2(_texCoords.x, _texCoords.y);
 
         }
         if (p_mesh->mTangents)
         {
-            tangents[i] = glm::vec3(_tangent.x, _tangent.y, _tangent.z);
-            bitangents[i] = glm::vec3(_bitangent.x, _bitangent.y, _bitangent.z);
+            vertexs[i].Tangent = glm::vec3(_tangent.x, _tangent.y, _tangent.z);
+            vertexs[i].Bitangent = glm::vec3(_bitangent.x, _bitangent.y, _bitangent.z);
         }
     }
     for (unsigned int f = 0; f < p_mesh->mNumFaces; ++f)
@@ -446,16 +435,19 @@ Mesh* AssimpParser::ProcessMeshEx(void* p_transform, Model& p_model, aiMesh* p_m
         }
     }
 
-    Mesh* mesh = new Mesh(positions, uv, normals, tangents, bitangents, indices);
 
-    mesh->SetName(p_mesh->mName.C_Str());
-    mesh->SetMaterialIndex(p_materalIndex);
-    mesh->SetTopology(TRIANGLES);
+
+    Mesh* mesh = new Mesh;
+    mesh->m_vecVertex = vertexs;
+    mesh->m_vecIndices = indices;
+    mesh->m_topology = TRIANGLES;
+    mesh->m_materialIndex = p_materalIndex;
+    mesh->m_strName = p_mesh->mName.C_Str();
 
     ExtraMaterialTexture(p_scene, p_mesh, *mesh);
     ExtraMeshBoneInfo(mesh->m_vecVertex, p_mesh, p_model);
 
-    mesh->Finalize(true);
+    mesh->NewFinalize(true);
 
     return mesh;
 }
@@ -486,7 +478,7 @@ void AssimpParser::ProcessBone(const aiAnimation* animation, Animation* anim, co
         const aiNode* node = root_node->FindNode(channel->mNodeName);
         if (node)
         {
-            LOG_INFO(node->mParent->mName.C_Str());
+            //LOG_INFO(node->mParent->mName.C_Str());
             anim->nameBoneMap[boneName] = new Bone(boneName, channel, glm::inverse(AiMatToGlmMat(node->mTransformation)));
         }
     }

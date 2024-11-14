@@ -1,5 +1,6 @@
 #pragma once
 #include "../GraphicsManager.h"
+#include "../../Render/GLCache.h"
 
 class OpenGLGraphicsManager : public GraphicsManager
 {
@@ -9,6 +10,9 @@ public:
 
 public:
 
-	void SetPipeline() override;
+	void SetPipelineState(PipelineState& pipelineState) override;
+
+private:
+	GLCache m_glState;
 };
 

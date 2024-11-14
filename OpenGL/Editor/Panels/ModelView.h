@@ -6,6 +6,8 @@
 
 class Actor;
 class TreeNode;
+class Animator;
+class Animation;
 class GroupCollapsable;
 
 class ModelView :public AViewControllable
@@ -38,6 +40,9 @@ private:
 	GizmoBehaviour m_gizmoOperations;
 	std::optional<std::reference_wrapper<Actor>> m_highlightedActor;
 	std::optional<GizmoBehaviour::EDirection> m_highlightedGizmoDirection;
+
+	std::vector<Animation*> m_testAnim;
+	Animator* m_anim;
 
 	Actor* m_curActor;
 };

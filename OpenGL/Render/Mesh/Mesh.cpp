@@ -265,6 +265,14 @@ void Mesh::NewFinalize(bool interleaved)
         data.push_back(m_vecVertex[i].Bitangent.x);
         data.push_back(m_vecVertex[i].Bitangent.y);
         data.push_back(m_vecVertex[i].Bitangent.z);
+        
+        if (m_vecVertex[i].BoneIDs[0] != -1)
+        {
+            for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+                data.push_back((float)m_vecVertex[i].BoneIDs[i]);
+            for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
+                data.push_back(m_vecVertex[i].Weights[i]);
+        }
     }
 
     glBindVertexArray(m_VAO);
@@ -310,6 +318,21 @@ void Mesh::NewFinalize(bool interleaved)
         glEnableVertexAttribArray(4);
         glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
         offset += 3 * sizeof(float);
+    }
+
+    if (data.size() > offset)
+    {
+        {
+            glEnableVertexAttribArray(5);
+            glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+            offset += 4 * sizeof(float);
+        }
+
+        {
+            glEnableVertexAttribArray(6);
+            glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+            offset += 4 * sizeof(float);
+        }
     }
  
     glBindVertexArray(0);

@@ -4,14 +4,16 @@
 #include "Animation.h"
 #include "../../Core/ECS/Components/CTransform.h"
 
-unsigned int MAX_BONE_NUM = 128;
+static unsigned int MAX_BONE_NUM = 128;
 
 class Animator
 {
 public:
 	Animator(Actor& p_actor);
 
-	//void CalculateBoneTransform(Actor& actor, Animation& animation, Matrix4& parentTransform);
+	void CalculateBoneTransform(aiNode* node, Matrix4& parentTransform);
+	void ReSetAnimation(Animation& animation);
+	std::vector<Matrix4> GetFinalBoneMatrix() const;
 	void Update(float dt);
 
 private:

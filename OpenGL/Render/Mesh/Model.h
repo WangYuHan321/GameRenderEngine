@@ -63,6 +63,8 @@ public:
 	std::vector<std::string> m_materialNames;
 private:
 	BoundingSphere m_boundingSphere;
+	std::unordered_map<string, BoneInfo> m_BoneInfoMap;
+	uint32 m_BoneCounter = 0;
 
 public:
 
@@ -70,11 +72,11 @@ public:
 	Model(std::vector<Mesh*>& p_mesh, std::vector<std::string>& p_material);
 	~Model();
 
-	std::map<string, BoneInfo> m_BoneInfoMap;
-	int m_BoneCounter = 0;
-
 	std::vector<Mesh*>& GetMeshes();
 	const BoundingSphere& GetBoundingSphere() const;
+
+	std::unordered_map<string, BoneInfo>& GetBoneInfoMap();
+	uint32& GetBoneCount();
 
 public:
 	void ComputeBoundingSphere();
