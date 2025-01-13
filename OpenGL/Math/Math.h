@@ -3,7 +3,7 @@
 
 #include<tuple>
 #include<GLM/glm.hpp>
-#include <assimp/scene.h>
+#include <Assimp/scene.h>
 #include<glm/matrix.hpp>
 
 struct Ray;

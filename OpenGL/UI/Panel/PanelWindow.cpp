@@ -69,7 +69,7 @@ void PanelWindow::_Draw_Impl()
 		if (!collapsable)				windowFlags |= ImGuiWindowFlags_NoCollapse;
 		if (!allowInputs)				windowFlags |= ImGuiWindowFlags_NoInputs;
 		if (!scrollable)                windowFlags |= ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar;
-		if (!titleBar)					windowFlags |= ImGuiWindowFlags_NoTitleBar;
+		if (!titleBar)					windowFlags |= ImGuiWindowFlags_NoTitleBar; 
 
 		if (minSize.x <= 0.f || minSize.y <= 0.f)
 			minSize = { 0.f, 0.f };
@@ -106,6 +106,6 @@ void PanelWindow::_Draw_Impl()
 
 			DrawWidgets();
 		}
-
+		ImGui::End();
 	}
 }

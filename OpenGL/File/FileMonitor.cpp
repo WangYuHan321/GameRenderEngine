@@ -78,7 +78,7 @@ void FileMonitor::Run()
 	OVERLAPPED overlapped = { 0 };
 	std::wstring str = to_wide_string(m_directoryStr);
 
-	HANDLE hDir = ::CreateFile(str.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+	HANDLE hDir = ::CreateFile((LPCSTR)str.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED, NULL);
 
 	if (INVALID_HANDLE_VALUE == hDir)

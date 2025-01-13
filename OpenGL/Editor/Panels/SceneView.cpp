@@ -172,6 +172,8 @@ void SceneView::HandleActorPicking()
 		mouseY -= m_position.y;
 		mouseY = GetSafeSize().y - mouseY + 40;
 
+		//float titleBarHeight = ImGui::GetWindowSize().y - ImGui::GetContentRegionAvail().y;;
+
 		m_actorPickRenderTarget->Bind();
 		uint8_t pixel[3];
 		dynamic_cast<ForwardRenderer*>(EDITOR_CONTEXT(m_renderer).get())->ReadPixels(static_cast<int>(mouseX), static_cast<int>(mouseY), 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);

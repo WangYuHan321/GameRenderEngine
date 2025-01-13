@@ -1,4 +1,5 @@
 //this id is to look for language.xml
+#pragma once
 
 #define MENU_FILE 1
 #define MENU_WINDOW 2

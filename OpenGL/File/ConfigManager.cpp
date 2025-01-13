@@ -1,5 +1,6 @@
 #include "ConfigManager.h"
 #include <cstdlib>
+#include <filesystem>
 
 ConfigManager::ConfigManager()
 {
@@ -14,7 +15,11 @@ ConfigManager::~ConfigManager()
 std::string ConfigManager::GetExecutePath() const
 {
 	char const* envRoot = getenv("ASSIMP");
-	std::string path = std::string(envRoot) + "/../../../Bin";
+	std::string path = "";
+	if (envRoot != nullptr)
+		path = std::string(envRoot) + "/../../../Bin";
+	else
+		path = std::filesystem::current_path().generic_string();
 	return path;
 }
 

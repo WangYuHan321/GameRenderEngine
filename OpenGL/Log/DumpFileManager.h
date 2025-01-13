@@ -81,7 +81,7 @@ private:
         DWORD dwRelativeAddr = 0;
         SIZE_T bytesWritten = 0;
 
-        if (NULL == (hKernel32 = LoadLibrary(L"kernel32.dll")))
+        if (NULL == (hKernel32 = LoadLibraryA("kernel32.dll")))
         {
             return FALSE;
         }

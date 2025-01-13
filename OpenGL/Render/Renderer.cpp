@@ -456,7 +456,7 @@ void Renderer::RenderToCubeMap(std::vector<RenderCommand>& renderCommands, Textu
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		for (uint32 i = 0; i < renderCommands.size(); ++i)
 		{
-			assert(renderCommands[i].Material->Type == MATERIAL_CUSTOM);
+			assert(renderCommands[i].material->Type == MATERIAL_CUSTOM);
 			RenderCustomCommand(&renderCommands[i], camera);
 		}
 	}
