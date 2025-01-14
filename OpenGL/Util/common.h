@@ -372,12 +372,6 @@ private:
 
 namespace EasyGraphics {
 
-#ifdef _DEBUG
-	#include"new_on.h"
-	#include"MemoryManager.h"
-#else
-
-#endif // DEBUG
 	struct EWINDOWINFO
 	{
 		uint32 WINDOW_WIDTH;

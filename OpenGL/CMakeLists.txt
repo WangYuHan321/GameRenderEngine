@@ -204,9 +204,45 @@ target_link_libraries(GameRenderEngine PRIVATE ${DEPENDENCY_FILES})
 
 set(CMAKE_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
 
+
+############################copy dll #############################
+  # ${ASSIMP}/lib
+  # ${GLFW}/lib/x64
+  # ${GLEW}/lib/x64
+  # ${THIRD_LUA}/lib
+  # ${FreeType}/lib
+  # ${IRRKLANG}/lib
+  # ${VK_SDK_PATH}/Lib
+  # ${GFSDK}/lib
+
+file(GLOB ASSIMPDLL ${ASSIMP}/bin/x64/*.dll) 
+file(GLOB GLFWDLL ${GLFW}/bin/x64/*.dll) 
+file(GLOB GLEWDLL ${GLEW}/bin/x64/*.dll) 
+file(GLOB LUADLL ${THIRD_LUA}/bin/*.dll) 
+file(GLOB FREETYPEDLL ${FreeType}/bin/*.dll) 
+file(GLOB IRRKLANGDLL ${IRRKLANG}/bin/*.dll) 
+#file(GLOB VULKANDLL ${IRRKLANG}/bin/*.dll) 
+file(GLOB GFSDKDLL ${GFSDK}/bin/*.dll) 
+
+set (DLLFILES 
+	${ASSIMPDLL}
+	${GLFW}
+	${GLEW}
+	${LUADLL}
+	${FREETYPEDLL}
+	${IRRKLANGDLL}
+	${GFSDKDLL}
+	)
+ 
+add_custom_command(TARGET GameRenderEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${DLLFILES} ${CMAKE_CURRENT_SOURCE_DIR}/../Bin)
+
+############################copy dll #############################
+
 set_target_properties(GameRenderEngine PROPERTIES CMAKE_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
 
 set_target_properties(GameRenderEngine PROPERTIES RUNTIME_WORKING_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}")
 set_target_properties(GameRenderEngine PROPERTIES RUNTIME_WORKING_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}")
 set_target_properties(GameRenderEngine PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${EXECUTABLE_OUTPUT_PATH}")
 set_target_properties(GameRenderEngine PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${EXECUTABLE_OUTPUT_PATH}")
+set_target_properties(GameRenderEngine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
