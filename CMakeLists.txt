@@ -30,6 +30,7 @@ endif()
 include(cmake/files.cmake)
 
 add_subdirectory(OpenGL)
+add_subdirectory(CEGUIApp)
 
 
 

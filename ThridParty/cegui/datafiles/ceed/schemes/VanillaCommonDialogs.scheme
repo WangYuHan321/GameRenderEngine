@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<!--
+     Note: Currently to use this you must also load the VanillaSkin.scheme.
+     Eventually it will be possible to 'include' one scheme from another, but
+     we're not quite there yet.
+-->
+<GUIScheme version="5" name="VanillaCommonDialogs">
+    <Font filename="DejaVuSans-10-NoScale.font"/>
+    <LookNFeel filename="VanillaCommonDialogs.looknfeel"/>
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet"/>
+    <FalagardMapping renderer="Core/Button" lookNFeel="Vanilla/VerticalImageSliderThumb" targetType="CEGUI/Thumb" windowType="Vanilla/VerticalImageSliderThumb"/>
+    <FalagardMapping renderer="Core/Slider" lookNFeel="Vanilla/VerticalImageSlider" targetType="CEGUI/Slider" windowType="Vanilla/VerticalImageSlider"/>
+    <FalagardMapping renderer="Core/Button" lookNFeel="Vanilla/HorizontalImageSliderThumb" targetType="CEGUI/Thumb" windowType="Vanilla/HorizontalImageSliderThumb"/>
+    <FalagardMapping renderer="Core/Slider" lookNFeel="Vanilla/HorizontalImageSlider" targetType="CEGUI/Slider" windowType="Vanilla/HorizontalImageSlider"/>
+    <FalagardMapping renderer="Core/Default" lookNFeel="Vanilla/FrameColourRect" targetType="DefaultWindow" windowType="Vanilla/FrameColourRect"/>
+    <FalagardMapping renderer="Core/Default" lookNFeel="Vanilla/ColourPicker" targetType="CEGUI/ColourPicker" windowType="Vanilla/ColourPicker"/>
+    <FalagardMapping renderer="Core/Default" lookNFeel="Vanilla/ColourPickerControls" targetType="CEGUI/ColourPickerControls" windowType="Vanilla/ColourPickerControls"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>

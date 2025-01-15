@@ -206,14 +206,6 @@ set(CMAKE_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
 
 
 ############################copy dll #############################
-  # ${ASSIMP}/lib
-  # ${GLFW}/lib/x64
-  # ${GLEW}/lib/x64
-  # ${THIRD_LUA}/lib
-  # ${FreeType}/lib
-  # ${IRRKLANG}/lib
-  # ${VK_SDK_PATH}/Lib
-  # ${GFSDK}/lib
 
 file(GLOB ASSIMPDLL ${ASSIMP}/bin/x64/*.dll) 
 file(GLOB GLFWDLL ${GLFW}/bin/x64/*.dll) 

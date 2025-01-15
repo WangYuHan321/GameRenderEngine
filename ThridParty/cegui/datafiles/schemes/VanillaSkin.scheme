@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<GUIScheme name="VanillaSkin" version="5">
+    <Imageset filename="Vanilla.imageset"/>
+    <LookNFeel filename="Vanilla.looknfeel"/>
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet"/>
+    <FalagardMapping windowType="Vanilla/Label" lookNFeel="Vanilla/Label" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="Vanilla/Titlebar" lookNFeel="Vanilla/Titlebar" targetType="CEGUI/Titlebar" renderer="Core/Titlebar"/>
+    <FalagardMapping windowType="Vanilla/Button" lookNFeel="Vanilla/Button" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="Vanilla/FrameWindow" lookNFeel="Vanilla/FrameWindow" targetType="CEGUI/FrameWindow" renderer="Core/FrameWindow"/>
+    <FalagardMapping windowType="Vanilla/Editbox" lookNFeel="Vanilla/Editbox" targetType="CEGUI/Editbox" renderer="Core/Editbox"/>
+    <FalagardMapping windowType="Vanilla/VerticalScrollbarThumb" lookNFeel="Vanilla/VerticalScrollbarThumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="Vanilla/VerticalScrollbar" lookNFeel="Vanilla/VerticalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="Vanilla/HorizontalScrollbarThumb" lookNFeel="Vanilla/HorizontalScrollbarThumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="Vanilla/HorizontalScrollbar" lookNFeel="Vanilla/HorizontalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="Vanilla/StaticImage" lookNFeel="Vanilla/StaticImage" targetType="DefaultWindow" renderer="Core/StaticImage"/>
+    <FalagardMapping windowType="Vanilla/StaticText" lookNFeel="Vanilla/StaticText" targetType="DefaultWindow" renderer="Core/StaticText"/>
+    <FalagardMapping windowType="Vanilla/MultiLineEditbox" lookNFeel="Vanilla/MultiLineEditbox" targetType="CEGUI/MultiLineEditbox" renderer="Core/MultiLineEditbox"/>
+    <FalagardMapping windowType="Vanilla/ComboDropList" lookNFeel="Vanilla/ComboDropList" targetType="CEGUI/ComboDropList" renderer="Core/ListView"/>
+    <FalagardMapping windowType="Vanilla/Combobox" lookNFeel="Vanilla/Combobox" targetType="CEGUI/Combobox" renderer="Core/Default"/>
+    <FalagardMapping windowType="Vanilla/ProgressBar" lookNFeel="Vanilla/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <FalagardMapping windowType="Vanilla/Checkbox" lookNFeel="Vanilla/Checkbox" targetType="CEGUI/ToggleButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="Vanilla/RadioButton" lookNFeel="Vanilla/RadioButton" targetType="CEGUI/RadioButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="Vanilla/Tooltip" lookNFeel="Vanilla/Tooltip" targetType="CEGUI/Tooltip" renderer="Core/Tooltip"/>
+    <!-- Views -->
+    <FalagardMapping windowType="Vanilla/ListView" lookNFeel="Vanilla/ListView" targetType="CEGUI/ListView" renderer="Core/ListView"/>
+    <FalagardMapping windowType="Vanilla/ListWidget" lookNFeel="Vanilla/ListView" targetType="CEGUI/ListWidget" renderer="Core/ListView"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>

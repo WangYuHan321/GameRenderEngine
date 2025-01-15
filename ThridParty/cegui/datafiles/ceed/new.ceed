@@ -1,0 +1,5 @@
+<Project looknfeelsPath="looknfeel" fontsPath="fonts" xmlSchemasPath="xml_schemas" CEGUIVersion="1.0" CEGUIDefaultResolution="1280x720" UUID="67b9de6d-ab75-4ba3-8837-02737eac5924" version="1" imagesetsPath="imagesets" baseDirectory="." schemesPath="schemes" layoutsPath="layouts">
+    <Items>
+        <Item type="file" path="new.ceed"/>
+    </Items>
+</Project>

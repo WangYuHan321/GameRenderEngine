@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<GUIScheme name="RestaurantGameSample" version="5">
+    <Imageset filename="RestaurantGameSample.imageset"/>
+    <Font filename="GreatVibes-22.font"/>
+    <Font filename="GreatVibes-16.font"/>
+    <LookNFeel filename="RestaurantGameSample.looknfeel"/>
+    <FalagardMapping windowType="RestaurantGameSample/PopupLabel" lookNFeel="RestaurantGameSample/PopupLabel" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="RestaurantGameSample/ProgressBar" lookNFeel="RestaurantGameSample/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>

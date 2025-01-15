@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<GUIScheme name="OgreTray" version="5">
+    <Imageset filename="OgreTray.imageset"/>
+    <Font filename="DejaVuSans-12.font"/>
+    <LookNFeel filename="OgreTray.looknfeel"/>
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet"/>
+    <FalagardMapping windowType="OgreTray/Label" lookNFeel="OgreTray/Label" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/Button" lookNFeel="OgreTray/PushButton" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="OgreTray/Titlebar" lookNFeel="OgreTray/Titlebar" targetType="CEGUI/Titlebar" renderer="Core/Titlebar"/>
+    <FalagardMapping windowType="OgreTray/FrameWindow" lookNFeel="OgreTray/FrameWindow" targetType="CEGUI/FrameWindow" renderer="Core/FrameWindow"/>
+    <FalagardMapping windowType="OgreTray/Thumb" lookNFeel="OgreTray/Thumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="OgreTray/VerticalScrollbar" lookNFeel="OgreTray/VerticalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="OgreTray/HorizontalScrollbar" lookNFeel="OgreTray/HorizontalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="OgreTray/StaticText" lookNFeel="OgreTray/StaticText" targetType="DefaultWindow" renderer="Core/StaticText"/>
+    <FalagardMapping windowType="OgreTray/Title" lookNFeel="OgreTray/MiniTray" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/CaptionedStaticText" lookNFeel="OgreTray/CaptionedStaticText" targetType="DefaultWindow" renderer="Core/StaticText"/>
+    <FalagardMapping windowType="OgreTray/ProgressBar" lookNFeel="OgreTray/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <FalagardMapping windowType="OgreTray/Editbox" lookNFeel="OgreTray/Editbox" targetType="CEGUI/Editbox" renderer="Core/Editbox"/>
+    <FalagardMapping windowType="OgreTray/MultiLineEditbox" lookNFeel="OgreTray/MultiLineEditbox" targetType="CEGUI/MultiLineEditbox" renderer="Core/MultiLineEditbox"/>
+    <FalagardMapping windowType="OgreTray/ComboDropList" lookNFeel="OgreTray/ListView" targetType="CEGUI/ComboDropList" renderer="Core/ListView"/>
+    <FalagardMapping windowType="OgreTray/Combobox" lookNFeel="OgreTray/Combobox" targetType="CEGUI/Combobox" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/DropDownMenu" lookNFeel="OgreTray/DropDownMenu" targetType="CEGUI/Combobox" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/Group" lookNFeel="OgreTray/Group" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/Checkbox" lookNFeel="OgreTray/Checkbox" targetType="CEGUI/ToggleButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="OgreTray/RadioButton" lookNFeel="OgreTray/RadioButton" targetType="CEGUI/RadioButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="OgreTray/Slider" lookNFeel="OgreTray/Slider" targetType="CEGUI/Slider" renderer="Core/Slider"/>
+    <FalagardMapping windowType="OgreTray/StaticImage" lookNFeel="OgreTray/StaticImage" targetType="DefaultWindow" renderer="Core/StaticImage"/>
+    <FalagardMapping windowType="OgreTray/AltStaticImage" lookNFeel="OgreTray/AltStaticImage" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/Tooltip" lookNFeel="OgreTray/Tooltip" targetType="CEGUI/Tooltip" renderer="Core/Tooltip"/>
+    <FalagardMapping windowType="OgreTray/ListboxItem" lookNFeel="OgreTray/ListboxItem" targetType="CEGUI/ItemEntry" renderer="Core/ItemEntry"/>
+    <FalagardMapping windowType="OgreTray/Spinner" lookNFeel="OgreTray/Spinner" targetType="CEGUI/Spinner" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/ScrollablePane" lookNFeel="OgreTray/ScrollablePane" targetType="CEGUI/ScrollablePane" renderer="Core/ScrollablePane"/>
+    <FalagardMapping windowType="OgreTray/ListHeaderSegment" lookNFeel="OgreTray/ListHeaderSegment" targetType="CEGUI/ListHeaderSegment" renderer="Core/ListHeaderSegment"/>
+    <FalagardMapping windowType="OgreTray/ListHeader" lookNFeel="OgreTray/ListHeader" targetType="CEGUI/ListHeader" renderer="Core/ListHeader"/>
+    <FalagardMapping windowType="OgreTray/MultiColumnList" lookNFeel="OgreTray/MultiColumnList" targetType="CEGUI/MultiColumnList" renderer="Core/MultiColumnList"/>
+    <FalagardMapping windowType="OgreTray/MenuItem" lookNFeel="OgreTray/MenuItem" targetType="CEGUI/MenuItem" renderer="Core/MenuItem"/>
+    <FalagardMapping windowType="OgreTray/Menubar" lookNFeel="OgreTray/Menubar" targetType="CEGUI/Menubar" renderer="Core/Menubar"/>
+    <FalagardMapping windowType="OgreTray/PopupMenu" lookNFeel="OgreTray/PopupMenu" targetType="CEGUI/PopupMenu" renderer="Core/PopupMenu"/>
+    <FalagardMapping windowType="OgreTray/TabButton" lookNFeel="OgreTray/TabButton" targetType="CEGUI/TabButton" renderer="Core/TabButton"/>
+    <FalagardMapping windowType="OgreTray/TabButtonPane" lookNFeel="OgreTray/TabButtonPane" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/TabContentPane" lookNFeel="OgreTray/TabContentPane" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="OgreTray/TabControl" lookNFeel="OgreTray/TabControl" targetType="CEGUI/TabControl" renderer="Core/TabControl"/>
+    <FalagardMapping windowType="OgreTray/BG" lookNFeel="OgreTray/BGTest" targetType="DefaultWindow" renderer="Core/Default"/>
+    <!-- Views -->
+    <FalagardMapping windowType="OgreTray/ListView" lookNFeel="OgreTray/ListView" targetType="CEGUI/ListView" renderer="Core/ListView"/>
+    <FalagardMapping windowType="OgreTray/ListWidget" lookNFeel="OgreTray/ListView" targetType="CEGUI/ListWidget" renderer="Core/ListView"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>

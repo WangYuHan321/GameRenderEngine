@@ -1,0 +1,56 @@
+<?xml version='1.0'?>
+<GUIScheme name="WindowsLookSkin" version="5">
+    <Imageset filename="WindowsLook.imageset"/>
+    <LookNFeel filename="WindowsLook.looknfeel"/>
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet"/>
+    <FalagardMapping windowType="WindowsLook/Label" lookNFeel="WindowsLook/Label" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="WindowsLook/Button" lookNFeel="WindowsLook/Button" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/Checkbox" lookNFeel="WindowsLook/Checkbox" targetType="CEGUI/ToggleButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="WindowsLook/IconButton" lookNFeel="WindowsLook/IconButton" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/RadioButton" lookNFeel="WindowsLook/RadioButton" targetType="CEGUI/RadioButton" renderer="Core/ToggleButton"/>
+    <FalagardMapping windowType="WindowsLook/FrameWindow" lookNFeel="WindowsLook/FrameWindow" targetType="CEGUI/FrameWindow" renderer="Core/FrameWindow"/>
+    <FalagardMapping windowType="WindowsLook/Titlebar" lookNFeel="WindowsLook/Titlebar" targetType="CEGUI/Titlebar" renderer="Core/Titlebar"/>
+    <FalagardMapping windowType="WindowsLook/SystemButton" lookNFeel="WindowsLook/SystemButton" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/Editbox" lookNFeel="WindowsLook/Editbox" targetType="CEGUI/Editbox" renderer="Core/Editbox"/>
+    <FalagardMapping windowType="WindowsLook/MultiLineEditbox" lookNFeel="WindowsLook/MultiLineEditbox" targetType="CEGUI/MultiLineEditbox" renderer="Core/MultiLineEditbox"/>
+    <FalagardMapping windowType="WindowsLook/Menubar" lookNFeel="WindowsLook/Menubar" targetType="CEGUI/Menubar" renderer="Core/Menubar"/>
+    <FalagardMapping windowType="WindowsLook/PopupMenu" lookNFeel="WindowsLook/PopupMenu" targetType="CEGUI/PopupMenu" renderer="Core/PopupMenu"/>
+    <FalagardMapping windowType="WindowsLook/MenuItem" lookNFeel="WindowsLook/MenuItem" targetType="CEGUI/MenuItem" renderer="Core/MenuItem"/>
+    <FalagardMapping windowType="WindowsLook/ProgressBar" lookNFeel="WindowsLook/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <FalagardMapping windowType="WindowsLook/VerticalScrollbar" lookNFeel="WindowsLook/VerticalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="WindowsLook/HorizontalScrollbar" lookNFeel="WindowsLook/HorizontalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="WindowsLook/VerticalScrollbarThumb" lookNFeel="WindowsLook/VerticalScrollbarThumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/HorizontalScrollbarThumb" lookNFeel="WindowsLook/HorizontalScrollbarThumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/TabButton" lookNFeel="WindowsLook/TabButton" targetType="CEGUI/TabButton" renderer="Core/TabButton"/>
+    <FalagardMapping windowType="WindowsLook/TabControl" lookNFeel="WindowsLook/TabControl" targetType="CEGUI/TabControl" renderer="Core/TabControl"/>
+    <FalagardMapping windowType="WindowsLook/TabContentPane" lookNFeel="WindowsLook/TabContentPane" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="WindowsLook/TabButtonPane" lookNFeel="WindowsLook/TabButtonPane" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="WindowsLook/ComboDropList" lookNFeel="WindowsLook/ComboDropList" targetType="CEGUI/ComboDropList" renderer="Core/ListView"/>
+    <FalagardMapping windowType="WindowsLook/Combobox" lookNFeel="WindowsLook/Combobox" targetType="CEGUI/Combobox" renderer="Core/Default"/>
+    <FalagardMapping windowType="WindowsLook/ListHeader" lookNFeel="WindowsLook/ListHeader" targetType="CEGUI/ListHeader" renderer="Core/ListHeader"/>
+    <FalagardMapping windowType="WindowsLook/ListHeaderSegment" lookNFeel="WindowsLook/ListHeaderSegment" targetType="CEGUI/ListHeaderSegment" renderer="Core/ListHeaderSegment"/>
+    <FalagardMapping windowType="WindowsLook/MultiColumnList" lookNFeel="WindowsLook/MultiColumnList" targetType="CEGUI/MultiColumnList" renderer="Core/MultiColumnList"/>
+    <FalagardMapping windowType="WindowsLook/Slider" lookNFeel="WindowsLook/Slider" targetType="CEGUI/Slider" renderer="Core/Slider"/>
+    <FalagardMapping windowType="WindowsLook/SliderThumb" lookNFeel="WindowsLook/SliderThumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="WindowsLook/ScrollablePane" lookNFeel="WindowsLook/ScrollablePane" targetType="CEGUI/ScrollablePane" renderer="Core/ScrollablePane"/>
+    <FalagardMapping windowType="WindowsLook/Spinner" lookNFeel="WindowsLook/Spinner" targetType="CEGUI/Spinner" renderer="Core/Default"/>
+    <FalagardMapping windowType="WindowsLook/Tooltip" lookNFeel="WindowsLook/Tooltip" targetType="CEGUI/Tooltip" renderer="Core/Tooltip"/>
+    <FalagardMapping windowType="WindowsLook/Static" lookNFeel="WindowsLook/Static" targetType="DefaultWindow" renderer="Core/Static"/>
+    <FalagardMapping windowType="WindowsLook/StaticImage" lookNFeel="WindowsLook/StaticImage" targetType="DefaultWindow" renderer="Core/StaticImage"/>
+    <FalagardMapping windowType="WindowsLook/StaticText" lookNFeel="WindowsLook/StaticText" targetType="DefaultWindow" renderer="Core/StaticText"/>
+    <FalagardMapping windowType="WindowsLook/ListboxItem" lookNFeel="WindowsLook/ListboxItem" targetType="CEGUI/ItemEntry" renderer="Core/ItemEntry"/>
+    <!--
+	<FalagardMapping windowType="WindowsLook/GroupBox" targetType="DefaultWindow"   renderer="Core/Default"   lookNFeel="WindowsLook/GroupBox" />
+-->
+    <!-- Views -->
+    <FalagardMapping windowType="WindowsLook/ListView" lookNFeel="WindowsLook/ListView" targetType="CEGUI/ListView" renderer="Core/ListView"/>
+    <FalagardMapping windowType="WindowsLook/ListWidget" lookNFeel="WindowsLook/ListView" targetType="CEGUI/ListWidget" renderer="Core/ListView"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>

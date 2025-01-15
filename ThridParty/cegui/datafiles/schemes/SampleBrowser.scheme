@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<GUIScheme name="SampleBrowserSkin" version="5">
+    <Imageset filename="SampleBrowser.imageset"/>
+    <Font filename="DejaVuSans-12.font"/>
+    <Font filename="SampleBrowserFonts.font"/>
+    <Font filename="Sthupo.font"/>
+    <LookNFeel filename="SampleBrowser.looknfeel"/>
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet"/>
+    <FalagardMapping windowType="SampleBrowserSkin/Label" lookNFeel="SampleBrowserSkin/Label" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="SampleBrowserSkin/SampleWindow" lookNFeel="SampleBrowserSkin/SampleWindow" targetType="DefaultWindow" renderer="Core/Default"/>
+    <FalagardMapping windowType="SampleBrowserSkin/Button" lookNFeel="SampleBrowserSkin/Button" targetType="CEGUI/PushButton" renderer="Core/Button"/>
+    <FalagardMapping windowType="SampleBrowserSkin/ProgressBar" lookNFeel="SampleBrowserSkin/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <FalagardMapping windowType="SampleBrowserSkin/Titlebar" lookNFeel="SampleBrowserSkin/Titlebar" targetType="CEGUI/Titlebar" renderer="Core/Titlebar"/>
+    <FalagardMapping windowType="SampleBrowserSkin/FrameWindow" lookNFeel="SampleBrowserSkin/FrameWindow" targetType="CEGUI/FrameWindow" renderer="Core/FrameWindow"/>
+    <FalagardMapping windowType="SampleBrowserSkin/StaticText" lookNFeel="SampleBrowserSkin/StaticText" targetType="DefaultWindow" renderer="Core/StaticText"/>
+    <FalagardMapping windowType="SampleBrowserSkin/VerticalScrollbar" lookNFeel="SampleBrowserSkin/VerticalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="SampleBrowserSkin/HorizontalScrollbar" lookNFeel="SampleBrowserSkin/HorizontalScrollbar" targetType="CEGUI/Scrollbar" renderer="Core/Scrollbar"/>
+    <FalagardMapping windowType="SampleBrowserSkin/Thumb" lookNFeel="SampleBrowserSkin/Thumb" targetType="CEGUI/Thumb" renderer="Core/Button"/>
+    <FalagardMapping windowType="SampleBrowserSkin/ScrollablePane" lookNFeel="SampleBrowserSkin/ScrollablePane" targetType="CEGUI/ScrollablePane" renderer="Core/ScrollablePane"/>
+    <FalagardMapping windowType="SampleBrowserSkin/ProgressBar" lookNFeel="SampleBrowserSkin/ProgressBar" targetType="CEGUI/ProgressBar" renderer="Core/ProgressBar"/>
+    <FalagardMapping windowType="SampleBrowserSkin/Light" lookNFeel="SampleBrowserSkin/Light" targetType="DefaultWindow" renderer="Core/Default"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+    <Font filename="Default.font"/>
+</GUIScheme>
