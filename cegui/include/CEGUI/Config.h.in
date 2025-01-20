@@ -82,14 +82,14 @@ setting CMake options and regenerating, rather than editing directly.
 // Set this to the default XMLParser to be used.
 //////////////////////////////////////////////////////////////////////////
 #ifndef CEGUI_DEFAULT_XMLPARSER
-#	define CEGUI_DEFAULT_XMLPARSER ${CEGUI_OPTION_DEFAULT_XMLPARSER}
+#	define CEGUI_DEFAULT_XMLPARSER TinyXML2Parser/*${CEGUI_OPTION_DEFAULT_XMLPARSER}*/
 #endif
 
 //////////////////////////////////////////////////////////////////////////
 // Set this to the default ImageCodec to be used.
 //////////////////////////////////////////////////////////////////////////
 #ifndef CEGUI_DEFAULT_IMAGE_CODEC
-#   define CEGUI_DEFAULT_IMAGE_CODEC ${CEGUI_OPTION_DEFAULT_IMAGECODEC}
+#   define CEGUI_DEFAULT_IMAGE_CODEC STBImageCodec/*${CEGUI_OPTION_DEFAULT_IMAGECODEC}*/
 #endif
 
 //////////////////////////////////////////////////////////////////////////
