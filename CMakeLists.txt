@@ -11,6 +11,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+#SET(CMAKE_EXE_LINKER_FLAGS "-v")
+
 set(CEGUI_BASE_LIBNAME CEGUIBase)
 set(GAMERENDERENGINE_ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -147,6 +149,16 @@ endif()
 
 include(cmake/files.cmake)
 include(cmake/CEGUIMacros.cmake)
+
+if(APPLE)
+	include(cmake/FindFreetype.cmake)
+	include(cmake/Findassimp.cmake)
+	include(cmake/FindGLEW.cmake)
+	include(cmake/FindGLFW.cmake)
+	include(cmake/FindOpenGL.cmake)
+endif()
+
+
 
 add_subdirectory(OpenGL)
 add_subdirectory(CEGUIApp)

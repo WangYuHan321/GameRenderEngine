@@ -1,16 +1,28 @@
 project(GameRenderEngine)
 
-set(DEPENDENCY_FILES 
-    opengl32.lib
-    glfw3.lib
-    glfw3-vc140.lib
-    assimp-vc142-mt.lib
-    glew32.lib
-    liblua53.lib
-    freetype.lib
-    irrKlang.lib
-    GFSDK_FaceWorks.win64.lib
-)
+if(WIN32)
+	set(DEPENDENCY_FILES 
+    	opengl32.lib
+    	glfw3.lib
+    	glfw3-vc140.lib
+    	assimp-vc142-mt.lib
+    	glew32.lib
+    	liblua53.lib
+    	freetype.lib
+    	irrKlang.lib
+    	GFSDK_FaceWorks.win64.lib
+	)
+elseif(APPLE)
+	set(DEPENDENCY_FILES
+	${FREETYPE_LIBRARIES}
+	${assimp_LIBRARIES}
+	${GLEW_LIBRARIES}
+	${GLFW_LIBRARIES}
+	${OPENGL_LIBRARIES}
+	#libfreetype.dylib
+	)
+
+endif(WIN32)
 
 set(DEPENDENCY_SFILES
 	${IMGUI}/imgui.cpp
@@ -100,6 +112,12 @@ INCLUDE_DIRECTORIES( BEFORE
   ${GLFW}/include
   ${THIRD_LUA}/include
   ${FreeType}
+  ${FREETYPE_INCLUDE_DIR}
+  ${assimp_INCLUDE_DIRS}
+  ${OPENGL_INCLUDE_DIRS}
+  /System/Library/Frameworks
+  ${GLFW_INCLUDE_DIR}
+  ${GLEW_INCLUDE_DIR}
   ${IRRKLANG}/include
   ${VULKAN}
   ${GFSDK}
@@ -111,6 +129,7 @@ link_directories(
   ${GLEW}/lib/x64
   ${THIRD_LUA}/lib
   ${FreeType}/lib
+  ${FREETYPE_LIBRARIES}
   ${IRRKLANG}/lib
   ${VK_SDK_PATH}/Lib
   ${GFSDK}/lib
@@ -200,7 +219,16 @@ SOURCE_GROUP(Window/Input FILES  ${WINDOW_INPUT_SRC})
 
 set(EXECUTABLE_OUTPUT_PATH "../../Bin")
 
-target_link_libraries(GameRenderEngine PRIVATE ${DEPENDENCY_FILES})	
+#
+if(WIN32)
+	target_link_libraries(GameRenderEngine PRIVATE ${DEPENDENCY_FILES})	
+endif(WIN32)
+		
+if(APPLE)
+	target_link_libraries(GameRenderEngine PRIVATE  ${DEPENDENCY_FILES})
+endif(APPLE)
+
+
 
 set(CMAKE_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
 
@@ -226,9 +254,10 @@ set (DLLFILES
 	${GFSDKDLL}
 	)
  
-add_custom_command(TARGET GameRenderEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${DLLFILES} ${CMAKE_CURRENT_SOURCE_DIR}/../Bin)
-
+if(WIN32)
+	add_custom_command(TARGET GameRenderEngine POST_BUILD
+    	COMMAND ${CMAKE_COMMAND} -E copy ${DLLFILES} ${CMAKE_CURRENT_SOURCE_DIR}/../Bin)
+endif(WIN32)
 ############################copy dll #############################
 
 set_target_properties(GameRenderEngine PROPERTIES CMAKE_WORKING_DIRECTORY "${EXECUTABLE_OUTPUT_PATH}")
