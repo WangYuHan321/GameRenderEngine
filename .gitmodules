@@ -1,0 +1,23 @@
+#[submodule "OpenGL/ThirdLib/assimp"]
+#	path = OpenGL/ThirdLib/assimp
+#	url = https://github.com/assimp/assimp.git
+#
+#[submodule "OpenGL/ThirdLib/freetype"]
+#	path = OpenGL/ThirdLib/freetype
+#	url = https://github.com/freetype/freetype.git
+#
+#[submodule "OpenGL/ThirdLib/imgui"]
+#	path = OpenGL/ThirdLib/imgui
+#	url = https://github.com/ocornut/imgui.git
+#	
+#[submodule "OpenGL/ThirdLib/glm"]
+#	path = OpenGL/ThirdLib/glm
+#	url = https://github.com/icaven/glm.git
+#	
+#[submodule "OpenGL/ThirdLib/glfw"]
+#	path = OpenGL/ThirdLib/glfw
+#	url = https://github.com/glfw/glfw.git
+#	
+#[submodule "OpenGL/ThirdLib/lua"]
+#	path = OpenGL/ThirdLib/lua
+#	url = https://github.com/lua/lua.git
