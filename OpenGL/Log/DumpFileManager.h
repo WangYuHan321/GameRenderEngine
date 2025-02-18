@@ -1,9 +1,11 @@
 #pragma once
+#include "../Util/common.h"
+#include "../Util/Singleton.h"
+
+#ifdef WINDOWS_PLATFORM
 
 #include <windows.h>
 #include <imagehlp.h>
-#include "../Util/common.h"
-#include "../Util/Singleton.h"
 
 static LONG WINAPI MyUnhandledExceptionFilter(
     struct _EXCEPTION_POINTERS* ExceptionInfo
@@ -20,7 +22,7 @@ static LONG WINAPI MyUnhandledExceptionFilter(
 
 static void CreateMiniDump(EXCEPTION_POINTERS* pep)
 {
-#ifdef WINDOWS_PLATFORM
+
 
     // Open the file
     typedef BOOL(*PDUMPFN)(
@@ -58,11 +60,7 @@ static void CreateMiniDump(EXCEPTION_POINTERS* pep)
         // Close the file
 
         CloseHandle(hFile);
-
     }
-#elif
-    return;
-#endif
 }
 
 class DumpFileManager 
@@ -124,3 +122,32 @@ public:
     ~DumpFileManager() {}
 };
 
+#else
+
+class DumpFileManager
+{
+private:
+
+    bool PreventSetUnhandledExceptionFilter()
+    {
+    }
+public:
+    DumpFileManager()
+    {
+    }
+
+    void OnStartUp()
+    {
+    }
+
+    void OnEnd()
+    {
+
+    }
+
+    ~DumpFileManager() {}
+};
+
+
+
+#endif

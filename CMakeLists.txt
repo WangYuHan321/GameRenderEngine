@@ -148,17 +148,8 @@ elseif(UNIX)
 endif()
 
 include(cmake/files.cmake)
+include(cmake/Dependencies.cmake)
 include(cmake/CEGUIMacros.cmake)
-
-if(APPLE)
-	include(cmake/FindFreetype.cmake)
-	include(cmake/Findassimp.cmake)
-	include(cmake/FindGLEW.cmake)
-	include(cmake/FindGLFW.cmake)
-	include(cmake/FindOpenGL.cmake)
-endif()
-
-
 
 add_subdirectory(OpenGL)
 add_subdirectory(CEGUIApp)

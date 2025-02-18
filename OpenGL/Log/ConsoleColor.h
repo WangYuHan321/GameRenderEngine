@@ -1,6 +1,6 @@
 #pragma once
+#include "../Util/common.h"
 #include<iostream>
-#include<windows.h>
 
 #define COLOR_BLUE blue
 #define COLOR_RED red
@@ -9,14 +9,12 @@
 #define COLOR_WHIT white
 #define COLOR_DEFAULT grey
 
-#ifdef WIN32
+#ifdef WINDOWS_PLATFORM
+
+#include<windows.h>
+
 inline std::ostream& blue(std::ostream& s)
 {
-
-
-
-
-
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hStdout,
 		FOREGROUND_BLUE |

@@ -426,6 +426,9 @@ set(SCENE_SRC
 
 set(THREAD_SRC
 	../OpenGL/Thread/Runable.h
+	../OpenGL/Thread/Util.h
+	../OpenGL/Thread/Thread.h
+	../OpenGL/Thread/Thread.cpp
 	../OpenGL/Thread/ThreadPool.h
 	../OpenGL/Thread/ThreadPool.cpp	
 )
