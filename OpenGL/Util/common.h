@@ -34,10 +34,13 @@
 
 typedef unsigned int uint32;
 typedef int int32;
+typedef unsigned long DWORD;
 typedef unsigned __int64 uint64;
 typedef __int64 int64;  
 typedef std::string string;
 typedef unsigned long long ullong;
+
+#define THREAD_CALLBACK __stdcall
 
 using Vector3 = glm::vec3;
 using Vector2 = glm::vec2;

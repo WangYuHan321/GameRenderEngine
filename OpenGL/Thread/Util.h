@@ -100,25 +100,35 @@ public:
 		CloseHandle(m_hEvent);
 	}
 
-	void Wait()
+	inline void Wait()
 	{
 		WaitForSingleObject(m_hEvent, INFINITE);
 	}
 
-	void TimeWait(int32 tw)
+	inline bool Wait(int waitTime)
+	{
+		return WaitForSingleObject(m_hEvent, waitTime) == WAIT_OBJECT_0;
+	}
+
+	inline void TimeWait(int32 tw)
 	{
 		Reset();
 		WaitForSingleObject(m_hEvent, tw);
 	}
 
-	void Set()
-	{
-		SetEvent(m_hEvent);
-	}
-
-	void Reset()
+	inline void Reset()
 	{
 		ResetEvent(m_hEvent);
+	}
+
+	inline void Trigger()
+	{
+		::SetEvent(m_hEvent);
+	}
+
+	inline bool IsTrigger()
+	{
+		return Wait(0);
 	}
 
 private:

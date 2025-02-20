@@ -429,6 +429,8 @@ set(THREAD_SRC
 	../OpenGL/Thread/Util.h
 	../OpenGL/Thread/Thread.h
 	../OpenGL/Thread/Thread.cpp
+	../OpenGL/Thread/WinThread.h
+	../OpenGL/Thread/WinThread.cpp
 	../OpenGL/Thread/ThreadPool.h
 	../OpenGL/Thread/ThreadPool.cpp	
 )
