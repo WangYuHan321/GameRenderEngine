@@ -353,6 +353,27 @@ set(RENDER_RESOURCE_LOADER_SRC
 	../OpenGL/Render/Resource/Loader/TextureLoader.cpp
 )
 
+set(RENDER_RESOURCE_LOADER_ASYNC_SRC
+	../OpenGL/Render/Resource/Loader/Async/FileJob.h
+	../OpenGL/Render/Resource/Loader/Async/FileJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/FontJob.h
+	../OpenGL/Render/Resource/Loader/Async/FontJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/AnimJob.h
+	../OpenGL/Render/Resource/Loader/Async/AnimJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/ModelJob.h
+	../OpenGL/Render/Resource/Loader/Async/ModelJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/ShaderJob.h
+	../OpenGL/Render/Resource/Loader/Async/ShaderJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/ResourceJob.h
+	../OpenGL/Render/Resource/Loader/Async/ResourceJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/MaterialJob.h
+	../OpenGL/Render/Resource/Loader/Async/MaterialJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/Texture2DJob.h
+	../OpenGL/Render/Resource/Loader/Async/Texture2DJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/Texture3DJob.h
+	../OpenGL/Render/Resource/Loader/Async/Texture3DJob.cpp
+)
+
 set(RENDER_RESOURCE_PARSER_SRC
 	../OpenGL/Render/Resource/Parser/AssimpParser.h
 	../OpenGL/Render/Resource/Parser/AssimpParser.cpp
