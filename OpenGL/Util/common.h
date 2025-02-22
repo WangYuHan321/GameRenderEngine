@@ -7,7 +7,6 @@
 #include<sstream>
 #include<fstream>
 #include<vector>
-#include<intrin.h>
 #include<map>
 #include <functional>
 #include "../Math/Math.h"
@@ -38,8 +37,8 @@
 typedef unsigned int uint32;
 typedef int int32;
 typedef unsigned long DWORD;
-typedef unsigned __int64 uint64;
-typedef __int64 int64;  
+//typedef unsigned __int64 uint64;
+//typedef __int64 int64;  
 typedef std::string string;
 typedef unsigned long long ullong;
 

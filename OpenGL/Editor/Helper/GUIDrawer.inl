@@ -9,7 +9,7 @@ inline void GUIDrawer::DrawScalar(WidgetContainer& p_root, const std::string& p_
 
 	CreateTitle(p_root, p_name);
 	auto& widget = p_root.CreateWidget<DragSingleScalar<T>>(GetDataType<T>(), p_min, p_max, p_data, p_step, "", GetFormat<T>());
-	auto& dispatcher = widget.AddPlugin<DataDispatcher<T>>();
+	auto& dispatcher = widget. template AddPlugin<DataDispatcher<T>>();
 	dispatcher.RegisterReference(p_data);
 }
 
@@ -20,7 +20,7 @@ inline void GUIDrawer::DrawScalar(WidgetContainer& p_root, const std::string& p_
 
 	CreateTitle(p_root, p_name);
 	auto& widget = p_root.CreateWidget<DragSingleScalar<T>>(GetDataType<T>(), p_min, p_max, static_cast<T>(0), p_step, "", GetFormat<T>());
-	auto& dispatcher = widget.AddPlugin<DataDispatcher<T>>();
+	auto& dispatcher = widget. template AddPlugin<DataDispatcher<T>>();
 	dispatcher.RegisterGatherer(p_gatherer);
 	dispatcher.RegisterProvider(p_provider);
 }

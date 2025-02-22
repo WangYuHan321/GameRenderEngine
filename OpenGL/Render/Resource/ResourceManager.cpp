@@ -123,7 +123,7 @@ SceneNode* ResourceManager::LoadMesh(std::string name, std::string path)
 
 Material* ResourceManager::CreateMaterial(std::string name)
 {
-	static uint64 number = 0;
+	static uint32 number = 0;
 	
 	if (m_material.find(SID(name)) != m_material.end())
 	{
