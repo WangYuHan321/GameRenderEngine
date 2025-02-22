@@ -7,7 +7,7 @@ Model* ModelLoader::Create(const std::string& p_filepath, EModelParserFlags p_pa
 {
 	Model* result = new Model();
 
-	if (__ASSIMP.LoadModelEx(p_filepath, *result, p_parserFlags))
+	if (__ASSIMP.LoadModel(p_filepath, result->m_meshes, result->m_materialNames, p_parserFlags))
 	{
 		result->ComputeBoundingSphere();
 		return result;

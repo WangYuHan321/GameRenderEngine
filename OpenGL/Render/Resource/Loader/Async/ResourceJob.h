@@ -1,30 +1,38 @@
 #pragma once
+#include "FileJob.h"
 
-class ResourceJob
+class ResourceJob : public FileJob
 {
 public:
-	enum //加载状态
+	enum
 	{
-		LS_PENDING,//等待中
-		LS_LOADED,//加载好
-		LS_FAIL, // error
+		JS_WaitLoadFromDisk_AnyThread = JS_PENDING,
+		JS_CreateLoadJobObject_MainThread = JS_MAIN_THREAD,
 	};
 
-	enum //任务类型
+	enum	//Resource Type
 	{
-		JT_TEXTURE,
-		JT_MATERIAL,
-		JT_ANIM,
-		JT_ACTOR,
-		JT_MODEL,
-		JT_FONT,
-	};
-	enum //任务状态
-	{
-		JS_NONE,
-		JS_DELETE,
+		RT_TEXTURE,
+		RT_SKELECTON_MODEL,
+		RT_STATIC_MODEL,
+		RT_ACTION,
+		RT_MATERIAL,
+		RT_POSTEFFECT,
+		RT_ANIMTREE,
+		RT_ACTOR,
+		RT_MAP,
+		RT_FONTTYPE,
+		RT_MAX
 	};
 
 	ResourceJob();
+	virtual ~ResourceJob() = 0;
+	virtual unsigned int GetResourceType() const = 0;
+	virtual unsigned int GetJobType()const
+	{
+		return JT_RESOURCE;
+	}
 
+	virtual void MainThreadProcess();
+	virtual void AsyncThreadProcess();
 };

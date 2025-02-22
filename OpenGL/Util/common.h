@@ -16,6 +16,9 @@
 #include"../ThirdLib/ImGui/imgui.h"
 #include"../ThirdLib/ImGui/imgui_internal.h"
 
+#define EngineNew new
+#define EngineDelete delete
+
 #ifdef _WIN32
 #define WINDOWS_PLATFORM
 #endif

@@ -1,2 +1,63 @@
 #pragma once
+#include "../../Util/common.h"
 
+//异步加载类
+//设计分为主线程和加载线程
+// 旨在加载线程进行加载文件 主线程来执行Link Obj
+
+
+class AsyncJob
+{
+public:
+	AsyncJob();
+	virtual ~AsyncJob() = 0 {};
+
+
+
+	enum //任务状态
+	{
+		JS_PENDING = 0,
+		JS_MAIN_THREAD = 25,
+		JS_SUCCESS = 245,
+		JS_FAIL = 255,
+	};
+
+	enum //加载状态
+	{
+		LS_PENDING,//等待中
+		LS_LOADED,//加载好
+		LS_FAIL, // error
+	};
+
+	enum //任务类型
+	{
+		JT_FILE,
+		JT_RESOURCE,
+	};
+
+	unsigned int m_uiControllState;
+	unsigned m_uiJobState;
+	virtual void MainThreadProcess() = 0;
+	virtual void AsyncThreadProcess() = 0;
+	virtual unsigned int GetJobType() const = 0;
+	virtual void Failed() = 0;
+};
+
+
+class FileJob : public AsyncJob
+{
+public:
+
+	FileJob();
+	virtual ~FileJob() = 0;
+	virtual void MainThreadProcess() = 0;
+	virtual void AsyncThreadProcess();
+	virtual unsigned int GetJobType() const
+	{
+		return JT_FILE;
+	}
+	string m_fileName;
+protected:
+	unsigned char* m_pBuffer;
+	unsigned int m_uiSize;
+};

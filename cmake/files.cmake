@@ -372,6 +372,8 @@ set(RENDER_RESOURCE_LOADER_ASYNC_SRC
 	../OpenGL/Render/Resource/Loader/Async/Texture2DJob.cpp
 	../OpenGL/Render/Resource/Loader/Async/Texture3DJob.h
 	../OpenGL/Render/Resource/Loader/Async/Texture3DJob.cpp
+	../OpenGL/Render/Resource/Loader/Async/AsynLoaderManager.h
+	../OpenGL/Render/Resource/Loader/Async/AsynLoaderManager.cpp
 )
 
 set(RENDER_RESOURCE_PARSER_SRC
