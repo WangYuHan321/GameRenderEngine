@@ -18,8 +18,6 @@ public:
 	void Sleep(int millSecond);
 	void SetPriority(Priority p);
 
-	bool IsStopTrigger();
-
 private:
 	static DWORD THREAD_CALLBACK ThreadProc(void* t);
 

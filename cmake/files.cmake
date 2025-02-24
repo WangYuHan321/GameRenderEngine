@@ -456,6 +456,8 @@ set(THREAD_SRC
 	../OpenGL/Thread/WinThread.cpp
 	../OpenGL/Thread/ThreadPool.h
 	../OpenGL/Thread/ThreadPool.cpp	
+	../OpenGL/Thread/AsynJobThread.h
+	../OpenGL/Thread/AsynJobThread.cpp	
 )
 
 set(TIME_SRC
