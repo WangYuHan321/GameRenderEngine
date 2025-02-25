@@ -413,6 +413,8 @@ set(RENDER_SHADOW_SRC
 )
 
 set(RHI_SRC
+	../OpenGL/RHI/BaseCommand.h
+	../OpenGL/RHI/BaseCommand.cpp
 	../OpenGL/RHI/GraphicsManager.h
 	../OpenGL/RHI/GraphicsManager.cpp
 	../OpenGL/RHI/PipelineState.h
