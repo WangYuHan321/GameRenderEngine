@@ -414,6 +414,53 @@ namespace EasyGraphics {
 	};
 }
 
+#define POLYNOMIAL 0x04c11db7L
+static unsigned int CRCTable[256] = { 0 };
+static bool bInit = false;
+static void InitCRCTable()
+{
+	register int i, j;
+	register unsigned long crc_accum;
+	for (i = 0; i < 256; i++)
+	{
+		crc_accum = ((unsigned long)i << 24);
+		for (j = 0; j < 8; j++)
+		{
+			if (crc_accum & 0x80000000L) crc_accum = (crc_accum << 1) ^ POLYNOMIAL;
+			else crc_accum = (crc_accum << 1);
+		}
+		CRCTable[i] = crc_accum;
+	}
+}
+static unsigned int CRC32Compute(const void* pData, unsigned int uiDateSize)
+{
+	if (!bInit) { InitCRCTable(); bInit = true; }
+
+	unsigned int uiResult;
+
+	if (uiDateSize == 0) return 0;
+
+	const unsigned char* pDateTemp = (const unsigned char*)pData;
+	uiResult = *pDateTemp++ << 24;
+	if (uiDateSize > 1)
+	{
+		uiResult |= *pDateTemp++ << 16;
+		if (uiDateSize > 2)
+		{
+			uiResult |= *pDateTemp++ << 8;
+			if (uiDateSize > 3) uiResult |= *pDateTemp++;
+		}
+	}
+	uiResult = ~uiResult;
+
+	for (size_t i = 4; i < uiDateSize; i++)
+	{
+		uiResult = (uiResult << 8 | *pDateTemp++) ^ CRCTable[uiResult >> 24];
+	}
+
+	return ~uiResult;
+}
+
 #if 0
 
 #define Assert(exp, desc)\

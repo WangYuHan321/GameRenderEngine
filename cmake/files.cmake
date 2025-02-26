@@ -321,6 +321,10 @@ set(RENDER_MESH_SRC
 )
 
 set(RENDER_RESOURCE_SRC
+	../OpenGL/Render/Resource/AResource.h
+	../OpenGL/Render/Resource/AResource.cpp
+	../OpenGL/Render/Resource/AResourceProxy.h
+	../OpenGL/Render/Resource/AResourceProxy.cpp
 	../OpenGL/Render/Resource/AResourceManager.h
 	../OpenGL/Render/Resource/AResourceManager.cpp
 	../OpenGL/Render/Resource/AResourceManager.inl
