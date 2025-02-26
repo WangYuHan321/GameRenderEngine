@@ -18,8 +18,19 @@ private:
 class AResource
 {
 public:
+	enum class ResType
+	{
+		RT_TEXTURE,
+		RT_MODEL,
+		RT_UNKNOW,
+		RT_SCRIPT,
+		RT_ANIM,
+	}RESTYPE;
+
 	AResource(ResName& resName);
 	~AResource();
+
+	virtual ResType GetResourceType()const { return ResType::RT_UNKNOW; }
 
 private:
 	ResName m_resName;
