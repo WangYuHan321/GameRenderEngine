@@ -4,12 +4,6 @@
 class ResourceJob : public FileJob
 {
 public:
-	enum
-	{
-		JS_WaitLoadFromDisk_AnyThread = JS_PENDING,
-		JS_CreateLoadJobObject_MainThread = JS_MAIN_THREAD,
-	};
-
 	enum	//Resource Type
 	{
 		RT_TEXTURE,

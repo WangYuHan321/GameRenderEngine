@@ -95,7 +95,7 @@ public:
 	AsynJobThread();
 	virtual ~AsynJobThread();
 
-    void AddJob(AsyncJob* job);
+    void SafeAddJob(AsyncJob* job);
 	void Run();
 
 protected:

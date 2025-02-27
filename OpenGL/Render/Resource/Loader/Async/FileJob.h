@@ -16,10 +16,9 @@ public:
 
 	enum //任务状态
 	{
-		JS_PENDING = 0,
-		JS_MAIN_THREAD = 25,
-		JS_SUCCESS = 245,
-		JS_FAIL = 255,
+		JS_NONE,
+		JS_FAIL,
+		JS_DELETE,
 	};
 
 	enum //加载状态
@@ -29,13 +28,19 @@ public:
 		LS_FAIL, // error
 	};
 
-	enum //任务类型
+	enum // JOB TYPE
 	{
 		JT_FILE,
 		JT_RESOURCE,
+		JT_TEXTURE,
+		JT_MATERIAL,
+		JT_ANIM,
+		JT_ACTOR,
+		JT_MAP,
+		JT_FONT,
 	};
 
-	unsigned int m_uiControllState;
+	unsigned int m_uiLoadState;
 	unsigned m_uiJobState;
 	virtual void MainThreadProcess() = 0;
 	virtual void AsyncThreadProcess() = 0;

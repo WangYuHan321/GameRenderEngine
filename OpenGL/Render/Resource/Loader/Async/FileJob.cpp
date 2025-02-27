@@ -2,6 +2,8 @@
 #include <filesystem>
 AsyncJob::AsyncJob()
 {
+    m_uiLoadState = LS_PENDING;
+    m_uiJobState = JS_NONE;
 }
 //AsyncJob::~AsyncJob()
 //{

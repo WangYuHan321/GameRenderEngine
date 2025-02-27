@@ -9,7 +9,7 @@ AsynJobThread::~AsynJobThread()
 	m_pResourceQueue.empty();
 }
 
-void AsynJobThread::AddJob(AsyncJob* job)
+void AsynJobThread::SafeAddJob(AsyncJob* job)
 {
 	m_pResourceQueue.push(job);
 	if (m_pResourceQueue.size() != 0)
