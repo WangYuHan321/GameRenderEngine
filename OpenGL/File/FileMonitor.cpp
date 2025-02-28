@@ -83,7 +83,7 @@ void FileMonitor::Run()
 
 	if (INVALID_HANDLE_VALUE == hDir)
 	{
-		LOG_ERROR("current thread 0x%d  error %d \n", GetCurrentThreadId(), GetLastError()); return;
+		LOG_ERROR("current thread 0x" + std::to_string(GetCurrentThreadId()) + " error code " + std::to_string(GetLastError())); return;
 	}
 
 	while (hr == S_OK)
@@ -96,13 +96,13 @@ void FileMonitor::Run()
 			FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_LAST_WRITE,
 			&dwBytesReturned, &overlapped, NULL))
 		{
-			LOG_ERROR("current thread 0x%d  error %d \n", GetCurrentThreadId(), GetLastError()); return;
+			LOG_ERROR("current thread 0x" + std::to_string(GetCurrentThreadId()) + " error code " + std::to_string(GetLastError())); return;
 		}
 
 		if (0 == ::GetOverlappedResult(hDir, &overlapped,
 			&dwBytesTransferred, TRUE))
 		{
-			LOG_ERROR("current thread 0x%d  error %d \n", GetCurrentThreadId(), GetLastError()); return;
+			LOG_ERROR("current thread 0x" + std::to_string(GetCurrentThreadId()) + " error code " + std::to_string(GetLastError())); return;
 		}
 		else
 		{

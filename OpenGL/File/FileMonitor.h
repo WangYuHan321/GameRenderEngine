@@ -25,7 +25,7 @@ private:
 	std::vector<ResourceChangeHandler*> m_pOwnders;
 	FileChangeArgs* m_pArg;
 
-	char m_readBuffer[1024];
+	unsigned char m_readBuffer[1024];
 
 };
 
