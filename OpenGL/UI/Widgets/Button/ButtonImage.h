@@ -7,7 +7,7 @@ class ButtonImage :
 	public AButton
 {
 public:
-	ButtonImage(uint32_t p_textureID, const ImVec2& p_size);
+	ButtonImage(uint32_t p_textureID, const ImVec2& p_size, int padding = -1);
 
 protected:
 	void _Draw_Impl() override;
@@ -21,5 +21,6 @@ public:
 
 	UTextureID textureID;
 	ImVec2 size;
+	int framePadding;
 };
 

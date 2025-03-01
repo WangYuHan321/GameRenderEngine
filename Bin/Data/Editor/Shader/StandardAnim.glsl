@@ -66,11 +66,11 @@ void main()
             totalPosition = vec4(geo_Pos,1.0f);
             break;
         }
-        vec4 localPosition = finalBonesMatrices[geo_BoneID[i]] * vec4(geo_Pos,1.0f);
+        vec4 localPosition = finalBonesMatrices[int(geo_BoneID[i])] * vec4(geo_Pos,1.0f);
         totalPosition += localPosition * geo_BoneWeight[i];
-        vec3 localNormal = mat3(finalBonesMatrices[geo_BoneID[i]]) * geo_Normal;
+        vec3 localNormal = mat3(finalBonesMatrices[int(geo_BoneID[i])]) * geo_Normal;
     }
-    vs_out.FragPos          = vec3(ubo_Model * vec4(totalPosition, 1.0));
+    vs_out.FragPos          = vec3(ubo_Model * totalPosition);
 
     gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }

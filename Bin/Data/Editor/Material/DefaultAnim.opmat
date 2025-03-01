@@ -5,47 +5,90 @@
         <DepthWrite>true</DepthWrite>
         <DepthCompare>513</DepthCompare>
         <Cull>true</Cull>
-		<CullFace>1029</CullFace>
-		<CullWindingOrder>2305</CullWindingOrder>
-		<Blend>false</Blend>	
-		<BlendSrc>1</BlendSrc>
-		<BlendDst>771</BlendDst>
-		<BlendEquation>32774</BlendEquation>
-		<ColorWrite>true</ColorWrite>	
-		<ShadowCast>true</ShadowCast>	
-		<ShadowReceive>true</ShadowReceive>	
-		<GPUInstance>1</GPUInstance>	
+        <CullFace>1029</CullFace>
+        <CullWindingOrder>2305</CullWindingOrder>
+        <Blend>false</Blend>
+        <BlendSrc>1</BlendSrc>
+        <BlendDst>771</BlendDst>
+        <BlendEquation>32774</BlendEquation>
+        <ColorWrite>true</ColorWrite>
+        <ShadowCast>true</ShadowCast>
+        <ShadowReceive>true</ShadowReceive>
+        <GPUInstance>1</GPUInstance>
     </Settings>
     <uniforms>
         <uniform>
-            <name>diffuseColor</name>
+            <name>shadow_LightDepthMap0</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>u_DiffuseMap</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>u_HeightMap</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>u_MaskMap</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>u_NormalMap</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>u_SpecularMap</name>
+            <value>?</value>
+        </uniform>
+        <uniform>
+            <name>finalBonesMatrices[0]</name>
+        </uniform>
+        <uniform>
+            <name>shadow_lightDepthMat0</name>
+        </uniform>
+        <uniform>
+            <name>u_Diffuse</name>
             <value>
                 <x>1</x>
-                <y>0.99998999</y>
-                <z>0.99998999</z>
-                <w>0</w>
+                <y>1</y>
+                <y>1</y>
+                <w>1</w>
             </value>
         </uniform>
         <uniform>
-            <name>diffuseTexture</name>
-            <value>?</value>
+            <name>u_EnableNormalMapping</name>
+            <value>false</value>
         </uniform>
         <uniform>
-            <name>specularColor</name>
+            <name>u_HeightScale</name>
+            <value>0</value>
+        </uniform>
+        <uniform>
+            <name>u_Shininess</name>
+            <value>100</value>
+        </uniform>
+        <uniform>
+            <name>u_Specular</name>
             <value>
-                <x>1e-06</x>
-                <y>9.9998999e-07</y>
-                <z>9.9998999e-07</z>
-                <w>0</w>
+                <x>1</x>
+                <y>1</y>
+                <y>1</y>
             </value>
         </uniform>
         <uniform>
-            <name>shineness</name>
-            <value>64</value>
+            <name>u_TextureOffset</name>
+            <value>
+                <x>0</x>
+                <y>0</y>
+            </value>
         </uniform>
         <uniform>
-            <name>specularTexture</name>
-            <value>?</value>
+            <name>u_TextureTiling</name>
+            <value>
+                <x>1</x>
+                <y>1</y>
+            </value>
         </uniform>
     </uniforms>
 </root>
