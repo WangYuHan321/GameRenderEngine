@@ -26,9 +26,9 @@
 #define VULKAN_API
 #endif
 
-#define USE_NO_EDITOR
+//#define USE_NO_EDITOR
 
-//#define USE_EDITOR //使用不是编辑器下面
+#define USE_EDITOR //使用不是编辑器下面
 
 #define MSAA_NUM 4
 
