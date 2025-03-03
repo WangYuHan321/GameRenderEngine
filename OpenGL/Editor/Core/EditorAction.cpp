@@ -5,6 +5,7 @@
 #include "../../Global/ServiceLocator.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../Core/ECS/Components/CMaterialRenderer.h"
+#include "../../Render/Resource/Loader/Async/AsynLoaderManager.h"
 
 EditorAction::EditorAction(Context& p_context, EditorRender& p_editorRender, PanelsManager& p_panelMgr):
 	m_context(p_context),
@@ -62,6 +63,15 @@ Actor& EditorAction::CreateActorWithModel(std::string p_model, bool p_focuseonCr
 		SelectActor(instance);
 
 	return instance;
+}
+
+Actor& EditorAction::CreateActorWithAsynModel(std::string p_model, bool p_focuseonCreation, Actor* p_parent, std::string p_name)
+{
+	Actor& selfActor = CreateEmptyActor();
+
+	AsynLoaderManager::getInstance()->AddModel(p_model);
+
+	return selfActor;
 }
 
 Actor& EditorAction::CreateEmptyActor(bool p_focusOnCreation, Actor* p_parent, std::string p_name)

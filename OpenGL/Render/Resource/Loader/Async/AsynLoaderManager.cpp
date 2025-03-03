@@ -1,4 +1,7 @@
 #include "AsynLoaderManager.h"
+#include "Texture2DJob.h"
+#include "Texture3DJob.h"
+#include "ModelJob.h"
 
 AsynLoaderManager::AsynLoaderManager()
 {
@@ -35,6 +38,18 @@ void AsynLoaderManager::Update(float appTime)
 			}
 		}
 	}
+}
+
+void AsynLoaderManager::AddTexture2D(std::string texPath)
+{
+	Texture2DJob* pJob = EngineNew Texture2DJob(texPath);
+	AddJob(pJob);
+}
+
+void AsynLoaderManager::AddModel(std::string modelPath)
+{
+	ModelJob *pJob = EngineNew ModelJob(modelPath);
+	AddJob(pJob);
 }
 
 void AsynLoaderManager::DeleteResource(AsyncJob* asynJob)

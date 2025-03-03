@@ -38,6 +38,8 @@ public:
 
 	Actor& CreateActorWithModel(std::string model, bool p_focuseonCreation = true, Actor* p_parent = nullptr, std::string p_name = "");
 
+	Actor& CreateActorWithAsynModel(std::string model, bool p_focuseonCreation = true, Actor* p_parent = nullptr, std::string p_name = "");
+
 	Actor& CreateEmptyActor(bool p_focusOnCreation = true, Actor* p_parent = nullptr, std::string p_name = "");
 
 	void CreateFontActor();

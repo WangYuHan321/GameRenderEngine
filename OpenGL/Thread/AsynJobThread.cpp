@@ -1,5 +1,8 @@
 #include "AsynJobThread.h"
 AsynJobThread::AsynJobThread()
+#ifdef WINDOWS_PLATFORM
+	:WinThread()
+#endif
 {
 	m_pResourceQueue.empty();
 }
@@ -27,7 +30,6 @@ void AsynJobThread::Run()
 			pJob->AsyncThreadProcess();
 		}
 	}
-
 }
 
 string AsynJobThread::GetThreadName()const

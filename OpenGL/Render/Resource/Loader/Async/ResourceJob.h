@@ -19,7 +19,7 @@ public:
 		RT_MAX
 	};
 
-	ResourceJob();
+	ResourceJob(string resourceName);
 	virtual ~ResourceJob() = 0;
 	virtual unsigned int GetResourceType() const = 0;
 	virtual unsigned int GetJobType()const

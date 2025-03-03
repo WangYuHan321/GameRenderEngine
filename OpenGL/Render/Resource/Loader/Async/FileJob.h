@@ -45,7 +45,6 @@ public:
 	virtual void MainThreadProcess() = 0;
 	virtual void AsyncThreadProcess() = 0;
 	virtual unsigned int GetJobType() const = 0;
-	virtual void Failed() = 0;
 };
 
 
@@ -53,7 +52,7 @@ class FileJob : public AsyncJob
 {
 public:
 
-	FileJob();
+	FileJob(string strFileName);
 	virtual ~FileJob() = 0;
 	virtual void MainThreadProcess() = 0;
 	virtual void AsyncThreadProcess();
@@ -65,4 +64,5 @@ public:
 protected:
 	unsigned char* m_pBuffer;
 	unsigned int m_uiSize;
+	unsigned int m_resHash;
 };

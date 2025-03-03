@@ -4,7 +4,7 @@
 #include "../../ResourceManager.h"
 #include "../../Thread/AsynJobThread.h"
 
-class AsynLoaderManager
+class AsynLoaderManager : public CSingleton<AsynLoaderManager>
 {
 	friend ResourceManager;
 
@@ -13,7 +13,9 @@ public:
 	~AsynLoaderManager();
 
 	void Update(float appTime);
-	void AddTexture2D();
+	
+	void AddTexture2D(std::string texPath);
+	void AddModel(std::string modelPath);
 
 
 	void DeleteResource(AsyncJob* asynJob);

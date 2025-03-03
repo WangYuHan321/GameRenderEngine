@@ -4,6 +4,7 @@ BaseThread::BaseThread() :
 	m_priority(Priority::Normal),
 	m_stackSize(0)
 {
+	m_tsState = TS_SUSPEND;
 }
 
 BaseThread::~BaseThread()

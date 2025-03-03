@@ -74,6 +74,8 @@
 #define MENU_LOAD_SCENE 57
 #define MENU_EXIT 58
 
+#define MENU_CERBERUS 59
+
 
 
 

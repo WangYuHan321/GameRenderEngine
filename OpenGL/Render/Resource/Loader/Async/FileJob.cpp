@@ -9,7 +9,10 @@ AsyncJob::AsyncJob()
 //{
 //}
 
-FileJob::FileJob() :
+FileJob::FileJob(string strFileName) :
+    ::AsyncJob(),
+    m_fileName(strFileName),
+    m_resHash(SID(m_fileName)),
 	m_pBuffer(nullptr)
 {
 }
