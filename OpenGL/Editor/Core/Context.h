@@ -31,6 +31,7 @@
 #include "../../Render/Resource/TextureManager.h"
 #include "../../Render/Resource/MaterialManager.h"
 #include "../../Core/Scripting/ScriptInterpreter.h"
+#include "../../Render/Resource/Loader/Async/AsynLoaderManager.h"
 
 class Context
 {
@@ -67,6 +68,7 @@ public:
 	MaterialManager materialMgr;
 	FontManager fontMgr;
 	XmlManager xmlMgr;
+	AsynLoaderManager asynLoaderMgr;
 	
 private:
 	
