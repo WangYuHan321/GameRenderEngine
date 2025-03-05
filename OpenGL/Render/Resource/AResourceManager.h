@@ -20,6 +20,11 @@ public:
 
 	T* GetResource(const std::string& p_path);
 
+	// for async load
+	T* GetDefaultResource(const std::string& p_path);
+
+	void SetNewResource(const std::string& p_path, T* value);
+
 protected:
 	static std::string __ENGINE_ASSET_PATH;
 

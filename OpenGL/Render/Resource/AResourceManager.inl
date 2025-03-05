@@ -31,6 +31,23 @@ T* AResourceManager<T>::GetResource(const std::string& p_path)
 	return nullptr;
 }
 
+//now have no default resource this call nullptr
+template<typename T>
+T* AResourceManager<T>::GetDefaultResource(const std::string& p_path)
+{
+	if (m_resources.size() != 0)
+		m_resources[SID(p_path)] = m_resources[0];
+	else
+		m_resources[SID(p_path)] = nullptr;
+	return m_resources[SID(p_path)];
+}
+
+template<typename T>
+void AResourceManager<T>::SetNewResource(const std::string& p_path, T* value)
+{
+	m_resources[SID(p_path)] = value;
+}
+
 template<typename T>
 void AResourceManager<T>::UnloadResource(const std::string& p_path)
 {
