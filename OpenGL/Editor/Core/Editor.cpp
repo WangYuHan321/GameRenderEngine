@@ -62,6 +62,7 @@ void Editor::PreUpdate()
 
 void Editor::Update(float deltaTime)
 {
+	m_context.asynLoaderMgr.Update(deltaTime);
 	PrepareRender(deltaTime);
 
 	RenderViews(deltaTime);
