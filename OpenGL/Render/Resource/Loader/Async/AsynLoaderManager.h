@@ -4,7 +4,7 @@
 #include "../../ResourceManager.h"
 #include "../../Thread/AsynJobThread.h"
 
-class AsynLoaderManager : public CSingleton<AsynLoaderManager>
+class AsynLoaderManager 
 {
 	friend ResourceManager;
 

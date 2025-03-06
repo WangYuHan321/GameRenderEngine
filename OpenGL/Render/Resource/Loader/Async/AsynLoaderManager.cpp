@@ -34,6 +34,8 @@ void AsynLoaderManager::Update(float appTime)
 				{
 					pJob->MainThreadProcess();
 				}
+
+				EngineDelete m_jobArray[i];
 				m_jobArray.erase(m_jobArray.begin() + i);
 			}
 		}

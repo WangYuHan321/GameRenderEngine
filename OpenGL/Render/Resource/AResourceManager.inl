@@ -35,10 +35,14 @@ T* AResourceManager<T>::GetResource(const std::string& p_path)
 template<typename T>
 T* AResourceManager<T>::GetDefaultResource(const std::string& p_path)
 {
-	if (m_resources.size() != 0)
-		m_resources[SID(p_path)] = m_resources[0];
+	
+
+	auto it = m_resources.begin();
+	if (it != m_resources.end())
+		m_resources[SID(p_path)] = it->second;
 	else
 		m_resources[SID(p_path)] = nullptr;
+
 	return m_resources[SID(p_path)];
 }
 

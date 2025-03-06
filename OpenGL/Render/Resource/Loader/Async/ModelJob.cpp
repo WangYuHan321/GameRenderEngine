@@ -1,5 +1,7 @@
 #include "ModelJob.h"
 #include "../ModelLoader.h"
+#include "../../ModelManager.h"
+#include "../../Global/ServiceLocator.h"
 
 
 ModelJob::ModelJob(string texName):
@@ -15,6 +17,8 @@ ModelJob::~ModelJob()
 void ModelJob::MainThreadProcess()
 {
 	ResourceJob::MainThreadProcess();
+
+	ServiceLocator::getInstance()->Get<ModelManager>().SetNewResource(m_fileName, m_model);
 }
 
 void ModelJob::AsyncThreadProcess()
