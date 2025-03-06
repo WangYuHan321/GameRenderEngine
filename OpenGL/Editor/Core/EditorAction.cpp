@@ -2,6 +2,7 @@
 
 #include "../Panels/SceneView.h"
 #include "../Panels/Inspector.h"
+#include "../../File/ConfigManager.h"
 #include "../../Global/ServiceLocator.h"
 #include "../../Core/ECS/Components/CModelRenderer.h"
 #include "../../Core/ECS/Components/CMaterialRenderer.h"
@@ -67,11 +68,26 @@ Actor& EditorAction::CreateActorWithModel(std::string p_model, bool p_focuseonCr
 
 Actor& EditorAction::CreateActorWithAsynModel(std::string p_model, bool p_focuseonCreation, Actor* p_parent, std::string p_name)
 {
-	Actor& selfActor = CreateEmptyActor();
+	auto& instance = CreateEmptyActor(false, p_parent, p_name);
+	auto& modelRenderer = instance.AddComponent<CModelRenderer>();
 
-	AsynLoaderManager::getInstance()->AddModel(p_model);
+	auto model = m_context.modelMgr.GetDefaultResource( ConfigManager::getInstance()->GetEditorPath() + "\\Models\\" + p_model );
 
-	return selfActor;
+	m_context.asynLoaderMgr.AddModel(ConfigManager::getInstance()->GetEditorPath() + "\\Models\\" + p_model);
+	
+	if (model)
+		modelRenderer.SetModel(model);
+
+	auto& materialRenderer = instance.AddComponent<CMaterialRenderer>();
+	const auto material = m_context.materialMgr["Default.opmat"];
+
+	if (material)
+		materialRenderer.FillWithMaterial(*material);
+
+	if (p_focuseonCreation)
+		SelectActor(instance);
+	
+	return  instance;
 }
 
 Actor& EditorAction::CreateEmptyActor(bool p_focusOnCreation, Actor* p_parent, std::string p_name)
