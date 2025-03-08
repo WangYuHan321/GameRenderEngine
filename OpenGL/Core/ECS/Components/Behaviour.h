@@ -1,8 +1,9 @@
 #pragma once
-
-#include <sol.hpp>
 #include "../Actor.h"
 #include "../Components/AComponent.h"
+#ifdef WINDOWS_PLATFORM
+#include <sol.hpp>
+#endif
 
 class Behaviour : public AComponent
 {
@@ -22,12 +23,16 @@ public:
 
 	virtual void OnDestroy() override;
 
+#ifdef WINDOWS_PLATFORM
 	bool RegisterToLuaContext(sol::state& p_luaState, const std::string& p_scriptFolder);
+#endif
 
 	void UnregisterFromLuaContext();
 
+#ifdef WINDOWS_PLATFORM
 	template<typename... Args>
 	void LuaCall(const std::string& p_functionName, Args&&... p_args);
+#endif
 
 	virtual void OnSerialize(tinyxml2::TinyXMLDocument& p_doc, tinyxml2::XMLNode* p_node) override;
 
@@ -47,7 +52,11 @@ public:
 	std::string m_scriptName;
 
 private:
+#ifdef WINDOWS_PLATFORM
 	sol::table m_object = sol::nil;
+#endif
 };
 
-#include "Behaviour.inl"
+#ifdef WINDOWS_PLATFORM
+	#include "Behaviour.inl"
+#endif

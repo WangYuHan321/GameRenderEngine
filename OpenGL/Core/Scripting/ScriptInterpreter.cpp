@@ -19,6 +19,7 @@ ScriptInterpreter::~ScriptInterpreter()
 
 void ScriptInterpreter::CreateLuaContextAndBindGlobals()
 {
+#ifdef WINDOWS_PLATFORM
 	if (!m_luaState)
 	{
 		m_luaState = std::make_unique<sol::state>();
@@ -52,10 +53,12 @@ void ScriptInterpreter::CreateLuaContextAndBindGlobals()
 			});
 
 	}
+#endif
 }
 
 void ScriptInterpreter::DestroyLuaContext()
 {
+#ifdef WINDOWS_PLATFORM
 	if (m_luaState)
 	{
 		std::for_each(m_behaviours.begin(), m_behaviours.end(), [this](Behaviour* behaviour)
@@ -66,11 +69,13 @@ void ScriptInterpreter::DestroyLuaContext()
 		m_luaState.reset();
 		m_isOk = false;
 	}
+#endif
 }
 
 
 void ScriptInterpreter::Consider(Behaviour* p_toConsider)
 {
+#ifdef WINDOWS_PLATFORM
 	if (m_luaState)
 	{
 		m_behaviours.push_back(p_toConsider);
@@ -82,10 +87,12 @@ void ScriptInterpreter::Consider(Behaviour* p_toConsider)
 		}
 
 	}
+#endif
 }
 
 void ScriptInterpreter::Unconsider(Behaviour* p_toUnconsider)
 {
+#ifdef WINDOWS_PLATFORM
 	if (m_luaState)
 		p_toUnconsider->UnregisterFromLuaContext();
 
@@ -95,6 +102,7 @@ void ScriptInterpreter::Unconsider(Behaviour* p_toUnconsider)
 		}));
 
 	RefreshAll();
+#endif
 }
 
 void ScriptInterpreter::RefreshAll()

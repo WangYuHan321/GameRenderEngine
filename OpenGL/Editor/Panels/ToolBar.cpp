@@ -8,10 +8,10 @@ ToolBar::ToolBar
 	const PanelWindowSetting& p_panelSetting
 ):PanelWindow(p_title, p_opened, p_panelSetting)
 {
-	m_playButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Play")->ID, ImVec2 { 20, 20 });
-	m_pauseButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Pause")->ID, ImVec2 { 20, 20 });
-	m_stopButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Stop")->ID, ImVec2 { 20, 20 });
-	m_nextButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Next")->ID, ImVec2 { 20, 20 });
+	m_playButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Play")->ID, ImVec2 { 20, 20 }, 0);
+	m_pauseButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Pause")->ID, ImVec2 { 20, 20 }, 0);
+	m_stopButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Stop")->ID, ImVec2 { 20, 20 }, 0);
+	m_nextButton = &CreateWidget<ButtonImage>(EDITOR_CONTEXT(m_editorResource)->GetTexture("Button_Next")->ID, ImVec2 { 20, 20 }, 0);
 
 	m_playButton->lineBreak = false;
 	m_pauseButton->lineBreak = false;

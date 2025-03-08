@@ -13,13 +13,13 @@ public:
     template <typename T>
     std::function<T()> GenerateGatherer(const std::string& p_keyName)
     {
-        return std::bind();
+        //return std::bind();
     }
 
     template <typename T>
     std::function<T()> GenerateProvider(const std::string& p_keyName)
     {
-        return std::bind();
+        //return std::bind();
     }
 
 };
