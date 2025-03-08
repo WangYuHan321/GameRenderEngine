@@ -71,9 +71,17 @@ Actor& EditorAction::CreateActorWithAsynModel(std::string p_model, bool p_focuse
 	auto& instance = CreateEmptyActor(false, p_parent, p_name);
 	auto& modelRenderer = instance.AddComponent<CModelRenderer>();
 
+	//asyn load model 
 	auto model = m_context.modelMgr.GetDefaultResource( ConfigManager::getInstance()->GetEditorPath() + "\\Models\\" + p_model );
+	m_context.modelMgr.m_resourceChangedEvent += [this, &instance, p_model]
+	{
+		CModelRenderer* pModelComponent = instance.GetComponent<CModelRenderer>();
+		if (pModelComponent)
+			pModelComponent->SetModel(m_context.modelMgr[p_model]);
+	};
 
 	m_context.asynLoaderMgr.AddModel(ConfigManager::getInstance()->GetEditorPath() + "\\Models\\" + p_model);
+	// asyn load model
 	
 	if (model)
 		modelRenderer.SetModel(model);

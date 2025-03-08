@@ -20,6 +20,11 @@ std::function<void()> ActorWithModelComponentCreationHandler(Actor* p_parent, co
     return Combine(EDITOR_BIND(CreateActorWithModel,  p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
 }
 
+std::function<void()> ActorWithAsynLoadModelComponentCreationHandler(Actor* p_parent, const std::string& p_modelName, std::optional<std::function<void()>> p_onItemClicked)
+{
+    return Combine(EDITOR_BIND(CreateActorWithAsynModel, p_modelName + ".fbx", true, p_parent, p_modelName), p_onItemClicked);
+}
+
 void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p_parent, std::optional<std::function<void()>> p_onItemClicked)
 {
 	p_menuList.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CREATE_EMPTY)).ClickedEvent += Combine(EDITOR_BIND(CreateEmptyActor, true, p_parent, ""), p_onItemClicked);
@@ -34,4 +39,5 @@ void ActorCreationMenu::GenerateActorCreationMenu(MenuList& p_menuList, Actor* p
     primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CONE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Cone", p_onItemClicked);
     primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_VERTICALPLANE)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Vertical_Plane", p_onItemClicked);
     primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_TORUS)).ClickedEvent += ActorWithModelComponentCreationHandler(p_parent, "Torus", p_onItemClicked);
+    primitives.CreateWidget<MenuItem>(EDITOR_LANGUAGE(MENU_CERBERUS)).ClickedEvent += ActorWithAsynLoadModelComponentCreationHandler(p_parent, "Camera", p_onItemClicked);
 }

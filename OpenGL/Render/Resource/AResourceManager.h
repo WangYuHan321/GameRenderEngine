@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "../../Event/Event.h"
 #include "../../Util/common.h"
 
 template<typename T>
@@ -24,6 +25,8 @@ public:
 	T* GetDefaultResource(const std::string& p_path);
 
 	void SetNewResource(const std::string& p_path, T* value);
+
+	Event<> m_resourceChangedEvent;
 
 protected:
 	static std::string __ENGINE_ASSET_PATH;

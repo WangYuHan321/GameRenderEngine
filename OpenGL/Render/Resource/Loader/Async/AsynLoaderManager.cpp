@@ -2,6 +2,7 @@
 #include "Texture2DJob.h"
 #include "Texture3DJob.h"
 #include "ModelJob.h"
+#include "../../Time/Time.h"
 
 AsynLoaderManager::AsynLoaderManager()
 {
@@ -13,6 +14,8 @@ AsynLoaderManager::~AsynLoaderManager()
 
 void AsynLoaderManager::Update(float appTime)
 {
+	double preTime = glfwGetTime();
+
 	while (m_jobArray.size() > 0)
 	{
 		for (int i = 0; i < m_jobArray.size(); i++)
@@ -38,6 +41,14 @@ void AsynLoaderManager::Update(float appTime)
 				EngineDelete m_jobArray[i];
 				m_jobArray.erase(m_jobArray.begin() + i);
 			}
+		}
+
+		double nowTime = glfwGetTime();
+		double deltaTime = nowTime - preTime;
+
+		if (deltaTime > 0.1f)
+		{
+			break;
 		}
 	}
 }

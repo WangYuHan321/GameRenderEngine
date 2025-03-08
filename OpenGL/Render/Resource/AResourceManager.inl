@@ -3,6 +3,9 @@
 template<typename T>
 std::string AResourceManager<T>::__ENGINE_ASSET_PATH = "Data\\Engine\\";
 
+//template<typename T>
+//Event<Actor&> AResourceManager<T>::m_resourceChangedEvent;
+
 template<typename T>
 T* AResourceManager<T>::LoadResource(const std::string& p_path)
 {
@@ -50,6 +53,7 @@ template<typename T>
 void AResourceManager<T>::SetNewResource(const std::string& p_path, T* value)
 {
 	m_resources[SID(p_path)] = value;
+	m_resourceChangedEvent.Invoke();
 }
 
 template<typename T>
