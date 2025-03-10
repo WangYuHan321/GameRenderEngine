@@ -169,7 +169,7 @@ CShader::CShader()
 //
 //}
 
-SHADER_TYPE GetShaderTypeByGLType(GLenum type)
+SHADER_TYPE GetShaderTypeByGLType(GLenum type, bool isArray)
 {
 	SHADER_TYPE curType;
 	switch (type)
@@ -178,28 +178,28 @@ SHADER_TYPE GetShaderTypeByGLType(GLenum type)
 		curType = SHADER_BOOL;
 		break;
 	case GL_INT:
-		curType = SHADER_INT;
+		curType = isArray ? SHADER_INT_ARRAY : SHADER_INT;
 		break;
 	case GL_FLOAT:
-		curType = SHADER_FLOAT;
+		curType = isArray ? SHADER_FLOAT_ARRAY : SHADER_FLOAT;
 		break;
 	case GL_FLOAT_VEC2:
-		curType = SHADER_VEC2;
+		curType = isArray ? SHADER_VEC2_ARRAY : SHADER_VEC2;
 		break;
 	case GL_FLOAT_VEC3:
-		curType = SHADER_VEC3;
+		curType = isArray ? SHADER_VEC3_ARRAY : SHADER_VEC3;
 		break;
 	case GL_FLOAT_VEC4:
-		curType = SHADER_VEC4;
+		curType = isArray ? SHADER_VEC4_ARRAY : SHADER_VEC4;
 		break;
 	case GL_FLOAT_MAT2:
-		curType = SHADER_MAT2;
+		curType = isArray ? SHADER_MAT2_ARRAY : SHADER_MAT2;
 		break;
 	case GL_FLOAT_MAT3:
-		curType = SHADER_MAT3;
+		curType = isArray ? SHADER_MAT3_ARRAY : SHADER_MAT3;
 		break;
 	case GL_FLOAT_MAT4:
-		curType = SHADER_MAT4;
+		curType = isArray ? SHADER_MAT4_ARRAY : SHADER_MAT4;
 		break;
 	case GL_SAMPLER_CUBE:
 		curType = SHADER_SAMPLERCUBE;
@@ -319,7 +319,7 @@ CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::str
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -330,7 +330,7 @@ CShader::CShader(string name, string vsPath, string fsPath, std::vector<std::str
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = GetShaderTypeByGLType(glType);
+		Uniforms[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
@@ -364,7 +364,7 @@ CShader::CShader(string name, string cmPath)
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -375,7 +375,7 @@ CShader::CShader(string name, string cmPath)
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = GetShaderTypeByGLType(glType);
+		Uniforms[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
@@ -439,7 +439,7 @@ void CShader::CreateFromSource(string name, string vsSource, string fsSource)
 		GLenum glType;
 		glGetActiveAttrib(m_ID, i, sizeof(buffer), 0, (GLint*)&VertexAttrs[i].Size, &glType, buffer);
 		VertexAttrs[i].Name = std::string(buffer);
-		VertexAttrs[i].Type = GetShaderTypeByGLType(glType);
+		VertexAttrs[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		VertexAttrs[i].Location = glGetAttribLocation(m_ID, buffer);
 	}
@@ -450,7 +450,7 @@ void CShader::CreateFromSource(string name, string vsSource, string fsSource)
 		GLenum glType;
 		glGetActiveUniform(m_ID, i, sizeof(buffer), 0, (GLint*)&Uniforms[i].Size, &glType, buffer);
 		Uniforms[i].Name = std::string(buffer);
-		Uniforms[i].Type = GetShaderTypeByGLType(glType);
+		Uniforms[i].Type = GetShaderTypeByGLType(glType, Uniforms[i].Size != 1);
 
 		Uniforms[i].Location = glGetUniformLocation(m_ID, buffer);
 	}
@@ -526,33 +526,6 @@ void CShader::SetVector(std::string location, Color4 value)
 		glUniform4fv(loc, 1, &val[0]);
 }
 
-void CShader::SetVectorArray(std::string location, int size, const std::vector<glm::vec2>& values)
-{
-    unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
-    if (loc >= 0)
-    {
-        glUniform2fv(loc, size, (float*)(&values[0].x));
-    }
-}
-
-void CShader::SetVectorArray(std::string location, int size, const std::vector<glm::vec3>& values)
-{
-    unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
-    if (loc >= 0)
-    {
-        glUniform3fv(loc, size, (float*)(&values[0].x));
-    }
-}
-
-void CShader::SetVectorArray(std::string location, int size, const std::vector<glm::vec4>& values)
-{
-    unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
-    if (loc >= 0)
-    {
-        glUniform4fv(loc, size, (float*)(&values[0].x));
-    }
-}
-
 void CShader::SetMatrix(std::string location, glm::mat2 value)
 {
     int loc = GetUniformLocation(location);
@@ -572,6 +545,72 @@ void CShader::SetMatrix(std::string location, glm::mat4 value)
     int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
+}
+
+void CShader::SetIntArray(std::string location, const std::vector<int32>& values)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform1iv(loc, values.size(), (int32*)&values[0]);
+}
+
+void CShader::SetFloatArray(std::string location, const std::vector<float>& values)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform1fv(loc, values.size(), (float*)&values[0]);
+}
+void CShader::SetVectorArray(std::string location, const std::vector<Vector2>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniform2fv(loc, values.size(), (float*)(&values[0]));
+	}
+}
+void CShader::SetVectorArray(std::string location, const std::vector<Vector3>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniform3fv(loc, values.size(), (float*)(&values[0]));
+	}
+}
+
+void CShader::SetVectorArray(std::string location, const std::vector<Vector4>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniform4fv(loc, values.size(), (float*)(&values[0]));
+	}
+}
+
+void CShader::SetMatrixArray(std::string location, const std::vector<glm::mat2>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniformMatrix2fv(loc, values.size(), GL_FALSE, (float*)&values[0][0]);
+	}
+}
+
+void CShader::SetMatrixArray(std::string location, const std::vector<glm::mat3>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniformMatrix3fv(loc, values.size(), GL_FALSE, (float*)&values[0][0]);
+	}
+}
+
+void CShader::SetMatrixArray(std::string location, const std::vector<glm::mat4>& values)
+{
+	unsigned int loc = glGetUniformLocation(m_ID, location.c_str());
+	if (loc >= 0)
+	{
+		glUniformMatrix4fv(loc, values.size(), GL_FALSE, (float*)&values[0][0]);
+	}
 }
 
 int CShader::GetInt(std::string location)

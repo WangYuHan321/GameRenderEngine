@@ -18,6 +18,14 @@ enum SHADER_TYPE
 	SHADER_MAT2,
 	SHADER_MAT3,
 	SHADER_MAT4,
+	SHADER_INT_ARRAY,
+	SHADER_FLOAT_ARRAY,
+	SHADER_VEC2_ARRAY,
+	SHADER_VEC3_ARRAY,
+	SHADER_VEC4_ARRAY,
+	SHADER_MAT2_ARRAY,
+	SHADER_MAT3_ARRAY,
+	SHADER_MAT4_ARRAY,
 };
 
 struct Uniform {
@@ -37,8 +45,8 @@ struct VertexAttr {
 struct UniformValue
 {
 	SHADER_TYPE Type;
-	union
-	{
+	//union
+	//{
 		bool BOOL;
 		int INT;
 		float FLOAT;
@@ -48,8 +56,15 @@ struct UniformValue
 		glm::mat2 MAT2;
 		glm::mat3 MAT3;
 		glm::mat4 MAT4;
-	};
-	UniformValue() {}
+		std::vector<int32> INTS;
+		std::vector<float> FLOATS;
+		std::vector<Vector2> VEC2S;
+		std::vector<Vector3> VEC3S;
+		std::vector<Vector4> VEC4S;
+		std::vector<Matrix2> MAT2S;
+		std::vector<Matrix3> MAT3S;
+		std::vector<Matrix4> MAT4S;
+	//};
 };
 
 

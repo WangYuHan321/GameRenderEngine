@@ -72,11 +72,15 @@ public:
 	void SetMatrix(std::string name, Matrix2 value);
 	void SetMatrix(std::string name, Matrix3 value);
 	void SetMatrix(std::string name, Matrix4 value);
-	void SetTextureValue(std::string name, Texture* value);
-	
-	
-	
-	
+	void SetIntArray(std::string name, const std::vector<int32>& values);
+	void SetFloatArray(std::string name, const std::vector<float>& values);
+	void SetVectorArray(std::string name, const std::vector<Vector2>& values);
+	void SetVectorArray(std::string name, const std::vector<Vector3>& values);
+	void SetVectorArray(std::string name, const std::vector<Vector4>& values);
+	void SetMatrixArray(std::string name, const std::vector<Matrix2>& values);
+	void SetMatrixArray(std::string name, const std::vector<Matrix3>& values);
+	void SetMatrixArray(std::string name, const std::vector<Matrix4>& values);
+	void SetTextureValue(std::string name, Texture* value); 
 	
 	void SetTexture(std::string name, Texture* value, unsigned int unit);
 	void SetTextureCube(std::string name, TextureCube* value, unsigned int unit);

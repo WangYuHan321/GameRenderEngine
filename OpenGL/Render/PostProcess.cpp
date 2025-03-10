@@ -64,7 +64,7 @@ PostProcess::PostProcess(Renderer* render):
         LOG("new m_ssaoNoise");
         m_ssaoNoise->Generate(4, 4, GL_RGBA16F, GL_RGB, GL_HALF_FLOAT, &ssaoNoise[0]);
 
-        m_ssaoShader->SetVectorArray("kernel", ssaoKernel.size(), ssaoKernel);
+        m_ssaoShader->SetVectorArray("kernel",  ssaoKernel);
         m_ssaoShader->SetInt("sampleCount", SSAOKernelSize);
     }
 

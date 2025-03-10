@@ -73,6 +73,14 @@ void Material::Bind()
             case SHADER_TYPE::SHADER_MAT2:m_Shader->SetMatrix(name, value.MAT2); break;
             case SHADER_TYPE::SHADER_MAT3:m_Shader->SetMatrix(name, value.MAT3); break;
             case SHADER_TYPE::SHADER_MAT4:m_Shader->SetMatrix(name, value.MAT4); break;
+            case SHADER_TYPE::SHADER_FLOAT_ARRAY:m_Shader->SetFloatArray(name, value.FLOATS); break;
+            case SHADER_TYPE::SHADER_INT_ARRAY:m_Shader->SetIntArray(name, value.INTS); break;
+            case SHADER_TYPE::SHADER_VEC2_ARRAY:m_Shader->SetVectorArray(name, value.VEC2S);break;
+            case SHADER_TYPE::SHADER_VEC3_ARRAY:m_Shader->SetVectorArray(name, value.VEC3S);break;
+            case SHADER_TYPE::SHADER_VEC4_ARRAY:m_Shader->SetVectorArray(name, value.VEC4S);break;
+            case SHADER_TYPE::SHADER_MAT2_ARRAY:m_Shader->SetMatrixArray(name, value.MAT2S);break;
+            case SHADER_TYPE::SHADER_MAT3_ARRAY:m_Shader->SetMatrixArray(name, value.MAT3S);break;
+            case SHADER_TYPE::SHADER_MAT4_ARRAY:m_Shader->SetMatrixArray(name, value.MAT4S);break;
             }
         }
 
@@ -266,6 +274,54 @@ void Material::SetMatrix(std::string name, Matrix4 value)
 {
     m_uniforms[name].Type = SHADER_MAT4;
     m_uniforms[name].MAT4 = value;
+}
+
+void Material::SetIntArray(std::string name, const std::vector<int32>& values)
+{
+    m_uniforms[name].Type = SHADER_INT_ARRAY;
+    m_uniforms[name].INTS = values;
+}
+
+void Material::SetFloatArray(std::string name, const std::vector<float>& values)
+{
+    m_uniforms[name].Type = SHADER_FLOAT_ARRAY;
+    m_uniforms[name].FLOATS = values;
+}
+
+void Material::SetVectorArray(std::string name, const std::vector<Vector2>& values)
+{
+    m_uniforms[name].Type = SHADER_VEC2_ARRAY;
+    m_uniforms[name].VEC2S = values;
+}
+
+void Material::SetVectorArray(std::string name, const std::vector<Vector3>& values)
+{
+    m_uniforms[name].Type = SHADER_VEC3_ARRAY;
+    m_uniforms[name].VEC3S = values;
+}
+
+void Material::SetVectorArray(std::string name, const std::vector<Vector4>& values)
+{
+    m_uniforms[name].Type = SHADER_VEC4_ARRAY;
+    m_uniforms[name].VEC4S = values;
+}
+
+void Material::SetMatrixArray(std::string name, const std::vector<glm::mat2>& values)
+{
+    m_uniforms[name].Type = SHADER_MAT2_ARRAY;
+    m_uniforms[name].MAT2S = values;
+}
+
+void Material::SetMatrixArray(std::string name, const std::vector<glm::mat3>& values)
+{
+    m_uniforms[name].Type = SHADER_MAT3_ARRAY;
+    m_uniforms[name].MAT3S = values;
+}
+
+void Material::SetMatrixArray(std::string name, const std::vector<glm::mat4>& values)
+{
+    m_uniforms[name].Type = SHADER_MAT4_ARRAY;
+    m_uniforms[name].MAT4S = values;
 }
 
 void Material::SetTextureValue(std::string name, Texture* value)

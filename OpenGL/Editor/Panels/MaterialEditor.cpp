@@ -283,6 +283,9 @@ void MaterialEditor::GenerateShaderSettingContent()
 		case SHADER_TYPE::SHADER_MAT2:  orderID = 6; break;
 		case SHADER_TYPE::SHADER_MAT3:  orderID = 5; break;
 		case SHADER_TYPE::SHADER_MAT4:  orderID = 4; break;
+		case SHADER_TYPE::SHADER_MAT2_ARRAY: orderID = 13; break;
+		case SHADER_TYPE::SHADER_MAT3_ARRAY: orderID = 14; break;
+		case SHADER_TYPE::SHADER_MAT4_ARRAY: orderID = 15; break;
 		}
 		sortedUniformData1.emplace(orderID, std::pair<std::string, UniformValue>(name, value));
 	}

@@ -41,25 +41,27 @@ public:
     void SetVector(std::string location, Color3 value);
     void SetVector(std::string location, glm::vec4  value);
     void SetVector(std::string location, Color4 value);
-    void SetVectorArray(std::string location, int size, const std::vector<glm::vec2>& values);
-    void SetVectorArray(std::string location, int size, const std::vector<glm::vec3>& values);
-    void SetVectorArray(std::string location, int size, const std::vector<glm::vec4>& values);
     void SetMatrix(std::string location, glm::mat2 value);
     void SetMatrix(std::string location, glm::mat3 value);
     void SetMatrix(std::string location, glm::mat4 value);
+    void SetIntArray(std::string location, const std::vector<int32>& values);
+    void SetFloatArray(std::string location, const std::vector<float>& values);
+    void SetVectorArray(std::string location, const std::vector<Vector2>& values);
+    void SetVectorArray(std::string location, const std::vector<Vector3>& values);
+    void SetVectorArray(std::string location, const std::vector<Vector4>& values);
+    void SetMatrixArray(std::string location, const std::vector<Matrix2>& values);
+    void SetMatrixArray(std::string location, const std::vector<Matrix3>& values);
+    void SetMatrixArray(std::string location, const std::vector<Matrix4>& values);
 
     int GetInt(std::string location);
     float GetFloat(std::string location);
-    glm::vec2 GetVector2(std::string location);
-    glm::vec3 GetVector3(std::string location);
-    glm::vec4 GetVector4(std::string location);
-    glm::mat2 GetMatrix2(std::string location);
-    glm::mat3 GetMatrix3(std::string location);
-    glm::mat4 GetMatrix4(std::string location);
+    Vector2 GetVector2(std::string location);
+    Vector3 GetVector3(std::string location);
+    Vector4 GetVector4(std::string location);
+    Matrix2 GetMatrix2(std::string location);
+    Matrix3 GetMatrix3(std::string location);
+    Matrix4 GetMatrix4(std::string location);
 
-    void SetMatrixArray(std::string location, int size, glm::mat2* values);
-    void SetMatrixArray(std::string location, int size, glm::mat3* values);
-    void SetMatrixArray(std::string location, int size, glm::mat4* values);
     int GetUniformLocation(std::string name);
 
     SHADER_TYPE GetShaderType(std::string name);
