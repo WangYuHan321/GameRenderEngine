@@ -70,6 +70,9 @@ void Material::Bind()
             case SHADER_TYPE::SHADER_VEC2:m_Shader->SetVector(name, value.VEC2); break;
             case SHADER_TYPE::SHADER_VEC3:m_Shader->SetVector(name, value.VEC3); break;
             case SHADER_TYPE::SHADER_VEC4:m_Shader->SetVector(name, value.VEC4); break;
+            case SHADER_TYPE::SHADER_IVEC2:m_Shader->SetVector(name, value.IVEC2); break;
+            case SHADER_TYPE::SHADER_IVEC3:m_Shader->SetVector(name, value.IVEC3); break;
+            case SHADER_TYPE::SHADER_IVEC4:m_Shader->SetVector(name, value.IVEC4); break;
             case SHADER_TYPE::SHADER_MAT2:m_Shader->SetMatrix(name, value.MAT2); break;
             case SHADER_TYPE::SHADER_MAT3:m_Shader->SetMatrix(name, value.MAT3); break;
             case SHADER_TYPE::SHADER_MAT4:m_Shader->SetMatrix(name, value.MAT4); break;
@@ -238,6 +241,24 @@ void Material::SetBoolean(std::string name, bool value)
 {
     m_uniforms[name].Type = SHADER_BOOL;
     m_uniforms[name].BOOL = value;
+}
+
+void Material::SetVector(std::string name, IVector2 value)
+{
+    m_uniforms[name].Type = SHADER_IVEC2;
+    m_uniforms[name].IVEC2 = value;
+}
+
+void Material::SetVector(std::string name, IVector3 value)
+{
+    m_uniforms[name].Type = SHADER_IVEC3;
+    m_uniforms[name].IVEC3 = value;
+}
+
+void Material::SetVector(std::string name, IVector4 value)
+{
+    m_uniforms[name].Type = SHADER_IVEC4;
+    m_uniforms[name].IVEC4 = value;
 }
 
 void Material::SetVector(std::string name, Vector2 value)

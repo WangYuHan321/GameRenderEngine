@@ -66,6 +66,9 @@ public:
 	void SetInt(std::string name, int value);
 	void SetFloat(std::string name, float value);
 	void SetBoolean(std::string name, bool value);
+	void SetVector(std::string name, IVector2 value);
+	void SetVector(std::string name, IVector3 value);
+	void SetVector(std::string name, IVector4 value);
 	void SetVector(std::string name, Vector2 value);
 	void SetVector(std::string name, Vector3 value);
 	void SetVector(std::string name, Vector4 value);

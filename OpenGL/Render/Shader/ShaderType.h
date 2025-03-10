@@ -15,6 +15,9 @@ enum SHADER_TYPE
 	SHADER_VEC2,
 	SHADER_VEC3,
 	SHADER_VEC4,
+	SHADER_IVEC2,
+	SHADER_IVEC3,
+	SHADER_IVEC4,
 	SHADER_MAT2,
 	SHADER_MAT3,
 	SHADER_MAT4,
@@ -50,12 +53,15 @@ struct UniformValue
 		bool BOOL;
 		int INT;
 		float FLOAT;
-		glm::vec2 VEC2;
-		glm::vec3 VEC3;
-		glm::vec4 VEC4;
-		glm::mat2 MAT2;
-		glm::mat3 MAT3;
-		glm::mat4 MAT4;
+		IVector2 IVEC2;
+		IVector3 IVEC3;
+		IVector4 IVEC4;
+		Vector2 VEC2;
+		Vector3 VEC3;
+		Vector4 VEC4;
+		Matrix2 MAT2;
+		Matrix3 MAT3;
+		Matrix4 MAT4;
 		std::vector<int32> INTS;
 		std::vector<float> FLOATS;
 		std::vector<Vector2> VEC2S;

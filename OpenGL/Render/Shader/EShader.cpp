@@ -213,6 +213,16 @@ SHADER_TYPE GetShaderTypeByGLType(GLenum type, bool isArray)
 	case GL_SAMPLER_3D:
 		curType = SHADER_SAMPLER3D;
 		break;
+	case GL_INT_VEC2:
+		curType = SHADER_IVEC2;
+		break;
+	case GL_INT_VEC3:
+		curType = SHADER_IVEC3;
+		break;
+	case GL_INT_VEC4:
+		curType = SHADER_IVEC4;
+		break;
+
 	}
 
 	return curType;
@@ -487,60 +497,81 @@ void CShader::SetFloat(std::string location, float value)
         glUniform1f(loc, value);
 }
 
-void CShader::SetVector(std::string location, glm::vec2 value)
+void CShader::SetVector(std::string location, Vector2 value)
 {
     int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform2fv(loc, 1, &value[0]);
 }
 
-void CShader::SetVector(std::string location, glm::vec3 value)
+void CShader::SetVector(std::string location, Vector3 value)
 {
     int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniform3fv(loc, 1, &value[0]);
 }
 
+void CShader::SetVector(std::string location, Vector4 value)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform4fv(loc, 1, &value[0]);
+}
+
+void CShader::SetVector(std::string location, IVector2  value)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform2iv(loc, 1, &value[0]);
+}
+
+void CShader::SetVector(std::string location, IVector3  value)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform3iv(loc, 1, &value[0]);
+}
+
+void CShader::SetVector(std::string location, IVector4  value)
+{
+	int loc = GetUniformLocation(location);
+	if (loc >= 0)
+		glUniform4iv(loc, 1, &value[0]);
+}
+
 void CShader::SetVector(std::string location, Color3 value)
 {
 	int loc = GetUniformLocation(location);
-	glm::vec3 val(value.r, value.g, value.b);
+	Vector3 val(value.r, value.g, value.b);
 
 	if (loc >= 0)
 		glUniform3fv(loc, 1, &val[0]);
 }
 
-void CShader::SetVector(std::string location, glm::vec4 value)
-{
-    int loc = GetUniformLocation(location);
-    if (loc >= 0)
-        glUniform4fv(loc, 1, &value[0]);
-}
-
 void CShader::SetVector(std::string location, Color4 value)
 {
 	int loc = GetUniformLocation(location);
-	glm::vec4 val(value.r, value.g, value.b, value.a);
+	Vector4 val(value.r, value.g, value.b, value.a);
 
 	if (loc >= 0)
 		glUniform4fv(loc, 1, &val[0]);
 }
 
-void CShader::SetMatrix(std::string location, glm::mat2 value)
+void CShader::SetMatrix(std::string location, Matrix2 value)
 {
     int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix2fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
-void CShader::SetMatrix(std::string location, glm::mat3 value)
+void CShader::SetMatrix(std::string location, Matrix3 value)
 {
     int loc = GetUniformLocation(location);
     if (loc >= 0)
         glUniformMatrix3fv(loc, 1, GL_FALSE, &value[0][0]);
 }
 
-void CShader::SetMatrix(std::string location, glm::mat4 value)
+void CShader::SetMatrix(std::string location, Matrix4 value)
 {
     int loc = GetUniformLocation(location);
     if (loc >= 0)
