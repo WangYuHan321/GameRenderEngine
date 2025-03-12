@@ -247,50 +247,17 @@ void Mesh::NewFinalize(bool interleaved)
         glGenBuffers(1, &m_EBO);
     }
 
-
-    std::vector<float> data;
-    for (int i = 0; i < m_vecVertex.size(); ++i)
-    {
-        data.push_back(m_vecVertex[i].Position.x);
-        data.push_back(m_vecVertex[i].Position.y);
-        data.push_back(m_vecVertex[i].Position.z);
-        data.push_back(m_vecVertex[i].UV.x);
-        data.push_back(m_vecVertex[i].UV.y);
-        data.push_back(m_vecVertex[i].Normal.x);
-        data.push_back(m_vecVertex[i].Normal.y);
-        data.push_back(m_vecVertex[i].Normal.z);
-        data.push_back(m_vecVertex[i].Tangent.x);
-        data.push_back(m_vecVertex[i].Tangent.y);
-        data.push_back(m_vecVertex[i].Tangent.z);
-        data.push_back(m_vecVertex[i].Bitangent.x);
-        data.push_back(m_vecVertex[i].Bitangent.y);
-        data.push_back(m_vecVertex[i].Bitangent.z);
-        
-        if (m_vecVertex[i].BoneIDs[0] != -1)
-        {
-            for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
-                data.push_back((float)m_vecVertex[i].BoneIDs[i]);
-            for (int i = 0; i < MAX_BONE_INFLUENCE; i++)
-                data.push_back(m_vecVertex[i].Weights[i]);
-        }
-    }
-
     glBindVertexArray(m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_vecVertex.size() * sizeof(Vertex), &m_vecVertex[0], GL_STATIC_DRAW);
 
     if (m_vecIndices.size() > 0)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_vecIndices.size() * sizeof(unsigned int), &m_vecIndices[0], GL_STATIC_DRAW);
     }
-
-
-    size_t stride = 3 * sizeof(float);
-    stride += 2 * sizeof(float);
-    stride += 3 * sizeof(float);
-    stride += 3 * sizeof(float);
-    stride += 3 * sizeof(float);
+    
+    size_t stride = sizeof(Vertex);
 
     size_t offset = 0;
     glEnableVertexAttribArray(0);
@@ -320,19 +287,16 @@ void Mesh::NewFinalize(bool interleaved)
         offset += 3 * sizeof(float);
     }
 
-    if (data.size() > offset)
     {
-        {
-            glEnableVertexAttribArray(5);
-            glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
-            offset += 4 * sizeof(float);
-        }
+        glEnableVertexAttribArray(5);
+        glVertexAttribIPointer(5, 4, GL_INT, stride, (GLvoid*)offset);
+        offset += 4 * sizeof(int32);
+    }
 
-        {
-            glEnableVertexAttribArray(6);
-            glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
-            offset += 4 * sizeof(float);
-        }
+    {
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, stride, (GLvoid*)offset);
+        offset += 4 * sizeof(float);
     }
  
     glBindVertexArray(0);

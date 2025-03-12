@@ -63,9 +63,8 @@ bool AssimpParser::LoadAnim(const std::string& p_fileName, std::vector<Animation
         for (unsigned int i = 0; i < scene->mNumAnimations; i++)
         {
             auto animation = scene->mAnimations[i];
-            Animation* pAnim = new Animation();
-            pAnim->path = p_fileName;
-            pAnim->m_nodeRoot = scene->mRootNode;
+            Animation* pAnim = new Animation(p_fileName.c_str());
+            pAnim->ReadHierarchyData(pAnim->m_nodeRoot, scene->mRootNode);
             InitAnim(animation, scene, pAnim);
 
             p_anim.push_back(pAnim);
@@ -462,6 +461,7 @@ void AssimpParser::InitAnim(aiAnimation* aiAnimation, const struct aiScene* p_sc
     anim->name = path.filename().string();
     anim->duration = aiAnimation->mDuration;
     anim->fps = aiAnimation->mTicksPerSecond;
+
     ProcessBone(aiAnimation, anim,  p_scene->mRootNode);
     ProcessBindPose(anim, p_scene->mRootNode);
 }

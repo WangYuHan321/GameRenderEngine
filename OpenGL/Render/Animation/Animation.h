@@ -4,12 +4,22 @@
 #include <map>
 #include "../../Util/common.h"
 
+class Model;
+
 enum class AnimType
 {
 	None,
 	Assimp,
 	Json,
 	Raw
+};
+
+struct AssimpNodeData
+{
+	glm::mat4 transformation;
+	std::string name;
+	int childrenCount;
+	std::vector<AssimpNodeData> children;
 };
 
 class Animation
@@ -21,10 +31,11 @@ public:
 	//void GetAnimation(aiAnimation* ai_anim, aiNode* ai_root_node, float factor, float isLinear);
 	float GetTickDeltaTime()const ;
 	float GetDuration()const;
-	aiNode* GetNodeRoot() { return m_nodeRoot; }
-
+	AssimpNodeData GetRootNode() { return m_nodeRoot; }
 	std::map<std::string, Bone*> GetBoneMap() { return nameBoneMap; }
 	Bone* GetBoneByName(std::string name);
+
+	void ReadHierarchyData(AssimpNodeData& dest, aiNode* node);
 
 public:
 
@@ -34,7 +45,7 @@ public:
 	std::string name;
 	std::map<std::string, Bone*> nameBoneMap;
 	std::map<std::string, Matrix4> nameBindPoseMap;
-	aiNode* m_nodeRoot;
+	AssimpNodeData m_nodeRoot;
 	AnimType animType;
 	std::string path;
 	int id{ -1 };

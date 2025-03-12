@@ -11,7 +11,7 @@ class Animator
 public:
 	Animator(Actor& p_actor);
 
-	void CalculateBoneTransform(aiNode* node, Matrix4& parentTransform);
+	void CalculateBoneTransform(AssimpNodeData* node, Matrix4& parentTransform);
 	void ReSetAnimation(Animation& animation);
 	std::vector<Matrix4> GetFinalBoneMatrix() const;
 	void Update(float dt);

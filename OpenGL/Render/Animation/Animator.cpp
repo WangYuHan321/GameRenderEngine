@@ -22,11 +22,10 @@ void Animator::ReSetAnimation(Animation& animation)
 	m_animation = &animation;
 }
 
-void Animator::CalculateBoneTransform(aiNode* node, Matrix4& parentTransform)
+void Animator::CalculateBoneTransform(AssimpNodeData* node, Matrix4& parentTransform)
 {
-#if 0
-	std::string nodeName = node->mName.C_Str();
-	glm::mat4 nodeTransform = AiMatToGlmMat(node->mTransformation);
+	std::string nodeName = node->name;
+	glm::mat4 nodeTransform = node->transformation;
 	Model* pModel = m_actor->GetComponent<CModelRenderer>()->GetModel();
 
 	Bone* Bone = m_animation->GetBoneByName(nodeName);
@@ -47,9 +46,8 @@ void Animator::CalculateBoneTransform(aiNode* node, Matrix4& parentTransform)
 		finalBoneMatrix[index] = globalTransformation * offset;
 	}
 
-	for (int i = 0; i < node->mNumChildren; i++)
-		CalculateBoneTransform(node->mChildren[i], globalTransformation);
-#endif
+	for (int i = 0; i < node->childrenCount; i++)
+		CalculateBoneTransform(&node->children[i], globalTransformation);
 }
 
 std::vector<Matrix4> Animator::GetFinalBoneMatrix() const
@@ -59,7 +57,7 @@ std::vector<Matrix4> Animator::GetFinalBoneMatrix() const
 
 void Animator::Update(float dt)
 {
-	currentTime += dt* 0.005;
+	currentTime += dt* 0.05;
 	if (currentTime > endTime)
 		currentTime = 0.0f;
 
@@ -68,5 +66,5 @@ void Animator::Update(float dt)
 	float curRealTime = currentTime * len;
 
 	Matrix4 mat(1);
-	CalculateBoneTransform(m_animation->GetNodeRoot(), mat);
+	CalculateBoneTransform(&m_animation->GetRootNode(), mat);
 }
