@@ -46,7 +46,7 @@ void main()
     vs_out.TangentFragPos   = TBNi * vs_out.FragPos;
 
     //gl_Position = ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
-    gl_Position = vec4(vs_out.FragPos, 1.0) * ubo_View * ubo_Projection;
+    gl_Position =  ubo_Projection * ubo_View * vec4(vs_out.FragPos, 1.0);
 }
 
 #shader fragment

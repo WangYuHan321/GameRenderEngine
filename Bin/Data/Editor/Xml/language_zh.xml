@@ -57,5 +57,5 @@
 	<item id="56" language="保存场景" />
 	<item id="57" language="加载场景" />
 	<item id="58" language="退出" />
-	<item id="59" language="创建枪" />
+	<item id="59" language="异步加载相机模型" />
 </language>
