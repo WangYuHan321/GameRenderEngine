@@ -54,9 +54,11 @@ ModelView::ModelView
 	m_curActor->GetComponent< CMaterialRenderer>()->FillWithMaterial(*GLOBALSERVICE(MaterialManager)["DefaultAnim.opmat"]);
 	m_curActor->GetComponent<CTransform>()->SetLocalScale(Vector3(1000, 1000, 1000));
 
-	m_testAnim = AnimLoader::getInstance()->Create("C:/Users/Administrator/Desktop/GameRenderEngine/Bin/Data/Editor/Models/dancing_vampire.dae", (EModelParserFlags)0x8);
+#if 0
+	m_testAnim = AnimLoader::getInstance()->Create("dancing_vampire.dae", (EModelParserFlags)0x8);
 	m_anim = new Animator(*m_curActor);
 	m_anim->ReSetAnimation(*m_testAnim[0]);
+#endif
 
 }
 
@@ -153,7 +155,7 @@ void ModelView::Update(float deltaTime)
 {
 	AViewControllable::Update(deltaTime);
 
-
+#if 0
 	m_anim->Update(deltaTime);
 
 	Material* pMat =  m_curActor->GetComponent<CMaterialRenderer>()->GetMaterialList()[0];
@@ -165,7 +167,7 @@ void ModelView::Update(float deltaTime)
 	}
 
 	pMat->SetMatrixArray("finalBonesMatrices[0]", data);
-
+#endif
 }
 
 void ModelView::RenderScene()
