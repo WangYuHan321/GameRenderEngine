@@ -320,6 +320,15 @@ set(RENDER_MESH_SRC
 	../OpenGL/Render/Mesh/Sphere.cpp
 )
 
+set(RENDER_THREAD_SRC
+	../OpenGL/Render/Thread/RenderThread.h
+	../OpenGL/Render/Thread/RenderThread.cpp
+	../OpenGL/Render/Thread/RenderCommand.h
+	../OpenGL/Render/Thread/RenderCommand.cpp
+	../OpenGL/Render/Thread/RenderThreadSys.h
+	../OpenGL/Render/Thread/RenderThreadSys.cpp
+)
+
 set(RENDER_RESOURCE_SRC
 	../OpenGL/Render/Resource/AResource.h
 	../OpenGL/Render/Resource/AResource.cpp
