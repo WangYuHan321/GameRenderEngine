@@ -16,6 +16,8 @@ how to build it ?
 
 ## Install Visual Studio 2022
 
+## Install CMake-GUI
+
 The following script is more or less universal for Windows. Minor changes may be required.
 
 	Run CMakeBuildX64.bat
