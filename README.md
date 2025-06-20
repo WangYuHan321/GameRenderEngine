@@ -21,3 +21,6 @@ how to build it ?
 The following script is more or less universal for Windows. Minor changes may be required.
 
 	Run CMakeBuildX64.bat
+	cd $build_x64
+	Open Project.sln
+	
